@@ -5,7 +5,7 @@
 	<MvASSIGN NAME = "l.module:version"		VALUE = "1.000">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.00">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Sunshine, Lollipops & Rainbows.">
-	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, json, clientside">
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -293,28 +293,86 @@
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
 
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Block Component', '', '' ) }">
+	<MvIF EXPR = "{ g.TGBLOCKS_Screen }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Block Component', '', '' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
 
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Block Component', '', '' ) }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGBLOCKS', 'TGBLOCKS_Blocks:Blocks,TGBLOCKS_Sets:Block Sets' ) }">
+		<MvIF EXPR = "{ NOT BlockSet_Load_ID( g.BlockSet_ID, l.blockset ) }">
+			ERROR: Could not load Screen for Block Set ID: <MvEVAL EXPR = "{ g.BlockSet_ID }">.
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Block Component', l.blockset:name, '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
-	<MvHIDE FIELDS = "g.Module_Code">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGBLOCKS_SCREEN', 'TGBLOCKS_SCREEN_Blocks:Blocks Set' ) }">
 
-	<MvIF EXPR = "{ g.Tab EQ 'TGBLOCKS_Blocks' }">
-		Sup holmes.
+			<MvHIDE FIELDS = "g.Module_Code,g.TGBLOCKS_Screen,g.BlockSet_ID">
+
+			:&gt; Block Set Screen for Block Set: <MvEVAL EXPR = "{ l.blockset:name}">.
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+		</MvIF>
+	<MvELSE>
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Block Component', '', '' ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Block Component', '', '' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGBLOCKS', 'TGBLOCKS_Blocks:Blocks,TGBLOCKS_Sets:Block Sets' ) }">
+
+		<MvHIDE FIELDS = "g.Module_Code">
+
+		<MvEVAL EXPR = "{ BlockTab_UI( g.Tab ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+
 	</MvIF>
-
-	<MvIF EXPR = "{ g.Tab EQ 'TGBLOCKS_Sets' }">
-		hola holmes..... dos.
-	</MvIF>
-
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
-
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
+
+<MvCOMMENT>
+| ====================================================================================
+|	JSON
+| ====================================================================================
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT g.Admin_Open_Store }"><MvFUNCTIONRETURN></MvIF>
+
+	<MvIF EXPR = "{ g.Module_Function EQ 'Blocks_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Blocks_Load_Query( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'Block_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Block_Insert( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'Block_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Block_Update( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'Block_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Block_Delete( l.module )	}"></MvIF>
+
+	<MvIF EXPR = "{ g.Module_Function EQ 'BlockSets_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockSets_Load_Query( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'BlockSet_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockSet_Insert( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'BlockSet_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockSet_Update( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'BlockSet_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockSet_Delete( l.module )	}"></MvIF>
+</MvFUNCTION>
+
+<MvCOMMENT>
+| ====================================================================================
+|	CLIENTSIDE
+| ====================================================================================
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_Clientside" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, compresswhitespace" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Filename EQ 'blocks.js' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+		<MvINCLUDE FILE = "js/blocks.js" INTERPRET="OFF">
+	</MvIF>
+	<MvIF EXPR = "{ g.Filename EQ 'blocksets.js' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+		<MvINCLUDE FILE = "js/blocksets.js" INTERPRET="OFF">
+	</MvIF>
+</MvFUNCTION>
+
+
+<MvINCLUDE FILE = "admin_components.mv">
+<MvINCLUDE FILE = "functions.mv">

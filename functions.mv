@@ -1,0 +1,431 @@
+<MvCOMMENT>
+	Block_Read( block var )
+	Block_Insert_Lowlevel( block var )
+	Block_Insert( block var )
+	Block_Load_ID( id, output var )
+	Block_Load_Code( code, output var )
+	Block_Update_Lowlevel( block var )
+	Block_Update( block var )
+	Block_Delete( block_id )
+
+	JSON_Block_Insert( module var )
+	JSON_Block_Update( module var )
+	JSON_Block_Delete( module var )
+
+	BlockSet_Read( blockset var )
+	BlockSet_Insert_Lowlevel( blockset var )
+	BlockSet_Insert( blockset var )
+	BlockSet_Load_ID( id, output var )
+	BlockSet_Load_Code( code, output var )
+	BlockSet_Update_Lowlevel( blockset var )
+	BlockSet_Update( blockset var )
+	BlockSet_Delete( blockset_id )
+
+	JSON_BlockSet_Insert( module var )
+	JSON_BlockSet_Update( module var )
+	JSON_BlockSet_Delete( module var )
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Block_Read" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.block" MEMBER = "id"				VALUE = "{ TGBlocks.d.id }">
+	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ TGBlocks.d.code }">
+	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ TGBlocks.d.name }">
+	<MvASSIGN NAME = "l.block" MEMBER = "descrip"			VALUE = "{ TGBlocks.d.descrip }">
+	<MvASSIGN NAME = "l.block" MEMBER = "image"				VALUE = "{ TGBlocks.d.image }">
+	<MvASSIGN NAME = "l.block" MEMBER = "allow_children"	VALUE = "{ TGBlocks.d.allow_children }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Block_Insert_Lowlevel" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.block" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGBlocks' ) }">
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGBlocks
+					      ( id, code, name, descrip, image, allow_children )
+						  VALUES
+						  ( ?, ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.block:id, l.block:code, l.block:name, l.block:descrip, l.block:image, l.block:allow_children">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0001', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Block_Insert" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.block" MEMBER = "code" VALUE = "{ trim( l.block:code ) }">
+	<MvASSIGN NAME = "l.block" MEMBER = "name" VALUE = "{ trim( l.block:name ) }">
+
+	<MvIF EXPR = "{ ISNULL l.block:code }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.block:code ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ Block_Load_Code( l.block:code, l.void ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.block:name }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Block_Insert_Lowlevel( l.block ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Block_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGBlocks"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlocks WHERE id = ?' }"
+				FIELDS	= "l.id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGBlocks.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBlocks-BLOCKS-0003' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ Block_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Block_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGBlocks"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlocks WHERE code = ?' }"
+				FIELDS	= "l.code">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0004', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGBlocks.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBlocks-BLOCKS-0005' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ Block_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Block_Update_LowLevel" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGBlocks
+					      SET
+							code = ?,
+							name = ?,
+							descrip = ?,
+							image = ?,
+							allow_children = ?
+					      WHERE
+						    id		= ?' }"
+			 FIELDS	= "l.block:code, l.block:name, l.block:descrip, l.block:image, l.block:allow_children, l.block:id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0006', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Block_Update" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Block_Load_ID( l.block:id, l.prev_block ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This block can not be found.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "id">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.block:code }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.block:code ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.block:code NE l.prev_block:code }">
+		<MvIF EXPR = "{ Block_Load_Code( l.block:code, l.void ) }">
+			<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
+			<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.block:name }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ Block_Update_LowLevel( l.block ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Block_Delete" PARAMETERS = "block_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGBlocks WHERE id = ?' }"
+			 FIELDS	= "l.block_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Block_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ g.Name }">
+	<MvASSIGN NAME = "l.block" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
+	<MvASSIGN NAME = "l.block" MEMBER = "image"				VALUE = "{ g.Image }">
+	<MvASSIGN NAME = "l.block" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
+
+	<MvIF EXPR = "{ NOT Block_Insert( l.block ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Block_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.block" MEMBER = "id"				VALUE = "{ g.Id }">
+	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ g.Name }">
+	<MvASSIGN NAME = "l.block" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
+	<MvASSIGN NAME = "l.block" MEMBER = "image"				VALUE = "{ g.Image }">
+	<MvASSIGN NAME = "l.block" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
+
+	<MvIF EXPR = "{ NOT Block_Update( l.block ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Block_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Block_Delete( g.Id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlockSet_Read" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.block" MEMBER = "id"				VALUE = "{ TGBlock_Sets.d.id }">
+	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ TGBlock_Sets.d.code }">
+	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ TGBlock_Sets.d.name }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlockSet_Insert_Lowlevel" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGBlock_Sets' ) }">
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGBlock_Sets
+					      ( id, code, name )
+						  VALUES
+						  ( ?, ?, ? )' }"
+			 FIELDS	= "l.blockset:id, l.blockset:code, l.blockset:name">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0001', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlockSet_Insert" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "code" VALUE = "{ trim( l.blockset:code ) }">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "name" VALUE = "{ trim( l.blockset:name ) }">
+
+	<MvIF EXPR = "{ ISNULL l.blockset:code }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.blockset:code ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ BlockSet_Load_Code( l.blockset:code, l.void ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.blockset:name }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT BlockSet_Insert_Lowlevel( l.blockset ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlockSet_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGBlock_Sets"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlock_Sets WHERE id = ?' }"
+				FIELDS	= "l.id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-BLOCKSETS-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGBlock_Sets.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBLOCKS-BLOCKSETS-0003' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ BlockSet_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlockSet_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGBlock_Sets"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlock_Sets WHERE code = ?' }"
+				FIELDS	= "l.code">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0004', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGBlock_Sets.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBlocks-BLOCKSETS-0005' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ BlockSet_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlockSet_Update_LowLevel" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGBlock_Sets
+					      SET
+							code = ?,
+							name = ?
+					      WHERE
+						    id		= ?' }"
+			 FIELDS	= "l.blockset:code, l.blockset:name, l.blockset:id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0006', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "BlockSet_Update" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT BlockSet_Load_ID( l.blockset:id, l.prev_blockset ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This block can not be found.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "id">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.blockset:code }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.blockset:code ) }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.blockset:code NE l.prev_blockset:code }">
+		<MvIF EXPR = "{ BlockSet_Load_Code( l.blockset:code, l.void ) }">
+			<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
+			<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.blockset:name }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ BlockSet_Update_LowLevel( l.blockset ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlockSet_Delete" PARAMETERS = "blockset_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGBlock_Sets WHERE id = ?' }"
+			 FIELDS	= "l.blockset_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_BlockSet_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "name"				VALUE = "{ g.Name }">
+
+	<MvIF EXPR = "{ NOT BlockSet_Insert( l.blockset ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_BlockSet_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "id"				VALUE = "{ g.Id }">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "code"			VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.blockset" MEMBER = "name"			VALUE = "{ g.Name }">
+
+	<MvIF EXPR = "{ NOT BlockSet_Update( l.blockset ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_BlockSet_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT BlockSet_Delete( g.Id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
