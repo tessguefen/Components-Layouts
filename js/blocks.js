@@ -30,6 +30,7 @@ function Blocks_Batchlist() {
 	self.Feature_Delete_Enable('Delete Block(s)');
 	self.Feature_RowDoubleClick_Enable();
 	self.processingdialog = new ProcessingDialog();
+	self.Feature_GoTo_Enable('Open Block', '');
 }
 
 DeriveFrom( MMBatchList, Blocks_Batchlist );
@@ -84,4 +85,7 @@ Blocks_Batchlist.Update_Nests = function( item, checked, callback, delegator ) {
 		}
 	}
 	Blocks_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Block_Update', callback, delegator );
+}
+Blocks_Batchlist.prototype.onGoTo = function( item, e ) {
+	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGBLOCKS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Block_ID': item.record.id, 'Module_Type': 'util', 'TGBLOCKS_Screen' : 'Block' } );
 }

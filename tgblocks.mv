@@ -65,7 +65,6 @@
 								code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
 								prompt			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
 								type			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
-								image			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ ',
 								required		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ ',
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
@@ -347,26 +346,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ g.TGBLOCKS_Screen }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Block Component', '', '' ) }">
-
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
-
-		<MvIF EXPR = "{ NOT BlockSet_Load_ID( g.BlockSet_ID, l.blockset ) }">
-			ERROR: Could not load Screen for Block Set ID: <MvEVAL EXPR = "{ g.BlockSet_ID }">.
-		<MvELSE>
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Block Component', l.blockset:name, '' ) }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
-
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGBLOCKS_SCREEN', 'TGBLOCKS_SCREEN_Blocks:Blocks Set' ) }">
-
-			<MvHIDE FIELDS = "g.Module_Code,g.TGBLOCKS_Screen,g.BlockSet_ID">
-
-			:&gt; Block Set Screen for Block Set: <MvEVAL EXPR = "{ l.blockset:name}">.
-
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
-		</MvIF>
+		<MvEVAL EXPR = "{ BlocksScreen_UI( g.TGBLOCKS_Screen ) }">
 	<MvELSE>
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Block Component', '', '' ) }">
 
@@ -407,6 +387,9 @@
 	<MvIF EXPR = "{ g.Module_Function EQ 'BlockSet_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockSet_Insert( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'BlockSet_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockSet_Update( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'BlockSet_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockSet_Delete( l.module )	}"></MvIF>
+
+	<MvIF EXPR = "{ g.Module_Function EQ 'Block_Attrs_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Block_Attrs_Load_Query( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'BlockAttrs_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_BlockAttrs_Insert( l.module )	}"></MvIF>
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -423,6 +406,10 @@
 	<MvIF EXPR = "{ g.Filename EQ 'blocksets.js' }">
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
 		<MvINCLUDE FILE = "js/blocksets.js" INTERPRET="OFF">
+	</MvIF>
+	<MvIF EXPR = "{ g.Filename EQ 'block_attrs.js' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+		<MvINCLUDE FILE = "js/block_attrs.js" INTERPRET="OFF">
 	</MvIF>
 </MvFUNCTION>
 

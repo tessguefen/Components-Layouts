@@ -1,9 +1,12 @@
 <MvCOMMENT>
 	BlocksTab_HeadTag( tab )
 	BlockTab_UI( tab )
+	BlocksScreen_HeadTag( screen )
+	BlocksScreen_UI( screen )
 
 	JSON_Blocks_Load_Query( module var )
 	JSON_BlockSets_Load_Query( module var )
+	JSON_Block_Attrs_Load_Query( module var )
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "BlocksTab_HeadTag" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "html, text">
@@ -32,6 +35,67 @@
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGBLOCKS_Sets' }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
 		<div id="jsBlockSetBatchlist"></div>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlocksScreen_HeadTag" PARAMETERS = "screen" STANDARDOUTPUTLEVEL = "html, text">
+	<MvIF EXPR = "{ l.screen EQ 'Block' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGBLOCKS&Filename=block_attrs.js' }"></script>
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].JavaScript_Set_A_Variable( 'block_id', g.Block_ID ) }">
+		<script language="JavaScript">
+			MMScreen_LoadFinished( function() { new BlockAttrs_Batchlist( block_id ); } );
+		</script>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "BlocksScreen_UI" PARAMETERS = "screen" STANDARDOUTPUTLEVEL = "text, html">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Block Component', '', '' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+
+
+	<MvIF EXPR = "{ l.screen EQ 'Block_Set' }">
+		<MvIF EXPR = "{ NOT BlockSet_Load_ID( g.BlockSet_ID, l.blockset ) }">
+			Could not load Screen for Block Set ID: <MvEVAL EXPR = "{ g.BlockSet_ID }">.
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Block Component', l.blockset:name, '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGBLOCKS_SCREEN', 'TGBLOCKS_SCREEN_Blocks:Blocks Set' ) }">
+
+			<MvEVAL EXPR = "{ BlocksScreen_HeadTag( l.screen ) }">
+
+			<MvHIDE FIELDS = "g.Module_Code,g.TGBLOCKS_Screen,g.BlockSet_ID">
+
+			:&gt; Block Set Screen for Block Set: <MvEVAL EXPR = "{ l.blockset:name}">.
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+		</MvIF>
+	<MvELSEIF EXPR = "{ l.screen EQ 'Block' }">
+		<MvIF EXPR = "{ NOT Block_Load_ID( g.Block_ID, l.block ) }">
+			ERROR: Could not load Screen for Block Set ID: <MvEVAL EXPR = "{ g.Block_ID }">.
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Block Component', l.block:name, '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGBLOCKS_SCREEN', 'TGBLOCKS_SCREEN_Blocks:Blocks' ) }">
+
+			<MvHIDE FIELDS = "g.Module_Code,g.TGBLOCKS_Screen,g.Block_ID">
+			
+			<MvEVAL EXPR = "{ BlocksScreen_HeadTag( l.screen ) }">
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
+			<div id="jsBlockAttributes"></div>
+			
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+		</MvIF>
 	</MvIF>
 </MvFUNCTION>
 
@@ -104,7 +168,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error(g.Error_Code, g.Error_Message ) }">
 	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGBlock_Sets', l.search_sql, l.search_fields, g.Offset, g.Count) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGPOINTS-JSON-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGPOINTS-JSON-2000', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -128,4 +192,123 @@
 		}
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
 	}
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Block_Attrs_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvASSIGN NAME = "g.Filter" VALUE = "{ trim( g.Filter ) }">
+	<MvASSIGN NAME = "g.Sort" VALUE = "{ trim( g.Sort ) }">
+	<MvASSIGN NAME = "g.Offset" VALUE = "{ trim( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count" VALUE = "{ trim( g.Count ) }">
+	<MvASSIGN NAME = "g.Data_ID" VALUE = "{ trim( g.Data_ID ) }">
+
+	<MvASSIGN NAME = "l.search_query"				VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query, 'attr.id				AS attr_id,
+																				 attr.block_id			AS attr_block_id,
+																				 attr.code				AS attr_code,
+																				 attr.prompt			AS attr_prompt,
+																				 attr.type				AS attr_type,
+																				 attr.required			AS attr_required,
+																				 attr.disp_order		AS attr_disp_order,
+																				 opt.id					AS opt_id,
+																				 opt.attr_id			AS opt_attr_id,
+																				 opt.prompt				AS opt_prompt,
+																				 opt.disp_order			AS opt_disp_order' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGBlock_Attrs', 'attr' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_LEFT_OUTER_JOIN( l.search_query, 'attr', g.Store_Table_Prefix $ 'TGBlock_Options', 'opt', 'opt.attr_id = attr.id', '' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 'attr.block_id = ?', 'g.Block_ID' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'code:attr.code;opt.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, g.Sort,
+																		'code:attr.code;opt.code,
+																		prompt:attr.prompt;opt.prompt,
+																		type:attr.type,
+																		required:attr.required',
+																		'attr.disp_order;opt.disp_order' ) }">
+																			
+	<MvASSIGN NAME = "l.search_sql"			VALUE = "{ [ g.Module_Library_DB ].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGBlock_Attrs"
+				QUERY	= "{ l.search_sql }"
+				FIELDS	= "{ l.search_fields }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGBLOCKS-JSON-3000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.total_count"	VALUE = 0>
+	<MvASSIGN NAME = "l.attr_count"		VALUE = 0>
+	<MvASSIGN NAME = "l.opt_count"		VALUE = 0>
+	<MvASSIGN NAME = "l.last_attr_id"	VALUE = 0>
+	<MvASSIGN NAME = "l.last_opt_id"	VALUE = 0>
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
+	{
+		"data":
+		[
+		<MvWHILE EXPR = "{ NOT TGBlock_Attrs.d.EOF }">
+			<MvIF EXPR = "{ l.last_attr_id NE TGBlock_Attrs.d.attr_id }">
+				<MvIF EXPR = "{ l.opt_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+					]
+				</MvIF>
+
+				<MvIF EXPR = "{ l.attr_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+				</MvIF>
+
+				<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.attr_count ) }">
+				"id":			<MvEVAL EXPR = "{ int( TGBlock_Attrs.d.attr_id ) }">,
+				"block_id":		<MvEVAL EXPR = "{ int( TGBlock_Attrs.d.attr_block_id ) }">,
+				"code":			"<MvEVAL EXPR = "{ encodejavascriptstring( TGBlock_Attrs.d.attr_code ) }">",
+				"prompt":		"<MvEVAL EXPR = "{ encodejavascriptstring( TGBlock_Attrs.d.attr_prompt ) }">",
+				"type":			"<MvEVAL EXPR = "{ encodejavascriptstring( TGBlock_Attrs.d.attr_type ) }">",
+				"required":		<MvEVAL EXPR = "{ int( TGBlock_Attrs.d.attr_required ) }">,
+				"disp_order":	<MvEVAL EXPR = "{ int( TGBlock_Attrs.d.attr_disp_order ) }">
+				
+				<MvASSIGN NAME = "l.total_count"		VALUE = "{ l.total_count + 1 }">
+				<MvASSIGN NAME = "l.last_attr_id"	VALUE = "{ TGBlock_Attrs.d.attr_id }">
+				<MvASSIGN NAME = "l.last_opt_id"	VALUE = 0>
+				<MvASSIGN NAME = "l.opt_count"		VALUE = 0>
+			</MvIF>
+
+			<MvIF EXPR = "{ l.last_opt_id NE TGBlock_Attrs.d.opt_id AND NOT ISNULL TGBlock_Attrs.d.opt_id }">
+				<MvIF EXPR = "{ l.opt_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+				</MvIF>
+
+				<MvIF EXPR = "{ NOT l.opt_count }">
+					, "options":
+					[
+				</MvIF>
+
+				<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.opt_count ) }">
+				"id":			<MvEVAL EXPR = "{ int( TGBlock_Attrs.d.opt_id ) }">,
+				"attr_id":		<MvEVAL EXPR = "{ int( TGBlock_Attrs.d.opt_attr_id ) }">,
+				"prompt":		"<MvEVAL EXPR = "{ encodejavascriptstring( TGBlock_Attrs.d.opt_prompt ) }">",
+				"disp_order":	<MvEVAL EXPR = "{ int( TGBlock_Attrs.d.opt_disp_order ) }">
+
+				<MvASSIGN NAME = "l.total_count"		VALUE = "{ l.total_count + 1 }">
+				<MvASSIGN NAME = "l.last_opt_id"	VALUE = "{ TGBlock_Attrs.d.opt_id }">
+			</MvIF>
+
+			<MvSKIP NAME = "Merchant" VIEW = "TGBlock_Attrs" ROWS = 1>
+		</MvWHILE>
+
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Attrs">
+
+		<MvIF EXPR = "{ l.opt_count }">
+			<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+			]
+		</MvIF>
+
+		<MvIF EXPR = "{ l.attr_count }">
+			<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+		</MvIF>
+		],
+		"start_offset": 0,
+		"total_count": <MvEVAL EXPR = "{ int( l.total_count ) }">
+	}
+}
 </MvFUNCTION>
