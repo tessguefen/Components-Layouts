@@ -10,6 +10,7 @@ block_sets
 block_sets_blocks
 
 **Blocks**
+
 **COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
 -----|-----|-----|-----
 id|Number| |StoreKey: blocks
@@ -17,6 +18,8 @@ code|Char(255)| |
 name|Char(255)| | 
 descrip|Char(255)| | 
 image|Char(255)| | 
+
+
 
 ```
 Block_Attrs
