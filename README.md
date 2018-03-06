@@ -35,28 +35,43 @@ options|Memo|array structure to be stored in here.|
 
 ---
 
+**Block_Sets**
 
+**COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
+-----|-----|-----|-----
+id|Number| |StoreKey: block_sets
+code|Char(255)| | 
+name|Char(255)| | 
 
+---
 
-```
+**BlockSets_Blocks**
 
-BlockSets
-	id
-	code
-	name
-	descrip
+**COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
+-----|-----|-----|-----
+id|Number| |StoreKey: blocksets_blocks
+block_set_id|Number|Block_Sets.id| 
+block_id|Number|Blocks.id| 
+parent|Number|BlockSets_Blocks.id or 0| 
+active|Bool| | 
+disp_order|Number| |StoreKey: blocksets_disp_order
 
+---
 
-BlockSets_Blocks
-	id
-	block_set_id (BlockSets.id)
-	block_id (Blocks.id)
-	parent (BlockSets_Blocks.id)
-	active
-	disp_order
+**BlockSets_Values**
 
-BlockSets_Values
-	blocksets_blocks_id (BlockSets_Blocks.id)
-	attr_id
-	value
-```
+**COLUMN NAME**|**TYPE**|**REFERENCE**
+-----|-----|-----
+blocksets_blocks_id|Number|BlockSets_Blocks.id
+attr_id|Number|Block_Attrs.id
+value|Memo| 
+
+---
+
+**Blocks_Cache**
+
+**COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
+-----|-----|-----|-----
+blocksets_blocks_id|Number|BlockSets_Blocks.id| 
+value|Memo| |structure of set for use at runtime
+
