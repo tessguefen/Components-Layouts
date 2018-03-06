@@ -19,17 +19,26 @@ name|Char(255)| |
 descrip|Char(255)| | 
 image|Char(255)| | 
 
+---
+
+**Block_Attrs**
+
+**COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
+-----|-----|-----|-----
+id|Number| |StoreKey: block_attrs
+block_id|Number|Blocks.id| 
+code|Char(255)| | 
+prompt|Char(255)| | 
+type|Char(255)| | 
+required|Bool| | 
+options|Memo|array structure to be stored in here.| 
+
+---
+
+
 
 
 ```
-Block_Attrs
-	id
-	block_id (Blocks.id)
-	code
-	name
-	type
-	required
-	options (if specific types)
 
 BlockSets
 	id
