@@ -4,24 +4,21 @@
 
 
 Keys
+
 blocks
 block_sets
 block_sets_blocks
 
-Blocks
-	id
-	code
-	name
-	descrip
-	image (?)
-	children (BOOL)
+**Blocks**
+**COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
+-----|-----|-----|-----
+id|Number| |StoreKey: blocks
+code|Char(255)| | 
+name|Char(255)| | 
+descrip|Char(255)| | 
+image|Char(255)| | 
 
-BlockSets
-	id
-	code
-	name
-	descrip
-
+```
 Block_Attrs
 	id
 	block_id (Blocks.id)
@@ -30,6 +27,13 @@ Block_Attrs
 	type
 	required
 	options (if specific types)
+
+BlockSets
+	id
+	code
+	name
+	descrip
+
 
 BlockSets_Blocks
 	id
@@ -43,8 +47,4 @@ BlockSets_Values
 	blocksets_blocks_id (BlockSets_Blocks.id)
 	attr_id
 	value
-
-
-
-
-
+```
