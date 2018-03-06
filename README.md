@@ -2,11 +2,14 @@
 
 ## Keys
 
-- blocks
-- block_attrs
-- block_sets
-- blocksets_blocks
-- blocksets_disp_order
+- TGBlocks
+- TGBlocks_Attrs
+- TGBlocks_Attrs_Disp_Order
+- TGBlocks_Options
+- TTGBlocks_Options_Disp_Order
+- TGBlock_Sets
+- TGBlockSets_Block
+- TGBlockSets_Disp_Order
 
 ---
 
@@ -16,7 +19,7 @@
 
 **COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
 -----|-----|-----|-----
-id|Number| |StoreKey: blocks
+id|Number| |StoreKey: TGBlocks
 code|Char(255)| | 
 name|Char(255)| | 
 descrip|Char(255)| | 
@@ -29,13 +32,24 @@ children|Bool| |Can haz childrens?
 
 **COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
 -----|-----|-----|-----
-id|Number| |StoreKey: block_attrs
+id|Number| |StoreKey: TGBlocks_Attrs
 block_id|Number|Blocks.id| 
 code|Char(255)| | 
 prompt|Char(255)| | 
 type|Char(255)| | 
 required|Bool| | 
-options|Memo|array structure to be stored in here.| 
+disp_order|Number| |StoreKey: TGBlocks_Attrs_Disp_Order
+
+---
+
+**TGBlock_Options**
+
+**COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
+-----|-----|-----|-----
+id|Number| |StoreKey: block_attrs
+attr_id|Number|Block_Attrs.id| 
+prompt|Char(255)| | 
+disp_order|Number| |StoreKey: TGBlocks_Options_Disp_Order
 
 ---
 
@@ -43,7 +57,7 @@ options|Memo|array structure to be stored in here.|
 
 **COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
 -----|-----|-----|-----
-id|Number| |StoreKey: block_sets
+id|Number| |StoreKey: TGBlock_Sets
 code|Char(255)| | 
 name|Char(255)| | 
 
@@ -53,12 +67,12 @@ name|Char(255)| |
 
 **COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
 -----|-----|-----|-----
-id|Number| |StoreKey: blocksets_blocks
+id|Number| |StoreKey: TGBlockSets_Block
 block_set_id|Number|Block_Sets.id| 
 block_id|Number|Blocks.id| 
 parent|Number|BlockSets_Blocks.id or 0| 
 active|Bool| | 
-disp_order|Number| |StoreKey: blocksets_disp_order
+disp_order|Number| |StoreKey: TGBlockSets_Disp_Order
 
 ---
 

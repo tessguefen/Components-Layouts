@@ -66,7 +66,8 @@
 								prompt			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
 								type			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
 								image			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ ',
-								required		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ '
+								required		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ ',
+								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
@@ -89,6 +90,39 @@
 
 	<MvCOMMENT>
 	|
+	|	Create TGBlock_Options table.
+	|
+	</MvCOMMENT>
+
+	<MvQUERY	NAME = "Merchant"
+				QUERY = "{ 'CREATE TABLE ' $ g.Store_Table_Prefix $ 'TGBlock_Options
+							(
+								id				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+								attr_id			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+								prompt			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
+								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
+							)' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1006', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlock_Options. Please make sure this table was not already created.' ) }">
+	</MvIF>
+
+	<MvQUERY	NAME = "Merchant"
+				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGBlock_Options_1 ON ' $ g.Store_Table_Prefix $ 'TGBlock_Options ( id )' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvQUERY	NAME = "Merchant"
+				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGBlock_Options_2 ON ' $ g.Store_Table_Prefix $ 'TGBlock_Options ( attr_id, prompt )' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1008', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvCOMMENT>
+	|
 	|	Create TGBlock_Sets table.
 	|
 	</MvCOMMENT>
@@ -102,21 +136,21 @@
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1006', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlock_Sets. Please make sure this table was not already created.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1009', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlock_Sets. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGBlock_Sets_1 ON ' $ g.Store_Table_Prefix $ 'TGBlock_Sets ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1010', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGBlock_Sets_2 ON ' $ g.Store_Table_Prefix $ 'TGBlock_Sets ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1008', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1011', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -137,21 +171,21 @@
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1009', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlockSets_Blocks. Please make sure this table was not already created.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1012', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlockSets_Blocks. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGBlockSets_Blocks_1 ON ' $ g.Store_Table_Prefix $ 'TGBlockSets_Blocks ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1010', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1013', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGBlockSets_Blocks_2 ON ' $ g.Store_Table_Prefix $ 'TGBlockSets_Blocks ( parent, disp_order )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1011', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1014', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -169,14 +203,14 @@
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1012', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlockSets_Values. Please make sure this table was not already created.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1015', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlockSets_Values. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGBlockSets_Values_1 ON ' $ g.Store_Table_Prefix $ 'TGBlockSets_Values ( blocksets_blocks_id, attr_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1013', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1016', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -193,14 +227,14 @@
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1014', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlocks_Cache. Please make sure this table was not already created.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-INSTALL-1017', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGBlocks_Cache. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGBlocks_Cache_1 ON ' $ g.Store_Table_Prefix $ 'TGBlocks_Cache ( blocksets_blocks_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1015', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGBLOCKS-INSTALL-1018', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -211,27 +245,42 @@
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlocks', 1 ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-1016', 'An error occured while creating the store key, TGBlocks. Please make sure this does not already exsist.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2016', 'An error occured while creating the store key, TGBlocks. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlocks_Attrs', 1 ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-1017', 'An error occured while creating the store key, TGBlocks_Attrs. Please make sure this does not already exsist.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2017', 'An error occured while creating the store key, TGBlocks_Attrs. Please make sure this does not already exsist.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlocks_Attrs_Disp_Order', 1 ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2018', 'An error occured while creating the store key, TGBlocks_Attrs_Disp_Order. Please make sure this does not already exsist.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlock_Options', 1 ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2019', 'An error occured while creating the store key, TGBlock_Options. Please make sure this does not already exsist.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlock_Options_Disp_Order', 1 ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2020', 'An error occured while creating the store key, TGBlock_Options_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlock_Sets', 1 ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-1018', 'An error occured while creating the store key, TGBlock_Sets. Please make sure this does not already exsist.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2021', 'An error occured while creating the store key, TGBlock_Sets. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlockSets_Block', 1 ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-1019', 'An error occured while creating the store key, TGBlockSets_Block. Please make sure this does not already exsist.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2022', 'An error occured while creating the store key, TGBlockSets_Block. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGBlockSets_Disp_Order', 1 ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-1020', 'An error occured while creating the store key, TGBlockSets_Disp_Order. Please make sure this does not already exsist.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-INSTALL-2023', 'An error occured while creating the store key, TGBlockSets_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -250,16 +299,20 @@
 <MvFUNCTION NAME = "Module_Uninstall_Store" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGBlocks'				}">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGBlock_Attrs'		}">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGBlock_Options'		}">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGBlock_Sets'			}">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGBlockSets_Blocks'	}">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGBlockSets_Values'	}">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGBlocks_Cache'		}">
 
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlocks' ) 				}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlocks_Attrs' )			}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlock_Sets' )			}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlockSets_Block' )		}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlockSets_Disp_Order' )	}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlocks' ) 						}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlocks_Attrs' )					}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlocks_Attrs_Disp_Order' )		}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlocks_Options' )				}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TTGBlocks_Options_Disp_Order' )	}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlock_Sets' )					}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlockSets_Block' )				}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGBlockSets_Disp_Order' )			}">
 
 	<MvFUNCTIONRETURN VALUE = 1 />
 </MvFUNCTION>
