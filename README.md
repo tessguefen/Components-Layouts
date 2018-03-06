@@ -1,13 +1,16 @@
 # Blocks
 
-## Notes
+##Keys
 
+- blocks
+- block_attrs
+- block_sets
+- blocksets_blocks
+- blocksets_disp_order
 
-Keys
+---
 
-blocks
-block_sets
-block_sets_blocks
+## Table Structure
 
 **Blocks**
 
@@ -18,6 +21,7 @@ code|Char(255)| |
 name|Char(255)| | 
 descrip|Char(255)| | 
 image|Char(255)| | 
+children|Bool| |Can haz childrens?
 
 ---
 
@@ -75,3 +79,13 @@ value|Memo|
 blocksets_blocks_id|Number|BlockSets_Blocks.id| 
 value|Memo| |structure of set for use at runtime
 
+---
+
+## Ideal Situation
+
+```
+l.settings:landing_page:blocks[1]:id
+l.settings:landing_page:blocks[1]:code
+l.settings:landing_page:blocks[1]:name
+l.settings:landing_page:blocks[1]:children[1]:
+```
