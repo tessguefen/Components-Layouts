@@ -37,6 +37,15 @@
 	ComponentAttrs_Delete( component_attr_id )
 
 	JSON_ComponentAttrs_Insert( module var )
+	JSON_ComponentAttrs_Update( module var )
+	JSON_ComponentAttrs_Delete( module var )
+	JSON_ComponentAttrs_DisplayOrder_Update( module var )
+
+	ComponentAttrs_Update_Offsets( component_id, fields var )
+	ComponentAttrs_Update_Offsets_PastEnd( component_id, pastend var, pastend_count )
+	ComponentOptions_Update_Offsets( attr_id, options var )
+	ComponentOptions_Update_Offsets_PastEnd( attr_id, pastend var, pastend_count )
+	
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Component_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
@@ -464,7 +473,7 @@
 						  ( ?, ?, ?, ?, ?, ?, ? )' }"
 			 FIELDS	= "l.component_attrs:id, l.component_attrs:component_id, l.component_attrs:code, l.component_attrs:prompt, l.component_attrs:type, l.component_attrs:required, l.component_attrs:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-BLOCKATTRS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0001', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -554,12 +563,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ? AND code = ?' }"
 				FIELDS	= "l.component_id, l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-BLOCKATTRS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0002', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-BLOCKATTRS-0003' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTATTRS-0003' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ ComponentAttrs_Read( l.output ) }">
@@ -568,6 +577,127 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "ComponentAttrs_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Attrs"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE id = ?' }"
+				FIELDS	= "l.id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0004', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTATTRS-0005' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ ComponentAttrs_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttrs_Update_Lowlevel" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs
+					      SET
+							code = ?,
+							prompt = ?,
+							type = ?,
+							required = ?
+					      WHERE
+						    id		= ?' }"
+			 FIELDS	= "l.component_attrs:code, l.component_attrs:prompt, l.component_attrs:type, l.component_attrs:required, l.component_attrs:id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0006', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "ComponentAttrs_Update" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ISNULL l.component_attrs:component_id }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "component_id">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_ID( l.component_attrs:id, l.prev_component_attrs ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This component can not be found.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "id">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code" VALUE = "{ trim( l.component_attrs:code ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt" VALUE = "{ trim( l.component_attrs:prompt ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type" VALUE = "{ trim( l.component_attrs:type ) }">
+
+
+	<MvIF EXPR = "{ NOT Component_Load_ID( l.component_attrs:component_id, l.component ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID does not exist.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "component_id">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.component_attrs:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.component_attrs:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.component_attrs:code NE l.prev_component_attrs:code }">
+		<MvIF EXPR = "{ ComponentAttrs_Load_Code( l.component_attrs:component_id, l.component_attrs:code, l.void ) }">
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist for this component.">
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.component_attrs:prompt }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Prompt must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "prompt">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.component_attrs:type }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Type must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "type">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Validate_ComponentAttr_Type( l.component_attrs:type ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Invalid value for Type.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "type">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ ComponentAttrs_Update_Lowlevel( l.component_attrs ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttrs_Delete" PARAMETERS = "component_attr_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE id = ?' }"
+			 FIELDS	= "l.component_attr_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvCOMMENT>
+		<MvIF EXPR = "{ NOT ComponentOptions_Delete_Attrs( component_attr_id ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvCOMMENT>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
 
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
@@ -582,4 +712,366 @@
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_ComponentAttrs_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"				VALUE = "{ g.Id }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"		VALUE = "{ g.Component_Id }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "type"				VALUE = "{ g.type }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "required"			VALUE = "{ g.Required }">
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Update( l.component_attr ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_ComponentAttrs_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttrs_Delete( g.Id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_ComponentAttrs_DisplayOrder_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }"><MvFUNCTIONRETURN></MvIF>
+	<MvASSIGN NAME = "l.component_id" VALUE = "{ g.component_id }">
+
+	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Attrs_DisplayOrder" INDEX = "l.pos">
+		<MvASSIGN NAME = "l.attrs_order:id"					VALUE = "{ int( l.attrs_order:id ) }">
+		<MvASSIGN NAME = "l.attrs_order:offset"				VALUE = "{ int( l.attrs_order:offset ) }">
+		<MvASSIGN NAME = "l.attrs_order:original_offset"	VALUE = "{ int( l.attrs_order:original_offset ) }">
+
+		<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_WholeNumber_Positive_Required( l.attrs_order:offset ) }">
+			<MvFUNCTIONRETURN VALUE VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attrs_DisplayOrder[' $ l.pos $ ']', g.Validation_Message ) }">
+		</MvIF>
+	</MvFOREACH>
+
+	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Option_Order" INDEX = "l.attr_pos">
+		<MvFOREACH ITERATOR = "l.option_order" ARRAY = "l.attrs_order" INDEX = "l.option_pos">
+			<MvASSIGN NAME = "l.option_order:id"				VALUE = "{ int( l.option_order:id ) }">
+			<MvASSIGN NAME = "l.option_order:offset"			VALUE = "{ int( l.option_order:offset ) }">
+			<MvASSIGN NAME = "l.option_order:original_offset"	VALUE = "{ int( l.option_order:original_offset ) }">
+
+			<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_WholeNumber_Positive_Required( l.option_order:offset ) }">
+				<MvFUNCTIONRETURN VALUE VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Option_Order[' $ l.attr_pos $ '][ ' $ l.option_pos $ ' ]', g.Validation_Message ) }">
+			</MvIF>
+		</MvFOREACH>
+	</MvFOREACH>
+
+	<MvASSIGN NAME = "l.field_count" VALUE = 0>
+
+	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Attrs_DisplayOrder">
+		<MvIF EXPR = "{ l.attrs_order:offset EQ l.attrs_order:original_offset }">
+			<MvFOREACHCONTINUE>
+		</MvIF>
+
+		<MvASSIGN NAME = "l.attr_changes" INDEX = "{ ++l.field_count }" VALUE = "{ l.attrs_order }">
+	</MvFOREACH>
+
+	<MvIF EXPR = "{ l.field_count }">
+		<MvIF EXPR = "{ NOT ComponentAttrs_Update_Offsets( l.component_id, l.attr_changes ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Option_Order" INDEX = "l.attr_id">
+		<MvASSIGN NAME = "l.option_count" VALUE = 0>
+		
+		<MvFOREACH ITERATOR = "l.option_order" ARRAY = "l.attrs_order" INDEX = "l.option_pos">
+			<MvIF EXPR = "{ l.option_order:offset EQ l.option_order:original_offset }">
+				<MvFOREACHCONTINUE>
+			</MvIF>
+
+			<MvASSIGN NAME = "l.option_changes" INDEX = "{ ++l.option_count }" VALUE = "{ l.option_order }">
+		</MvFOREACH>
+
+		<MvIF EXPR = "{ l.option_count }">
+			<MvIF EXPR = "{ NOT ComponentOptions_Update_Offsets( l.attr_id, l.option_changes ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
+			</MvIF>
+		</MvIF>
+	</MvFOREACH>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttrs_Update_Offsets" PARAMETERS = "component_id, fields var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.pastend_count"				VALUE = 0>
+
+	<MvASSIGN NAME = "l.field_pos"				VALUE = 1>
+	<MvASSIGN NAME = "l.field_count"			VALUE = "{ miva_array_elements( l.fields ) }">
+	<MvASSIGN NAME = "g.Field_component_id" VALUE = "{ l.component_id }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray( l.fields, l.field_count ) }">
+
+	<MvWHILE EXPR = "{ l.field_pos LE l.field_count }">
+		<MvASSIGN NAME = "g.ComponentAttrs_ID" 	VALUE = "{ l.fields[ l.field_pos ]:id }">
+
+		<MvCOMMENT>
+		|
+		| Determine disp_order of current field at this offset.
+		|
+		</MvCOMMENT>
+
+		<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range( 'Merchant',
+																				   'TGComponent_Attrs',
+																				   'SELECT id, disp_order FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE id <> ? AND component_id = ? ORDER BY disp_order',
+																				   'g.ComponentAttrs_ID, g.Field_component_id',
+																				   l.fields[ l.field_pos ]:offset - 1,
+																				   1 ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0009', g.MvOPENVIEW_Error ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+
+			<MvCOMMENT>
+			|
+			| Offset was higher than the last record.  This case requires specialized processing, so save this record for later.
+			|
+			</MvCOMMENT>
+
+			<MvASSIGN NAME = "l.pastend_count"							VALUE = "{ l.pastend_count + 1 }">
+			<MvASSIGN NAME = "l.pastend" INDEX = "{ l.pastend_count }"	VALUE = "{ l.fields[ l.field_pos ] }">
+
+			<MvASSIGN NAME = "l.field_pos"	VALUE = "{ l.field_pos + 1 }">
+		<MvELSEIF EXPR = "{ l.pastend_count }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+
+			<MvIF EXPR = "{ NOT ComponentAttrs_Update_Offsets_PastEnd( l.component_id, l.pastend, l.pastend_count ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			<MvASSIGN NAME = "l.pastend_count" VALUE = 0>
+		<MvELSE>
+			<MvASSIGN NAME = "l.disp_order" VALUE = "{ TGComponent_Attrs.d.disp_order }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+
+			<MvCOMMENT>
+			|
+			| Make a hole by shifting fields after this disp_order down
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+														$ g.Store_Table_Prefix $ 'TGComponent_Attrs 
+													SET 
+														disp_order = disp_order + 1 
+													WHERE 
+														disp_order >= ? AND component_id = ?' }" 
+													FIELDS = "l.disp_order, l.component_id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0010', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Attrs_Disp_Order' ) }">
+
+			<MvCOMMENT>
+			|
+			| Put the field in the newly created hole
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+														$ g.Store_Table_Prefix $ 'TGComponent_Attrs 
+													SET 
+														disp_order = ? 
+													WHERE 
+														id = ? AND component_id = ?' }" 
+													FIELDS = "l.disp_order, g.ComponentAttrs_ID, l.component_id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0011', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.field_pos"	VALUE = "{ l.field_pos + 1 }">
+		</MvIF>
+	</MvWHILE>
+
+	<MvCOMMENT>
+	|
+	| If all the downward records were past the end, they must be processed here.
+	|
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ l.pastend_count }">
+		<MvIF EXPR = "{ NOT ComponentAttrs_Update_Offsets_PastEnd( l.component_id, l.pastend, l.pastend_count ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>		
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttrs_Update_Offsets_PastEnd" PARAMETERS = "component_id, pastend var, pastend_count" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+	|
+	| Process records moving past the end.  These records must be sorted in ascending order.
+	|
+	</MvCOMMENT>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray_PastEnd( l.pastend, l.pastend_count ) }">
+
+	<MvASSIGN NAME = "l.pastend_pos"		VALUE = 1>
+	<MvWHILE EXPR = "{ l.pastend_pos LE l.pastend_count }">
+		<MvASSIGN NAME = "g.ComponentAttrs_ID" 	VALUE = "{ l.pastend[ l.pastend_pos ]:id }">
+		<MvASSIGN NAME = "l.disp_order"				VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Attrs_Disp_Order' ) }">
+
+		<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+													$ g.Store_Table_Prefix $ 'TGComponent_Attrs 
+												SET 
+													disp_order = ? 
+												WHERE 
+													id = ? AND component_id = ?' }" 
+												FIELDS = "l.disp_order, g.ComponentAttrs_ID, l.component_id">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0012', g.MvQUERY_Error ) }">
+		</MvIF>
+		
+		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
+	</MvWHILE>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOptions_Update_Offsets" PARAMETERS = "attr_id, options var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.pastend_count"				VALUE = 0>
+
+	<MvASSIGN NAME = "l.option_pos"				VALUE = 1>
+	<MvASSIGN NAME = "l.option_count"			VALUE = "{ miva_array_elements( l.options ) }">
+	<MvASSIGN NAME = "g.Option_attr_id" 		VALUE = "{ l.attr_id }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray( l.options, l.option_count ) }">
+
+	<MvWHILE EXPR = "{ l.option_pos LE l.option_count }">
+		<MvASSIGN NAME = "g.Option_Order_AttrID" 	VALUE = "{ l.options[ l.option_pos ]:id }">
+
+		<MvCOMMENT>
+		|
+		| Determine disp_order of current option at this offset.
+		|
+		</MvCOMMENT>
+
+		<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range( 'Merchant',
+																				   'TGComponent_Options',
+																				   'SELECT id, disp_order FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE id <> ? AND attr_id = ? ORDER BY disp_order',
+																				   'g.Option_Order_AttrID, g.Option_attr_id',
+																				   l.options[ l.option_pos ]:offset - 1,
+																				   1 ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0009', g.MvOPENVIEW_Error ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ TGComponent_Options.d.EOF }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+
+			<MvCOMMENT>
+			|
+			| Offset was higher than the last record.  This case requires specialized processing, so save this record for later.
+			|
+			</MvCOMMENT>
+
+			<MvASSIGN NAME = "l.pastend_count"							VALUE = "{ l.pastend_count + 1 }">
+			<MvASSIGN NAME = "l.pastend" INDEX = "{ l.pastend_count }"	VALUE = "{ l.options[ l.option_pos ] }">
+
+			<MvASSIGN NAME = "l.option_pos"	VALUE = "{ l.option_pos + 1 }">
+		<MvELSEIF EXPR = "{ l.pastend_count }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+
+			<MvIF EXPR = "{ NOT ComponentOptions_Update_Offsets_PastEnd( l.data_id, l.pastend, l.pastend_count ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			<MvASSIGN NAME = "l.pastend_count" VALUE = 0>
+		<MvELSE>
+			<MvASSIGN NAME = "l.disp_order" VALUE = "{ TGComponent_Options.d.disp_order }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+
+			<MvCOMMENT>
+			|
+			| Make a hole by shifting options after this disp_order down
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+														$ g.Store_Table_Prefix $ 'TGComponent_Options 
+													SET 
+														disp_order = disp_order + 1 
+													WHERE 
+														disp_order >= ? AND attr_id = ?' }" 
+													FIELDS = "l.disp_order, l.attr_id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0010', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Options_Disp_Order' ) }">
+
+			<MvCOMMENT>
+			|
+			| Put the option in the newly created hole
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+														$ g.Store_Table_Prefix $ 'TGComponent_Options 
+													SET 
+														disp_order = ? 
+													WHERE 
+														id = ? AND attr_id = ?' }" 
+													FIELDS = "l.disp_order, g.Option_Order_AttrID, l.attr_id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0011', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.option_pos"	VALUE = "{ l.option_pos + 1 }">
+		</MvIF>
+	</MvWHILE>
+
+	<MvCOMMENT>
+	|
+	| If all the downward records were past the end, they must be processed here.
+	|
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ l.pastend_count }">
+		<MvIF EXPR = "{ NOT ComponentOptions_Update_Offsets_PastEnd( l.data_id, l.pastend, l.pastend_count ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>		
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOptions_Update_Offsets_PastEnd" PARAMETERS = "attr_id, pastend var, pastend_count" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+	|
+	| Process records moving past the end.  These records must be sorted in ascending order.
+	|
+	</MvCOMMENT>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray_PastEnd( l.pastend, l.pastend_count ) }">
+
+	<MvASSIGN NAME = "l.pastend_pos"		VALUE = 1>
+	<MvWHILE EXPR = "{ l.pastend_pos LE l.pastend_count }">
+		<MvASSIGN NAME = "g.Option_Order_AttrID" 	VALUE = "{ l.pastend[ l.pastend_pos ]:id }">
+		<MvASSIGN NAME = "l.disp_order"				VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Options_Disp_Order' ) }">
+
+		<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+													$ g.Store_Table_Prefix $ 'TGComponent_Options 
+												SET 
+													disp_order = ? 
+												WHERE 
+													id = ? AND attr_id = ?' }" 
+												FIELDS = "l.disp_order, g.Option_Order_AttrID, l.attr_id">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0012', g.MvQUERY_Error ) }">
+		</MvIF>
+		
+		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
+	</MvWHILE>
+
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>

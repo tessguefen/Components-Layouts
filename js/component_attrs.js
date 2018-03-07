@@ -185,7 +185,7 @@ ComponentAttrs_Batchlist.prototype.onSave = function( item, callback, delegator 
 			original_callback( response );
 		}
 	}
-	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Field_Update', callback, delegator );
+	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentAttrs_Update', callback, delegator );
 }
 
 
@@ -204,7 +204,7 @@ ComponentAttrs_Batchlist.prototype.onCreate = function() {
 }
 
 ComponentAttrs_Batchlist.prototype.onDelete = function( item, callback, delegator ) {
-	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Field_Delete', callback, delegator );
+	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentAttrs_Delete', callback, delegator );
 }
 
 ComponentAttrs_Batchlist.prototype.onInsert = function( item, callback, delegator ) {
@@ -212,7 +212,7 @@ ComponentAttrs_Batchlist.prototype.onInsert = function( item, callback, delegato
 }
 
 ComponentAttrs_Batchlist.prototype.onDisplayOrderSave = function( fieldlist, callback ) {
-	ComponentAttrs_Batchlist_DisplayOrder( fieldlist, 'Field_DisplayOrder_Update', callback, '' );
+	ComponentAttrs_Batchlist_DisplayOrder( fieldlist, 'ComponentAttrs_DisplayOrder_Update', callback, '' );
 }
 
 ComponentAttrs_Batchlist.prototype.onSetDisplayOrder = function( recordlist, start_index ){
@@ -312,10 +312,10 @@ Fields_Column_Type.prototype.onDisplayEdit = function( record, item ) {
 	var select;
 
 	select									= newElement( 'select', { 'name': 'type' }, null, null );
+	select.options[ select.options.length ] = new Option( 'Text Field', 'text' );
 	select.options[ select.options.length ] = new Option( 'Radio Buttons', 'radio' );
 	select.options[ select.options.length ] = new Option( 'Drop-down List', 'select' );
 	select.options[ select.options.length ] = new Option( 'Checkbox', 'checkbox' );
-	select.options[ select.options.length ] = new Option( 'Text Field', 'text' );
 	select.options[ select.options.length ] = new Option( 'Text Area', 'memo' );
 	select.options[ select.options.length ] = new Option( 'Image', 'image' );
 	select.options[ select.options.length ] = new Option( 'Product', 'product' );

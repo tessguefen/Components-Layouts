@@ -6,7 +6,7 @@
 - TGComponent_Attrs
 - TGComponent_Attrs_Disp_Order
 - TGComponents_Options
-- TTGComponents_Options_Disp_Order
+- TGComponents_Options_Disp_Order
 - TGLayouts
 - TGLayouts_Components
 - TGLayouts_Disp_Order

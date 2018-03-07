@@ -274,13 +274,12 @@
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts'			}">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components'	}">
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Values'	}">
-	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGComponents_Cache'		}">
 
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents' ) 						}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs' )					}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs_Disp_Order' )		}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Options' )				}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TTGComponents_Options_Disp_Order' )	}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Options_Disp_Order' )	}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGLayouts' )					}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGLayouts_Components' )				}">
 
@@ -361,6 +360,9 @@
 
 	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Attrs_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Attrs_Load_Query( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Insert( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Update( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Delete( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_DisplayOrder_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_DisplayOrder_Update( l.module ) }"></MvIF>
 </MvFUNCTION>
 
 <MvCOMMENT>
