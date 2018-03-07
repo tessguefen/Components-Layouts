@@ -42,7 +42,7 @@
 		
 		// Scope Functions
 		$scope.saveComponent = function() {
-			console.log( $scope );
+			console.log( $scope.models.dropzones );
 		}
 
 		$scope.componentEdit = function( item ) {
@@ -52,7 +52,6 @@
 		$scope.componentDelete = function( item ) {
 
 		}
-
 
 		var init = function( cmps ) {
 			$timeout( function(){
