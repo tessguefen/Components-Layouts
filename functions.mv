@@ -1,149 +1,149 @@
 <MvCOMMENT>
-	Block_Read( block var )
-	Block_Insert_Lowlevel( block var )
-	Block_Insert( block var )
-	Block_Load_ID( id, output var )
-	Block_Load_Code( code, output var )
-	Block_Update_Lowlevel( block var )
-	Block_Update( block var )
-	Block_Delete( block_id )
+	Component_Read( component var )
+	Component_Insert_Lowlevel( component var )
+	Component_Insert( component var )
+	Component_Load_ID( id, output var )
+	Component_Load_Code( code, output var )
+	Component_Update_Lowlevel( component var )
+	Component_Update( component var )
+	Component_Delete( component_id )
 
-	JSON_Block_Insert( module var )
-	JSON_Block_Update( module var )
-	JSON_Block_Delete( module var )
+	JSON_Component_Insert( module var )
+	JSON_Component_Update( module var )
+	JSON_Component_Delete( module var )
 
-	BlockSet_Read( blockset var )
-	BlockSet_Insert_Lowlevel( blockset var )
-	BlockSet_Insert( blockset var )
-	BlockSet_Load_ID( id, output var )
-	BlockSet_Load_Code( code, output var )
-	BlockSet_Update_Lowlevel( blockset var )
-	BlockSet_Update( blockset var )
-	BlockSet_Delete( blockset_id )
+	Layout_Read( layout var )
+	Layout_Insert_Lowlevel( layout var )
+	Layout_Insert( layout var )
+	Layout_Load_ID( id, output var )
+	Layout_Load_Code( code, output var )
+	Layout_Update_Lowlevel( layout var )
+	Layout_Update( layout var )
+	Layout_Delete( layout_id )
 
-	JSON_BlockSet_Insert( module var )
-	JSON_BlockSet_Update( module var )
-	JSON_BlockSet_Delete( module var )
+	JSON_Layout_Insert( module var )
+	JSON_Layout_Update( module var )
+	JSON_Layout_Delete( module var )
 
-	BlockAttrs_Read( block_attr var )
-	BlockAttrs_Read( block_attr var )
-	BlockAttrs_Insert_Lowlevel( block_attr var )
-	BlockAttrs_Insert( block_attr var )
-	Validate_BlockAttr_Type( type )
-	BlockAttrs_Load_Code( block_id, code, output var )
-	BlockAttrs_Load_ID( id, output var )
-	BlockAttrs_Update_Lowlevel( block_attr var )
-	BlockAttrs_Update( block_attr var )
-	BlockAttrs_Delete( block_attr_id )
+	ComponentAttrs_Read( component_attr var )
+	ComponentAttrs_Read( component_attr var )
+	ComponentAttrs_Insert_Lowlevel( component_attr var )
+	ComponentAttrs_Insert( component_attr var )
+	Validate_ComponentAttr_Type( type )
+	ComponentAttrs_Load_Code( component_id, code, output var )
+	ComponentAttrs_Load_ID( id, output var )
+	ComponentAttrs_Update_Lowlevel( component_attr var )
+	ComponentAttrs_Update( component_attr var )
+	ComponentAttrs_Delete( component_attr_id )
 
-	JSON_BlockAttrs_Insert( module var )
+	JSON_ComponentAttrs_Insert( module var )
 </MvCOMMENT>
 
-<MvFUNCTION NAME = "Block_Read" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block" MEMBER = "id"				VALUE = "{ TGBlocks.d.id }">
-	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ TGBlocks.d.code }">
-	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ TGBlocks.d.name }">
-	<MvASSIGN NAME = "l.block" MEMBER = "descrip"			VALUE = "{ TGBlocks.d.descrip }">
-	<MvASSIGN NAME = "l.block" MEMBER = "image"				VALUE = "{ TGBlocks.d.image }">
-	<MvASSIGN NAME = "l.block" MEMBER = "allow_children"	VALUE = "{ TGBlocks.d.allow_children }">
+<MvFUNCTION NAME = "Component_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGComponents.d.id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ TGComponents.d.code }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGComponents.d.name }">
+	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ TGComponents.d.descrip }">
+	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ TGComponents.d.image }">
+	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ TGComponents.d.allow_children }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Block_Insert_Lowlevel" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGBlocks' ) }">
+<MvFUNCTION NAME = "Component_Insert_Lowlevel" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents' ) }">
 
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGBlocks
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGComponents
 					      ( id, code, name, descrip, image, allow_children )
 						  VALUES
 						  ( ?, ?, ?, ?, ?, ? )' }"
-			 FIELDS	= "l.block:id, l.block:code, l.block:name, l.block:descrip, l.block:image, l.block:allow_children">
+			 FIELDS	= "l.component:id, l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0001', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Block_Insert" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block" MEMBER = "code" VALUE = "{ trim( l.block:code ) }">
-	<MvASSIGN NAME = "l.block" MEMBER = "name" VALUE = "{ trim( l.block:name ) }">
+<MvFUNCTION NAME = "Component_Insert" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "code" VALUE = "{ trim( l.component:code ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name" VALUE = "{ trim( l.component:name ) }">
 
-	<MvIF EXPR = "{ ISNULL l.block:code }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ ISNULL l.component:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.block:code ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.component:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ Block_Load_Code( l.block:code, l.void ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.void ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.block:name }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+	<MvIF EXPR = "{ ISNULL l.component:name }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT Block_Insert_Lowlevel( l.block ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT Component_Insert_Lowlevel( l.component ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Block_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "TGBlocks"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlocks WHERE id = ?' }"
+				VIEW	= "TGComponents"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ TGBlocks.d.EOF }">
-		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBlocks-BLOCKS-0003' ) }">
+	<MvIF EXPR = "{ TGComponents.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0003' ) }">
 	</MvIF>
 
-	<MvEVAL EXPR = "{ Block_Read( l.output ) }">
-	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
+	<MvEVAL EXPR = "{ Component_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Block_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "TGBlocks"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlocks WHERE code = ?' }"
+				VIEW	= "TGComponents"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE code = ?' }"
 				FIELDS	= "l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0004', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ TGBlocks.d.EOF }">
-		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBlocks-BLOCKS-0005' ) }">
+	<MvIF EXPR = "{ TGComponents.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0005' ) }">
 	</MvIF>
 
-	<MvEVAL EXPR = "{ Block_Read( l.output ) }">
-	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlocks">
+	<MvEVAL EXPR = "{ Component_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Block_Update_LowLevel" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Update_LowLevel" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGBlocks
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponents
 					      SET
 							code = ?,
 							name = ?,
@@ -152,387 +152,387 @@
 							allow_children = ?
 					      WHERE
 						    id		= ?' }"
-			 FIELDS	= "l.block:code, l.block:name, l.block:descrip, l.block:image, l.block:allow_children, l.block:id">
+			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children, l.component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0006', g.MvQUERY_Error ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 
-<MvFUNCTION NAME = "Block_Update" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT Block_Load_ID( l.block:id, l.prev_block ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This block can not be found.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "id">
+<MvFUNCTION NAME = "Component_Update" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Component_Load_ID( l.component:id, l.prev_component ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This component can not be found.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "id">
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.block:code }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ ISNULL l.component:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.block:code ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.component:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ l.block:code NE l.prev_block:code }">
-		<MvIF EXPR = "{ Block_Load_Code( l.block:code, l.void ) }">
-			<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
-			<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ l.component:code NE l.prev_component:code }">
+		<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.void ) }">
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist.">
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.block:name }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+	<MvIF EXPR = "{ ISNULL l.component:name }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvFUNCTIONRETURN VALUE = "{ Block_Update_LowLevel( l.block ) }">
+	<MvFUNCTIONRETURN VALUE = "{ Component_Update_LowLevel( l.component ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Block_Delete" PARAMETERS = "block_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Delete" PARAMETERS = "component_id" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGBlocks WHERE id = ?' }"
-			 FIELDS	= "l.block_id">
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE id = ?' }"
+			 FIELDS	= "l.component_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKS-0007', g.MvQUERY_Error ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0007', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Block_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ g.Name }">
-	<MvASSIGN NAME = "l.block" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
-	<MvASSIGN NAME = "l.block" MEMBER = "image"				VALUE = "{ g.Image }">
-	<MvASSIGN NAME = "l.block" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
+<MvFUNCTION NAME = "JSON_Component_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ g.Name }">
+	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
+	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ g.Image }">
+	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
 
-	<MvIF EXPR = "{ NOT Block_Insert( l.block ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	<MvIF EXPR = "{ NOT Component_Insert( l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Block_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block" MEMBER = "id"				VALUE = "{ g.Id }">
-	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ g.Name }">
-	<MvASSIGN NAME = "l.block" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
-	<MvASSIGN NAME = "l.block" MEMBER = "image"				VALUE = "{ g.Image }">
-	<MvASSIGN NAME = "l.block" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
+<MvFUNCTION NAME = "JSON_Component_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ g.Id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ g.Name }">
+	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
+	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ g.Image }">
+	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
 
-	<MvIF EXPR = "{ NOT Block_Update( l.block ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
-	</MvIF>
-	
-	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
-</MvFUNCTION>
-
-<MvFUNCTION NAME = "JSON_Block_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT Block_Delete( g.Id ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	<MvIF EXPR = "{ NOT Component_Update( l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockSet_Read" PARAMETERS = "block var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block" MEMBER = "id"				VALUE = "{ TGBlock_Sets.d.id }">
-	<MvASSIGN NAME = "l.block" MEMBER = "code"				VALUE = "{ TGBlock_Sets.d.code }">
-	<MvASSIGN NAME = "l.block" MEMBER = "name"				VALUE = "{ TGBlock_Sets.d.name }">
+<MvFUNCTION NAME = "JSON_Component_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Component_Delete( g.Id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockSet_Insert_Lowlevel" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGBlock_Sets' ) }">
+<MvFUNCTION NAME = "Layout_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGLayouts.d.id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ TGLayouts.d.code }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGLayouts.d.name }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Insert_Lowlevel" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGLayouts' ) }">
 
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGBlock_Sets
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts
 					      ( id, code, name )
 						  VALUES
 						  ( ?, ?, ? )' }"
-			 FIELDS	= "l.blockset:id, l.blockset:code, l.blockset:name">
+			 FIELDS	= "l.layout:id, l.layout:code, l.layout:name">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0001', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockSet_Insert" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "code" VALUE = "{ trim( l.blockset:code ) }">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "name" VALUE = "{ trim( l.blockset:name ) }">
+<MvFUNCTION NAME = "Layout_Insert" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout" MEMBER = "code" VALUE = "{ trim( l.layout:code ) }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "name" VALUE = "{ trim( l.layout:name ) }">
 
-	<MvIF EXPR = "{ ISNULL l.blockset:code }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ ISNULL l.layout:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.blockset:code ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.layout:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ BlockSet_Load_Code( l.blockset:code, l.void ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.void ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.blockset:name }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+	<MvIF EXPR = "{ ISNULL l.layout:name }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT BlockSet_Insert_Lowlevel( l.blockset ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT Layout_Insert_Lowlevel( l.layout ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockSet_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "TGBlock_Sets"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlock_Sets WHERE id = ?' }"
+				VIEW	= "TGLayouts"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBLOCKS-BLOCKSETS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-LAYOUTS-0002', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ TGBlock_Sets.d.EOF }">
-		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBLOCKS-BLOCKSETS-0003' ) }">
+	<MvIF EXPR = "{ TGLayouts.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGCOMPONENTS-LAYOUTS-0003' ) }">
 	</MvIF>
 
-	<MvEVAL EXPR = "{ BlockSet_Read( l.output ) }">
-	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
+	<MvEVAL EXPR = "{ Layout_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockSet_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "TGBlock_Sets"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlock_Sets WHERE code = ?' }"
+				VIEW	= "TGLayouts"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE code = ?' }"
 				FIELDS	= "l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0004', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ TGBlock_Sets.d.EOF }">
-		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBlocks-BLOCKSETS-0005' ) }">
+	<MvIF EXPR = "{ TGLayouts.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-LAYOUTS-0005' ) }">
 	</MvIF>
 
-	<MvEVAL EXPR = "{ BlockSet_Read( l.output ) }">
-	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Sets">
+	<MvEVAL EXPR = "{ Layout_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockSet_Update_LowLevel" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Update_LowLevel" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGBlock_Sets
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts
 					      SET
 							code = ?,
 							name = ?
 					      WHERE
 						    id		= ?' }"
-			 FIELDS	= "l.blockset:code, l.blockset:name, l.blockset:id">
+			 FIELDS	= "l.layout:code, l.layout:name, l.layout:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0006', g.MvQUERY_Error ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 
-<MvFUNCTION NAME = "BlockSet_Update" PARAMETERS = "blockset var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT BlockSet_Load_ID( l.blockset:id, l.prev_blockset ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This block can not be found.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "id">
+<MvFUNCTION NAME = "Layout_Update" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Load_ID( l.layout:id, l.prev_layout ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This component can not be found.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "id">
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.blockset:code }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ ISNULL l.layout:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.blockset:code ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.layout:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ l.blockset:code NE l.prev_blockset:code }">
-		<MvIF EXPR = "{ BlockSet_Load_Code( l.blockset:code, l.void ) }">
-			<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist.">
-			<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ l.layout:code NE l.prev_layout:code }">
+		<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.void ) }">
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist.">
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.blockset:name }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Name must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "name">
+	<MvIF EXPR = "{ ISNULL l.layout:name }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvFUNCTIONRETURN VALUE = "{ BlockSet_Update_LowLevel( l.blockset ) }">
+	<MvFUNCTIONRETURN VALUE = "{ Layout_Update_LowLevel( l.layout ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockSet_Delete" PARAMETERS = "blockset_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Delete" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGBlock_Sets WHERE id = ?' }"
-			 FIELDS	= "l.blockset_id">
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE id = ?' }"
+			 FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKSETS-0007', g.MvQUERY_Error ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0007', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_BlockSet_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "name"				VALUE = "{ g.Name }">
+<MvFUNCTION NAME = "JSON_Layout_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "name"				VALUE = "{ g.Name }">
 
-	<MvIF EXPR = "{ NOT BlockSet_Insert( l.blockset ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_BlockSet_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "id"				VALUE = "{ g.Id }">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "code"			VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.blockset" MEMBER = "name"			VALUE = "{ g.Name }">
+<MvFUNCTION NAME = "JSON_Layout_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout" MEMBER = "id"				VALUE = "{ g.Id }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "code"			VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "name"			VALUE = "{ g.Name }">
 
-	<MvIF EXPR = "{ NOT BlockSet_Update( l.blockset ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
-	</MvIF>
-	
-	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
-</MvFUNCTION>
-
-<MvFUNCTION NAME = "JSON_BlockSet_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT BlockSet_Delete( g.Id ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	<MvIF EXPR = "{ NOT Layout_Update( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockAttrs_Read" PARAMETERS = "block_attrs var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "id"			VALUE = "{ TGBlock_Attrs.d.id }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "block_id"	VALUE = "{ TGBlock_Attrs.d.block_id }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "code"		VALUE = "{ TGBlock_Attrs.d.code }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "prompt"		VALUE = "{ TGBlock_Attrs.d.prompt }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "type"		VALUE = "{ TGBlock_Attrs.d.type }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "required"	VALUE = "{ TGBlock_Attrs.d.required }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "disp_order"	VALUE = "{ TGBlock_Attrs.d.disp_order }">
+<MvFUNCTION NAME = "JSON_Layout_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Delete( g.Id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockAttrs_Insert_Lowlevel" PARAMETERS = "block_attrs var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGBlocks_Attrs' ) }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "disp_order"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGBlocks_Attrs_Disp_Order' ) }">
+<MvFUNCTION NAME = "ComponentAttrs_Read" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "id"			VALUE = "{ TGComponent_Attrs.d.id }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "component_id"	VALUE = "{ TGComponent_Attrs.d.component_id }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code"		VALUE = "{ TGComponent_Attrs.d.code }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt"		VALUE = "{ TGComponent_Attrs.d.prompt }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type"		VALUE = "{ TGComponent_Attrs.d.type }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "required"	VALUE = "{ TGComponent_Attrs.d.required }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "disp_order"	VALUE = "{ TGComponent_Attrs.d.disp_order }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttrs_Insert_Lowlevel" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Attrs' ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "disp_order"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Attrs_Disp_Order' ) }">
 
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGBlock_Attrs
-					      ( id, block_id, code, prompt, type, required, disp_order )
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs
+					      ( id, component_id, code, prompt, type, required, disp_order )
 						  VALUES
 						  ( ?, ?, ?, ?, ?, ?, ? )' }"
-			 FIELDS	= "l.block_attrs:id, l.block_attrs:block_id, l.block_attrs:code, l.block_attrs:prompt, l.block_attrs:type, l.block_attrs:required, l.block_attrs:disp_order">
+			 FIELDS	= "l.component_attrs:id, l.component_attrs:component_id, l.component_attrs:code, l.component_attrs:prompt, l.component_attrs:type, l.component_attrs:required, l.component_attrs:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKATTRS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-BLOCKATTRS-0001', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "BlockAttrs_Insert" PARAMETERS = "block_attrs var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "code" VALUE = "{ trim( l.block_attrs:code ) }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "prompt" VALUE = "{ trim( l.block_attrs:prompt ) }">
-	<MvASSIGN NAME = "l.block_attrs" MEMBER = "type" VALUE = "{ trim( l.block_attrs:type ) }">
+<MvFUNCTION NAME = "ComponentAttrs_Insert" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code" VALUE = "{ trim( l.component_attrs:code ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt" VALUE = "{ trim( l.component_attrs:prompt ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type" VALUE = "{ trim( l.component_attrs:type ) }">
 
-	<MvIF EXPR = "{ ISNULL l.block_attrs:block_id }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Block ID must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "block_id">
+	<MvIF EXPR = "{ ISNULL l.component_attrs:component_id }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "component_id">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT Block_Load_ID( l.block_attrs:block_id, l.block ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Block ID does not exist.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "block_id">
+	<MvIF EXPR = "{ NOT Component_Load_ID( l.component_attrs:component_id, l.component ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID does not exist.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "component_id">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.block_attrs:code }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Code must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ ISNULL l.component_attrs:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.block_attrs:code ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Please enter a Valid Code.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.component_attrs:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ BlockAttrs_Load_Code( l.block_attrs:block_id, l.block_attrs:code, l.void ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "This code already exist for this block.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ ComponentAttrs_Load_Code( l.component_attrs:component_id, l.component_attrs:code, l.void ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist for this component.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.block_attrs:prompt }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Prompt must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "prompt">
+	<MvIF EXPR = "{ ISNULL l.component_attrs:prompt }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Prompt must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "prompt">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ ISNULL l.block_attrs:type }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Type must be present.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "type">
+	<MvIF EXPR = "{ ISNULL l.component_attrs:type }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Type must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "type">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT Validate_BlockAttr_Type( l.block_attrs:type ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "Invalid value for Type.">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "type">
+	<MvIF EXPR = "{ NOT Validate_ComponentAttr_Type( l.component_attrs:type ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Invalid value for Type.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "type">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT BlockAttrs_Insert_Lowlevel( l.block_attrs ) }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGBLOCKS_Error:name"	VALUE = "code">
+	<MvIF EXPR = "{ NOT ComponentAttrs_Insert_Lowlevel( l.component_attrs ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Validate_BlockAttr_Type" PARAMETERS = "type" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Validate_ComponentAttr_Type" PARAMETERS = "type" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{
 		l.type NE 'radio' AND
 		l.type NE 'select' AND
@@ -548,37 +548,37 @@
 	<MvFUNCTIONRETURN VALUE = 1 />
 </MvFUNCTION>
 
-<MvFUNCTION NAME ="BlockAttrs_Load_Code" PARAMETERS = "block_id, code, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME ="ComponentAttrs_Load_Code" PARAMETERS = "component_id, code, output var" STANDARDOUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "TGBlock_Attrs"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGBlock_Attrs WHERE block_id = ? AND code = ?' }"
-				FIELDS	= "l.block_id, l.code">
+				VIEW	= "TGComponent_Attrs"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ? AND code = ?' }"
+				FIELDS	= "l.component_id, l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGBlocks-BLOCKATTRS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-BLOCKATTRS-0002', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ TGBlock_Attrs.d.EOF }">
-		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Attrs">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGBlocks-BLOCKATTRS-0003' ) }">
+	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-BLOCKATTRS-0003' ) }">
 	</MvIF>
 
-	<MvEVAL EXPR = "{ BlockAttrs_Read( l.output ) }">
-	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGBlock_Attrs">
+	<MvEVAL EXPR = "{ ComponentAttrs_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 
 
-<MvFUNCTION NAME = "JSON_BlockAttrs_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.block_attr" MEMBER = "block_id"			VALUE = "{ g.Block_Id }">
-	<MvASSIGN NAME = "l.block_attr" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.block_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
-	<MvASSIGN NAME = "l.block_attr" MEMBER = "type"				VALUE = "{ g.type }">
-	<MvASSIGN NAME = "l.block_attr" MEMBER = "required"			VALUE = "{ g.Required }">
+<MvFUNCTION NAME = "JSON_ComponentAttrs_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"			VALUE = "{ g.Component_Id }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "type"				VALUE = "{ g.type }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "required"			VALUE = "{ g.Required }">
 
-	<MvIF EXPR = "{ NOT BlockAttrs_Insert( l.block_attr ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGBLOCKS_Error:name, g.TGBLOCKS_Error:message ) }">
+	<MvIF EXPR = "{ NOT ComponentAttrs_Insert( l.component_attr ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
