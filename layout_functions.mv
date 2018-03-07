@@ -15,7 +15,7 @@
 		[]
 	</MvIF>
 	<MvEXIT />
-[
+	[
 		{
 			"type": "container",
 			"id": 1,
@@ -126,7 +126,12 @@
 </MvCOMMENT>
 <MvFUNCTION NAME = "Recursive_Nes_Attack" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
 	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Layout_Load_Components_Parent_Lowlevel( l.layout_id, l.parent_id, l.components, l.count ) }">
-		<MvASSIGN NAME = "l.component:children_count" VALUE = "{ Recursive_Nes_Attack( l.component:layout_id, l.component:id, l.component:children ) }">
+		<MvIF EXPR = "{ l.component:allow_children EQ 1 }">
+			<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "container">
+			<MvASSIGN NAME = "l.component:columns_count" VALUE = "{ Recursive_Nes_Attack( l.component:layout_id, l.component:id, l.component:columns[1] ) }">
+		<MvELSE>
+			<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "item">
+		</MvIF>
 	</MvFOREACH>
 	<MvFUNCTIONRETURN VALUE = "{ l.count }">
 </MvFUNCTION>
@@ -163,12 +168,6 @@
 	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
 	<MvASSIGN NAME = "l.component" MEMBER = "component_name"	VALUE = "{ TGLayouts_Components.d.component_name  }">
 	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ TGLayouts_Components.d.allow_children  }">
-	<MvIF EXPR = "{ l.component:allow_children EQ 1 }">
-		<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "container">
-	<MvELSE>
-		<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "item">
-	</MvIF>
-	<MvASSIGN NAME = "l.component" MEMBER = "attributes"		VALUE = "{ Layout_Component_Attribute_Load( l.component:id ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Layout_Component_Attribute_Load" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">

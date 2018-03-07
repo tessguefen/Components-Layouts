@@ -56,9 +56,7 @@
 		var init = function( cmps ) {
 			$timeout( function(){
 				$scope.models.dropzones = {
-					"Layout": {
-						"children":  cmps
-					}		
+					"Layout": cmps	
 				}
 			}, 0);
 
