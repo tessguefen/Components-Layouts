@@ -19,6 +19,9 @@
 		border-bottom: 2px solid #000;
 		margin:0 0 10px 0;
 	}*/
+	.container-element-title {
+		padding: 5px 0 10px;
+	}
 	.dropzone ul {
 		padding: 0;
 		list-style: none;
@@ -35,6 +38,24 @@
 	    display: none;
 	}
 
+	.component {
+		position: relative;
+	}
+	.edit {
+		display: inline-block;
+		background: #ccc;
+		text-transform: uppercase;
+		font-weight: bold;
+		margin-right: 5px;
+	}
+	.delete {
+		display: inline-block;
+		color: red;
+		text-transform: uppercase;
+		font-weight: bold;
+		margin-right: 5px;
+	}
+
 </style>
 
 
@@ -47,11 +68,11 @@
 	 assigned to it. If an element was dragged away, you have to remove
 	 it from the original list yourself using the dnd-moved attribute -->
 	 <script type="text/ng-template" id="list.html">
-		<ul dnd-list="list" class="list">
-			<li ng-repeat="item in list"
+		<ul dnd-list="list.children" class="list">
+			<li ng-repeat="item in list.children"
 			dnd-draggable="item"
 			dnd-effect-allowed="move"
-			dnd-moved="list.splice($index, 1)"
+			dnd-moved="list.children.splice($index, 1)"
 			dnd-selected="models.selected = item"
 			ng-class="{selected: models.selected === item}"
 			ng-include="item.type + '.html'">
@@ -59,18 +80,27 @@
 	 </ul>
  </script>
 
+
 <!-- This template is responsible for rendering a container element. It uses
 	the above list template to render each container column -->
 	<script type="text/ng-template" id="container.html">
 		<div class="container-element box">
-			<div class="container-element-title">Container {{item.id}}</div>
-			<div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
+			<div class="container-element-title component">
+				<span class="delete" ng-click="componentDelete( item )">X</span>
+				<span class="edit" ng-click="componentEdit( item )">Edit</span>
+				{{item.component_name }} - {{ item.name }}
+			</div>
+			<div ng-init="list=item" ng-include="'list.html'"></div>
 		</div>
 	</script>
 
 	<!-- Template for a normal list item -->
 	<script type="text/ng-template" id="item.html">
-		<div class="item">Item {{item.id}}</div>
+		<div class="item component">
+			<span class="delete" ng-click="componentDelete( item )">X</span>
+			<span class="edit" ng-click="componentEdit( item )">Edit</span>
+			{{item.component_name }} - {{ item.name }}
+		</div>
 	</script>
 
 	<!-- Main area with dropzones and source code -->

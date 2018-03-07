@@ -38,18 +38,28 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
+		$scope.models = {};
+		
+		// Scope Functions
 		$scope.saveComponent = function() {
 			console.log( $scope );
 		}
 
-		$scope.models = {
-			selected: null			
-		};
+		$scope.componentEdit = function( item ) {
+			console.log( item );
+		}
+
+		$scope.componentDelete = function( item ) {
+
+		}
+
 
 		var init = function( cmps ) {
 			$timeout( function(){
 				$scope.models.dropzones = {
-					"Layout": cmps
+					"Layout": {
+						"children":  cmps
+					}		
 				}
 			}, 0);
 

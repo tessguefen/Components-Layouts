@@ -5,6 +5,16 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "JSON_Layout_Load_Components" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvCOMMENT>
+		This is temporary until I add data
+	</MvCOMMENT>
+	<MvASSIGN NAME = "l.components_count" VALUE = "{ Recursive_Nes_Attack( 1,  0, l.components ) }">
+	<MvIF EXPR = "{ l.components_count GT 0 }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
+	<MvELSE>
+		[]
+	</MvIF>
+	<MvEXIT />
 [
 		{
 			"type": "container",
@@ -13,7 +23,11 @@
 				[
 					{
 						"type": "item",
-						"id": "1"
+						"id": "1",
+						"attributes": {
+							"attr1": "value",
+							"attr2": "value_2"
+						}
 					},
 					{
 						"type": "item",
@@ -105,4 +119,57 @@
 			"id": 16
 		}
 	]
+</MvFUNCTION>
+
+<MvCOMMENT>
+	Function formerly known as "Layout_Load_Components"
+</MvCOMMENT>
+<MvFUNCTION NAME = "Recursive_Nes_Attack" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Layout_Load_Components_Parent_Lowlevel( l.layout_id, l.parent_id, l.components, l.count ) }">
+		<MvASSIGN NAME = "l.component:children_count" VALUE = "{ Recursive_Nes_Attack( l.component:layout_id, l.component:id, l.component:children ) }">
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = "{ l.count }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Load_Components_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Components"
+				QUERY	= "{ 'SELECT LC.*, C.name as component_name, C.allow_children as allow_children  FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components LC LEFT JOIN ' $ g.Store_Table_Prefix $ 'TGComponents C ON LC.component_id = C.id WHERE layout_id = ? AND parent = ? ORDER BY disp_order' }"
+				FIELDS	= "l.layout_id, l.parent_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
+
+		<MvEVAL EXPR = "{ Read_Layout_Component( l.components[ ++l.count ] ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'TGCOMPONENT-LAYOUT-2000', l.count ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Read_Layout_Component" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGLayouts_Components.d.id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "layout_id"			VALUE = "{ TGLayouts_Components.d.layout_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "component_id"		VALUE = "{ TGLayouts_Components.d.component_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGLayouts_Components.d.name }">
+	<MvASSIGN NAME = "l.component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
+	<MvASSIGN NAME = "l.component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
+	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
+	<MvASSIGN NAME = "l.component" MEMBER = "component_name"	VALUE = "{ TGLayouts_Components.d.component_name  }">
+	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ TGLayouts_Components.d.allow_children  }">
+	<MvIF EXPR = "{ l.component:allow_children EQ 1 }">
+		<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "container">
+	<MvELSE>
+		<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "item">
+	</MvIF>
+	<MvASSIGN NAME = "l.component" MEMBER = "attributes"		VALUE = "{ Layout_Component_Attribute_Load( l.component:id ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Component_Attribute_Load" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">
 </MvFUNCTION>

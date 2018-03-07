@@ -54,7 +54,7 @@
 	</MvIF>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentsScreen_UI" PARAMETERS = "screen" STANDARDOUTPUTLEVEL = "text, html">
+<MvFUNCTION NAME = "ComponentsScreen_UI" PARAMETERS = "screen" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components', '', '' ) }">
 
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
@@ -74,6 +74,10 @@
 			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
 
 			<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
+			<hr />
+			TEST: <MvASSIGN NAME = "l.test" VALUE = "{ Recursive_Nes_Attack( 1, 0, l.return ) }">
+			<pre><MvEVAL EXPR = "{ glosub( miva_array_serialize( l.return ), ',', asciichar( 10 ) ) }"></pre>
+
 
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
