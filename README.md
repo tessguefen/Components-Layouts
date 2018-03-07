@@ -53,7 +53,7 @@ disp_order|Number| |StoreKey: TGComponents_Options_Disp_Order
 
 ---
 
-**Component_Sets**
+**Layouts**
 
 **COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
 -----|-----|-----|-----
@@ -68,7 +68,7 @@ name|Char(255)| |
 **COLUMN NAME**|**TYPE**|**REFERENCE**|**NOTES**
 -----|-----|-----|-----
 id|Number| |StoreKey: TGLayouts_Components
-component_set_id|Number|Component_Sets.id| 
+layout_id|Number|Layouts.id| 
 component_id|Number|Components.id| 
 parent|Number|Layouts_Components.id or 0| 
 active|Bool| | 

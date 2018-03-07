@@ -47,6 +47,10 @@
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new ComponentAttrs_Batchlist( component_id ); } );
 		</script>
+	<MvELSEIF EXPR = "{ l.screen EQ 'Layout' }">
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-drag-and-drop-lists.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
 	</MvIF>
 </MvFUNCTION>
 
@@ -56,20 +60,20 @@
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
 
 
-	<MvIF EXPR = "{ l.screen EQ 'Component_Set' }">
+	<MvIF EXPR = "{ l.screen EQ 'Layout' }">
 		<MvIF EXPR = "{ NOT Layout_Load_ID( g.Layout_ID, l.layout ) }">
 			Could not load Screen for Layout ID: <MvEVAL EXPR = "{ g.Layout_ID }">.
 		<MvELSE>
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components', l.layout:name, '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Layout: ' $ l.layout:name, l.layout:name, '' ) }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Components Set' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Layout' ) }">
 
 			<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
 
 			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
 
-			:&gt; Layout Screen for Layout: <MvEVAL EXPR = "{ l.layout:name}">.
+			<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
 
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">

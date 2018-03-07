@@ -70,5 +70,5 @@ Layouts_Batchlist.prototype.onDelete = function( item, callback, delegator ) {
 	Layouts_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Layout_Delete', callback, delegator );
 }
 Layouts_Batchlist.prototype.onGoTo = function( item, e ) {
-	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGCOMPONENTS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Layout_ID': item.record.id, 'Module_Type': 'util', 'TGCOMPONENTS_Screen' : 'Component_Set' } );
+	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGCOMPONENTS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Layout_ID': item.record.id, 'Module_Type': 'util', 'TGCOMPONENTS_Screen' : 'Layout' } );
 }

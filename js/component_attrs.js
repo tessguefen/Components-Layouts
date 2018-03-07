@@ -26,8 +26,7 @@ function ComponentAttrs_Batchlist_Option_Function( parentlist, fieldlist, _funct
 									   'admin',
 									   'TGCOMPONENTS',
 									   _function,
-									   'Field_ID=' + parentlist.id +
-									   '&component_id=' + parentlist.component_id,
+									   'Attr_ID=' + parentlist.id,
 									   fieldlist,
 									   delegator );
 }
@@ -253,7 +252,7 @@ ComponentAttrs_Batchlist.prototype.Option_Create = function() {
 
 ComponentAttrs_Batchlist.prototype.Option_Insert = function( item, callback, delegator ) {
 	var parent_field = this.GetListItemRecord_Parent( item.index );
-	ComponentAttrs_Batchlist_Option_Function( parent_field, item.record.mmbatchlist_fieldlist, 'Option_Insert', callback, delegator );
+	ComponentAttrs_Batchlist_Option_Function( parent_field, item.record.mmbatchlist_fieldlist, 'ComponentOption_Insert', callback, delegator );
 }
 
 ComponentAttrs_Batchlist.prototype.Field_RowSupportsChildren_Hook = function( item ) {
@@ -290,12 +289,12 @@ ComponentAttrs_Batchlist.prototype.onProcessLoadedData = function( recordlist, s
 }
 
 ComponentAttrs_Batchlist.prototype.Option_Save = function( item, callback, delegator ) {
-	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Option_Update', callback, delegator );
+	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentOption_Update', callback, delegator );
 
 }
 
 ComponentAttrs_Batchlist.prototype.Option_Delete = function( item, callback, delegator ) {
-	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Option_Delete', callback, delegator );
+	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentOption_Delete', callback, delegator );
 }
 
 // Column 'type'

@@ -1,0 +1,82 @@
+<style>
+	/*.box {
+		margin-bottom: 20px;
+		background-color: #fff;
+		border: 1px solid transparent;
+	}
+	.list {
+		list-style: none;
+	}
+	.container-element {
+		border: 2px solid #000;
+		padding-bottom: 20px;
+	}
+	.item {
+		padding: 10px;
+	}
+	.container-element-title {
+		padding: 10px;
+		border-bottom: 2px solid #000;
+		margin:0 0 10px 0;
+	}*/
+	.dropzone ul {
+		padding: 0;
+		list-style: none;
+	}
+	.dropzone li {
+		border: 1px solid #ddd;
+		background: #fff;
+		padding: 5px;
+	}
+	.dropzone .dndDragging {
+		opacity: 0.7;
+	}
+	.dropzone .dndDraggingSource {
+	    display: none;
+	}
+
+</style>
+
+
+<div ng-controller="ComponentsController" ng-app="Components">
+	<div ng-click="saveComponent()">Save meeeeeeeeeeee!</div>
+	<!-- Markup for lists inside the dropzone. It's inside a seperate template
+	 because it will be used recursively. The dnd-list directive enables
+	 to drop elements into the referenced array. The dnd-draggable directive
+	 makes an element draggable and will transfer the object that was
+	 assigned to it. If an element was dragged away, you have to remove
+	 it from the original list yourself using the dnd-moved attribute -->
+	 <script type="text/ng-template" id="list.html">
+		<ul dnd-list="list" class="list">
+			<li ng-repeat="item in list"
+			dnd-draggable="item"
+			dnd-effect-allowed="move"
+			dnd-moved="list.splice($index, 1)"
+			dnd-selected="models.selected = item"
+			ng-class="{selected: models.selected === item}"
+			ng-include="item.type + '.html'">
+		</li>
+	 </ul>
+ </script>
+
+<!-- This template is responsible for rendering a container element. It uses
+	the above list template to render each container column -->
+	<script type="text/ng-template" id="container.html">
+		<div class="container-element box">
+			<div class="container-element-title">Container {{item.id}}</div>
+			<div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
+		</div>
+	</script>
+
+	<!-- Template for a normal list item -->
+	<script type="text/ng-template" id="item.html">
+		<div class="item">Item {{item.id}}</div>
+	</script>
+
+	<!-- Main area with dropzones and source code -->
+
+	<div ng-repeat="(zone, list) in models.dropzones" class="dropzone">
+		<div ng-include="'list.html'"></div>
+	</div>
+
+</div>

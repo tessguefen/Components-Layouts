@@ -162,7 +162,7 @@
 				QUERY = "{ 'CREATE TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
 							(
 								id				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								component_set_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+								layout_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								component_id		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								parent			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								active			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ ',
@@ -363,6 +363,12 @@
 	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Update( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Delete( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_DisplayOrder_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_DisplayOrder_Update( l.module ) }"></MvIF>
+
+	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Insert( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Update( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Delete( l.module )	}"></MvIF>
+
+	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Load_Components' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_Components( l.module )	}"></MvIF>
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -384,8 +390,21 @@
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
 		<MvINCLUDE FILE = "js/component_attrs.js" INTERPRET="OFF">
 	</MvIF>
+	<MvIF EXPR = "{ g.Filename EQ 'angular.min.js' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+		<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
+	</MvIF>
+	<MvIF EXPR = "{ g.Filename EQ 'angular-drag-and-drop-lists.min.js' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+		<MvINCLUDE FILE = "angular_app/angular-drag-and-drop-lists.min.js" INTERPRET="OFF">
+	</MvIF>
+	<MvIF EXPR = "{ g.Filename EQ 'app.js' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+		<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
+	</MvIF>
 </MvFUNCTION>
 
 
 <MvINCLUDE FILE = "admin_components.mv">
+<MvINCLUDE FILE = "layout_functions.mv">
 <MvINCLUDE FILE = "functions.mv">

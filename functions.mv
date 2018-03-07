@@ -26,7 +26,6 @@
 	JSON_Layout_Delete( module var )
 
 	ComponentAttrs_Read( component_attr var )
-	ComponentAttrs_Read( component_attr var )
 	ComponentAttrs_Insert_Lowlevel( component_attr var )
 	ComponentAttrs_Insert( component_attr var )
 	Validate_ComponentAttr_Type( type )
@@ -45,7 +44,20 @@
 	ComponentAttrs_Update_Offsets_PastEnd( component_id, pastend var, pastend_count )
 	ComponentOptions_Update_Offsets( attr_id, options var )
 	ComponentOptions_Update_Offsets_PastEnd( attr_id, pastend var, pastend_count )
-	
+
+	ComponentOption_Read( component_option var )
+	ComponentOption_Insert_Lowlevel( component_option var )
+	ComponentOption_Insert( component_option var )
+	ComponentOption_Load_ID( id, output var )
+	ComponentOption_Update_Lowlevel( component_option var )
+	ComponentOption_Update( component_option var )
+	ComponentOption_Delete( component_option_id )
+	ComponentOptions_Delete_Attr( component_attr_id )
+
+	JSON_ComponentOption_Insert( module var )
+	JSON_ComponentOption_Update( module var )
+	JSON_ComponentOption_Delete( module var )
+
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Component_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
@@ -691,11 +703,10 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
 	</MvIF>
 
-	<MvCOMMENT>
-		<MvIF EXPR = "{ NOT ComponentOptions_Delete_Attrs( component_attr_id ) }">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
-	</MvCOMMENT>
+	<MvIF EXPR = "{ NOT ComponentOptions_Delete_Attr( l.component_attr_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -1074,4 +1085,175 @@
 	</MvWHILE>
 
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOption_Read" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "id"			VALUE = "{ TGComponent_Options.d.id }">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "attr_id"	VALUE = "{ TGComponent_Options.d.attr_id }">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "prompt"		VALUE = "{ TGComponent_Options.d.prompt }">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "disp_order"	VALUE = "{ TGComponent_Options.d.disp_order }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOption_Insert_Lowlevel" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Options' ) }">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "disp_order"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Options_Disp_Order' ) }">
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGComponent_Options
+					      ( id, attr_id, prompt, disp_order )
+						  VALUES
+						  ( ?, ?, ?, ? )' }"
+			 FIELDS	= "l.component_option:id, l.component_option:attr_id, l.component_option:prompt, l.component_option:disp_order">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0001', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOption_Insert" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "prompt" VALUE = "{ trim( l.component_option:prompt ) }">
+
+	<MvIF EXPR = "{ ISNULL l.component_option:attr_id }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Attribute ID must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "attr_id">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_ID( l.component_option:attr_id, l.component_attr ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID does not exist.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "attr_id">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.component_option:prompt }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Prompt must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "prompt">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+
+	<MvIF EXPR = "{ NOT ComponentOption_Insert_Lowlevel( l.component_option ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOption_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Options"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE id = ?' }"
+				FIELDS	= "l.id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0004', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponent_Options.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTOPTION-0005' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ ComponentOption_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOption_Update_Lowlevel" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponent_Options
+					      SET
+							prompt = ?,
+					      WHERE
+						    id		= ?' }"
+			 FIELDS	= "l.component_option:prompt, l.component_option:id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0006', g.MvQUERY_Error ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOption_Update" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "prompt" VALUE = "{ trim( l.component_option:prompt ) }">
+
+	<MvIF EXPR = "{ ISNULL l.component_option:attr_id }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Attribute ID must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "attr_id">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_ID( l.component_option:attr_id, l.component_attr ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID does not exist.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "attr_id">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.component_option:prompt }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Prompt must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "prompt">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ ComponentAttrs_Update_Lowlevel( l.component_option ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOption_Delete" PARAMETERS = "component_option_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE id = ?' }"
+			 FIELDS	= "l.component_option_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentOptions_Delete_Attr" PARAMETERS = "component_attr_id" STANDARDOUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE attr_id = ?' }"
+			 FIELDS	= "l.component_attr_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0008', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_ComponentOption_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"			VALUE = "{ g.Attr_ID }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
+
+	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.component_attr ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_ComponentOption_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"				VALUE = "{ g.Id }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"			VALUE = "{ g.Attr_ID }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
+
+	<MvIF EXPR = "{ NOT ComponentOption_Update( l.component_attr ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_ComponentOption_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentOption_Delete( g.Id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
