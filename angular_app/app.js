@@ -39,6 +39,8 @@
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
 
+		$scope.itemsForDeletion = [];
+
 		var init = function( cmps ) {
 			$timeout( function(){
 				$scope.data = cmps;
@@ -51,14 +53,15 @@
 		});
 
 		$scope.scopeCreep = function() {
-			console.log( $scope.data );
+			console.log( $scope );
 		}
 
-		$scope.remove = function (scope) {
+		$scope.removeComponent = function (scope) {
+			$scope.itemsForDeletion.push( scope );
 			scope.remove();
 		};
 
-		$scope.newTopLevel = function( scope, type ) {
+		$scope.newTopLevel = function( scope, allow_children ) {
 			// Pop up to create NEW item, and pass thru necessary data...
 			var nodeData = scope;
 			if ( typeof scope != 'object' ) {
@@ -66,14 +69,15 @@
 			}
 			scope.push({
 				id: 0,
-				name: 'This is the new ' + type,
+				name: 'This is the new ' + ( allow_children ? 'container' : 'item' ),
 				component_name: 'Some Component',
-				type: type,
+				allow_children: allow_children,
+				type: allow_children ? 'container' : 'item',
 				nodes: []
 			});
 		}
 
-		$scope.newSubItem = function (scope, type ) {
+		$scope.newSubItem = function (scope, allow_children ) {
 			// Pop up to create NEW item, and pass thru necessary data...
 			var nodeData = scope.$modelValue;
 			if ( typeof nodeData.nodes != 'object' ) {
@@ -81,9 +85,10 @@
 			}
 			nodeData.nodes.push({
 				id: 0,
-				name: 'This is the new ' + type,
+				name: 'This is the new ' + ( allow_children ? 'container' : 'item' ),
 				component_name: 'Some Component',
-				type: type,
+				allow_children: allow_children,
+				type: allow_children ? 'container' : 'item',
 				nodes: []
 			});
 		};
