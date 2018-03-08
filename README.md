@@ -1,5 +1,8 @@
 # Components
 
+## Note to self...
+https://codepen.io/hutchgrant/pen/YZONxx
+
 ## Keys
 
 - TGComponents
