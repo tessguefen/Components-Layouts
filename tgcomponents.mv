@@ -395,9 +395,9 @@
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
 		<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
 	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'angular-drag-and-drop-lists.min.js' }">
+	<MvIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "angular_app/angular-drag-and-drop-lists.min.js" INTERPRET="OFF">
+		<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
 	</MvIF>
 	<MvIF EXPR = "{ g.Filename EQ 'app.js' }">
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">

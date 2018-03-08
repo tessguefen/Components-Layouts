@@ -14,111 +14,6 @@
 	<MvELSE>
 		[]
 	</MvIF>
-	<MvEXIT />
-	[
-		{
-			"type": "container",
-			"id": 1,
-			"columns": [
-				[
-					{
-						"type": "item",
-						"id": "1",
-						"attributes": {
-							"attr1": "value",
-							"attr2": "value_2"
-						}
-					},
-					{
-						"type": "item",
-						"id": "2"
-					}
-				],
-				[
-					{
-						"type": "item",
-						"id": "3"
-					}
-				]
-			]
-		},
-		{
-			"type": "item",
-			"id": "4"
-		},
-		{
-			"type": "item",
-			"id": "5"
-		},
-		{
-			"type": "item",
-			"id": "6"
-		},
-		{
-			"type": "item",
-			"id": 7
-		},
-		{
-			"type": "item",
-			"id": "8"
-		},
-		{
-			"type": "container",
-			"id": "2",
-			"columns": [
-				[
-					{
-						"type": "item",
-						"id": "9"
-					},
-					{
-						"type": "item",
-						"id": "10"
-					},
-					{
-						"type": "item",
-						"id": "11"
-					}
-				],
-				[
-					{
-						"type": "item",
-						"id": "12"
-					},
-					{
-						"type": "container",
-						"id": "3",
-						"columns": [
-							[
-								{
-									"type": "item",
-									"id": "13"
-								}
-							],
-							[
-								{
-									"type": "item",
-									"id": "14"
-								}
-							]
-						]
-					},
-					{
-						"type": "item",
-						"id": "15"
-					},
-					{
-						"type": "item",
-						"id": "16"
-					}
-				]
-			]
-		},
-		{
-			"type": "item",
-			"id": 16
-		}
-	]
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -128,7 +23,7 @@
 	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Layout_Load_Components_Parent_Lowlevel( l.layout_id, l.parent_id, l.components, l.count ) }">
 		<MvIF EXPR = "{ l.component:allow_children EQ 1 }">
 			<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "container">
-			<MvASSIGN NAME = "l.component:columns_count" VALUE = "{ Recursive_Nes_Attack( l.component:layout_id, l.component:id, l.component:columns[1] ) }">
+			<MvASSIGN NAME = "l.component:node_count" VALUE = "{ Recursive_Nes_Attack( l.component:layout_id, l.component:id, l.component:nodes ) }">
 		<MvELSE>
 			<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "item">
 		</MvIF>

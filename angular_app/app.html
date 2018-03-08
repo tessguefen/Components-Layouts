@@ -1,117 +1,92 @@
 <style>
-	/*.box {
-		margin-bottom: 20px;
-		background-color: #fff;
-		border: 1px solid transparent;
-	}
-	.list {
-		list-style: none;
-	}
-	.container-element {
-		border: 2px solid #000;
-		padding-bottom: 20px;
-	}
-	.item {
-		padding: 10px;
-	}
-	.container-element-title {
-		padding: 10px;
-		border-bottom: 2px solid #000;
-		margin:0 0 10px 0;
-	}*/
-	.container-element {
-		background: #fafafa;
-		padding: 10px 0 20px;
-	}
-	.container-element-title {
-		margin-bottom: 10px;
-	}
-	.dropzone ul {
-		padding: 0;
-		list-style: none;
-	}
-	.dropzone li {
-		border: 1px solid #ddd;
-		background: #fff;
-		padding: 10px;
-		margin-bottom: 10px;
-	}
-	.dropzone .dndDragging {
-		opacity: 0.7;
-	}
-	.dropzone .dndDraggingSource {
-		display: none;
-	}
+.angular-ui-tree-dropzone,.angular-ui-tree-empty{border:1px dashed #bbb;min-height:100px;background-color:#e5e5e5;background-image:-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);background-image:linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);background-size:60px 60px;background-position:0 0,30px 30px}.angular-ui-tree-empty{pointer-events:none}.angular-ui-tree-nodes{position:relative;margin:0;padding:0;list-style:none}.angular-ui-tree-nodes .angular-ui-tree-nodes{padding-left:20px}.angular-ui-tree-node,.angular-ui-tree-placeholder{position:relative;margin:0;padding:0;min-height:20px;line-height:20px}.angular-ui-tree-hidden{display:none}.angular-ui-tree-placeholder{margin:10px;padding:0;min-height:30px}.angular-ui-tree-handle{cursor:move;text-decoration:none;font-weight:700;box-sizing:border-box;min-height:20px;line-height:20px}.angular-ui-tree-drag{position:absolute;pointer-events:none;z-index:999;opacity:.8}.angular-ui-tree-drag .tree-node-content{margin-top:0}
 
-	.component {
-		position: relative;
-	}
-	.edit {
-		display: inline-block;
-		background: #ccc;
-		text-transform: uppercase;
-		font-weight: bold;
-		margin-right: 5px;
-	}
-	.delete {
-		display: inline-block;
-		color: red;
-		text-transform: uppercase;
-		font-weight: bold;
-		margin-right: 5px;
-	}
+.btn {
+	margin-right: 8px;
+}
 
+.angular-ui-tree-handle {
+	background: #f8faff;
+	border: 1px solid #dae2ea;
+	color: #7c9eb2;
+	padding: 10px 10px;
+}
+
+.angular-ui-tree-handle:hover {
+	color: #438eb9;
+	background: #f4f6f7;
+	border-color: #dce2e8;
+}
+
+.angular-ui-tree-placeholder {
+	background: #f0f9ff;
+	border: 2px dashed #bed2db;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+tr.angular-ui-tree-empty {
+	height:100px
+}
+
+.group-title {
+	background-color: #687074 !important;
+	color: #FFF !important;
+}
+
+
+/* --- Tree --- */
+.tree-node {
+	border: 1px solid #dae2ea;
+	background: #f8faff;
+	color: #7c9eb2;
+}
+
+.nodrop {
+	background-color: #f2dede;
+}
+
+.tree-node-content {
+	margin: 10px;
+}
+.tree-handle {
+	padding: 10px;
+	background: #428bca;
+	color: #FFF;
+	margin-right: 10px;
+}
+
+.angular-ui-tree-handle:hover {
+}
+
+.angular-ui-tree-placeholder {
+	background: #f0f9ff;
+	border: 2px dashed #bed2db;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
 </style>
 
 
 <div ng-controller="ComponentsController" ng-app="Components">
-	<div ng-click="saveComponent()">Save meeeeeeeeeeee!</div>
-	<!-- Markup for lists inside the dropzone. It's inside a seperate template
-	 because it will be used recursively. The dnd-list directive enables
-	 to drop elements into the referenced array. The dnd-draggable directive
-	 makes an element draggable and will transfer the object that was
-	 assigned to it. If an element was dragged away, you have to remove
-	 it from the original list yourself using the dnd-moved attribute -->
-	 <script type="text/ng-template" id="list.html">
-		<ul dnd-list="list">
-	        <li ng-repeat="item in list"
-	            dnd-draggable="item"
-	            dnd-effect-allowed="move"
-	            dnd-moved="list.splice($index, 1)"
-	            dnd-selected="models.selected = item"
-	            ng-class="{selected: models.selected === item}"
-	            ng-include="item.type + '.html'">
-	        </li>
-	    </ul>
- </script>
-
-
-<!-- This template is responsible for rendering a container element. It uses
-	the above list template to render each container column -->
-	<script type="text/ng-template" id="container.html">
-		<div class="container-element box">
-			<div class="container-element-title component">
-				<span class="delete" ng-click="componentDelete( item )">X</span>
-				<span class="edit" ng-click="componentEdit( item )">Edit</span>
-				{{item.component_name }} - {{ item.name }}
-			</div>
-			<div class="column" ng-repeat="list in item.columns" ng-include="'list.html'"></div>
+	<!-- Nested node template -->
+	<script type="text/ng-template" id="nodes_renderer.html">
+		<div ui-tree-handle>
+			<span ng-if="node.type == 'container'">CONTAINER::</span>
+			<span ng-if="node.type == 'item'">ITEM::</span>
+			{{node.component_name}} - {{node.name}}
 		</div>
+		<ol ng-attr-data-nodrop-enabled="{{ node.type != 'container' ? true : undefined  }}" ui-tree-nodes="" ng-model="node.nodes">
+			<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+			</li>
+		</ol>
 	</script>
 
-	<!-- Template for a normal list item -->
-	<script type="text/ng-template" id="item.html">
-		<div class="item component">
-			<span class="delete" ng-click="componentDelete( item )">X</span>
-			<span class="edit" ng-click="componentEdit( item )">Edit</span>
-			{{item.component_name }} - {{ item.name }}
-		</div>
-	</script>
-
-	<!-- Main area with dropzones and source code -->
-
-	<div ng-repeat="(zone, list) in models.dropzones" class="dropzone">
-		<div ng-include="'list.html'"></div>
+	<div ui-tree>
+		<ol ui-tree-nodes="" ng-model="data" id="tree-root">
+			<li ng-attr-data-nodrop-enabled="{{ node.type != 'container'? true : undefined  }}" ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+		</ol>
 	</div>
-
 </div>

@@ -1,7 +1,7 @@
 (function( window, angular, undefined ) {
 
 	var ngModule = angular.module('Components', [
-		'dndLists'
+		'ui.tree'
 	]);
 
 	ngModule.factory('ComponentsAPI', [ '$http', function( $http ) {
@@ -38,28 +38,11 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
-		$scope.models = {};
-		
-		// Scope Functions
-		$scope.saveComponent = function() {
-			console.log( $scope.models.dropzones );
-		}
-
-		$scope.componentEdit = function( item ) {
-			console.log( item );
-		}
-
-		$scope.componentDelete = function( item ) {
-
-		}
 
 		var init = function( cmps ) {
 			$timeout( function(){
-				$scope.models.dropzones = {
-					"Layout": cmps	
-				}
+				$scope.data = cmps;
 			}, 0);
-
 		}
 
 		ComponentsAPI.getData( function( data ) {
