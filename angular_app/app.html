@@ -85,7 +85,7 @@ tr.angular-ui-tree-empty {
 			<span ng-if="node.allow_children" style="float:right; cursor:pointer; margin-right: 0.75rem; display: inline-block;" ng-click="newSubItem(this, 1)" data-nodrag> Add new Container</span>
 			<span ng-if="node.allow_children" style="float:right; cursor:pointer; margin-right: 0.75rem; display: inline-block;" ng-click="newSubItem(this, 0)" data-nodrag>Add new Item</span>
 		</div>
-		<ol ng-attr-data-nodrop-enabled="{{ node.allow_children ? true : undefined  }}" ui-tree-nodes="" ng-model="node.nodes">
+		<ol ng-attr-data-nodrop-enabled="{{ node.allow_children ? undefined : true  }}" ui-tree-nodes="" ng-model="node.nodes">
 			<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
 			</li>
 		</ol>
@@ -93,7 +93,7 @@ tr.angular-ui-tree-empty {
 
 	<div ui-tree>
 		<ol ui-tree-nodes="" ng-model="data" id="tree-root">
-			<li ng-attr-data-nodrop-enabled="{{ node.allow_children ? true : undefined  }}" ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+			<li ng-attr-data-nodrop-enabled="{{ node.allow_children ? undefined : true  }}" ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 		</ol>
 	</div>
 
