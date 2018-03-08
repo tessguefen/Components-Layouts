@@ -50,6 +50,21 @@
 			init( data );
 		});
 
+		$scope.newSubItem = function (scope) {
+			// Pop up to create NEW item, and pass thru necessary data...
+			var nodeData = scope.$modelValue;
+			if ( typeof nodeData.nodes != 'object' ) {
+				nodeData.nodes = [];
+			}
+			nodeData.nodes.push({
+				id: nodeData.id * 10 + nodeData.nodes.length,
+				name: 'waaaazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaap',
+				component_name: 'testington the third',
+				type: 'item',
+				nodes: []
+			});
+		};
+
 		console.log( $scope );
 	}]);
 

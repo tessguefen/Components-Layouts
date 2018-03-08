@@ -77,6 +77,7 @@ tr.angular-ui-tree-empty {
 			<span ng-if="node.type == 'container'">CONTAINER::</span>
 			<span ng-if="node.type == 'item'">ITEM::</span>
 			{{node.component_name}} - {{node.name}}
+			<span ng-if="node.type == 'container'" style="float:right; cursor:pointer;" ng-click="newSubItem(this)" data-nodrag>Add Me a New 1</span>
 		</div>
 		<ol ng-attr-data-nodrop-enabled="{{ node.type != 'container' ? true : undefined  }}" ui-tree-nodes="" ng-model="node.nodes">
 			<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
