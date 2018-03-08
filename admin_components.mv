@@ -74,10 +74,6 @@
 			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
 
 			<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
-			<hr />
-			TEST: <MvASSIGN NAME = "l.test" VALUE = "{ Recursive_Nes_Attack( 1, 0, l.return ) }">
-			<pre><MvEVAL EXPR = "{ glosub( miva_array_serialize( l.return ), ',', asciichar( 10 ) ) }"></pre>
-
 
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">

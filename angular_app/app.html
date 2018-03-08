@@ -71,13 +71,19 @@ tr.angular-ui-tree-empty {
 
 
 <div ng-controller="ComponentsController" ng-app="Components">
+	<div>
+		<span ng-click="scopeCreep()">Initiate Scope Creep</span><br />
+		<span ng-click="newTopLevel( data, 'item')">Add New Top Level ITEM</span>
+		<span ng-click="newTopLevel( data, 'container')">Add New Top Level CONTAINER</span>
+	</div>
 	<!-- Nested node template -->
 	<script type="text/ng-template" id="nodes_renderer.html">
 		<div ui-tree-handle>
-			<span ng-if="node.type == 'container'">CONTAINER::</span>
-			<span ng-if="node.type == 'item'">ITEM::</span>
+			<span style="text-transform: uppercase;">{{ node.type }}::</span>
 			{{node.component_name}} - {{node.name}}
-			<span ng-if="node.type == 'container'" style="float:right; cursor:pointer;" ng-click="newSubItem(this)" data-nodrag>Add Me a New 1</span>
+			<span ng-click="remove( this )" style="float:right; cursor:pointer; display: inline-block;" data-nodrag>Delete Me</span>
+			<span ng-if="node.type == 'container'" style="float:right; cursor:pointer; margin-right: 0.75rem; display: inline-block;" ng-click="newSubItem(this, 'container')" data-nodrag> Add new Container</span>
+			<span ng-if="node.type == 'container'" style="float:right; cursor:pointer; margin-right: 0.75rem; display: inline-block;" ng-click="newSubItem(this, 'item')" data-nodrag>Add new Item</span>
 		</div>
 		<ol ng-attr-data-nodrop-enabled="{{ node.type != 'container' ? true : undefined  }}" ui-tree-nodes="" ng-model="node.nodes">
 			<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
@@ -90,4 +96,8 @@ tr.angular-ui-tree-empty {
 			<li ng-attr-data-nodrop-enabled="{{ node.type != 'container'? true : undefined  }}" ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 		</ol>
 	</div>
+
+	<hr />
+
+	<pre class="code">{{ data | json }}</pre>
 </div>

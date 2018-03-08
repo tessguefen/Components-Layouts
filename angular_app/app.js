@@ -50,17 +50,40 @@
 			init( data );
 		});
 
-		$scope.newSubItem = function (scope) {
+		$scope.scopeCreep = function() {
+			console.log( $scope.data );
+		}
+
+		$scope.remove = function (scope) {
+			scope.remove();
+		};
+
+		$scope.newTopLevel = function( scope, type ) {
+			// Pop up to create NEW item, and pass thru necessary data...
+			var nodeData = scope;
+			if ( typeof scope != 'object' ) {
+				scope = [];
+			}
+			scope.push({
+				id: 0,
+				name: 'This is the new ' + type,
+				component_name: 'Some Component',
+				type: type,
+				nodes: []
+			});
+		}
+
+		$scope.newSubItem = function (scope, type ) {
 			// Pop up to create NEW item, and pass thru necessary data...
 			var nodeData = scope.$modelValue;
 			if ( typeof nodeData.nodes != 'object' ) {
 				nodeData.nodes = [];
 			}
 			nodeData.nodes.push({
-				id: nodeData.id * 10 + nodeData.nodes.length,
-				name: 'waaaazaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaap',
-				component_name: 'testington the third',
-				type: 'item',
+				id: 0,
+				name: 'This is the new ' + type,
+				component_name: 'Some Component',
+				type: type,
 				nodes: []
 			});
 		};
