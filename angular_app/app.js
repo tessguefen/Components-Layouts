@@ -102,6 +102,7 @@
 			if ($scope.data.newComponent.parent.nodes.length === 0 ) {
 				$scope.data.newComponent.parent.nodes = [];
 			}
+			if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
 			$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
 			$scope.closePopup();
 		}

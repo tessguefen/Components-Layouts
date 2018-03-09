@@ -8,7 +8,7 @@
 	<MvCOMMENT>
 		This is temporary until I add data
 	</MvCOMMENT>
-	<MvASSIGN NAME = "l.components_count" VALUE = "{ Recursive_Nes_Attack( 1,  0, l.components ) }">
+	<MvASSIGN NAME = "l.components_count" VALUE = "{ Recursive_Nes_Attack( g.Layout_ID,  0, l.components ) }">
 	<MvIF EXPR = "{ l.components_count GT 0 }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
 	<MvELSE>
