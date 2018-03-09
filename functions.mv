@@ -1302,9 +1302,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponent_Insert" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component" MEMBER = "name " VALUE = "{ trim( l.component:name ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "name " VALUE = "{ trim( l.layout_component:name ) }">
 
-	<MvIF EXPR = "{ ISNULL l.component:name }">
+	<MvIF EXPR = "{ ISNULL l.layout_component:name }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
 		<MvFUNCTIONRETURN VALUE = 0>
@@ -1384,7 +1384,7 @@
 <MvFUNCTION NAME = "LayoutComponent_Update" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "name" VALUE = "{ trim( l.layout_component:name ) }">
 
-	<MvIF EXPR = "{ ISNULL l.component:name }">
+	<MvIF EXPR = "{ ISNULL l.layout_component:name }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
 		<MvFUNCTIONRETURN VALUE = 0>

@@ -79,6 +79,15 @@
 			scope.remove();
 		};
 
+		$scope.checkNodes = function( node ) {
+			console.log( node );
+			if ( ( typeof node.component != 'undefined' ) && ( node.component.allow_children == 1 ) ) {
+				if ( node.nodes.length === 0 ) {
+					node.nodes = [];
+				}
+			}
+		}
+
 		$scope.newComponent = function( scope ) {
 			// Pop up to create NEW item, and pass thru necessary data...
 			var nodeData = scope.$modelValue;
@@ -89,7 +98,11 @@
 		}
 
 		$scope.insertComponent = function() {
-			$scope.data.newComponent.parent.nodes.push( $scope.data.newComponent );
+			console.log( $scope.data.newComponent.parent.nodes )
+			if ($scope.data.newComponent.parent.nodes.length === 0 ) {
+				$scope.data.newComponent.parent.nodes = [];
+			}
+			$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
 			$scope.closePopup();
 		}
 

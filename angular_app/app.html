@@ -186,7 +186,7 @@ tr.angular-ui-tree-empty {
 	</div>
 	<!-- Nested node template -->
 	<script type="text/ng-template" id="nodes_renderer.html">
-		<div ui-tree-handle ng-class="{ 'cmp_container' : node.component.allow_children, 'cmp_item' : !node.component.allow_children }">
+		<div ui-tree-handle ng-class="{ 'cmp_container' : node.component.allow_children, 'cmp_item' : !node.component.allow_children }" ng-init="checkNodes( node )">
 			{{node.component.name}} - {{node.name}}
 			<span class="cmps_options">
 				<span ng-if="node.component.allow_children" ng-if="node.component.allow_children" class="cmps_options-button" ng-click="newComponent( this )" data-nodrag>+</span>
