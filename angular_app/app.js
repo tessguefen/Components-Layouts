@@ -37,14 +37,15 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
-		$scope.data = [];
-		$scope.data.layout = new Object();;
+		$scope.data = new Object();
+		$scope.data.layout = new Object();
 
-		$scope.data.newComponent = new Object();;
-		$scope.data.newComponent.component = new Object();;
-		$scope.data.newComponent.parent = new Object();;
+		$scope.data.newComponent = new Object();
+		$scope.data.newComponent.component = new Object();
+		$scope.data.newComponent.parent = new Object();
 
-		$scope.data.itemsForDeletion = [];
+		$scope.data.itemsForDeletion = new Object();
+		$scope.data.itemsForDeletion.nodes = [];
 		$scope.data.layout_id = layout_id;
 
 		$scope.data.showPopUp = 0;
@@ -74,7 +75,7 @@
 		}
 
 		$scope.removeComponent = function( scope, node ) {
-			$scope.data.itemsForDeletion.push( node );
+			$scope.data.itemsForDeletion.nodes.push( node );
 			scope.remove();
 		};
 
@@ -104,20 +105,23 @@
 		}
 
 		$scope.resetPopup = function() {
-			$scope.data.newComponent = new Object();;
-			$scope.data.newComponent.component = new Object();;
-			$scope.data.newComponent.parent = new Object();;
+			$scope.data.newComponent = new Object();
+			$scope.data.newComponent.component = new Object();
+			$scope.data.newComponent.parent = new Object();
 		}
 
 		/*** Submission of SAVE ***/
 		$scope.saveLayout = function() {
 			var layout_data = new Object();
-			layout_data.layout = $scope.data.layout;
-			layout_data.deleted = $scope.data.itemsForDeletion;
-			console.log( layout_data );
+			layout_data.layout = angular.copy( $scope.data.layout );
+			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
+			var payload = JSON.stringify( layout_data );
+			console.log( payload );
 			ComponentsAPI.saveLayout( function( data ) {
 				console.log( data );
-			}, JSON.stringify(layout_data) );
+				$scope.data.itemsForDeletion = new Object();
+				$scope.data.itemsForDeletion.nodes = [];
+			}, payload );
 		}
 
 

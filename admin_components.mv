@@ -338,4 +338,34 @@
 <MvFUNCTION NAME = "JSON_Layout_Save" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
 	<MvASSIGN NAME = "l.void" VALUE = "{ miva_json_decode( g.Payload, l.payload ) }">
 	<MvEVAL EXPR = "{ glosub( miva_array_serialize( l.payload ), ',', asciichar( 10 ) ) }">
+	<MvIF EXPR = "{ NOT Layout_Update_Save( g.Layout_ID, l.payload:layout, l.l.payload:deleted ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Update_Save" PARAMETERS = "layout_id, new_layout, deleted" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.node" ARRAY = "l.new_layout:nodes">
+		<MvASSIGN NAME = "l.node:parent" VALUE = "0" />
+		<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Update_Save_LowLevel( l.layout_id, l.node ) }">
+	</MvFOREACH>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Update_Save_LowLevel" PARAMETERS = "layout_id, component var">
+	<MvFOREACH ITERATOR = "l.node" ARRAY = "l.component:nodes">
+		<MvCOMMENT>
+			Do stuff.
+		</MvCOMMENT>
+
+		<MvASSIGN NAME = "l.node:parent" VALUE = "{ l.component:id }" />
+		<MvASSIGN NAME = "l.node:layout_id" VALUE = "{ l.layout_id }" />
+
+		<MvIF EXPR = "{ l.node:id EQ 0 }">
+			<MvASSIGN NAME = "l.void" VALUE = "{ LayoutComponent_Insert( l.node ) }">
+		<MvELSE>
+			<MvASSIGN NAME = "l.void" VALUE = "{ LayoutComponent_Update( l.node ) }">
+		</MvIF>
+		<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Update_Save_LowLevel( l.layout_id, l.node ) }">
+	</MvFOREACH>
 </MvFUNCTION>
