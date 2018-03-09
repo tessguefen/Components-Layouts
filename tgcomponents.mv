@@ -371,6 +371,7 @@
 
 	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Load_Components' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_Components( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_All' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_All( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module )	}"></MvIF>
 </MvFUNCTION>
 
 <MvCOMMENT>

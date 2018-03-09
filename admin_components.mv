@@ -334,3 +334,8 @@
 	</MvIF>
 	[]
 </MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Layout_Save" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvASSIGN NAME = "l.void" VALUE = "{ miva_json_decode( g.Payload, l.payload ) }">
+	<MvEVAL EXPR = "{ glosub( miva_array_serialize( l.payload ), ',', asciichar( 10 ) ) }">
+</MvFUNCTION>

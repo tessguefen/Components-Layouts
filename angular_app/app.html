@@ -143,7 +143,7 @@ tr.angular-ui-tree-empty {
 }
 .cmp_item_wrap {
 	color: #fff;
-	background-color: #1eabbd;
+	background-color: #666;
 	transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 	box-sizing: border-box;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -254,20 +254,20 @@ tr.angular-ui-tree-empty {
 							</td>
 							<td ng-if="attribute.type == 'product'">
 								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
-								<span ng-click="productPopup( 'js-attribute_' + attribute.id )">PRODUCT LOOKUP</span>
+								<span class="cmp_button" ng-click="productPopup( 'js-attribute_' + attribute.id )">PRODUCT LOOKUP</span>
 							</td>
 							<td ng-if="attribute.type == 'category'">
 								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
-								<span ng-click="categoryPopup( 'js-attribute_' + attribute.id )">CATEGORY LOOKUP</span>
+								<span class="cmp_button" ng-click="categoryPopup( 'js-attribute_' + attribute.id )">CATEGORY LOOKUP</span>
 							</td>
 							<td ng-if="attribute.type == 'image'">
 								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
-								<span ng-click="imageUpload( 'Image', '', 'js-attribute_' + attribute.id )">IMAGE UPLOAD</span>
+								<span class="cmp_button" ng-click="imageUpload( 'Image', '', 'js-attribute_' + attribute.id )">IMAGE UPLOAD</span>
 							</td>
 						</tr>
 						<tr ng-if="data.newComponent.component.id > 0">
 							<td colspan="2">
-								<span ng-click="insertComponent()">ADD COMPONENT</span>
+								<span class="cmp_button" ng-click="insertComponent()">ADD COMPONENT</span>
 							</td>
 						</tr>
 					</table>
