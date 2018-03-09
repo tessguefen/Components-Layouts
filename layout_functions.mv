@@ -55,12 +55,13 @@
 
 <MvFUNCTION NAME = "Read_Layout_Component" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGLayouts_Components.d.id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "component_id"		VALUE = "{ TGLayouts_Components.d.component_id }">
 	<MvASSIGN NAME = "l.component" MEMBER = "layout_id"			VALUE = "{ TGLayouts_Components.d.layout_id }">
 	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGLayouts_Components.d.name }">
 	<MvASSIGN NAME = "l.component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
 	<MvASSIGN NAME = "l.component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
 	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
-	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:id, l.component:component ) }">
+	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:component_id, l.component:component ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Layout_Component_Attribute_Load" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">

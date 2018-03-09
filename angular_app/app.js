@@ -22,6 +22,15 @@
 								'Components_Load_All' );
 			}
 
+			self.saveLayout = function( callback, data ) {
+				return AJAX_Call_Module_FieldList( callback,
+									   'admin',
+									   'TGCOMPONENTS',
+									   'Layout_Save',
+									   'Layout_ID=' + layout_id + '&Payload=' + data,
+									   '' );
+			}
+
 			return self;
 		}
 	]);
@@ -29,10 +38,11 @@
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
 		$scope.data = [];
+		$scope.data.layout = new Object();;
 
-		$scope.data.newComponent = {};
-		$scope.data.newComponent.component = {};
-		$scope.data.newComponent.parent = {};
+		$scope.data.newComponent = new Object();;
+		$scope.data.newComponent.component = new Object();;
+		$scope.data.newComponent.parent = new Object();;
 
 		$scope.data.itemsForDeletion = [];
 		$scope.data.layout_id = layout_id;
@@ -41,7 +51,7 @@
 
 		var init = function( cmps ) {
 			$timeout( function(){
-				$scope.data.layout = cmps;
+				$scope.data.layout.nodes = cmps;
 			}, 0);
 		}
 
@@ -71,11 +81,12 @@
 		$scope.newComponent = function( scope ) {
 			// Pop up to create NEW item, and pass thru necessary data...
 			var nodeData = scope.$modelValue;
-			if ( typeof nodeData != 'object' ) {
-				nodeData = [];
+			if( !nodeData ) {
+				nodeData = $scope.data.layout;
 			}
 			$scope.openPopup( nodeData );
 		}
+
 		$scope.insertComponent = function() {
 			$scope.data.newComponent.parent.nodes.push( $scope.data.newComponent );
 			$scope.closePopup();
@@ -93,11 +104,24 @@
 		}
 
 		$scope.resetPopup = function() {
-			$scope.data.newComponent = {};
-			$scope.data.newComponent.component = {};
-			$scope.data.newComponent.parent = {};
+			$scope.data.newComponent = new Object();;
+			$scope.data.newComponent.component = new Object();;
+			$scope.data.newComponent.parent = new Object();;
 		}
 
+		/*** Submission of SAVE ***/
+		$scope.saveLayout = function() {
+			var layout_data = new Object();
+			layout_data.layout = $scope.data.layout;
+			layout_data.deleted = $scope.data.itemsForDeletion;
+			console.log( layout_data );
+			ComponentsAPI.saveLayout( function( data ) {
+				console.log( data );
+			}, JSON.stringify(layout_data) );
+		}
+
+
+		/*** Popups for Forms ***/
 		$scope.productPopup = function( id ) {
 			ProductLookupDialog( id );
 		}

@@ -154,6 +154,21 @@ tr.angular-ui-tree-empty {
 	padding: 0.5rem 0.75rem;
 	margin-bottom: 20px;
 }
+.cmp_button {
+	margin-bottom: 1.5rem;
+	padding: 0.25rem 0.75rem;
+	display: inline-block;
+	cursor: pointer;
+	border: 2px solid #444;
+}
+.component_popup__inner {
+	position: relative;
+}
+.component_popup-exit {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+}
 </style>
 
 
@@ -164,7 +179,10 @@ tr.angular-ui-tree-empty {
 		<span ng-click="scopeCreep()">Initiate Scope Creep</span>
 	</div>
 	<div>
-		<span class="cmp_button" ng-click="newComponent( data )">Add a Component</span>
+		<span class="cmp_button" ng-click="newComponent( data.layout )">Add a Component</span>
+	</div>
+	<div>
+		<span class="cmp_button" ng-click="saveLayout()">Save Layout</span>
 	</div>
 	<!-- Nested node template -->
 	<script type="text/ng-template" id="nodes_renderer.html">
@@ -182,76 +200,79 @@ tr.angular-ui-tree-empty {
 	</script>
 
 	<div ui-tree>
-		<ol ui-tree-nodes="" ng-model="data.layout" id="tree-root">
-			<li ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children }" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+		<ol ui-tree-nodes="" ng-model="data.layout.nodes" id="tree-root">
+			<li ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children }" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 		</ol>
 	</div>
 
 
 	<div class="component_popup" ng-class="{ 'popup-show' : data.showPopUp }">
+		<div class="component_popup__inner">
+			<span class="component_popup-exit" ng-click="closePopup()">&times;</span>
 
-		<div class="component_popup-title" ng-if="( data.newComponent.component.name || data.newComponent.name)">
-			<span class="component_popup-cmp">{{ data.newComponent.component.name }}</span>
-			<span class="component_popup-name">{{ data.newComponent.name }}</span>
-		</div>
+			<div class="component_popup-title" ng-if="( data.newComponent.component.name || data.newComponent.name )">
+				<span class="component_popup-cmp">{{ data.newComponent.component.name }}</span>
+				<span class="component_popup-name">{{ data.newComponent.name }}</span>
+			</div>
 
-		<div class="component_popup-details">
-			<form name="newComponentForm">
-				<table>
-					<tr ng-if="data.newComponent.component.image">
-						<td colspan="2">
-							<img ng-src="{{ data.newComponent.component.image }}" class="cmp_image" />
-						</td>
-					</tr>
-					<tr ng-if="data.components.length > 0">
-						<td>Select Component:</td>
-						<td><select ng-options="option.name for option in data.components track by option.id" ng-model="data.newComponent.component" required></select></td>
-					</tr>
-					<tr>
-						<td>Name</td>
-						<td><input type="text" ng-model="data.newComponent.name" required /></td>
-					</tr>
-					<tr ng-if="data.newComponent.component.id > 0" ng-repeat="attribute in data.newComponent.component.attributes">
-						<td>{{ attribute.prompt }}<span ng-if="attribute.required">*</span></td>
-						<td ng-if="attribute.type == 'text'">
-							<input type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
-						</td>
-						<td ng-if="attribute.type == 'textarea'">
-							<textarea placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}"></textarea>
-						</td>
-						<td ng-if="attribute.type == 'select'">
-							<select ng-options="option.prompt for option in attribute.options track by option.id" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}"></select>
-						</td>
-						<td ng-if="attribute.type == 'radio'">
-							<label ng-repeat="option in attribute.options">
-								<input type="radio" ng-model="attribute.value" ng-value="option.prompt" ng-attr-required="{{ attribute.required ? true : undefined }}"> {{ attribute.prompt }}
-							</label>
-						</td>
-						<td ng-if="attribute.type == 'radio'">
-							<label>
-								<input type="checkbox" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}"> {{ attribute.prompt }}
-							</label>
-						</td>
-						<td ng-if="attribute.type == 'product'">
-							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
-							<span ng-click="productPopup( 'js-attribute_' + attribute.id )">PRODUCT LOOKUP</span>
-						</td>
-						<td ng-if="attribute.type == 'category'">
-							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
-							<span ng-click="categoryPopup( 'js-attribute_' + attribute.id )">CATEGORY LOOKUP</span>
-						</td>
-						<td ng-if="attribute.type == 'image'">
-							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
-							<span ng-click="imageUpload( 'Image', '', 'js-attribute_' + attribute.id )">IMAGE UPLOAD</span>
-						</td>
-					</tr>
-					<tr ng-if="data.newComponent.component.id > 0">
-						<td colspan="2">
-							<span ng-click="insertComponent()">ADD COMPONENT</span>
-						</td>
-					</tr>
-				</table>
-			</form>
+			<div class="component_popup-details">
+				<form name="newComponentForm" id="js-newComponentForm">
+					<table>
+						<tr ng-if="data.newComponent.component.image">
+							<td colspan="2">
+								<img ng-src="{{ data.newComponent.component.image }}" class="cmp_image" />
+							</td>
+						</tr>
+						<tr ng-if="data.components.length > 0">
+							<td>Select Component:</td>
+							<td><select ng-options="option.name for option in data.components track by option.id" ng-model="data.newComponent.component" required></select></td>
+						</tr>
+						<tr>
+							<td>Name</td>
+							<td><input type="text" ng-model="data.newComponent.name" required /></td>
+						</tr>
+						<tr ng-if="data.newComponent.component.id > 0" ng-repeat="attribute in data.newComponent.component.attributes">
+							<td>{{ attribute.prompt }}<span ng-if="attribute.required">*</span></td>
+							<td ng-if="attribute.type == 'text'">
+								<input type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
+							</td>
+							<td ng-if="attribute.type == 'textarea'">
+								<textarea placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}"></textarea>
+							</td>
+							<td ng-if="attribute.type == 'select'">
+								<select ng-options="option.prompt for option in attribute.options track by option.id" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}"></select>
+							</td>
+							<td ng-if="attribute.type == 'radio'">
+								<label ng-repeat="option in attribute.options">
+									<input type="radio" ng-model="attribute.value" ng-value="option.prompt" ng-attr-required="{{ attribute.required ? true : undefined }}"> {{ attribute.prompt }}
+								</label>
+							</td>
+							<td ng-if="attribute.type == 'radio'">
+								<label>
+									<input type="checkbox" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}"> {{ attribute.prompt }}
+								</label>
+							</td>
+							<td ng-if="attribute.type == 'product'">
+								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
+								<span ng-click="productPopup( 'js-attribute_' + attribute.id )">PRODUCT LOOKUP</span>
+							</td>
+							<td ng-if="attribute.type == 'category'">
+								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
+								<span ng-click="categoryPopup( 'js-attribute_' + attribute.id )">CATEGORY LOOKUP</span>
+							</td>
+							<td ng-if="attribute.type == 'image'">
+								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" ng-model="attribute.value" ng-attr-required="{{ attribute.required ? true : undefined }}" />
+								<span ng-click="imageUpload( 'Image', '', 'js-attribute_' + attribute.id )">IMAGE UPLOAD</span>
+							</td>
+						</tr>
+						<tr ng-if="data.newComponent.component.id > 0">
+							<td colspan="2">
+								<span ng-click="insertComponent()">ADD COMPONENT</span>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
 		</div>
 
 
