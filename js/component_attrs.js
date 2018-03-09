@@ -82,7 +82,7 @@ ComponentAttrs_Batchlist.prototype.onCreateRootColumnList = function() {
 	var columnlist;
 	var self = this;
 
-		self.attr_id				=	new MMBatchList_Column_Name( 'ID', 'id', 'id')
+		self.id				=	new MMBatchList_Column_Name( 'ID', 'id', 'id')
 											.SetDisplayInMenu(false)
 											.SetDisplayInList(false)
 											.SetAdvancedSearchEnabled(false)
@@ -107,7 +107,7 @@ ComponentAttrs_Batchlist.prototype.onCreateRootColumnList = function() {
 										.SetUpdateOnModifiedOnly( true ),
 	columnlist =
 	[
-		self.attr_id,
+		self.id,
 		self.component_id,
 		self.fields_code,
 		self.fields_prompt,
@@ -125,6 +125,10 @@ ComponentAttrs_Batchlist.prototype.CreateColumnList_Options = function() {
 	[
 		new MMBatchList_Column_Code( 'Attribute ID', 'attr_id', 'attr_id' )
 				.SetRootColumn( self.attr_id )
+				.SetSearchable( false )
+				.SetDisplayInList( false ),
+		new MMBatchList_Column_Code( 'Option ID', 'id', 'id' )
+				.SetRootColumn( self.id )
 				.SetSearchable( false )
 				.SetDisplayInList( false ),
 		new MMBatchList_Column_Name( 'Prompt', 'prompt', 'prompt' )
@@ -289,12 +293,14 @@ ComponentAttrs_Batchlist.prototype.onProcessLoadedData = function( recordlist, s
 }
 
 ComponentAttrs_Batchlist.prototype.Option_Save = function( item, callback, delegator ) {
-	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentOption_Update', callback, delegator );
+	var parent_field = this.GetListItemRecord_Parent( item.index );
+	ComponentAttrs_Batchlist_Option_Function( parent_field, item.record.mmbatchlist_fieldlist, 'ComponentOption_Update', callback, delegator );
 
 }
 
 ComponentAttrs_Batchlist.prototype.Option_Delete = function( item, callback, delegator ) {
-	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentOption_Delete', callback, delegator );
+	var parent_field = this.GetListItemRecord_Parent( item.index );
+	ComponentAttrs_Batchlist_Option_Function( parent_field, item.record.mmbatchlist_fieldlist, 'ComponentOption_Delete', callback, delegator );
 }
 
 // Column 'type'

@@ -7,6 +7,7 @@
 	JSON_Components_Load_Query( module var )
 	JSON_Layouts_Load_Query( module var )
 	JSON_Component_Attrs_Load_Query( module var )
+	JSON_Components_Load_All( module var )
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ComponentsTab_HeadTag" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "html, text">
@@ -48,9 +49,16 @@
 			MMScreen_LoadFinished( function() { new ComponentAttrs_Batchlist( component_id ); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.screen EQ 'Layout' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].JavaScript_Set_A_Variable( 'layout_id', g.Layout_ID ) }">
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
 	</MvIF>
 </MvFUNCTION>
 
@@ -74,6 +82,9 @@
 			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
 
 			<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
 
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
@@ -315,4 +326,11 @@
 		"total_count": <MvEVAL EXPR = "{ int( l.total_count ) }">
 	}
 }
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Components_Load_All" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvIF EXPR = "{ Components_Load_All( l.components ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
+	</MvIF>
+	[]
 </MvFUNCTION>

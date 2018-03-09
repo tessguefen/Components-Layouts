@@ -21,7 +21,7 @@
 </MvCOMMENT>
 <MvFUNCTION NAME = "Recursive_Nes_Attack" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
 	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Layout_Load_Components_Parent_Lowlevel( l.layout_id, l.parent_id, l.components, l.count ) }">
-		<MvIF EXPR = "{ l.component:allow_children EQ 1 }">
+		<MvIF EXPR = "{ l.component:component:allow_children EQ 1 }">
 			<MvASSIGN NAME = "l.component" MEMBER = "type"	VALUE = "container">
 			<MvASSIGN NAME = "l.component:node_count" VALUE = "{ Recursive_Nes_Attack( l.component:layout_id, l.component:id, l.component:nodes ) }">
 		<MvELSE>
@@ -34,7 +34,7 @@
 <MvFUNCTION NAME = "Layout_Load_Components_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
-				QUERY	= "{ 'SELECT LC.*, C.name as component_name, C.allow_children as allow_children  FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components LC LEFT JOIN ' $ g.Store_Table_Prefix $ 'TGComponents C ON LC.component_id = C.id WHERE layout_id = ? AND parent = ? ORDER BY disp_order' }"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent = ? ORDER BY disp_order' }"
 				FIELDS	= "l.layout_id, l.parent_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
@@ -56,14 +56,101 @@
 <MvFUNCTION NAME = "Read_Layout_Component" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGLayouts_Components.d.id }">
 	<MvASSIGN NAME = "l.component" MEMBER = "layout_id"			VALUE = "{ TGLayouts_Components.d.layout_id }">
-	<MvASSIGN NAME = "l.component" MEMBER = "component_id"		VALUE = "{ TGLayouts_Components.d.component_id }">
 	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGLayouts_Components.d.name }">
 	<MvASSIGN NAME = "l.component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
 	<MvASSIGN NAME = "l.component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
 	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
-	<MvASSIGN NAME = "l.component" MEMBER = "component_name"	VALUE = "{ TGLayouts_Components.d.component_name  }">
-	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ TGLayouts_Components.d.allow_children  }">
+	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:id, l.component:component ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Layout_Component_Attribute_Load" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "return var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponents"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponents.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0003' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
+		<MvASSIGN NAME = "l.count" VALUE = "{ l.count + 1 }" />
+		<MvASSIGN NAME ="l.void" VALUE = "{ Component_Read( l.return[ l.count ] ) }">
+		<MvASSIGN NAME ="l.void" VALUE = "{ Components_Attrs_Load_All_ID( l.return[ l.count ]:id, l.return[ l.count ]:attributes ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Components_Attrs_Load_All_ID" PARAMETERS = "component_id, return var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Attrs"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ? ORDER BY disp_order' }"
+				FIELDS	= "l.component_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0003' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGComponent_Attrs.d.EOF }">
+		<MvASSIGN NAME = "l.count" VALUE = "{ l.count + 1 }" />
+
+		<MvASSIGN NAME ="l.void" VALUE = "{ ComponentAttrs_Read( l.return[ l.count ] ) }">
+
+		<MvIF EXPR = "{ l.return[ l.count ]:type EQ 'select' OR l.return[ l.count ]:type EQ 'radio' }">
+			<MvASSIGN NAME ="l.void" VALUE = "{ Components_Options_Load_Attr( l.return[ l.count ]:id, l.return[ l.count ]:options ) }">
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponent_Attrs" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Components_Options_Load_Attr" PARAMETERS = "attr_id, return var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Options"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE attr_id = ? ORDER BY disp_order' }"
+				FIELDS	= "l.attr_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponent_Options.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0003' ) }">
+	</MvIF>
+
+
+	<MvWHILE EXPR = "{ NOT TGComponent_Options.d.EOF }">
+
+		<MvASSIGN NAME ="l.void" VALUE = "{ ComponentOption_Read( l.return[ ++l.count ] ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponent_Options" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>

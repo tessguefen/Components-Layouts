@@ -7,30 +7,20 @@
 	ngModule.factory('ComponentsAPI', [ '$http', function( $http ) {
 			var self = this;
 
-			// self.getData = function( callback ) {
-			// 	$http.get( theme_path + '/page_to_ping.json', {
-			// 		headers: {
-			// 			'Content-Type': 'application/json'
-			// 		}
-			// 	}).then(
-			// 		function( response ) {
-
-			// 			callback( response.data );
-
-			// 		},
-			// 		function( error ) { console.error( error ); }
-			// 	);
-			// }
-
 			self.getData = function( callback ) {
 				return AJAX_Call_Module( callback,
 								'admin',
 								'TGCOMPONENTS',
 								'Layout_Load_Components',
-								'Layout_ID=1' );
+								'Layout_ID=' + layout_id );
 			}
 
-			console.log( 'wat' );
+			self.getComponents = function( callback ) {
+				return AJAX_Call_Module( callback,
+								'admin',
+								'TGCOMPONENTS',
+								'Components_Load_All' );
+			}
 
 			return self;
 		}
@@ -38,60 +28,87 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
+		$scope.data = [];
 
-		$scope.itemsForDeletion = [];
+		$scope.data.newComponent = {};
+		$scope.data.newComponent.component = {};
+		$scope.data.newComponent.parent = {};
+
+		$scope.data.itemsForDeletion = [];
+		$scope.data.layout_id = layout_id;
+
+		$scope.data.showPopUp = 0;
 
 		var init = function( cmps ) {
 			$timeout( function(){
-				$scope.data = cmps;
+				$scope.data.layout = cmps;
+			}, 0);
+		}
+
+		var initComponents = function( cmps ) {
+			$timeout( function(){
+				$scope.data.components = cmps;
 			}, 0);
 		}
 
 		ComponentsAPI.getData( function( data ) {
-			console.log( data );
 			init( data );
+		});
+
+		ComponentsAPI.getComponents( function( data ) {
+			initComponents( data );
 		});
 
 		$scope.scopeCreep = function() {
 			console.log( $scope );
 		}
 
-		$scope.removeComponent = function (scope) {
-			$scope.itemsForDeletion.push( scope );
+		$scope.removeComponent = function( scope, node ) {
+			$scope.data.itemsForDeletion.push( node );
 			scope.remove();
 		};
 
-		$scope.newTopLevel = function( scope, allow_children ) {
-			// Pop up to create NEW item, and pass thru necessary data...
-			var nodeData = scope;
-			if ( typeof scope != 'object' ) {
-				scope = [];
-			}
-			scope.push({
-				id: 0,
-				name: 'This is the new ' + ( allow_children ? 'container' : 'item' ),
-				component_name: 'Some Component',
-				allow_children: allow_children,
-				type: allow_children ? 'container' : 'item',
-				nodes: []
-			});
-		}
-
-		$scope.newSubItem = function (scope, allow_children ) {
+		$scope.newComponent = function( scope ) {
 			// Pop up to create NEW item, and pass thru necessary data...
 			var nodeData = scope.$modelValue;
-			if ( typeof nodeData.nodes != 'object' ) {
-				nodeData.nodes = [];
+			if ( typeof nodeData != 'object' ) {
+				nodeData = [];
 			}
-			nodeData.nodes.push({
-				id: 0,
-				name: 'This is the new ' + ( allow_children ? 'container' : 'item' ),
-				component_name: 'Some Component',
-				allow_children: allow_children,
-				type: allow_children ? 'container' : 'item',
-				nodes: []
-			});
-		};
+			$scope.openPopup( nodeData );
+		}
+		$scope.insertComponent = function() {
+			$scope.data.newComponent.parent.nodes.push( $scope.data.newComponent );
+			$scope.closePopup();
+		}
+
+		$scope.closePopup = function() {
+			$scope.resetPopup();
+			$scope.data.showPopUp = 0;
+		}
+
+		$scope.openPopup = function( parent ) {
+			$scope.resetPopup();
+			$scope.data.newComponent.parent = parent;
+			$scope.data.showPopUp = 1;
+		}
+
+		$scope.resetPopup = function() {
+			$scope.data.newComponent = {};
+			$scope.data.newComponent.component = {};
+			$scope.data.newComponent.parent = {};
+		}
+
+		$scope.productPopup = function( id ) {
+			ProductLookupDialog( id );
+		}
+
+		$scope.categoryPopup = function( id ) {
+			CategoryLookupDialog( id );
+		}
+
+		$scope.imageUpload = function( type, data, field ) {
+			PopupFileUpload( type, data, field );
+		}
 
 		console.log( $scope );
 	}]);
