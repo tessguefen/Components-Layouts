@@ -3,11 +3,13 @@
 	ComponentTab_UI( tab )
 	ComponentsScreen_HeadTag( screen )
 	ComponentsScreen_UI( screen )
+	Component_HTML_App()
 
 	JSON_Components_Load_Query( module var )
 	JSON_Layouts_Load_Query( module var )
 	JSON_Component_Attrs_Load_Query( module var )
 	JSON_Components_Load_All( module var )
+
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ComponentsTab_HeadTag" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "html, text">
@@ -83,7 +85,7 @@
 
 				<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
 
-				<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
+				<MvEVAL EXPR = "{ Component_HTML_App() }" />
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
@@ -115,6 +117,10 @@
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
 		</MvIF>
 	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Component_HTML_App" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Components_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
@@ -341,72 +347,9 @@
 <MvFUNCTION NAME = "JSON_Layout_Save" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
 	<MvASSIGN NAME = "l.void" VALUE = "{ miva_json_decode( g.Payload, l.payload ) }">
 	<MvEVAL EXPR = "{ glosub( miva_array_serialize( l.payload ), ',', asciichar( 10 ) ) }">
-	<MvIF EXPR = "{ NOT Layout_Update_Delete( g.Layout_ID, l.payload:layout, l.payload:deleted ) }">
+	<MvIF EXPR = "{ NOT Layout_Components_Save( g.Layout_ID, l.payload:layout, l.payload:deleted ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
-</MvFUNCTION>
-
-<MvFUNCTION NAME = "Layout_Update_Delete" PARAMETERS = "layout_id, new_layout var, deleted var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT Layout_UpdateSave_LowLevel( l.layout_id, l.new_layout ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
-	</MvIF>
-	<MvIF EXPR = "{ NOT Layout_Delete_Components( l.layout_id, l.deleted ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
-	</MvIF>
-	<MvFUNCTIONRETURN VALUE = 1>
-</MvFUNCTION>
-
-<MvFUNCTION NAME = "Layout_UpdateSave_LowLevel" PARAMETERS = "layout_id, component var">
-	<MvFOREACH ITERATOR = "l.node" ARRAY = "l.component:nodes">
-		<MvCOMMENT>
-			Do stuff.
-		</MvCOMMENT>
-
-		<MvASSIGN NAME = "l.disp_order" VALUE = "{ l.disp_order + 1 }" />
-
-		<MvASSIGN NAME = "l.node:parent" VALUE = "{ l.component:id }" />
-		<MvASSIGN NAME = "l.node:layout_id" VALUE = "{ l.layout_id }" />
-		<MvASSIGN NAME = "l.node:component_id" VALUE = "{ l.node:component:id }">
-		<MvASSIGN NAME = "l.node:disp_order" VALUE = "{ l.disp_order }">
-
-		<MvIF EXPR = "{ ( l.node:id EQ 0 ) OR ( ISNULL l.node:id ) }">
-			<MvIF EXPR = "{ NOT LayoutComponent_Insert( l.node ) }">
-				<MvFUNCTIONRETURN VALUE = 0>
-			</MvIF>
-		<MvELSE>
-			<MvIF EXPR = "{ NOT LayoutComponent_Update( l.node ) }">
-				<MvFUNCTIONRETURN VALUE = 0>
-			</MvIF>
-		</MvIF>
-		<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.node:component:attributes">
-			<MvASSIGN NAME = "l.temp" VALUE = "">
-			<MvASSIGN NAME = "l.temp" MEMBER = "layouts_components_id"	VALUE = "{ l.node:id }" />
-			<MvASSIGN NAME = "l.temp" MEMBER = "attr_id"				VALUE = "{ l.attribute:id }" />
-			<MvASSIGN NAME = "l.temp" MEMBER = "value"					VALUE = "{ l.attribute:value }" />
-			<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
-				<MvASSIGN NAME = "l.temp:value" VALUE = "{ miva_array_serialize( l.temp:link ) }">
-			</MvIF>
-			<MvIF EXPR = "{ NOT LayoutValue_Update( l.temp ) }">
-				<MvFUNCTIONRETURN VALUE = 0>
-			</MvIF>
-		</MvFOREACH>
-		<MvIF EXPR = "{ NOT Layout_UpdateSave_LowLevel( l.layout_id, l.node ) }">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
-	</MvFOREACH>
-	<MvFUNCTIONRETURN VALUE = 1>
-</MvFUNCTION>
-
-<MvFUNCTION NAME = "Layout_Delete_Components" PARAMETERS = "layout_id, component var" STANDARDOUTPUTLEVEL = "">
-	<MvFOREACH ITERATOR = "l.node" ARRAY = "l.component:nodes">
-		<MvIF EXPR = "{ ( l.node:id EQ 0 ) OR ( ISNULL l.node:id ) }">
-			<MvFOREACHCONTINUE />
-		</MvIF>
-		<MvIF EXPR = "{ NOT LayoutComponent_Delete( l.node:id ) }">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
-	</MvFOREACH>
-	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>

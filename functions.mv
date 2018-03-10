@@ -76,6 +76,20 @@
 	LayoutValue_Update( layout_value var )
 	LayoutValue_Delete( layouts_components_id, attr_id )
 
+	Layout_Components_Save( layout_id, layout_nodes var, deleted_components var )
+	Layout_Components_Save_Lowlevel( layout_id, layout_nodes var )
+	Layout_Components_Delete_Lowlevel( layout_id, deleted_nodes var )
+	Layout_Components_Save_Attributes( node var )
+
+	Layout_Components_Load_Parent_Lowlevel( layout_id, parent_id, components var, count var )
+	Recursive_Nes_Attack( layout_id, parent_id, components var )
+	Read_Layout_Component( component var )
+	Components_Attrs_Load_All_ID( component_id, return var )
+	Components_Options_Load_Attr( attr_id, return var )
+	LayoutComponent_Load_Values( layout_component_id, attributes var )
+
+	JSON_Layout_Load_Components( module var )
+
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Component_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
@@ -1572,4 +1586,218 @@
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Components_Save" PARAMETERS = "layout_id, layout_nodes var, deleted_components var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Components_Save_Lowlevel( l.layout_id, l.layout_nodes ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	<MvIF EXPR = "{ NOT Layout_Components_Delete_Lowlevel( l.layout_id, l.deleted_components ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Components_Save_Lowlevel" PARAMETERS = "layout_id, layout_nodes var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		Recursive Function that will update the layout components.
+	</MvCOMMENT>
+	<MvFOREACH ITERATOR = "l.node" ARRAY = "l.layout_nodes:nodes">
+
+		<MvASSIGN NAME = "l.disp_order" VALUE = "{ l.disp_order + 1 }" />
+		<MvASSIGN NAME = "l.node" MEMBER = "layout_id"		VALUE = "{ l.layout_id }">
+		<MvASSIGN NAME = "l.node" MEMBER = "parent"			VALUE = "{ l.layout_nodes:id }">
+		<MvASSIGN NAME = "l.node" MEMBER = "component_id"	VALUE = "{ l.node:component:id }">
+		<MvASSIGN NAME = "l.node" MEMBER = "disp_order"		VALUE = "{ l.disp_order }">
+
+		<MvIF EXPR = "{ ( l.node:id EQ 0 ) OR ( ISNULL l.node:id )  }">
+			<MvIF EXPR = "{ NOT LayoutComponent_Insert( l.node ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		<MvELSE>
+			<MvIF EXPR = "{ NOT LayoutComponent_Update( l.node ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT Layout_Components_Save_Attributes( l.node ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT Layout_Components_Save_Lowlevel( l.layout_id, l.node ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Components_Delete_Lowlevel" PARAMETERS = "layout_id, deleted_nodes var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.node" ARRAY = "l.deleted_nodes:nodes">
+
+		<MvIF EXPR = "{ ( l.node:id EQ 0 ) OR ( ISNULL l.node:id ) }">
+			<MvFOREACHCONTINUE />
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutComponent_Delete( l.node:id ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Components_Save_Attributes" PARAMETERS = "node var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.node:component:attributes">
+		<MvASSIGN NAME = "l.new_attribute" VALUE = "">
+
+		<MvASSIGN NAME = "l.new_attribute" MEMBER = "layouts_components_id"	VALUE = "{ l.node:id }" />
+		<MvASSIGN NAME = "l.new_attribute" MEMBER = "attr_id"				VALUE = "{ l.attribute:id }" />
+		<MvASSIGN NAME = "l.new_attribute" MEMBER = "value"					VALUE = "{ l.attribute:value }" />
+
+		<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+			<MvASSIGN NAME = "l.new_attribute:value" VALUE = "{ miva_array_serialize( l.attribute:link ) }">
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' }">
+			<MvASSIGN NAME = "l.new_attribute:value" VALUE = "{ miva_array_serialize( l.attribute:product ) }">
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
+			<MvASSIGN NAME = "l.new_attribute:value" VALUE = "{ miva_array_serialize( l.attribute:category ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutValue_Update( l.new_attribute ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Recursive_Nes_Attack" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Layout_Components_Load_Parent_Lowlevel( l.layout_id, l.parent_id, l.components, l.count ) }">
+		<MvIF EXPR = "{ l.component:component:allow_children EQ 1 }">
+			<MvASSIGN NAME = "l.component:node_count" VALUE = "{ Recursive_Nes_Attack( l.component:layout_id, l.component:id, l.component:nodes ) }">
+		</MvIF>
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = "{ l.count }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Components_Load_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Components"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent = ? ORDER BY disp_order' }"
+				FIELDS	= "l.layout_id, l.parent_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
+
+		<MvEVAL EXPR = "{ Read_Layout_Component( l.components[ ++l.count ] ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'TGCOMPONENT-LAYOUT-2000', l.count ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Read_Layout_Component" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGLayouts_Components.d.id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "component_id"		VALUE = "{ TGLayouts_Components.d.component_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "layout_id"			VALUE = "{ TGLayouts_Components.d.layout_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGLayouts_Components.d.name }">
+	<MvASSIGN NAME = "l.component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
+	<MvASSIGN NAME = "l.component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
+	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
+
+	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:component_id, l.component:component ) }">
+	<MvASSIGN NAME = "l.void" VALUE = "{ Components_Attrs_Load_All_ID( l.component:component_id, l.component:component:attributes ) }">
+	<MvASSIGN NAME = "l.void" VALUE = "{ LayoutComponent_Load_Values( l.component:id, l.component:component:attributes ) }">
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Components_Attrs_Load_All_ID" PARAMETERS = "component_id, return var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Attrs"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ? ORDER BY disp_order' }"
+				FIELDS	= "l.component_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0003' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGComponent_Attrs.d.EOF }">
+		<MvASSIGN NAME = "l.count" VALUE = "{ l.count + 1 }" />
+
+		<MvASSIGN NAME ="l.void" VALUE = "{ ComponentAttrs_Read( l.return[ l.count ] ) }">
+
+		<MvIF EXPR = "{ l.return[ l.count ]:type EQ 'select' OR l.return[ l.count ]:type EQ 'radio' }">
+			<MvASSIGN NAME ="l.void" VALUE = "{ Components_Options_Load_Attr( l.return[ l.count ]:id, l.return[ l.count ]:options ) }">
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponent_Attrs" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Components_Options_Load_Attr" PARAMETERS = "attr_id, return var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Options"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE attr_id = ? ORDER BY disp_order' }"
+				FIELDS	= "l.attr_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponent_Options.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0003' ) }">
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGComponent_Options.d.EOF }">
+		<MvASSIGN NAME ="l.void" VALUE = "{ ComponentOption_Read( l.return[ ++l.count ] ) }">
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponent_Options" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Options">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponent_Load_Values" PARAMETERS = "layout_component_id, attributes var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.attributes">
+
+		<MvASSIGN NAME = "l.void" VALUE = "{ LayoutValue_Load_Value( l.layout_component_id, l.attribute:id, l.attribute:value ) }">
+
+		<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+			<MvASSIGN NAME = "l.attribute:link" VALUE = "{ miva_array_deserialize( l.attribute:value ) }">
+			<MvIF EXPR = "{ ISNULL l.attribute:link:type }">		<MvASSIGN NAME = "l.attribute:link:type" VALUE = "">		</MvIF>
+			<MvIF EXPR = "{ ISNULL l.attribute:link:value }">		<MvASSIGN NAME = "l.attribute:link:value" VALUE = "">		</MvIF>
+			<MvIF EXPR = "{ ISNULL l.attribute:link:targ }">		<MvASSIGN NAME = "l.attribute:link:targ" VALUE = "">		</MvIF>
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' }">
+			<MvASSIGN NAME = "l.attribute:product" VALUE = "{ miva_array_deserialize( l.attribute:value ) }">
+			<MvIF EXPR = "{ ISNULL l.attribute:product:id }">		<MvASSIGN NAME = "l.attribute:product:id" VALUE = "">		</MvIF>
+			<MvIF EXPR = "{ ISNULL l.attribute:product:code }">		<MvASSIGN NAME = "l.attribute:product:code" VALUE = "">		</MvIF>
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
+			<MvASSIGN NAME = "l.attribute:category" VALUE = "{ miva_array_deserialize( l.attribute:value ) }">
+			<MvIF EXPR = "{ ISNULL l.attribute:category:id }">		<MvASSIGN NAME = "l.attribute:category:id" VALUE = "">		</MvIF>
+			<MvIF EXPR = "{ ISNULL l.attribute:category:code }">	<MvASSIGN NAME = "l.attribute:category:code" VALUE = "">	</MvIF>
+		</MvIF>
+
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Layout_Load_Components" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvASSIGN NAME = "l.components_count" VALUE = "{ Recursive_Nes_Attack( g.Layout_ID, 0, l.components ) }">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
 </MvFUNCTION>
