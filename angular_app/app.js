@@ -37,6 +37,7 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
+		// Top Level Controls
 		// Declare Variables
 		$scope.data = new Object();
 		$scope.data.layout = new Object();
@@ -50,8 +51,6 @@
 		$scope.data.itemsForDeletion = new Object();
 		$scope.data.itemsForDeletion.nodes = [];
 		$scope.data.layout_id = layout_id;
-
-		$scope.data.show_save_button = 1;
 
 		$scope.data.showPopUp = 0;
 
@@ -142,19 +141,22 @@
 
 		$scope.insertComponent = function() {
 			$scope.data.popup_show_errors = 0;
-			if ( !$scope.newComponentForm.$invalid) {
-				$timeout( function(){
-					if ( $scope.data.newComponent.parent.nodes.length === 0 ) $scope.data.newComponent.parent.nodes = [];
-					if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
-					$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
-					$scope.closePopup();
-				}, 0);
-			} else {
-				$timeout( function(){
-					$scope.data.popup_show_errors = 1;
-				}, 0);
-				console.log( $scope );
-			}
+			$scope.$digest();
+			$timeout( function(){
+				if ( !$scope.newComponentForm.$invalid) {
+					$timeout( function(){
+						if ( $scope.data.newComponent.parent.nodes.length === 0 ) $scope.data.newComponent.parent.nodes = [];
+						if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
+						$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
+						$scope.closePopup();
+					}, 0);
+				} else {
+					$timeout( function(){
+						$scope.data.popup_show_errors = 1;
+					}, 0);
+					console.log( $scope );
+				}
+			}, 0);
 		}
 
 		$scope.closePopup = function() {
@@ -177,19 +179,18 @@
 		}
 
 		/*** Submission of SAVE ***/
-		$scope.saveLayout = function() {
-			$scope.data.show_save_button = 0;
+		$scope.saveLayout = function( button ) {
 			var layout_data = new Object();
 			layout_data.layout = angular.copy( $scope.data.layout );
 			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
+
+			DisableButtons( button );
+			DisableOnSubmitFormElements();
 			
 			ComponentsAPI.saveLayout( function( data ) {
-				console.log( data );
 				$scope.data.itemsForDeletion = new Object();
 				$scope.data.itemsForDeletion.nodes = [];
-				$timeout( function(){
-					$scope.data.show_save_button = 1;
-				}, 0);
+				document.forms[ Screen ].submit();
 			}, JSON.stringify( layout_data ) );
 		}
 
@@ -201,10 +202,11 @@
 		}
 
 		$scope.updateComponent = function( scope, node ) {
-
 			$scope.data.popup_show_errors = 0;
+			$scope.$digest();
 			if ( !$scope.editComponentForm.$invalid) {
 				node.name = $scope.data.editComponent.name;
+				node.active = $scope.data.editComponent.active ? 1 : 0;
 				node.component = $scope.data.editComponent.component;
 				console.log( node );
 				$scope.data.editComponent = new Object();
@@ -229,22 +231,41 @@
 
 		/*** Popups for Forms ***/
 		$scope.linkPopup = function( attribute ) {
-
+			console.log( attribute );
+			var id = 'js-attribute_link_' + attribute.id;
+			if ( attribute.link.type == 'P' ) {
+				$scope.productPopup( id );
+			} else if( attribute.link.type == 'C' ) {
+				$scope.categoryPopup( id );
+			} else if ( attribute.link.type == 'G' ) {
+				$scope.pagePopup( id );
+			}
 		}
-		
+
 		$scope.productPopup = function( id ) {
-			ProductLookupDialog( id );
+			new ProductLookupDialog( id );
 		}
 
 		$scope.categoryPopup = function( id ) {
-			CategoryLookupDialog( id );
+			new CategoryLookupDialog( id );
+		}
+
+		$scope.pagePopup = function( id ) {
+			new PageLookupDialog( id );
 		}
 
 		$scope.imageUpload = function( type, data, field ) {
-			PopupFileUpload( type, data, field );
+			new PopupFileUpload( type, data, field );
 		}
 
 		console.log( $scope );
 	}]);
 
 })( window, window.angular );
+
+function initSaveLayout( button ) {
+	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
+	scope.$apply(function () {
+		scope.saveLayout( button );
+	});		
+}

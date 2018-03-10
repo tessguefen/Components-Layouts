@@ -61,6 +61,9 @@
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_CSS() }">
 	</MvIF>
 </MvFUNCTION>
 
@@ -74,7 +77,7 @@
 		<MvIF EXPR = "{ NOT Layout_Load_ID( g.Layout_ID, l.layout ) }">
 			Could not load Screen for Layout ID: <MvEVAL EXPR = "{ g.Layout_ID }">.
 		<MvELSE>
-			<div ng-controller="ComponentsController" ng-app="Components">
+			<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components">
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Layout: ' $ l.layout:name, l.layout:name, '' ) }">
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
@@ -89,9 +92,10 @@
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
+				<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( 'Components:[UPDATE];initSaveLayout( this )' ) }">
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
 			</div>
 		</MvIF>
