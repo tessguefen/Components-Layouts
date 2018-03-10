@@ -50,6 +50,30 @@
 
 		$scope.data.showPopUp = 0;
 
+		/* Dialog Functions */
+		var dialog;
+		function layoutComponentPopup() {
+			var self = this;
+			MMDialog.call( this, 'layoutcomponent', 600, 450 );
+
+			self.SetResizeEnabled();
+			
+			// Buttons
+			this.button_add									= null;
+			this.button_save								= this.ActionItem_Add( 'Add', function() { $scope.insertComponent(); } );
+			this.button_delete								= null;
+			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );
+		}
+		DeriveFrom( MMDialog, layoutComponentPopup );
+
+		layoutComponentPopup.prototype.onEnter = function(){
+			this.Save();
+		}
+
+		layoutComponentPopup.prototype.onVisible = function() {}
+
+		layoutComponentPopup.prototype.onSetContent = function(){}
+
 		var init = function( cmps ) {
 			$timeout( function(){
 				$scope.data.layout.nodes = cmps;
@@ -98,25 +122,34 @@
 		}
 
 		$scope.insertComponent = function() {
-			console.log( $scope.data.newComponent.parent.nodes )
-			if ($scope.data.newComponent.parent.nodes.length === 0 ) {
-				$scope.data.newComponent.parent.nodes = [];
+			$scope.data.popup_show_errors = 0;
+			if ( !$scope.newComponentForm.$invalid) {
+				if ($scope.data.newComponent.parent.nodes.length === 0 ) {
+					$scope.data.newComponent.parent.nodes = [];
+				}
+				if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
+				$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
+				$scope.closePopup();
+			} else {
+				$timeout( function(){
+					$scope.data.popup_show_errors = 1;
+				}, 0);
+				console.log( $scope );
 			}
-			if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
-			$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
-			$scope.closePopup();
 		}
 
 		$scope.closePopup = function() {
 			$scope.resetPopup();
-			$scope.data.showPopUp = 0;
+			$scope.popup.Hide();
 		}
 
 		$scope.openPopup = function( parent ) {
 			$scope.resetPopup();
 			$scope.data.newComponent.parent = parent;
-			$scope.data.showPopUp = 1;
+			$scope.popup = new layoutComponentPopup();
+			$scope.popup.Show();
 		}
+
 
 		$scope.resetPopup = function() {
 			$scope.data.newComponent = new Object();

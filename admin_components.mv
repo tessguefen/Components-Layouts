@@ -72,23 +72,26 @@
 		<MvIF EXPR = "{ NOT Layout_Load_ID( g.Layout_ID, l.layout ) }">
 			Could not load Screen for Layout ID: <MvEVAL EXPR = "{ g.Layout_ID }">.
 		<MvELSE>
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Layout: ' $ l.layout:name, l.layout:name, '' ) }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+			<div ng-controller="ComponentsController" ng-app="Components">
 
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Layout' ) }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Layout: ' $ l.layout:name, l.layout:name, '' ) }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
-			<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Layout' ) }">
 
-			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
+				<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
 
-			<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
+				<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
 
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
+				<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
 
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
+
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+			</div>
 		</MvIF>
 	<MvELSEIF EXPR = "{ l.screen EQ 'Component' }">
 		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
