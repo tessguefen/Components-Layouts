@@ -37,6 +37,7 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
+		// Declare Variables
 		$scope.data = new Object();
 		$scope.data.layout = new Object();
 
@@ -44,17 +45,20 @@
 		$scope.data.newComponent.component = new Object();
 		$scope.data.newComponent.parent = new Object();
 
+		$scope.data.editComponent = new Object();
+
 		$scope.data.itemsForDeletion = new Object();
 		$scope.data.itemsForDeletion.nodes = [];
 		$scope.data.layout_id = layout_id;
 
+		$scope.data.show_save_button = 1;
+
 		$scope.data.showPopUp = 0;
 
 		/* Dialog Functions */
-		var dialog;
-		function layoutComponentPopup() {
+		function layoutComponentPopup_ADD() {
 			var self = this;
-			MMDialog.call( this, 'layoutcomponent', 600, 450 );
+			MMDialog.call( this, 'layoutcomponent_add', 600, 450 );
 
 			self.SetResizeEnabled();
 			
@@ -64,15 +68,30 @@
 			this.button_delete								= null;
 			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );
 		}
-		DeriveFrom( MMDialog, layoutComponentPopup );
+		DeriveFrom( MMDialog, layoutComponentPopup_ADD );
 
-		layoutComponentPopup.prototype.onEnter = function(){
+		layoutComponentPopup_ADD.prototype.onEnter = function(){
 			this.Save();
 		}
 
-		layoutComponentPopup.prototype.onVisible = function() {}
+		function layoutComponentPopup_EDIT( scope, node ) {
+			var self = this;
+			MMDialog.call( this, 'layoutcomponent_edit', 600, 450 );
 
-		layoutComponentPopup.prototype.onSetContent = function(){}
+			self.SetResizeEnabled();
+			
+			// Buttons
+			this.button_add									= null;
+			this.button_save								= this.ActionItem_Add( 'Save', function() { $scope.updateComponent( scope, node ); } );
+			this.button_delete								= null;
+			// If they cancel, reset the values???
+			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { $scope.cancelEdit( scope, node ) } );
+		}
+		DeriveFrom( MMDialog, layoutComponentPopup_EDIT );
+
+		layoutComponentPopup_EDIT.prototype.onEnter = function(){
+			this.Save();
+		}
 
 		var init = function( cmps ) {
 			$timeout( function(){
@@ -124,12 +143,12 @@
 		$scope.insertComponent = function() {
 			$scope.data.popup_show_errors = 0;
 			if ( !$scope.newComponentForm.$invalid) {
-				if ($scope.data.newComponent.parent.nodes.length === 0 ) {
-					$scope.data.newComponent.parent.nodes = [];
-				}
-				if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
-				$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
-				$scope.closePopup();
+				$timeout( function(){
+					if ( $scope.data.newComponent.parent.nodes.length === 0 ) $scope.data.newComponent.parent.nodes = [];
+					if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
+					$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
+					$scope.closePopup();
+				}, 0);
 			} else {
 				$timeout( function(){
 					$scope.data.popup_show_errors = 1;
@@ -146,7 +165,7 @@
 		$scope.openPopup = function( parent ) {
 			$scope.resetPopup();
 			$scope.data.newComponent.parent = parent;
-			$scope.popup = new layoutComponentPopup();
+			$scope.popup = new layoutComponentPopup_ADD();
 			$scope.popup.Show();
 		}
 
@@ -159,20 +178,60 @@
 
 		/*** Submission of SAVE ***/
 		$scope.saveLayout = function() {
+			$scope.data.show_save_button = 0;
 			var layout_data = new Object();
 			layout_data.layout = angular.copy( $scope.data.layout );
 			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
-			var payload = JSON.stringify( layout_data );
-			console.log( payload );
+			
 			ComponentsAPI.saveLayout( function( data ) {
 				console.log( data );
 				$scope.data.itemsForDeletion = new Object();
 				$scope.data.itemsForDeletion.nodes = [];
-			}, payload );
+				$timeout( function(){
+					$scope.data.show_save_button = 1;
+				}, 0);
+			}, JSON.stringify( layout_data ) );
+		}
+
+		/*** EDIT ***/
+		$scope.editComponent = function( scope, node ) {
+			angular.copy( node, $scope.data.editComponent );
+			$scope.popup = new layoutComponentPopup_EDIT( scope, node );
+			$scope.popup.Show();
+		}
+
+		$scope.updateComponent = function( scope, node ) {
+
+			$scope.data.popup_show_errors = 0;
+			if ( !$scope.editComponentForm.$invalid) {
+				node.name = $scope.data.editComponent.name;
+				node.component = $scope.data.editComponent.component;
+				console.log( node );
+				$scope.data.editComponent = new Object();
+				$scope.closePopup();
+				$timeout( function(){
+					$scope.$apply();
+				}, 0);
+			} else {
+				$timeout( function(){
+					$scope.data.popup_show_errors = 1;
+				}, 0);
+			}
+		}
+
+		$scope.cancelEdit = function( scope, node ) {
+			$timeout( function(){
+				$scope.data.editComponent = new Object();
+				$scope.closePopup();
+			}, 0);
 		}
 
 
 		/*** Popups for Forms ***/
+		$scope.linkPopup = function( attribute ) {
+
+		}
+		
 		$scope.productPopup = function( id ) {
 			ProductLookupDialog( id );
 		}

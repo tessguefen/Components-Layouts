@@ -70,7 +70,8 @@
 	LayoutValue_Read( layout_value var )
 	LayoutValue_Insert_Lowlevel( layout_value var )
 	LayoutValue_Insert( layout_value var )
-	LayoutValue_Load_ID( layout_value var )
+	LayoutValue_Load( layouts_components_id, attr_id, output var )
+	LayoutValue_Load_Value( layouts_components_id, attr_id, output var )
 	LayoutValue_Update_Lowlevel( layout_value var )
 	LayoutValue_Update( layout_value var )
 	LayoutValue_Delete( layouts_components_id, attr_id )
@@ -579,7 +580,8 @@
 		l.type NE 'memo' AND
 		l.type NE 'image' AND
 		l.type NE 'product' AND
-		l.type NE 'category'
+		l.type NE 'category' AND
+		l.type NE 'link'
 	}">
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>
@@ -1423,12 +1425,8 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<mvcomment>
-	LayoutValue_Delete( layout_value )
-	</mvcomment>
-
 <MvFUNCTION NAME = "LayoutValue_Read" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.layout_value" MEMBER = "layouts_components_id"	VALUE = "{ TGLayouts_Values.d.layouts_components_i  }">
+	<MvASSIGN NAME = "l.layout_value" MEMBER = "layouts_components_id"	VALUE = "{ TGLayouts_Values.d.layouts_components_id  }">
 	<MvASSIGN NAME = "l.layout_value" MEMBER = "attr_id"				VALUE = "{ TGLayouts_Values.d.attr_id }">
 	<MvASSIGN NAME = "l.layout_value" MEMBER = "value"					VALUE = "{ TGLayouts_Values.d.value }">
 </MvFUNCTION>
@@ -1436,10 +1434,10 @@
 <MvFUNCTION NAME = "LayoutValue_Insert_Lowlevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Values
-						  ( layout_component_id, attr_id, value )
+						  ( layouts_components_id, attr_id, value )
 						  VALUES
 						  ( ?, ?, ? )' }"
-			 FIELDS	= "l.layout_value:layout_component_id, l.layout_value:attr_id, l.layout_value:value">
+			 FIELDS	= "l.layout_value:layouts_components_id, l.layout_value:attr_id, l.layout_value:value">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0001', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -1505,14 +1503,25 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "LayoutValue_Load_Value" PARAMETERS = "layouts_components_id, attr_id, output var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValue_Load( l.layouts_components_id, l.attr_id, l.loaded_value ) }">
+		<MvASSIGN NAME = "l.output"	VALUE = "">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+	<MvASSIGN NAME = "l.output"	VALUE = "{ l.loaded_value:value }">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+
 <MvFUNCTION NAME = "LayoutValue_Update_Lowlevel" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts_Values
 					      SET
 							value = ?
 					      WHERE
-						    layout_component_id		= ? AND attr_id = ?' }"
-			 FIELDS	= "l.layout_value:value, l.layout_value:layout_component_id, l.layout_value:attr_id">
+						    layouts_components_id = ? AND
+						    attr_id = ?' }"
+			 FIELDS	= "l.layout_value:value, l.layout_value:layouts_components_id, l.layout_value:attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0006', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -1534,8 +1543,8 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutComponent_Load_ID( l.layout_value:layouts_components_id, l.layout )}">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Layout ID does not exist.">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "layout_id">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Layout Component ID does not exist.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "layouts_components_id">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -1555,7 +1564,7 @@
 <MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ? AND attr_id = ?' }"
-			 FIELDS	= "l.layout_value:layout_component_id, l.layout_value:attr_id">
+			 FIELDS	= "l.layout_value:layouts_components_id, l.layout_value:attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "id">

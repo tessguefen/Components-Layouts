@@ -325,6 +325,7 @@ Fields_Column_Type.prototype.onDisplayEdit = function( record, item ) {
 	select.options[ select.options.length ] = new Option( 'Image', 'image' );
 	select.options[ select.options.length ] = new Option( 'Product', 'product' );
 	select.options[ select.options.length ] = new Option( 'Category', 'category' );
+	select.options[ select.options.length ] = new Option( 'Link', 'link' );
 
 	for ( i = 0, i_len = select.options.length; i < i_len; i++ )
 	{
@@ -340,14 +341,15 @@ Fields_Column_Type.prototype.onDisplayEdit = function( record, item ) {
 Fields_Column_Type.prototype.onDisplayData = function( record ) {
 	var text = newElement( 'div', null, null, null );
 
-	if ( record.type == 'radio' )					text.innerHTML = 'Radio Buttons';
-	else if ( record.type == 'select' )				text.innerHTML = 'Drop-down List';
-	else if ( record.type == 'checkbox' )			text.innerHTML = 'Checkbox';
-	else if ( record.type == 'text' )				text.innerHTML = 'Text Field';
-	else if ( record.type == 'memo' )				text.innerHTML = 'Text Area';
-	else if ( record.type == 'image' )				text.innerHTML = 'Image';
-	else if ( record.type == 'product' )			text.innerHTML = 'Product';
-	else if ( record.type == 'category' )			text.innerHTML = 'Category';
+	if ( record.type == 'radio' )				text.innerHTML = 'Radio Buttons';
+	else if ( record.type == 'select' )			text.innerHTML = 'Drop-down List';
+	else if ( record.type == 'checkbox' )		text.innerHTML = 'Checkbox';
+	else if ( record.type == 'text' )			text.innerHTML = 'Text Field';
+	else if ( record.type == 'memo' )			text.innerHTML = 'Text Area';
+	else if ( record.type == 'image' )			text.innerHTML = 'Image';
+	else if ( record.type == 'product' )		text.innerHTML = 'Product';
+	else if ( record.type == 'category' )		text.innerHTML = 'Category';
+	else if ( record.type == 'link' )			text.innerHTML = 'Link';
 
 	return text;
 }

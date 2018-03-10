@@ -63,14 +63,22 @@
 	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
 	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:component_id, l.component:component ) }">
 	<MvASSIGN NAME = "l.void" VALUE = "{ Components_Attrs_Load_All_ID( l.component:component_id, l.component:component:attributes ) }">
-	<MvASSIGN NAME = "l.void" VALUE = "{ LayoutComponent_Load_Values( l.component:component_id, l.component:component:attributes ) }">
+	<MvASSIGN NAME = "l.void" VALUE = "{ LayoutComponent_Load_Values( l.component:id, l.component:component:attributes ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponent_Load_Values" PARAMETERS = "layout_component_id, attributes var" STANDARDOUTPUTLEVEL = "">
 	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.attributes">
 		<MvASSIGN NAME = "l.temp:layout_component_id" VALUE = "{ l.layout_component_id }">
 		<MvASSIGN NAME = "l.temp:attr_id" VALUE = "{ l.attribute:id }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ LayoutValue_Load( l.layout_component_id, l.attribute:id, l.attribute:value ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ LayoutValue_Load_Value( l.layout_component_id, l.attribute:id, l.attribute:value ) }">
+		<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+			<MvIF EXPR = "{ ISNULL l.attribute:value }">
+				<MvASSIGN NAME = "l.attribute:link:type" VALUE = "">
+				<MvASSIGN NAME = "l.attribute:link:value" VALUE = "">
+			<MvELSE>
+				<MvASSIGN NAME = "l.attribute:link" VALUE = "{ miva_array_deserialize( l.attribute:value ) }">
+			</MvIF>
+		</MvIF>
 	</MvFOREACH>
 </MvFUNCTION>
 

@@ -380,6 +380,18 @@
 				<MvFUNCTIONRETURN VALUE = 0>
 			</MvIF>
 		</MvIF>
+		<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.node:component:attributes">
+			<MvASSIGN NAME = "l.temp" VALUE = "">
+			<MvASSIGN NAME = "l.temp" MEMBER = "layouts_components_id"	VALUE = "{ l.node:id }" />
+			<MvASSIGN NAME = "l.temp" MEMBER = "attr_id"				VALUE = "{ l.attribute:id }" />
+			<MvASSIGN NAME = "l.temp" MEMBER = "value"					VALUE = "{ l.attribute:value }" />
+			<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+				<MvASSIGN NAME = "l.temp:value" VALUE = "{ miva_array_serialize( l.temp:link ) }">
+			</MvIF>
+			<MvIF EXPR = "{ NOT LayoutValue_Update( l.temp ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		</MvFOREACH>
 		<MvIF EXPR = "{ NOT Layout_UpdateSave_LowLevel( l.layout_id, l.node ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
