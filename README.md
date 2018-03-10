@@ -2,7 +2,7 @@
 
 ## Random Screenshots
 
-![Admin UI - TEMP](http://puu.sh/zDdDK/8ade3da3c6.png)
+![Admin UI - TEMP](http://puu.sh/zEOc4/21db2f822b.png)
 
 ---
 
