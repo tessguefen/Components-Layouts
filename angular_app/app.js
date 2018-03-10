@@ -117,8 +117,10 @@
 		}
 
 		$scope.removeComponent = function( scope, node ) {
-			$scope.data.itemsForDeletion.nodes.push( node );
-			scope.remove();
+			if( $window.confirm('Are you sure you want to delete?') ) {
+				$scope.data.itemsForDeletion.nodes.push( node );
+				scope.remove();
+			}
 		};
 
 		$scope.checkNodes = function( node ) {
