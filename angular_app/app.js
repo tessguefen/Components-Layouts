@@ -52,7 +52,7 @@
 		$scope.data.layout_id = layout_id;
 
 		/* Dialog Functions */
-		function LayoutComponentPopup_Add() {
+		function LayoutComponentPopup_add() {
 			var self = this;
 			MMDialog.call( this, 'layoutcomponent_add', 600, 450 );
 
@@ -64,9 +64,9 @@
 			this.button_delete								= null;
 			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );	
 		}
-		DeriveFrom( MMDialog, layoutComponentPopup_add );
+		DeriveFrom( MMDialog, LayoutComponentPopup_add );
 
-		layoutComponentPopup_add.prototype.onEnter = function(){
+		LayoutComponentPopup_add.prototype.onEnter = function(){
 			this.Save();
 		}
 
@@ -167,7 +167,7 @@
 			$scope.resetPopup();
 			$scope.data.newComponent.parent = parent;
 			$scope.data.newComponent.active = 1;
-			$scope.popup = new layoutComponentPopup_add();
+			$scope.popup = new LayoutComponentPopup_add();
 			$scope.popup.Show();
 		}
 
