@@ -87,7 +87,6 @@ Layouts_Batchlist.prototype.onGoTo = function( item, e ) {
 }
 
 Layouts_Batchlist.prototype.DuplicateLayout = function( item, e ) {
-	console.log( item );
 	var self = this;
 	var duplicatelayout;
 
@@ -171,6 +170,9 @@ DuplicateLayout_Dialog.prototype.Save_Callback = function( response ){
 
 		return;
 	}
+
+	this.new_code.value = '';
+	this.new_name.value = '';
 
 	this.Hide();
 	this.onsave();

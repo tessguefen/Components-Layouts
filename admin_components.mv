@@ -376,7 +376,6 @@
 
 <MvFUNCTION NAME = "JSON_Layout_Save" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
 	<MvASSIGN NAME = "l.void" VALUE = "{ miva_json_decode( g.Payload, l.payload ) }">
-	<MvEVAL EXPR = "{ glosub( miva_array_serialize( l.payload ), ',', asciichar( 10 ) ) }">
 	<MvIF EXPR = "{ NOT Layout_Components_Save( g.Layout_ID, l.payload:layout, l.payload:deleted ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
