@@ -25,7 +25,10 @@
 ![Edit Popup](http://puu.sh/zF40y/1b91c46bff.png)
 ![Add New Popup - With All Fields](http://puu.sh/zF4ky/a549b1ab30.png)
 ![Duplicate Layouts Feature](https://puu.sh/zF7Js/8786d08fdb.png)
+<<<<<<< HEAD
 ![Drag & Drop](https://puu.sh/zF7Zz/e32d8bbd12.png)
+=======
+>>>>>>> 6b62199beb3c0a9b7c3a7b673f9e7259e89aaab8
 ---
 
 ## Example (subject to change)
