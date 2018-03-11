@@ -319,10 +319,10 @@
 	<MvIF EXPR = "{ g.TGCOMPONENTS_Screen }">
 		<MvEVAL EXPR = "{ ComponentsScreen_UI( g.TGCOMPONENTS_Screen ) }">
 	<MvELSE>
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components', '', '' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components & Layouts', '', '' ) }">
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components', '', '' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Components:Components,TGCOMPONENTS_Sets:Layouts' ) }">

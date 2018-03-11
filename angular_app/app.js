@@ -37,7 +37,6 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
-		// Top Level Controls
 		// Declare Variables
 		$scope.data = new Object();
 		$scope.data.layout = new Object();
@@ -52,10 +51,8 @@
 		$scope.data.itemsForDeletion.nodes = [];
 		$scope.data.layout_id = layout_id;
 
-		$scope.data.showPopUp = 0;
-
 		/* Dialog Functions */
-		function layoutComponentPopup_ADD() {
+		function LayoutComponentPopup_Add() {
 			var self = this;
 			MMDialog.call( this, 'layoutcomponent_add', 600, 450 );
 
@@ -65,11 +62,11 @@
 			this.button_add									= null;
 			this.button_save								= this.ActionItem_Add( 'Add', function() { $scope.insertComponent(); } );
 			this.button_delete								= null;
-			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );
+			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );	
 		}
-		DeriveFrom( MMDialog, layoutComponentPopup_ADD );
+		DeriveFrom( MMDialog, layoutComponentPopup_add );
 
-		layoutComponentPopup_ADD.prototype.onEnter = function(){
+		layoutComponentPopup_add.prototype.onEnter = function(){
 			this.Save();
 		}
 
@@ -83,7 +80,6 @@
 			this.button_add									= null;
 			this.button_save								= this.ActionItem_Add( 'Save', function() { $scope.updateComponent( scope, node ); } );
 			this.button_delete								= null;
-			// If they cancel, reset the values???
 			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { $scope.cancelEdit( scope, node ) } );
 		}
 		DeriveFrom( MMDialog, layoutComponentPopup_EDIT );
@@ -113,7 +109,7 @@
 		});
 
 		$scope.removeComponent = function( scope, node ) {
-			if( $window.confirm('Are you sure you want to delete?') ) {
+			if( $window.confirm('Are you sure you want to delete this?') ) {
 				$scope.data.itemsForDeletion.nodes.push( node );
 				scope.remove();
 			}
@@ -128,7 +124,6 @@
 		}
 
 		$scope.newComponent = function( scope ) {
-			// Pop up to create NEW item, and pass thru necessary data...
 			var nodeData = scope.$modelValue;
 			if( !nodeData ) {
 				nodeData = $scope.data.layout;
@@ -172,15 +167,15 @@
 			$scope.resetPopup();
 			$scope.data.newComponent.parent = parent;
 			$scope.data.newComponent.active = 1;
-			$scope.popup = new layoutComponentPopup_ADD();
+			$scope.popup = new layoutComponentPopup_add();
 			$scope.popup.Show();
 		}
-
 
 		$scope.resetPopup = function() {
 			$scope.data.newComponent = new Object();
 			$scope.data.newComponent.component = new Object();
 			$scope.data.newComponent.parent = new Object();
+			$scope.data.popup_show_errors = 0;
 		}
 
 		/*** Submission of SAVE ***/

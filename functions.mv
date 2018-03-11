@@ -7,6 +7,7 @@
 	Component_Update_LowLevel( component var )
 	Component_Update( component var )
 	Component_Delete( component_id )
+	Component_Layout_Reference( component_id, layouts var )
 
 	JSON_Component_Insert( module var )
 	JSON_Component_Update( module var )
@@ -268,6 +269,20 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_Delete" PARAMETERS = "component_id" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ Component_Layout_Reference( l.component_id, l.layouts ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This component is referenced in the following layout(s): ">
+		<MvASSIGN NAME = "l.count" VALUE = 0>
+		<MvFOREACH ITERATOR = "l.layout" ARRAY = "l.layouts">
+			<MvASSIGN NAME = "l.count" VALUE = "{ l.count + 1 }">
+			<MvIF EXPR = "{ l.count GT 1 }">
+				<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ g.TGCOMPONENTS_Error:message $ ', ' }">
+			</MvIF>
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ g.TGCOMPONENTS_Error:message $ l.layout }">
+		</MvFOREACH>
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name" VALUE = "referenced_component">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE id = ?' }"
 			 FIELDS	= "l.component_id">
@@ -281,6 +296,28 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Component_Layout_Reference" PARAMETERS = "component_id, layouts var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Components"
+				QUERY	= "{ 'SELECT DISTINCT( lc.layout_id ) AS layout_id, l.code AS layout_code  FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components lc LEFT JOIN ' $ g.Store_Table_Prefix $ 'TGLayouts l ON lc.layout_id = l.id WHERE component_id = ?' }"
+				FIELDS	= "l.component_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
+
+		<MvASSIGN NAME = "l.layouts_count" VALUE = "{ miva_array_insert_var( l.layouts, TGLayouts_Components.d.layout_code, -1 ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+	<MvFUNCTIONRETURN VALUE = "{ l.layouts_count }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
@@ -314,6 +351,9 @@
 
 <MvFUNCTION NAME = "JSON_Component_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT Component_Delete( g.Id ) }">
+		<MvIF EXPR = "{ g.TGCOMPONENTS_Error:name EQ 'referenced_component' }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGCOMPONENTS_Error', g.TGCOMPONENTS_Error:message ) }">
+		</MvIF>
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 	

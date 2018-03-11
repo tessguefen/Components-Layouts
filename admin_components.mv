@@ -121,12 +121,12 @@
 		</MvIF>
 	<MvELSEIF EXPR = "{ l.screen EQ 'Component' }">
 		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
-			ERROR: Could not load Screen for Layout ID: <MvEVAL EXPR = "{ g.Component_ID }">.
+			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ g.Component_ID }">.
 		<MvELSE>
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components', l.component:name, '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Component: ' $ l.component:name, l.component:name, '' ) }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Components' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Attributes' ) }">
 
 			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Component_ID">
 			
