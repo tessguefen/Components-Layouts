@@ -244,23 +244,81 @@
 			}
 		}
 
-		$scope.productPopup = function( id ) {
-			new ProductLookupDialog( id );
+		$scope.productPopup = function( field ) {
+			product_dialog = new ProductLookup_Dialog();
+			product_dialog.onok = function(){
+				var record;
+
+				if ( ( record = product_dialog.SelectedProduct() ) === null ){
+					return;
+				}
+
+				$scope.$apply(function() {
+					var field_div = document.getElementById( field );
+					var element = angular.element(field_div);
+					element.val( record.code );
+					element.triggerHandler('input');
+				});
+				$scope.$digest();
+			};
+
+			product_dialog.Show();
 		}
 
-		$scope.categoryPopup = function( id ) {
-			new CategoryLookupDialog( id );
+		$scope.categoryPopup = function( field ) {
+			category_dialog = new CategoryLookup_Dialog();
+			category_dialog.onok = function(){
+				var record;
+
+				if ( ( record = category_dialog.SelectedCategory() ) === null ){
+					return;
+				}
+
+				$scope.$apply(function() {
+					var field_div = document.getElementById( field );
+					var element = angular.element(field_div);
+					element.val( record.code );
+					element.triggerHandler('input');
+				});
+				$scope.$digest();
+			};
+
+			category_dialog.Show();
 		}
 
-		$scope.pagePopup = function( id ) {
-			new PageLookupDialog( id );
+		$scope.pagePopup = function( field ) {
+			var page_dialog = new PageLookup_Dialog();
+			page_dialog.onok		= function(){
+				var record;
+
+				if ( ( record = page_dialog.SelectedPage() ) === null ) {
+					return;
+				}
+
+				$scope.$apply(function() {
+					var field_div = document.getElementById( field );
+					var element = angular.element(field_div);
+					element.val( record.code );
+					element.triggerHandler('input');
+				});
+				$scope.$digest();
+			};
+			page_dialog.Show();
 		}
 
-		$scope.imageUpload = function( type, data, field ) {
-			new PopupFileUpload( type, data, field );
+		$scope.imageUpload = function( field ) {
+			var image_dialog = new MMImagePicker( true, true );
+			image_dialog.onComplete	= function( images ) {
+				$scope.$apply(function() {
+					var field_div = document.getElementById( field );
+					var element = angular.element(field_div);
+					element.val( images[ 0 ] ? images[ 0 ].image : '' );
+					element.triggerHandler('input');
+				});
+				$scope.$digest();
+			};
+			image_dialog.Show();
 		}
-
-		console.log( $scope );
 	}]);
 
 })( window, window.angular );
