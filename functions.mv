@@ -1262,7 +1262,7 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvFUNCTIONRETURN VALUE = "{ ComponentAttrs_Update_Lowlevel( l.component_option ) }">
+	<MvFUNCTIONRETURN VALUE = "{ ComponentOption_Update_Lowlevel( l.component_option ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentOption_Delete" PARAMETERS = "component_option_id" STANDARDOUTPUTLEVEL = "">
