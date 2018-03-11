@@ -112,10 +112,6 @@
 			initComponents( data );
 		});
 
-		$scope.scopeCreep = function() {
-			console.log( $scope );
-		}
-
 		$scope.removeComponent = function( scope, node ) {
 			if( $window.confirm('Are you sure you want to delete?') ) {
 				$scope.data.itemsForDeletion.nodes.push( node );
@@ -124,7 +120,6 @@
 		};
 
 		$scope.checkNodes = function( node ) {
-			console.log( node );
 			if ( ( typeof node.component != 'undefined' ) && ( node.component.allow_children == 1 ) ) {
 				if ( node.nodes.length === 0 ) {
 					node.nodes = [];
@@ -146,17 +141,17 @@
 			$scope.$digest();
 			$timeout( function(){
 				if ( !$scope.newComponentForm.$invalid) {
-					$timeout( function(){
+					$scope.$apply(function() {
 						if ( $scope.data.newComponent.parent.nodes.length === 0 ) $scope.data.newComponent.parent.nodes = [];
 						if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
 						$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
 						$scope.closePopup();
-					}, 0);
+					});
+					$scope.$digest();
 				} else {
 					$timeout( function(){
 						$scope.data.popup_show_errors = 1;
 					}, 0);
-					console.log( $scope );
 				}
 			}, 0);
 		}
@@ -207,15 +202,14 @@
 			$scope.data.popup_show_errors = 0;
 			$scope.$digest();
 			if ( !$scope.editComponentForm.$invalid) {
-				node.name = $scope.data.editComponent.name;
-				node.active = $scope.data.editComponent.active ? 1 : 0;
-				node.component = $scope.data.editComponent.component;
-				console.log( node );
-				$scope.data.editComponent = new Object();
-				$scope.closePopup();
-				$timeout( function(){
-					$scope.$apply();
-				}, 0);
+				$scope.$apply(function() {
+					node.name = $scope.data.editComponent.name;
+					node.active = $scope.data.editComponent.active ? 1 : 0;
+					node.component = $scope.data.editComponent.component;
+					$scope.data.editComponent = new Object();
+					$scope.closePopup();
+				});
+				$scope.$digest();
 			} else {
 				$timeout( function(){
 					$scope.data.popup_show_errors = 1;
@@ -233,7 +227,6 @@
 
 		/*** Popups for Forms ***/
 		$scope.linkPopup = function( attribute ) {
-			console.log( attribute );
 			var id = 'js-attribute_link_' + attribute.id;
 			if ( attribute.link.type == 'P' ) {
 				$scope.productPopup( id );

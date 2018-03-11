@@ -1,10 +1,6 @@
 <style>
 .angular-ui-tree-dropzone,.angular-ui-tree-empty{border:1px dashed #bbb;min-height:100px;background-color:#e5e5e5;background-image:-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);background-image:linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);background-size:60px 60px;background-position:0 0,30px 30px}.angular-ui-tree-empty{pointer-events:none}.angular-ui-tree-nodes{position:relative;margin:0;padding:0;list-style:none}.angular-ui-tree-nodes .angular-ui-tree-nodes{padding-left:20px; padding-right:20px;}.angular-ui-tree-node,.angular-ui-tree-placeholder{position:relative;margin:0;padding:0;min-height:20px;line-height:20px}.angular-ui-tree-hidden{display:none}.angular-ui-tree-placeholder{margin:10px;padding:0;min-height:30px}.angular-ui-tree-handle{cursor:move;text-decoration:none;box-sizing:border-box;min-height:20px;line-height:20px}.angular-ui-tree-drag{position:absolute;pointer-events:none;z-index:999;opacity:.8}.angular-ui-tree-drag .tree-node-content{margin-top:0}
 
-.btn {
-	margin-right: 8px;
-}
-
 .angular-ui-tree-handle {
 
 }
@@ -56,8 +52,8 @@ tr.angular-ui-tree-empty {
 }
 
 .angular-ui-tree-placeholder {
-	background: #f0f9ff;
-	border: 2px dashed #bed2db;
+	background: #e5e5e5;
+	border: 2px dashed #d5d5d5;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
@@ -140,8 +136,6 @@ tr.angular-ui-tree-empty {
 }
 .layoutcomponent_img_button {
 	display: inline-block;
-	position: relative;
-	top: 5px;
 }
 </style>
 
@@ -203,6 +197,13 @@ tr.angular-ui-tree-empty {
 							<td nowrap><span class="layoutcomponent_required">Select Component:</span></td>
 							<td valign="middle" width="100%"><select ng-options="option.name for option in data.components track by option.id" name="layoutcomponent_component" ng-model="data.newComponent.component" required></select></td>
 						</tr>
+						<tr ng-if="data.newComponent.component.id > 0">
+							<td colspan="2">
+								<label>
+									<input type="checkbox" name="layoutcomponent_active" ng-model="data.newComponent.active" ng-true-value="1" ng-false-value="0"> Active
+								</label>
+							</td>
+						</tr>
 						<tr ng-class="{ 'layoutcomponent_error' : data.popup_show_errors && newComponentForm.layoutcomponent_name.$invalid }">
 							<td nowrap><span class="layoutcomponent_required">Name:</span></td>
 							<td valign="middle" width="100%"><input type="text" name="layoutcomponent_name" ng-model="data.newComponent.name" required /></td>
@@ -210,13 +211,6 @@ tr.angular-ui-tree-empty {
 						<tr ng-if="data.newComponent.component.image">
 							<td valign="middle" colspan="2">
 								<img ng-src="{{ data.newComponent.component.image }}" class="cmp_image" />
-							</td>
-						</tr>
-						<tr ng-if="data.newComponent.component.id > 0">
-							<td colspan="2">
-								<label>
-									<input type="checkbox" name="layoutcomponent_active" ng-model="data.newComponent.active" ng-true-value="1" ng-false-value="0"> Active
-								</label>
 							</td>
 						</tr>
 						<tr ng-if="data.newComponent.component.id > 0" ng-repeat="attribute in data.newComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : attribute.required && data.popup_show_errors && newComponentForm['layoutcomponent_' + $index].$error }">
@@ -308,7 +302,14 @@ tr.angular-ui-tree-empty {
 					<table width="100%">
 						<tr>
 							<td nowrap>Component</td>
-							<td valign="middle" width="100%">{{ data.editComponent.component.name }}</td>
+							<td valign="middle" width="100%"><strong>{{ data.editComponent.component.name }}</strong></td>
+						</tr>
+						<tr ng-if="data.editComponent.component.id > 0">
+							<td colspan="2">
+								<label>
+									<input type="checkbox" name="layoutcomponent_active" ng-model="data.editComponent.active" ng-true-value="1" ng-false-value="0"> Active
+								</label>
+							</td>
 						</tr>
 						<tr ng-class="{ 'layoutcomponent_error' : data.popup_show_errors && editComponentForm.layoutcomponent_name.$invalid }">
 							<td nowrap><span class="layoutcomponent_required">Name:</span></td>
@@ -317,13 +318,6 @@ tr.angular-ui-tree-empty {
 						<tr ng-if="data.editComponent.component.image">
 							<td valign="middle" colspan="2">
 								<img ng-src="{{ data.editComponent.component.image }}" class="cmp_image" />
-							</td>
-						</tr>
-						<tr ng-if="data.editComponent.component.id > 0">
-							<td colspan="2">
-								<label>
-									<input type="checkbox" name="layoutcomponent_active" ng-model="data.editComponent.active" ng-true-value="1" ng-false-value="0"> Active
-								</label>
 							</td>
 						</tr>
 						<tr ng-if="data.editComponent.component.id > 0" ng-repeat="attribute in data.editComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : ( attribute.required && data.popup_show_errors && editComponentForm['layoutcomponent_' + $index].$error && attribute.type != 'link' ) }">
@@ -351,14 +345,14 @@ tr.angular-ui-tree-empty {
 								</label>
 							</td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'product'">
-								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
+								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.product.code" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="productPopup( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 									<span class="mm9_button_text" style="padding-left: 5px;">Lookup Product</span>
 								</span>
 							</td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'category'">
-								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
+								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.category.code" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="categoryPopup( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 									<span class="mm9_button_text" style="padding-left: 5px;">Lookup Category</span>
