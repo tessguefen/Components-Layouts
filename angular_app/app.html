@@ -132,7 +132,7 @@ tr.angular-ui-tree-empty {
 }
 .layoutcomponent_buttonrow {
 	text-align: right;
-	margin: 2.5rem 0 1.5rem;
+	margin: 1rem 0;
 }
 .layoutcomponent_img_button {
 	display: inline-block;
@@ -154,7 +154,7 @@ tr.angular-ui-tree-empty {
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
 	<div ui-tree-handle ng-class="{ 'cmp_container' : node.component.allow_children, 'cmp_item' : !node.component.allow_children }" ng-init="checkNodes( node )">
-		<span class="layoutcomponent_component-name">{{node.component.name}} - {{node.name}}</span>
+		<span class="layoutcomponent_component-name">{{node.component.name}} <strong>&nbsp;&nbsp;{{node.name}}</strong> <em ng-if="!node.active">&nbsp;&nbsp;Inactive</em></span>
 		<span class="cmps_options">
 			<span ng-if="node.component.allow_children" ng-if="node.component.allow_children" ng-click="newComponent( this )" data-nodrag class="layoutcomponent_button mm9_button_light" title="Add Child Component">
 				<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>

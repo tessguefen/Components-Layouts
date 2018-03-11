@@ -90,6 +90,8 @@
 
 	JSON_Layout_Load_Components( module var )
 
+	Runtime_Load_Layout( layout_code, output var )
+
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Component_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
@@ -1808,4 +1810,73 @@
 <MvFUNCTION NAME = "JSON_Layout_Load_Components" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
 	<MvASSIGN NAME = "l.components_count" VALUE = "{ Recursive_Nes_Attack( g.Layout_ID, 0, l.components ) }">
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_Load_Layout" PARAMETERS = "layout_code, output var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.output" VALUE = "" />
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.layout_code, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = "{ Runtime_Load_Layout_Components( l.layout:id, 0, l.output ) }" />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_Load_Layout_Components" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Runtime_Layout_Components_Load_Parent_Lowlevel( l.layout_id, l.parent_id, l.components, l.count ) }">
+		<MvIF EXPR = "{ l.component:component:allow_children EQ 1 }">
+			<MvASSIGN NAME = "l.component:children_count" VALUE = "{ Runtime_Load_Layout_Components( l.component:layout_id, l.component:id, l.component:children ) }">
+		</MvIF>
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = "{ l.count }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_Layout_Components_Load_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Components"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent = ? AND active = 1 ORDER BY disp_order' }"
+				FIELDS	= "l.layout_id, l.parent_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
+
+		<MvEVAL EXPR = "{ Runtime_Read_Layout_Component( l.components[ ++l.count ] ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'TGCOMPONENT-LAYOUT-2000', l.count ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_Read_Layout_Component" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGLayouts_Components.d.id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "component_id"		VALUE = "{ TGLayouts_Components.d.component_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "layout_id"			VALUE = "{ TGLayouts_Components.d.layout_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGLayouts_Components.d.name }">
+	<MvASSIGN NAME = "l.component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
+	<MvASSIGN NAME = "l.component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
+	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
+
+	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:component_id, l.component:component ) }">
+	<MvASSIGN NAME = "l.void" VALUE = "{ Runtime_Load_Values( l.component, l.component:attributes ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_Load_Values" PARAMETERS = "component var, output var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.void" VALUE = "{ Components_Attrs_Load_All_ID( l.component:component_id, l.attributes ) }">
+	<MvASSIGN NAME = "l.void" VALUE = "{ LayoutComponent_Load_Values( l.component:id, l.attributes ) }">
+
+	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.attributes">
+		<MvASSIGN NAME = "{ 'l.output:' $ l.attribute:code $ ':value' }" VALUE = "{ l.attribute:value }" />
+		<MvIF EXPR = "{ l.attribute:type EQ 'product' }">
+			<MvASSIGN NAME = "{ 'l.output:' $ l.attribute:code $ ':product' }" VALUE = "{ l.attribute:product }" />
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
+			<MvASSIGN NAME = "{ 'l.output:' $ l.attribute:code $ ':category' }" VALUE = "{ l.attribute:category }" />
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'link' }">
+			<MvASSIGN NAME = "{ 'l.output:' $ l.attribute:code $ ':link' }" VALUE = "{ l.attribute:link }" />
+		</MvIF>
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
