@@ -58,6 +58,8 @@ function ComponentAttrs_Batchlist( component_id ) {
 	self.Branch_SetInsertFunction( self.branch_options, self.Option_Insert );
 	self.Branch_SetSaveFunction( self.branch_options, self.Option_Save );
 	self.Branch_SetDeleteFunction( self.branch_options, self.Option_Delete );
+	self.Branch_SetFindIndex_ParamsFunction( this.branch_options, this.Option_FindIndex_Params );
+	self.Branch_SetFindIndex_CompareFunction( this.branch_options, this.Option_FindIndex_Compare );
 
 	self.Feature_Add_RowSupportsChildren_AddHook( self.Field_RowSupportsChildren_Hook );
 
@@ -144,12 +146,11 @@ ComponentAttrs_Batchlist.prototype.CreateColumnList_Options = function() {
 
 ComponentAttrs_Batchlist.prototype.onRetrieveChildBranch = function( item )
 {
-	if ( !item || !item.root )
-	{
-		return null;
+	if ( item && item.root && item.record ){
+		return item.branch.children[ 'options' ];
 	}
 
-	return item.branch.children[ 'options' ];
+	return null;
 }
 
 
@@ -255,8 +256,18 @@ ComponentAttrs_Batchlist.prototype.Option_Create = function() {
 }
 
 ComponentAttrs_Batchlist.prototype.Option_Insert = function( item, callback, delegator ) {
-	var parent_field = this.GetListItemRecord_Parent( item.index );
-	ComponentAttrs_Batchlist_Option_Function( parent_field, item.record.mmbatchlist_fieldlist, 'ComponentOption_Insert', callback, delegator );
+	var attribute_record, error;
+	
+	if ( ( attribute_record = this.GetListItemRecord_Parent( item.index ) ) == null )
+	{
+		error							= new Object();
+		error.validation_error			= true;
+		error.error_field_message		= 'Attribute record not found';
+		error.error_field				= 'Code';
+
+		return this.onerror( error );
+	}
+	ComponentAttrs_Batchlist_Option_Function( attribute_record, item.record.mmbatchlist_fieldlist, 'ComponentOption_Insert', callback, delegator );
 }
 
 ComponentAttrs_Batchlist.prototype.Field_RowSupportsChildren_Hook = function( item ) {
@@ -290,6 +301,26 @@ ComponentAttrs_Batchlist.prototype.onProcessLoadedData = function( recordlist, s
 			}
 		}
 	}
+}
+
+ComponentAttrs_Batchlist.prototype.Option_FindIndex_Params = function( item ){
+	var attribute_record = this.GetListItemRecord_Parent( item.index );
+
+	return { 'Attribute_ID': attribute_record ? attribute_record.id : '', 'Option_Prompt': item && item.record ? item.record.prompt : '' };
+}
+
+ComponentAttrs_Batchlist.prototype.Option_FindIndex_Compare = function( item, params ) {
+	var attribute_record = this.GetListItemRecord_Parent( item.index );
+
+	if ( item.record											&&
+		 attribute_record										&& 
+		 ( attribute_record.id == params[ 'Attribute_ID' ] )	&&
+		 ( item.record.prompt == params[ 'Option_Prompt' ] ) )
+	{
+		return true;
+	}
+
+	return false;
 }
 
 ComponentAttrs_Batchlist.prototype.Option_Save = function( item, callback, delegator ) {
@@ -353,3 +384,4 @@ Fields_Column_Type.prototype.onDisplayData = function( record ) {
 
 	return text;
 }
+
