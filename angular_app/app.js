@@ -51,6 +51,8 @@
 		$scope.data.itemsForDeletion.nodes = [];
 		$scope.data.layout_id = layout_id;
 
+		$scope.data.original_components = new Object();
+
 		/* Dialog Functions */
 		function LayoutComponentPopup_add() {
 			var self = this;
@@ -97,6 +99,7 @@
 		var initComponents = function( cmps ) {
 			$timeout( function(){
 				$scope.data.components = cmps;
+				$scope.data.original_components = cmps;
 			}, 0);
 		}
 
@@ -141,21 +144,20 @@
 		$scope.insertComponent = function() {
 			$scope.data.popup_show_errors = 0;
 			$scope.$digest();
-			$timeout( function(){
-				if ( !$scope.newComponentForm.$invalid) {
-					$scope.$apply(function() {
-						if ( $scope.data.newComponent.parent.nodes.length === 0 ) $scope.data.newComponent.parent.nodes = [];
-						if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
-						$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
-						$scope.closePopup();
-					});
-					$scope.$digest();
-				} else {
-					$timeout( function(){
-						$scope.data.popup_show_errors = 1;
-					}, 0);
-				}
-			}, 0);
+			if ( !$scope.newComponentForm.$invalid) {
+				$scope.$apply(function() {
+					if ( $scope.data.newComponent.parent.nodes.length === 0 ) $scope.data.newComponent.parent.nodes = [];
+					if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
+					$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
+					$scope.closePopup();
+				});
+				$scope.$digest();
+			} else {
+				$timeout( function(){
+					$scope.data.popup_show_errors = 1;
+				}, 0);
+			}
+	
 		}
 
 		$scope.closePopup = function() {
@@ -175,6 +177,7 @@
 			$scope.data.newComponent = new Object();
 			$scope.data.newComponent.component = new Object();
 			$scope.data.newComponent.parent = new Object();
+			$scope.data.components = angular.copy( $scope.data.original_components );
 			$scope.data.popup_show_errors = 0;
 		}
 
