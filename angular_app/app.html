@@ -217,7 +217,7 @@ tr.angular-ui-tree-empty {
 							</td>
 						</tr>
 						<tr ng-if="data.newComponent.component.id > 0" ng-repeat="attribute in data.newComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : newComponent_Validation( attribute, $index ) }">
-							<td valign="top" nowrap><span ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}:</span></td>
+							<td valign="top" nowrap><span ng-if="attribute.type != 'checkbox'" ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}:</span></td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'text'">
 								<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 							</td>
@@ -234,7 +234,7 @@ tr.angular-ui-tree-empty {
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'checkbox'">
 								<label>
-									<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0"> {{ attribute.prompt }}
+									<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0"><span ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}</span>
 								</label>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'product'">
@@ -325,7 +325,7 @@ tr.angular-ui-tree-empty {
 							</td>
 						</tr>
 						<tr ng-if="data.editComponent.component.id > 0" ng-repeat="attribute in data.editComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : editComponent_Validation( attribute, $index) }">
-							<td valign="top" nowrap><span ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}:</span></td>
+							<td valign="top" nowrap><span ng-if="attribute.type != 'checkbox'" ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}:</span></td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'text'">
 								<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 							</td>
@@ -345,7 +345,7 @@ tr.angular-ui-tree-empty {
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'checkbox'">
 								<label>
-									<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0"> {{ attribute.prompt }}
+									<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0"><span ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}</span>
 								</label>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'product'">

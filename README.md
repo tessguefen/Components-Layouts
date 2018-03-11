@@ -6,7 +6,7 @@
   - Add a **Code**, **Name**, Description, Image, and **Allow Nested Components**
   - Add specific attributes/ options for each component.
     - **Code**, **Prompt**, **Type**, **Required**
-    - Types: Text Field, Radio Buttons, Drop-down List, Checkbox, Text Area, Image, Link
+    - Types: Text Field, Radio Buttons, Drop-down List, Checkbox, Text Area, Image, Product, Category, Link
     - Editable Display Order
 - Layouts
   - Add a **Code**, **Name**
@@ -23,7 +23,7 @@
 
 ![Admin UI](http://puu.sh/zF3Qy/1e2004893f.png)
 ![Edit Popup](http://puu.sh/zF40y/1b91c46bff.png)
-![Add New Popup - With All Fields](http://puu.sh/zF4ky/a549b1ab30.png)
+![Add New Popup - With All Fields](http://puu.sh/zF8au/153f4aecfd.png)
 ![Duplicate Layouts Feature](https://puu.sh/zF7Js/8786d08fdb.png)
 ![Drag & Drop](https://puu.sh/zF7Zz/e32d8bbd12.png)
 ---
