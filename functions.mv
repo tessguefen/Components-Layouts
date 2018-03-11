@@ -1228,12 +1228,11 @@
 
 <MvFUNCTION NAME = "ComponentOption_Update_Lowlevel" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponent_Options
-						  SET
-							prompt = ?,
-						  WHERE
-							id		= ?' }"
-			 FIELDS	= "l.component_option:prompt, l.component_option:id">
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponent_Options SET 
+			 					prompt = ? 
+			 				WHERE 
+			 					id = ?' }"
+				FIELDS	= "l.component_option:prompt, l.component_option:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0006', g.MvQUERY_Error ) }">
 	</MvIF>
