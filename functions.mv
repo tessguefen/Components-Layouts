@@ -4,7 +4,7 @@
 	Component_Insert( component var )
 	Component_Load_ID( id, output var )
 	Component_Load_Code( code, output var )
-	Component_Update_Lowlevel( component var )
+	Component_Update_LowLevel( component var )
 	Component_Update( component var )
 	Component_Delete( component_id )
 
@@ -12,12 +12,12 @@
 	JSON_Component_Update( module var )
 	JSON_Component_Delete( module var )
 
-	Layout_Read( layout var )
+	Layout_Read( component var )
 	Layout_Insert_Lowlevel( layout var )
 	Layout_Insert( layout var )
 	Layout_Load_ID( id, output var )
 	Layout_Load_Code( code, output var )
-	Layout_Update_Lowlevel( layout var )
+	Layout_Update_LowLevel( layout var )
 	Layout_Update( layout var )
 	Layout_Delete( layout_id )
 
@@ -25,16 +25,15 @@
 	JSON_Layout_Update( module var )
 	JSON_Layout_Delete( module var )
 
-	ComponentAttrs_Read( component_attr var )
-	ComponentAttrs_Insert_Lowlevel( component_attr var )
-	ComponentAttrs_Insert( component_attr var )
+	ComponentAttrs_Read( component_attrs var )
+	ComponentAttrs_Insert_Lowlevel( component_attrs var )
+	ComponentAttrs_Insert( component_attrs var )
 	Validate_ComponentAttr_Type( type )
-	ComponentAttrs_Load_Code( component_id, code, output var )
 	ComponentAttrs_Load_ID( id, output var )
-	ComponentAttrs_Update_Lowlevel( component_attr var )
-	ComponentAttrs_Update( component_attr var )
+	ComponentAttrs_Update_Lowlevel( component_attrs var )
+	ComponentAttrs_Update( component_attrs var )
 	ComponentAttrs_Delete( component_attr_id )
-	ComponentAttrs_Delete_Component( component_attr_id )
+	ComponentAttrs_Delete_Component( component_id )
 
 	JSON_ComponentAttrs_Insert( module var )
 	JSON_ComponentAttrs_Update( module var )
@@ -45,7 +44,6 @@
 	ComponentAttrs_Update_Offsets_PastEnd( component_id, pastend var, pastend_count )
 	ComponentOptions_Update_Offsets( attr_id, options var )
 	ComponentOptions_Update_Offsets_PastEnd( attr_id, pastend var, pastend_count )
-
 	ComponentOption_Read( component_option var )
 	ComponentOption_Insert_Lowlevel( component_option var )
 	ComponentOption_Insert( component_option var )
@@ -54,11 +52,11 @@
 	ComponentOption_Update( component_option var )
 	ComponentOption_Delete( component_option_id )
 	ComponentOptions_Delete_Attr( component_attr_id )
-
+	
 	JSON_ComponentOption_Insert( module var )
 	JSON_ComponentOption_Update( module var )
 	JSON_ComponentOption_Delete( module var )
-
+	
 	LayoutComponent_Read( layout_component var )
 	LayoutComponent_Insert_Lowlevel( layout_component var )
 	LayoutComponent_Insert( layout_component var )
@@ -67,33 +65,47 @@
 	LayoutComponent_Update( layout_component var )
 	LayoutComponent_Delete( layout_component_id )
 	LayoutComponent_Delete_Values( layout_component_id )
-
 	Layout_Delete_Components( layout_id )
-
+	
 	LayoutValue_Read( layout_value var )
 	LayoutValue_Insert_Lowlevel( layout_value var )
 	LayoutValue_Insert( layout_value var )
 	LayoutValue_Load( layouts_components_id, attr_id, output var )
 	LayoutValue_Load_Value( layouts_components_id, attr_id, output var )
-	LayoutValue_Update_Lowlevel( layout_value var )
+	LayoutValue_Update_Lowlevel( layout_value )
 	LayoutValue_Update( layout_value var )
-	LayoutValue_Delete( layouts_components_id, attr_id )
-
+	LayoutValue_Delete( layout_value )
+	
 	Layout_Components_Save( layout_id, layout_nodes var, deleted_components var )
 	Layout_Components_Save_Lowlevel( layout_id, layout_nodes var )
 	Layout_Components_Delete_Lowlevel( layout_id, deleted_nodes var )
 	Layout_Components_Save_Attributes( node var )
-
-	Layout_Components_Load_Parent_Lowlevel( layout_id, parent_id, components var, count var )
+	
 	Recursive_Nes_Attack( layout_id, parent_id, components var )
+	Layout_Components_Load_Parent_Lowlevel( layout_id, parent_id, components var, count var )
 	Read_Layout_Component( component var )
 	Components_Attrs_Load_All_ID( component_id, return var )
 	Components_Options_Load_Attr( attr_id, return var )
 	LayoutComponent_Load_Values( layout_component_id, attributes var )
-
+	
 	JSON_Layout_Load_Components( module var )
-
+	
 	Runtime_Load_Layout( layout_code, output var )
+	Runtime_Load_Layout_Components( layout_id, parent_id, components var )
+	Runtime_Layout_Components_Load_Parent_Lowlevel( layout_id, parent_id, components var, count var )
+	Runtime_Read_Layout_Component( component var )
+	Runtime_Load_Values( component var, output var )
+	
+	Load_URI( link var )
+	Layout_Components_Duplicate( new_layout_id, old_layout_id )
+	Layout_Components_Duplicate_Lowlevel( layout_id, layout_nodes var )
+	
+	JSON_Layout_Duplicate( module var )
+	JSON_Layout_Save( module var )
+	JSON_Components_Load_Query( module var )
+	JSON_Layouts_Load_Query( module var )
+	JSON_Component_Attrs_Load_Query( module var )
+	JSON_Components_Load_All( module var )
 
 </MvCOMMENT>
 
@@ -1995,4 +2007,234 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Layout_Save" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvASSIGN NAME = "l.void" VALUE = "{ miva_json_decode( g.Payload, l.payload ) }">
+	<MvIF EXPR = "{ NOT Layout_Components_Save( g.Layout_ID, l.payload:layout, l.payload:deleted ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Components_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
+	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ trim( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ trim( g.Count ) }">
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponents', 's' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,allow_children:s.allow_children' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields(l.search_query, g.Sort, 'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,allow_children:s.allow_children', 's.id' ) }">
+
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error(g.Error_Code, g.Error_Message ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, g.Offset, g.Count) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGPOINTS-JSON-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
+		{
+			"data":
+				[
+					<MvWHILE EXPR = "{ ( NOT TGComponents.d.EOF ) AND ( ( g.Count EQ 0 ) OR (l.count LT g.Count ) ) }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.count )}">
+					"id": <MvEVAL EXPR = "{ int( TGComponents.d.id ) }">,
+					"code" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.code ) }">",
+					"name" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.name ) }">",
+					"descrip" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.descrip ) }">",
+					"image" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.image ) }">",
+					"allow_children" : <MvEVAL EXPR = "{ TGComponents.d.allow_children }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+					<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
+					</MvWHILE>
+				],
+
+			"total_count": <MvEVAL EXPR = "{ int( l.total_count ) }">,
+			"start_offset": <MvEVAL EXPR = "{ int( g.Offset ) }">
+		}
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+	}
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Layouts_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
+	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ trim( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ trim( g.Count ) }">
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGLayouts', 's' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'id:s.id,code:s.code,name:s.name' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields(l.search_query, g.Sort, 'id:s.id,code:s.code,name:s.name', 's.id' ) }">
+
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error(g.Error_Code, g.Error_Message ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGLayouts', l.search_sql, l.search_fields, g.Offset, g.Count) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGPOINTS-JSON-2000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
+		{
+			"data":
+				[
+					<MvWHILE EXPR = "{ ( NOT TGLayouts.d.EOF ) AND ( ( g.Count EQ 0 ) OR (l.count LT g.Count ) ) }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.count )}">
+					"id": <MvEVAL EXPR = "{ int( TGLayouts.d.id ) }">,
+					"code" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGLayouts.d.code ) }">",
+					"name" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGLayouts.d.name ) }">"
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+					<MvSKIP NAME = "Merchant" VIEW = "TGLayouts" ROWS = 1>
+					</MvWHILE>
+				],
+
+			"total_count": <MvEVAL EXPR = "{ int( l.total_count ) }">,
+			"start_offset": <MvEVAL EXPR = "{ int( g.Offset ) }">
+		}
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+	}
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Component_Attrs_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvASSIGN NAME = "g.Filter" VALUE = "{ trim( g.Filter ) }">
+	<MvASSIGN NAME = "g.Sort" VALUE = "{ trim( g.Sort ) }">
+	<MvASSIGN NAME = "g.Offset" VALUE = "{ trim( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count" VALUE = "{ trim( g.Count ) }">
+	<MvASSIGN NAME = "g.Data_ID" VALUE = "{ trim( g.Data_ID ) }">
+
+	<MvASSIGN NAME = "l.search_query"				VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query, 'attr.id				AS attr_id,
+																				 attr.component_id			AS attr_component_id,
+																				 attr.code				AS attr_code,
+																				 attr.prompt			AS attr_prompt,
+																				 attr.type				AS attr_type,
+																				 attr.required			AS attr_required,
+																				 attr.disp_order		AS attr_disp_order,
+																				 opt.id					AS opt_id,
+																				 opt.attr_id			AS opt_attr_id,
+																				 opt.prompt				AS opt_prompt,
+																				 opt.disp_order			AS opt_disp_order' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponent_Attrs', 'attr' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_LEFT_OUTER_JOIN( l.search_query, 'attr', g.Store_Table_Prefix $ 'TGComponent_Options', 'opt', 'opt.attr_id = attr.id', '' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 'attr.component_id = ?', 'g.Component_ID' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'code:attr.code;opt.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, g.Sort,
+																		'code:attr.code;opt.code,
+																		prompt:attr.prompt;opt.prompt,
+																		type:attr.type,
+																		required:attr.required',
+																		'attr.disp_order;opt.disp_order' ) }">
+																			
+	<MvASSIGN NAME = "l.search_sql"			VALUE = "{ [ g.Module_Library_DB ].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Attrs"
+				QUERY	= "{ l.search_sql }"
+				FIELDS	= "{ l.search_fields }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGCOMPONENTS-JSON-3000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.total_count"	VALUE = 0>
+	<MvASSIGN NAME = "l.attr_count"		VALUE = 0>
+	<MvASSIGN NAME = "l.opt_count"		VALUE = 0>
+	<MvASSIGN NAME = "l.last_attr_id"	VALUE = 0>
+	<MvASSIGN NAME = "l.last_opt_id"	VALUE = 0>
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
+	{
+		"data":
+		[
+		<MvWHILE EXPR = "{ NOT TGComponent_Attrs.d.EOF }">
+			<MvIF EXPR = "{ l.last_attr_id NE TGComponent_Attrs.d.attr_id }">
+				<MvIF EXPR = "{ l.opt_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+					]
+				</MvIF>
+
+				<MvIF EXPR = "{ l.attr_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+				</MvIF>
+
+				<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.attr_count ) }">
+				"id":			<MvEVAL EXPR = "{ int( TGComponent_Attrs.d.attr_id ) }">,
+				"component_id":		<MvEVAL EXPR = "{ int( TGComponent_Attrs.d.attr_component_id ) }">,
+				"code":			"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponent_Attrs.d.attr_code ) }">",
+				"prompt":		"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponent_Attrs.d.attr_prompt ) }">",
+				"type":			"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponent_Attrs.d.attr_type ) }">",
+				"required":		<MvEVAL EXPR = "{ int( TGComponent_Attrs.d.attr_required ) }">,
+				"disp_order":	<MvEVAL EXPR = "{ int( TGComponent_Attrs.d.attr_disp_order ) }">
+				
+				<MvASSIGN NAME = "l.total_count"		VALUE = "{ l.total_count + 1 }">
+				<MvASSIGN NAME = "l.last_attr_id"	VALUE = "{ TGComponent_Attrs.d.attr_id }">
+				<MvASSIGN NAME = "l.last_opt_id"	VALUE = 0>
+				<MvASSIGN NAME = "l.opt_count"		VALUE = 0>
+			</MvIF>
+
+			<MvIF EXPR = "{ l.last_opt_id NE TGComponent_Attrs.d.opt_id AND NOT ISNULL TGComponent_Attrs.d.opt_id }">
+				<MvIF EXPR = "{ l.opt_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+				</MvIF>
+
+				<MvIF EXPR = "{ NOT l.opt_count }">
+					, "options":
+					[
+				</MvIF>
+
+				<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.opt_count ) }">
+				"id":			<MvEVAL EXPR = "{ int( TGComponent_Attrs.d.opt_id ) }">,
+				"attr_id":		<MvEVAL EXPR = "{ int( TGComponent_Attrs.d.opt_attr_id ) }">,
+				"prompt":		"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponent_Attrs.d.opt_prompt ) }">",
+				"disp_order":	<MvEVAL EXPR = "{ int( TGComponent_Attrs.d.opt_disp_order ) }">
+
+				<MvASSIGN NAME = "l.total_count"		VALUE = "{ l.total_count + 1 }">
+				<MvASSIGN NAME = "l.last_opt_id"	VALUE = "{ TGComponent_Attrs.d.opt_id }">
+			</MvIF>
+
+			<MvSKIP NAME = "Merchant" VIEW = "TGComponent_Attrs" ROWS = 1>
+		</MvWHILE>
+
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+
+		<MvIF EXPR = "{ l.opt_count }">
+			<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+			]
+		</MvIF>
+
+		<MvIF EXPR = "{ l.attr_count }">
+			<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+		</MvIF>
+		],
+		"start_offset": 0,
+		"total_count": <MvEVAL EXPR = "{ int( l.total_count ) }">
+	}
+}
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Components_Load_All" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvIF EXPR = "{ Components_Load_All( l.components ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
+	</MvIF>
+	[]
 </MvFUNCTION>
