@@ -34,6 +34,7 @@
 	ComponentAttrs_Update_Lowlevel( component_attr var )
 	ComponentAttrs_Update( component_attr var )
 	ComponentAttrs_Delete( component_attr_id )
+	ComponentAttrs_Delete_Component( component_attr_id )
 
 	JSON_ComponentAttrs_Insert( module var )
 	JSON_ComponentAttrs_Update( module var )
@@ -66,6 +67,8 @@
 	LayoutComponent_Update( layout_component var )
 	LayoutComponent_Delete( layout_component_id )
 	LayoutComponent_Delete_Values( layout_component_id )
+
+	Layout_Delete_Components( layout_id )
 
 	LayoutValue_Read( layout_value var )
 	LayoutValue_Insert_Lowlevel( layout_value var )
@@ -262,6 +265,9 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0007', g.MvQUERY_Error ) }">
 	</MvIF>
 
+	<MvIF EXPR = "{ NOT ComponentAttrs_Delete_Component( l.component_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -462,6 +468,10 @@
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0007', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Delete_Components( l.layout_id ) }">
+		<MVFUNCTIONRETURN VALUE = 0  />
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -738,13 +748,32 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT ComponentOptions_Delete_Attr( l.component_attr_id ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
-	</MvIF>
-
-	<MvFUNCTIONRETURN VALUE = 1>
+	<MvFUNCTIONRETURN VALUE = "{ ComponentOptions_Delete_Attr( l.component_attr_id ) }" />
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "ComponentAttrs_Delete_Component" PARAMETERS = "component_id" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponent_Attrs"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ?' }"
+				FIELDS	= "l.component_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGComponent_Attrs.d.EOF }">
+
+		<MvIF EXPR = "{ NOT ComponentAttrs_Delete( TGComponent_Attrs.d.id  ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponent_Attrs" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponent_Attrs">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"			VALUE = "{ g.Component_Id }">
@@ -1441,6 +1470,30 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "Layout_Delete_Components" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Components"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ?' }"
+				FIELDS	= "l.layout_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
+
+		<MvIF EXPR = "{ NOT LayoutComponent_Delete( TGLayouts_Components.d.id  ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MVFUNCTION>
+
 <MvFUNCTION NAME = "LayoutValue_Read" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.layout_value" MEMBER = "layouts_components_id"	VALUE = "{ TGLayouts_Values.d.layouts_components_id  }">
 	<MvASSIGN NAME = "l.layout_value" MEMBER = "attr_id"				VALUE = "{ TGLayouts_Values.d.attr_id }">
@@ -1875,8 +1928,23 @@
 		<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
 			<MvASSIGN NAME = "{ 'l.output:' $ l.attribute:code $ ':category' }" VALUE = "{ l.attribute:category }" />
 		<MvELSEIF EXPR = "{ l.attribute:type EQ 'link' }">
+			<MvASSIGN NAME = "{ 'l.output:' $ l.attribute:code $ ':value' }" VALUE = "{ Load_URI( l.attribute:link ) }">
 			<MvASSIGN NAME = "{ 'l.output:' $ l.attribute:code $ ':link' }" VALUE = "{ l.attribute:link }" />
 		</MvIF>
 	</MvFOREACH>
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Load_URI" PARAMETERS = "link var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.flags:nosession" VALUE = "1" />
+	<MvIF EXPR = "{ l.link:type EQ 'P' AND l.link:value }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_URI_UT ].Store_Product_Code_URL( l.link:value, l.flags ) }">
+	<MvELSEIF EXPR = "{ l.link:type EQ 'C' AND l.link:value }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_URI_UT ].Store_Category_Code_URL( l.link:value, l.flags ) }">
+	<MvELSEIF EXPR = "{ l.link:type EQ 'G' AND l.link:value }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_URI_UT ].Store_Page_Code_URL( l.link:value, l.flags ) }">
+	<MvELSEIF EXPR = "{ l.link:type EQ 'U' AND l.link:value }">
+		<MvFUNCTIONRETURN VALUE = "{ l.link:value }">
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = "" />
 </MvFUNCTION>

@@ -2,26 +2,27 @@
 
 ## Random Screenshots
 
-![Admin UI - TEMP](http://puu.sh/zEOc4/21db2f822b.png)
+![Admin UI](http://puu.sh/zF3Qy/1e2004893f.png)
 
 ---
 
 ## Example (subject to change)
 
 ```
-l.settings:landing_page:components[1]:id
-l.settings:landing_page:components[1]:code
-l.settings:landing_page:components[1]:name
-l.settings:landing_page:components[1]:attributes:image
-l.settings:landing_page:components[1]:attributes:heading_text
-l.settings:landing_page:components[1]:attributes:link
-l.settings:landing_page:components[1]:children_count
-l.settings:landing_page:components[1]:children[1]:id
-l.settings:landing_page:components[1]:children[1]:code
-l.settings:landing_page:components[1]:children[1]:name
-l.settings:landing_page:components[1]:children[1]:attributes:button_text
-l.settings:landing_page:components[1]:children[1]:attributes:heading_text
-l.settings:landing_page:components[1]:children[1]:attributes:link
+l.settings:landing_page:[1]:id
+l.settings:landing_page:[1]:code
+l.settings:landing_page:[1]:name
+l.settings:landing_page:[1]:attributes:image:value
+l.settings:landing_page:[1]:attributes:heading_text:value
+l.settings:landing_page:[1]:attributes:link:value
+l.settings:landing_page:[1]:attributes:link:link:uri
+l.settings:landing_page:[1]:children_count
+l.settings:landing_page:[1]:children[1]:id
+l.settings:landing_page:[1]:children[1]:code
+l.settings:landing_page:[1]:children[1]:name
+l.settings:landing_page:[1]:children[1]:attributes:button_text
+l.settings:landing_page:[1]:children[1]:attributes:heading_text
+l.settings:landing_page:[1]:children[1]:attributes:link
 ```
 
 ---

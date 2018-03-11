@@ -136,6 +136,13 @@
 			$scope.openPopup( nodeData );
 		}
 
+		$scope.newComponent_Validation = function( attribute, index ) {
+			if ( !$scope.data.popup_show_errors ) return false;
+			if ( attribute.type == 'link' && ( attribute.link.type != 'N') && ( !attribute.link.value ) ) return true;
+			if ( !attribute.required ) return false;
+			if ( attribute.type != 'link' && $scope.newComponentForm['layoutcomponent_' + index].$invalid ) return true;
+		}
+
 		$scope.insertComponent = function() {
 			$scope.data.popup_show_errors = 0;
 			$scope.$digest();
@@ -196,6 +203,13 @@
 			angular.copy( node, $scope.data.editComponent );
 			$scope.popup = new layoutComponentPopup_EDIT( scope, node );
 			$scope.popup.Show();
+		}
+
+		$scope.editComponent_Validation = function( attribute, index ) {
+			if ( !$scope.data.popup_show_errors ) return false;
+			if ( attribute.type == 'link' && ( attribute.link.type != 'N') && ( !attribute.link.value ) ) return true;
+			if ( !attribute.required ) return false;
+			if ( attribute.type != 'link' && $scope.editComponentForm['layoutcomponent_' + index].$invalid ) return true;
 		}
 
 		$scope.updateComponent = function( scope, node ) {

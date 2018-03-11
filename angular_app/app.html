@@ -181,7 +181,6 @@ tr.angular-ui-tree-empty {
 	</ol>
 </div>
 
-<hr />
 <!-- Layout Component ADD Dialog -->
 <div id="layoutcomponent_add_mmdialog" class="mm9_dialog">
 	<div class="mm9_dialog_container">
@@ -213,7 +212,7 @@ tr.angular-ui-tree-empty {
 								<img ng-src="{{ data.newComponent.component.image }}" class="cmp_image" />
 							</td>
 						</tr>
-						<tr ng-if="data.newComponent.component.id > 0" ng-repeat="attribute in data.newComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : attribute.required && data.popup_show_errors && newComponentForm['layoutcomponent_' + $index].$error }">
+						<tr ng-if="data.newComponent.component.id > 0" ng-repeat="attribute in data.newComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : newComponent_Validation( attribute, $index ) }">
 							<td nowrap><span ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}:</span></td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'text'">
 								<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
@@ -249,6 +248,7 @@ tr.angular-ui-tree-empty {
 								</span>
 							</td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'image'">
+								<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:100px; max-height: 100px;" /></div>
 								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="imageUpload( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
@@ -256,14 +256,14 @@ tr.angular-ui-tree-empty {
 								</span>
 							</td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'link'">
-								<select name="layoutcomponent_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
+								<select name="layoutcomponent_type_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
 									<option value="N">None</option>
 									<option value="U">URL</option>
 									<option value="P">Product</option>
 									<option value="C">Category</option>
 									<option value="G">Page</option>
 								</select>
-								<input ng-if="attribute.link.type && attribute.link.type != 'N'" name="layoutcomponent_{{$index}}" type="text" ng-model="attribute.link.value" id="js-attribute_link_{{ attribute.id }}" />
+								<input ng-if="attribute.link.type && attribute.link.type != 'N'" name="layoutcomponent_link_{{$index}}" required type="text" ng-model="attribute.link.value" id="js-attribute_link_{{ attribute.id }}" />
 								<span ng-if="attribute.link.type && attribute.link.type != 'N' && attribute.link.type != 'U'" class="mm9_button_light layoutcomponent_img_button" ng-click="linkPopup( attribute )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 									<span ng-if="attribute.link.type == 'P'" class="mm9_button_text" style="padding-left: 5px;">Lookup Product</span>
@@ -320,7 +320,7 @@ tr.angular-ui-tree-empty {
 								<img ng-src="{{ data.editComponent.component.image }}" class="cmp_image" />
 							</td>
 						</tr>
-						<tr ng-if="data.editComponent.component.id > 0" ng-repeat="attribute in data.editComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : ( attribute.required && data.popup_show_errors && editComponentForm['layoutcomponent_' + $index].$error && attribute.type != 'link' ) }">
+						<tr ng-if="data.editComponent.component.id > 0" ng-repeat="attribute in data.editComponent.component.attributes" ng-class="{ 'layoutcomponent_error' : editComponent_Validation( attribute, $index) }">
 							<td nowrap><span ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}:</span></td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'text'">
 								<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
@@ -359,6 +359,7 @@ tr.angular-ui-tree-empty {
 								</span>
 							</td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'image'">
+								<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:100px; max-height: 100px;" /></div>
 								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="imageUpload( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
@@ -366,14 +367,14 @@ tr.angular-ui-tree-empty {
 								</span>
 							</td>
 							<td valign="middle" width="100%" ng-if="attribute.type == 'link'">
-								<select name="layoutcomponent_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
+								<select name="layoutcomponent_type_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
 									<option value="N">None</option>
 									<option value="U">URL</option>
 									<option value="P">Product</option>
 									<option value="C">Category</option>
 									<option value="G">Page</option>
 								</select>
-								<input ng-if="attribute.link.type && attribute.link.type != 'N'" name="layoutcomponent_{{$index}}" type="text" ng-model="attribute.link.value" id="js-attribute_link_{{ attribute.id }}" />
+								<input ng-if="attribute.link.type && attribute.link.type != 'N'" name="layoutcomponent_link_{{$index}}" required type="text" ng-model="attribute.link.value" id="js-attribute_link_{{ attribute.id }}" />
 								<span ng-if="attribute.link.type && attribute.link.type != 'N' && attribute.link.type != 'U'" class="mm9_button_light layoutcomponent_img_button" ng-click="linkPopup( attribute )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 									<span ng-if="attribute.link.type == 'P'" class="mm9_button_text" style="padding-left: 5px;">Lookup Product</span>
