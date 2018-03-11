@@ -3,6 +3,8 @@
 ## Random Screenshots
 
 ![Admin UI](http://puu.sh/zF3Qy/1e2004893f.png)
+![Edit Popup](http://puu.sh/zF40y/1b91c46bff.png)
+![Add New Popup - With All Fields](http://puu.sh/zF4ky/a549b1ab30.png)
 
 ---
 

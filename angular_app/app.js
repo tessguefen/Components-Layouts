@@ -171,6 +171,7 @@
 		$scope.openPopup = function( parent ) {
 			$scope.resetPopup();
 			$scope.data.newComponent.parent = parent;
+			$scope.data.newComponent.active = 1;
 			$scope.popup = new layoutComponentPopup_ADD();
 			$scope.popup.Show();
 		}
