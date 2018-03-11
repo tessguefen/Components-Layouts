@@ -38,6 +38,32 @@
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Sets' }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
 		<div id="jsLayoutBatchlist"></div>
+		<!-- Duplicate Layout MM Dialog -->
+		<div id="DuplicateLayout_dialog" class="mm_dialog">
+			<div id="DuplicateLayout_dialog_title" class="mm_dialog_title">Duplicate Layout</div>
+			<div class="mm_clear"></div>
+			<table>
+				<tbody>
+					<tr>
+						<td class="mm_dialog_prompt_required">New Code:</td>
+						<td class="DuplicateLayout_dialog_field">
+							<input type="text" name="new_code" id="DuplicateLayout_New_Code" />
+						</td>
+					</tr>
+					<tr>
+						<td class="mm_dialog_prompt_required">New Name:</td>
+						<td class="DuplicateLayout_dialog_field">
+							<input type="text" name="new_name" id="DuplicateLayout_New_Name" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="mm_dialog_buttons_left">
+				<input id="DuplicateLayout_dialog_button_cancel" type="button" value="Cancel">
+			</div>
+			<div class="mm_dialog_buttons_right"><input id="DuplicateLayout_dialog_button_save" type="button" value="Add"></div>
+		</div>
+		<!-- Duplicate Layout MM Dialog -->
 	</MvIF>
 </MvFUNCTION>
 

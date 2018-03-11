@@ -1947,3 +1947,52 @@
 	</MvIF>
 	<MvFUNCTIONRETURN VALUE = "" />
 </MvFUNCTION>
+
+<MvCOMMENT>
+	Function Deticated to Ann
+</MvCOMMENT>
+<MvFUNCTION NAME = "Layout_Components_Duplicate" PARAMETERS = "new_layout_id, old_layout_id" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.component_count" VALUE = "{ Recursive_Nes_Attack( l.old_layout_id, 0, l.layout_nodes:nodes ) }">
+	<MvFUNCTIONRETURN VALUE = "{ Layout_Components_Duplicate_Lowlevel( l.new_layout_id, l.layout_nodes ) }" />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Components_Duplicate_Lowlevel" PARAMETERS = "layout_id, layout_nodes var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		Recursive Function that will duplicate the layout components.
+	</MvCOMMENT>
+	<MvFOREACH ITERATOR = "l.node" ARRAY = "l.layout_nodes:nodes">
+		<MvASSIGN NAME = "l.disp_order" VALUE = "{ l.disp_order + 1 }" />
+		<MvASSIGN NAME = "l.node" MEMBER = "id"				VALUE = "0" />
+		<MvASSIGN NAME = "l.node" MEMBER = "layout_id"		VALUE = "{ l.layout_id }">
+		<MvASSIGN NAME = "l.node" MEMBER = "parent"			VALUE = "{ l.layout_nodes:id }">
+		<MvASSIGN NAME = "l.node" MEMBER = "component_id"	VALUE = "{ l.node:component:id }">
+		<MvASSIGN NAME = "l.node" MEMBER = "disp_order"		VALUE = "{ l.disp_order }">
+
+		<MvIF EXPR = "{ NOT LayoutComponent_Insert( l.node ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT Layout_Components_Save_Attributes( l.node ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT Layout_Components_Duplicate_Lowlevel( l.layout_id, l.node ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Layout_Duplicate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout" MEMBER = "code"				VALUE = "{ g.Code }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "name"				VALUE = "{ g.Name }">
+
+	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Components_Duplicate( l.layout:id, g.Layout_ID ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
