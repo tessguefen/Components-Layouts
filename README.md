@@ -28,7 +28,13 @@
 ![Drag & Drop](https://puu.sh/zF7Zz/e32d8bbd12.png)
 ---
 
-## Example (subject to change)
+## Items
+
+```xml
+<mvt:item name="tgcomponent" param="Layout_Load_Code( 'homepage_slider', l.settings:output )"/>
+```
+
+## Example
 
 ```
 [1]:active=1
@@ -161,4 +167,4 @@
 - Image Upload
 - Category (supply ID)
 - Product (supply ID)
-- Page (necessary???)
+- Link (Includes Product, Category, Page, URL & None )
