@@ -254,6 +254,16 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2022', 'An error occured while creating the store key, TGLayouts_Components. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].DomainPrivilege_Load_Privilege( 'TGCOMPONENTS', l.void ) }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].DomainPrivilege_Insert( 'TGCOMPONENTS', 'Components & Layouts Module' ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
 
 	<MvCOMMENT>
 	|
@@ -307,7 +317,9 @@
 	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].LeftNavigation_Dot( l.indent - 1, 'Screen=SUTL&Store_Code=' $ encodeattribute( g.Store:code ) $ '&Module_Code=' $ encodeattribute( l.module:code ), 'Main', 'Components' ) }">
+	<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].LeftNavigation_Dot( l.indent - 1, 'Screen=SUTL&Store_Code=' $ encodeattribute( g.Store:code ) $ '&Module_Code=' $ encodeattribute( l.module:code ), 'Main', 'Components' ) }">
+	</MvIF>
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 

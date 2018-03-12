@@ -25,10 +25,16 @@ function Components_Batchlist() {
 	MMBatchList.call( self, 'jsComponentBatchlist' );
 	self.Feature_SearchBar_SetPlaceholderText( 'Search Components...' );
 	self.SetDefaultSort( 'id', '' );
-	self.Feature_Add_Enable('Add Component');
-	self.Feature_Edit_Enable('Edit Component(s)');
-	self.Feature_Delete_Enable('Delete Component(s)');
-	self.Feature_RowDoubleClick_Enable();
+	if ( CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) ) {
+		self.Feature_Add_Enable('Add Component');
+	}
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
+		self.Feature_Edit_Enable('Edit Component(s)');
+		self.Feature_RowDoubleClick_Enable();
+	}
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
+		self.Feature_Delete_Enable('Delete Component(s)');
+	}
 	self.processingdialog = new ProcessingDialog();
 	self.Feature_GoTo_Enable('Open Component', '');
 }
@@ -49,10 +55,14 @@ Components_Batchlist.prototype.onCreateRootColumnList = function() {
 		new MMBatchList_Column_Name( 'Name', 'name', 'name'),
 		new MMBatchList_Column_Name( 'Description', 'descrip', 'descrip'),
 		new MMBatchList_Column_Image_Upload( 'Image', 'image', 'image'),
-		new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'allow_children', 'allow_children', function( item, checked, delegator ) {
-			Components_Batchlist.Update_Nests( item, checked, function(){}, delegator );
-		} )
 	];
+
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
+		columnlist.push( new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'allow_children', 'allow_children', function( item, checked, delegator ) {Components_Batchlist.Update_Nests( item, checked, function(){}, delegator ); } ) );
+	} else {
+		columnlist.push( new MMBatchList_Column_Checkbox( 'Allow Nested Components ', 'allow_children', 'allow_children' ) );
+	}
+
 	return columnlist;
 }
 

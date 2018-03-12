@@ -53,6 +53,12 @@
 
 		$scope.data.original_components = new Object();
 
+		$scope.data.can_add = CanI( 'TGCOMPONENTS', 0, 1, 0, 0 );
+		$scope.data.can_edit = CanI( 'TGCOMPONENTS', 0, 0, 1, 0 );
+		$scope.data.can_delete = CanI( 'TGCOMPONENTS', 0, 0, 0, 1 );
+
+		console.log( $scope.data );
+
 		/* Dialog Functions */
 		function LayoutComponentPopup_add() {
 			var self = this;

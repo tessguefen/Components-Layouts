@@ -36,14 +36,21 @@ function Layouts_Batchlist() {
 	MMBatchList.call( self, 'jsLayoutBatchlist' );
 	self.Feature_SearchBar_SetPlaceholderText( 'Search Layouts...' );
 	self.SetDefaultSort( 'id', '' );
-	self.Feature_Add_Enable('Add Layout');
-	self.Feature_Edit_Enable('Edit Layout(s)');
-	self.Feature_Delete_Enable('Delete Layout(s)');
-	self.Feature_RowDoubleClick_Enable();
+
+	if ( CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) ) {
+		self.Feature_Add_Enable('Add Layout');
+	}
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
+		self.Feature_Edit_Enable('Edit Layout(s)');
+		self.Feature_RowDoubleClick_Enable();
+		button = this.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', this.DuplicateLayout );
+	}
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
+		self.Feature_Delete_Enable('Delete Layout(s)');
+	}
+	
 	self.processingdialog = new ProcessingDialog();
 	self.Feature_GoTo_Enable('Open Layout', '');
-
-	button = this.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', this.DuplicateLayout );
 }
 
 DeriveFrom( MMBatchList, Layouts_Batchlist );

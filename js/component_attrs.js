@@ -63,16 +63,21 @@ function ComponentAttrs_Batchlist( component_id ) {
 
 	self.Feature_Add_RowSupportsChildren_AddHook( self.Field_RowSupportsChildren_Hook );
 
-	self.Feature_Delete_Enable( 'Delete Field(s)' );
-	self.Feature_Edit_Enable( 'Edit Field(s)' );
-	self.Feature_RowDoubleClick_Enable();
-
-	self.Feature_Add_Enable( 'Add Field', 'Save Field', 'Add Option', 'Cancel', 'Add Field', 'Save Field', 'Add Option', '' );
+	if ( CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) ) {
+		self.Feature_Add_Enable( 'Add Field', 'Save Field', 'Add Option', 'Cancel', 'Add Field', 'Save Field', 'Add Option', '' );
+	}
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
+		self.Feature_Edit_Enable( 'Edit Field(s)' );
+		self.Feature_RowDoubleClick_Enable();
+		self.Feature_DisplayOrder_Enable( 'disp_order', 'Attrs_DisplayOrder' );
+	}
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
+		self.Feature_Delete_Enable( 'Delete Field(s)' );
+	}
 
 	self.Feature_SearchBar_SetPlaceholderText( 'Search Fields...' );
 	self.SetDefaultSort( 'disp_order', '' );
 
-	self.Feature_DisplayOrder_Enable( 'disp_order', 'Attrs_DisplayOrder' );
 	self.Branch_SetDisplayOrderPrefix( this.branch_options, 'Option_Order' );
 }
 
