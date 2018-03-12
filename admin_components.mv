@@ -104,9 +104,15 @@
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Layout' ) }">
 
+				<MvIF EXPR = "{ g.Layout_Updated EQ 1 }">
+					<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons_Message( 'Layout Updated!' ) }">
+				</MvIF>
+
 				<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
 
 				<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
+
+				<input type="hidden" name="Layout_Updated" value="0" id="jsLayoutUpdated" />
 
 				<MvEVAL EXPR = "{ Component_HTML_App() }" />
 
