@@ -189,6 +189,7 @@
 		$scope.saveLayout = function( button ) {
 			var layout_data = new Object();
 			layout_data.layout = angular.copy( $scope.data.layout );
+
 			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
 
 			DisableButtons( button );
@@ -199,7 +200,7 @@
 				$scope.data.itemsForDeletion.nodes = [];
 				document.getElementById( 'jsLayoutUpdated' ).value = 1;
 				document.forms[ Screen ].submit();
-			}, JSON.stringify( layout_data ) );
+			}, encodeURIComponent( JSON.stringify( layout_data ) ) );
 		}
 
 		/*** EDIT ***/
