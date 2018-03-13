@@ -1766,12 +1766,14 @@
 			<MvASSIGN NAME = "l.attribute:product:id" VALUE = "0" />
 			<MvIF EXPR = "{ [ g.Module_Library_DB ].Product_Load_Code( l.attribute:product:code, l.loaded_product ) }">
 				<MvASSIGN NAME = "l.attribute:product:id" VALUE = "{ l.loaded_product:id }" />
+				<MvASSIGN NAME = "l.attribute:product:code" VALUE = "{ l.loaded_product:code }" />
 			</MvIF>
 			<MvASSIGN NAME = "l.new_attribute:value" VALUE = "{ miva_array_serialize( l.attribute:product ) }">
 		<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
 			<MvASSIGN NAME = "l.attribute:category:id" VALUE = "0" />
 			<MvIF EXPR = "{ [ g.Module_Library_DB ].Category_Load_Code( l.attribute:category:code, l.loaded_category ) }">
 				<MvASSIGN NAME = "l.attribute:category:id" VALUE = "{ l.loaded_category:id }" />
+				<MvASSIGN NAME = "l.attribute:category:code" VALUE = "{ l.loaded_category:code }" />
 			</MvIF>
 			<MvASSIGN NAME = "l.new_attribute:value" VALUE = "{ miva_array_serialize( l.attribute:category ) }">
 		</MvIF>

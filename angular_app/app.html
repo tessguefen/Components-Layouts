@@ -107,14 +107,14 @@
 								</label>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'product'">
-								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
+								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.product.code" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="productPopup( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 									<span class="mm9_button_text" style="padding-left: 5px;">Lookup Product</span>
 								</span>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'category'">
-								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
+								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.category.code" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="categoryPopup( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 									<span class="mm9_button_text" style="padding-left: 5px;">Lookup Category</span>
