@@ -54,7 +54,15 @@ Components_Batchlist.prototype.onCreateRootColumnList = function() {
 		new MMBatchList_Column_Code( 'Code', 'code', 'code'),
 		new MMBatchList_Column_Name( 'Name', 'name', 'name'),
 		new MMBatchList_Column_Name( 'Description', 'descrip', 'descrip'),
-		new MMBatchList_Column_Image_Upload( 'Image', 'image', 'image'),
+		new MMBatchList_Column_Image_Upload( 'Image', 'image', 'image')
+		.SetOnDisplayData( function( record ) {
+			var element;
+			element						= newElement( 'span', { 'class': 'mm9_batchlist_column_imagepreview_image_container' }, null, null );
+			element.element_preview		= newElement( 'img', { 'class': 'mm9_batchlist_column_imagepreview_image' }, null, element );
+			element.element_preview.src	= record[ this.code ];
+
+			return element;
+		}),
 	];
 
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {

@@ -108,13 +108,16 @@
 					<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons_Message( 'Layout Updated!' ) }">
 				</MvIF>
 
-				<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
+				<div class="layoutcomponent_wrapper">
 
-				<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
+					<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
 
-				<input type="hidden" name="Layout_Updated" value="0" id="jsLayoutUpdated" />
+					<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
 
-				<MvEVAL EXPR = "{ Component_HTML_App() }" />
+					<input type="hidden" name="Layout_Updated" value="0" id="jsLayoutUpdated" />
+
+					<MvEVAL EXPR = "{ Component_HTML_App() }" />
+				</div>
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
