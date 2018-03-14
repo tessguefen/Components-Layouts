@@ -60,7 +60,7 @@
 		/* Dialog Functions */
 		function LayoutComponentPopup_add() {
 			var self = this;
-			MMDialog.call( this, 'layoutcomponent_add', 600, 450 );
+			MMDialog.call( this, 'layoutcomponent_add', 680, 450 );
 
 			self.SetResizeEnabled();
 			
@@ -78,7 +78,7 @@
 
 		function layoutComponentPopup_EDIT( scope, node ) {
 			var self = this;
-			MMDialog.call( this, 'layoutcomponent_edit', 600, 450 );
+			MMDialog.call( this, 'layoutcomponent_edit', 680, 450 );
 
 			self.SetResizeEnabled();
 			
