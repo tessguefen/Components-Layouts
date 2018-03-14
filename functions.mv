@@ -251,7 +251,7 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ l.component:code NE l.prev_component:code }">
+	<MvIF EXPR = "{ toupper( l.component:code ) NE toupper( l.prev_component:code ) }">
 		<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.void ) }">
 			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist.">
 			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
@@ -495,7 +495,7 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ l.layout:code NE l.prev_layout:code }">
+	<MvIF EXPR = "{ toupper( l.layout:code ) NE toupper( l.prev_layout:code ) }">
 		<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.void ) }">
 			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist.">
 			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
@@ -761,7 +761,7 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ l.component_attrs:code NE l.prev_component_attrs:code }">
+	<MvIF EXPR = "{ toupper( l.component_attrs:code ) NE toupper( l.prev_component_attrs:code ) }">
 		<MvIF EXPR = "{ ComponentAttrs_Load_Code( l.component_attrs:component_id, l.component_attrs:code, l.void ) }">
 			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This code already exist for this component.">
 			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
