@@ -130,12 +130,17 @@
 			}
 		}
 
+
 		$scope.newComponent = function( scope ) {
 			var nodeData = scope.$modelValue;
 			if( !nodeData ) {
 				nodeData = $scope.data.layout;
 			}
 			$scope.openPopup( nodeData );
+		}
+
+		$scope.addComponentTopLevel = function() {
+			$scope.newComponent( $scope.data.layout );
 		}
 
 		$scope.newComponent_Validation = function( attribute, index ) {
@@ -155,7 +160,6 @@
 					$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
 					$scope.closePopup();
 				});
-				$scope.$digest();
 			} else {
 				$timeout( function(){
 					$scope.data.popup_show_errors = 1;
@@ -183,6 +187,7 @@
 			$scope.data.newComponent.parent = new Object();
 			$scope.data.components = angular.copy( $scope.data.original_components );
 			$scope.data.popup_show_errors = 0;
+			if ( typeof $scope.popup == 'object' ) $scope.popup.Hide();
 		}
 
 		/*** Submission of SAVE ***/
@@ -228,7 +233,6 @@
 					$scope.data.editComponent = new Object();
 					$scope.closePopup();
 				});
-				$scope.$digest();
 			} else {
 				$timeout( function(){
 					$scope.data.popup_show_errors = 1;
@@ -271,7 +275,6 @@
 					element.val( record.code );
 					element.triggerHandler('input');
 				});
-				$scope.$digest();
 			};
 
 			product_dialog.Show();
@@ -292,7 +295,6 @@
 					element.val( record.code );
 					element.triggerHandler('input');
 				});
-				$scope.$digest();
 			};
 
 			category_dialog.Show();
@@ -313,7 +315,6 @@
 					element.val( record.code );
 					element.triggerHandler('input');
 				});
-				$scope.$digest();
 			};
 			page_dialog.Show();
 		}
@@ -327,7 +328,6 @@
 					element.val( images[ 0 ] ? images[ 0 ].image : '' );
 					element.triggerHandler('input');
 				});
-				$scope.$digest();
 			};
 			image_dialog.Show();
 		}
@@ -339,5 +339,12 @@ function initSaveLayout( button ) {
 	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 	scope.$apply(function () {
 		scope.saveLayout( button );
-	});		
+	});	
+}
+
+function initAddComponent( button ) {
+	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
+	scope.$apply(function () {
+		scope.addComponentTopLevel();
+	});
 }

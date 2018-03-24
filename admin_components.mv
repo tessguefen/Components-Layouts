@@ -124,8 +124,11 @@
 				<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+				<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">
+					<MvASSIGN NAME = "l.buttons" VALUE = "Components:+ Add Component;initAddComponent( this ),">
+				</MvIF>
 				<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) OR [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) OR [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">
-					<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( 'Components:[UPDATE];initSaveLayout( this )' ) }">
+					<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( l.buttons $ 'Components:[UPDATE];initSaveLayout( this )' ) }">
 				</MvIF>
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
 			</div>

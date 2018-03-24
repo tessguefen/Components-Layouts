@@ -659,7 +659,8 @@
 		l.type NE 'image' AND
 		l.type NE 'product' AND
 		l.type NE 'category' AND
-		l.type NE 'link'
+		l.type NE 'link'	AND
+		l.type NE 'imagetype'
 	}">
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>
@@ -1855,6 +1856,13 @@
 
 		<MvIF EXPR = "{ l.return[ l.count ]:type EQ 'select' OR l.return[ l.count ]:type EQ 'radio' }">
 			<MvASSIGN NAME ="l.void" VALUE = "{ Components_Options_Load_Attr( l.return[ l.count ]:id, l.return[ l.count ]:options ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ l.return[ l.count ]:type EQ 'imagetype' }">
+			<MvIF EXPR = "{ ISNULL g.Session:cache:tgcomponents:imagetypes }">
+				<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Library_DB ].ImageTypeList_Load_All( g.Session:cache:tgcomponents:imagetypes )  }">
+			</MvIF>
+			<MvASSIGN NAME = "l.return" INDEX = "{ l.count }" MEMBER = "options" VALUE = "{ g.Session:cache:tgcomponents:imagetypes }">
 		</MvIF>
 
 		<MvSKIP NAME = "Merchant" VIEW = "TGComponent_Attrs" ROWS = 1>

@@ -29,15 +29,6 @@
 <div id="mm9_screen_update_message_container" class="mm9_screen_update_message_container" style="top: 0;">
 	<span id="mm9_screen_update_message" class="mm9_screen_update_message">{{ data.notification_message }}</span>
 </div>
-
-<div class="layoutcomponent_buttonrow" ng-if="data.can_add">
-
-	<span ng-click="newComponent( data.layout )" class="mm9_button_light">
-		<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;">&#57347;</span>
-		<span class="mm9_button_text" style="padding-left: 5px;">Add New Component</span>
-	</span>
-
-</div>
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
 	<div ui-tree-handle ng-class="{ 'cmp_container' : node.component.allow_children, 'cmp_item' : !node.component.allow_children }" ng-init="checkNodes( node )">
@@ -150,7 +141,7 @@
 								</span>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'image'">
-								<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:190px; max-height: 190px;" title="Image for {{ attribute.prompt }}" alt="Image for {{ attribute.prompt }}" /></div>
+								<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:190px; max-height: 140px;" title="Image for {{ attribute.prompt }}" alt="Image for {{ attribute.prompt }}" /></div>
 								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="imageUpload( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
@@ -172,6 +163,12 @@
 									<span ng-if="attribute.link.type == 'C'" class="mm9_button_text" style="padding-left: 5px;">Lookup Category</span>
 									<span ng-if="attribute.link.type == 'G'" class="mm9_button_text" style="padding-left: 5px;">Lookup Page</span>
 								</span>
+							</td>
+							<td valign="top" width="100%" ng-if="attribute.type == 'imagetype'">
+								<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
+									<option value="">-- Select Image Type --</option>
+									<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
+								</select>
 							</td>
 						</tr>
 					</table>
@@ -269,7 +266,7 @@
 								</span>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'image'">
-								<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:190px; max-height: 190px;" title="Image for {{ attribute.prompt }}" alt="Image for {{ attribute.prompt }}" /></div>
+								<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:190px; max-height: 140px;" title="Image for {{ attribute.prompt }}" alt="Image for {{ attribute.prompt }}" /></div>
 								<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 								<span class="mm9_button_light layoutcomponent_img_button" ng-click="imageUpload( 'js-attribute_' + attribute.id )">
 									<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
@@ -291,6 +288,12 @@
 									<span ng-if="attribute.link.type == 'C'" class="mm9_button_text" style="padding-left: 5px;">Lookup Category</span>
 									<span ng-if="attribute.link.type == 'G'" class="mm9_button_text" style="padding-left: 5px;">Lookup Page</span>
 								</span>
+							</td>
+							<td valign="top" width="100%" ng-if="attribute.type == 'imagetype'">
+								<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
+									<option value="">-- Select Image Type --</option>
+									<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
+								</select>
 							</td>
 						</tr>
 					</table>

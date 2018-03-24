@@ -362,6 +362,7 @@ Fields_Column_Type.prototype.onDisplayEdit = function( record, item ) {
 	select.options[ select.options.length ] = new Option( 'Product', 'product' );
 	select.options[ select.options.length ] = new Option( 'Category', 'category' );
 	select.options[ select.options.length ] = new Option( 'Link', 'link' );
+	select.options[ select.options.length ] = new Option( 'Image Type', 'imagetype' );
 
 	for ( i = 0, i_len = select.options.length; i < i_len; i++ )
 	{
@@ -386,6 +387,7 @@ Fields_Column_Type.prototype.onDisplayData = function( record ) {
 	else if ( record.type == 'product' )		text.innerHTML = 'Product';
 	else if ( record.type == 'category' )		text.innerHTML = 'Category';
 	else if ( record.type == 'link' )			text.innerHTML = 'Link';
+	else if ( record.type == 'imagetype' )		text.innerHTML = 'Image Type';
 
 	return text;
 }
