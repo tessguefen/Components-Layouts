@@ -1,5 +1,13 @@
 # Components
 
+## Notes
+
+Image_Increment_RefCount
+Image_Decrement_RefCount
+[ g.Module_Library_DB ].
+
+With image_id as the param
+
 ## Features
 
 - Components
