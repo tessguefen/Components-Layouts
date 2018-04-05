@@ -5,53 +5,74 @@
 Potential XML prov. Ideas:
 
 ```xml
-	<Component_Add>
-		<Code>MyCode</Code>
-		<Name>My Name</Name>
-		<Descrip>My Description</Descrip>
-		<Image>Image/Path.jpg</Image>
-		<Allow_Nest>1</Allow_Nest>
-	</Component_Add>
+<Component_Add>
+	<Code>MyCode</Code>
+	<Name>My Name</Name>
+	<Descrip>My Description</Descrip>
+	<Image>Image/Path.jpg</Image>
+	<Allow_Nest>1</Allow_Nest>
+</Component_Add>
 
-	<Component_Update Code="MyCode">
-		<Code>NewCode</Code>
-		<Name>My Name</Name>
-		<Descrip>My Description</Descrip>
-		<Image>Image/Path.jpg</Image>
-		<Allow_Nest>1</Allow_Nest>
-	</Component_Update>
+<Component_Update Code="MyCode">
+	<Code>NewCode</Code>
+	<Name>My Name</Name>
+	<Descrip>My Description</Descrip>
+	<Image>Image/Path.jpg</Image>
+	<Allow_Nest>1</Allow_Nest>
+</Component_Update>
 
-	<ComponentAttribute_Add component="MyComponent">
-		<Code>MyAttribute</Code>
-		<Prompt>My Prompt</Prompt>
-		<Type>image</Type>
-		<Required>1</Required>
-	</ComponentAttribute_Add>
+<ComponentAttribute_Add component="MyComponent">
+	<Code>MyAttribute</Code>
+	<Prompt>My Prompt</Prompt>
+	<Type>image</Type>
+	<Required>1</Required>
+</ComponentAttribute_Add>
 
-	<ComponentAttribute_Update component="MyComponent" attribute_code="MyAttribute">
-		<Code>MyNewAttribute</Code>
-		<Prompt>My Prompt</Prompt>
-		<Type>image</Type>
-		<Required>1</Required>
-	</ComponentAttribute_Add>
+<ComponentAttribute_Update component="MyComponent" attribute_code="MyAttribute">
+	<Code>MyNewAttribute</Code>
+	<Prompt>My Prompt</Prompt>
+	<Type>image</Type>
+	<Required>1</Required>
+</ComponentAttribute_Add>
 
-	<ComponentAttributeOption_Add component="MyComponent" attribute_code="MyAttribute">
-		<Prompt>My Prompt</Prompt>
-	</Component>
+<ComponentAttributeOption_Add component="MyComponent" attribute_code="MyAttribute">
+	<Prompt>My Prompt</Prompt>
+</Component>
 
-	<ComponentAttributeOption_Update component="MyComponent" attribute_code="MyAttribute" prompt="My Prompt">
-		<Prompt>My New Prompt</Prompt>
-	</Component>
+<ComponentAttributeOption_Update component="MyComponent" attribute_code="MyAttribute" prompt="My Prompt">
+	<Prompt>My New Prompt</Prompt>
+</Component>
 
-	<LayoutAdd>
-		<Code>LayoutCode</Code>
-		<Name>Layout Name</Name>
-	</LayoutAdd>
+<LayoutAdd>
+	<Code>LayoutCode</Code>
+	<Name>Layout Name</Name>
+</LayoutAdd>
 
-	<LayoutUpdate code="LayoutCode">
-		<Code>LayoutCode</Code>
-		<Name>Layout Name</Name>
-	</LayoutUpdate>
+<LayoutUpdate code="LayoutCode">
+	<Code>LayoutCode</Code>
+	<Name>Layout Name</Name>
+</LayoutUpdate>
+
+<LayoutComponent_Add>
+	<Component>Component_Code</Component>
+	<Name>Some Unique Name I guess</Name>
+	<Attributes>
+		<Attribute code="MyAttribute" value="My Value Here" />
+		<Attribute code="MyAttribute1" value="My Value Here" />
+		<Attribute code="MyAttribute2" value="My Value Here" />
+	</Attributes>
+</LayoutComponent_Add>
+
+<LayoutComponent_Add>
+	<Component>Component_Code2</Component>
+	<Name>Some Unique Name I guess 2</Name>
+	<Attributes>
+		<Attribute code="MyAttribute" value="My Value Here" />
+		<Attribute code="MyAttribute1" value="My Value Here" />
+		<Attribute code="MyAttribute2" value="My Value Here" />
+	</Attributes>
+	<Parent>Some Unique Name I guess</Name>
+</LayoutComponent_Add>
 
 	..to be continued.
 ```
