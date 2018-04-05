@@ -2,30 +2,77 @@
 
 ## Notes
 
-Image_Increment_RefCount
-Image_Decrement_RefCount
-[ g.Module_Library_DB ].
+Potential XML prov. Ideas:
 
-With image_id as the param
+```xml
+	<Component_Add>
+		<Code>MyCode</Code>
+		<Name>My Name</Name>
+		<Descrip>My Description</Descrip>
+		<Image>Image/Path.jpg</Image>
+		<Allow_Nest>1</Allow_Nest>
+	</Component_Add>
 
+	<Component_Update Code="MyCode">
+		<Code>NewCode</Code>
+		<Name>My Name</Name>
+		<Descrip>My Description</Descrip>
+		<Image>Image/Path.jpg</Image>
+		<Allow_Nest>1</Allow_Nest>
+	</Component_Update>
+
+	<ComponentAttribute_Add component="MyComponent">
+		<Code>MyAttribute</Code>
+		<Prompt>My Prompt</Prompt>
+		<Type>image</Type>
+		<Required>1</Required>
+	</ComponentAttribute_Add>
+
+	<ComponentAttribute_Update component="MyComponent" attribute_code="MyAttribute">
+		<Code>MyNewAttribute</Code>
+		<Prompt>My Prompt</Prompt>
+		<Type>image</Type>
+		<Required>1</Required>
+	</ComponentAttribute_Add>
+
+	<ComponentAttributeOption_Add component="MyComponent" attribute_code="MyAttribute">
+		<Prompt>My Prompt</Prompt>
+	</Component>
+
+	<ComponentAttributeOption_Update component="MyComponent" attribute_code="MyAttribute" prompt="My Prompt">
+		<Prompt>My New Prompt</Prompt>
+	</Component>
+
+	<LayoutAdd>
+		<Code>LayoutCode</Code>
+		<Name>Layout Name</Name>
+	</LayoutAdd>
+
+	<LayoutUpdate code="LayoutCode">
+		<Code>LayoutCode</Code>
+		<Name>Layout Name</Name>
+	</LayoutUpdate>
+
+	..to be continued.
+```
 ## Features
 
 - Components
-  - Add a **Code**, **Name**, Description, Image, and **Allow Nested Components**
-  - Add specific attributes/ options for each component.
-    - **Code**, **Prompt**, **Type**, **Required**
-    - Types: Text Field, Radio Buttons, Drop-down List, Checkbox, Text Area, Image, Product, Category, Link
-    - Editable Display Order
+	- Add a **Code**, **Name**, Description, Image, and **Allow Nested Components**
+	- Add specific attributes/ options for each component.
+		- **Code**, **Prompt**, **Type**, **Required**
+		- Types: Text Field, Radio Buttons, Drop-down List, Checkbox, Text Area, Image, Product, Category, Link
+		- Editable Display Order
 - Layouts
-  - Add a **Code**, **Name**
-  - Selecting a layout will give you the option to Duplicate it (you will enter a new code/name).
-  - Add Components, Remove Components, Update Components
-  - Drag & Drop UI to quickly re-arrange components
-  - Image Preview for components (if there is an image set)
-  - Image Preview for component options (image type only)
-  - Product/ Category/ Page Batchlist Popups (when allowed for attribute types: product, category, link)
-  - Update button to save all changes (does not save on the fly)
-  
+	- Add a **Code**, **Name**
+	- Selecting a layout will give you the option to Duplicate it (you will enter a new code/name).
+	- Add Components, Remove Components, Update Components
+	- Drag & Drop UI to quickly re-arrange components
+	- Image Preview for components (if there is an image set)
+	- Image Preview for component options (image type only)
+	- Product/ Category/ Page Batchlist Popups (when allowed for attribute types: product, category, link)
+	- Update button to save all changes (does not save on the fly)
+	
 
 ## Random Screenshots
 
