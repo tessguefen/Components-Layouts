@@ -76,7 +76,8 @@
 	LayoutValue_Update_Lowlevel( layout_value )
 	LayoutValue_Update( layout_value var )
 	LayoutValue_Delete( layout_value )
-	
+	LayoutValue_Load_All( layouts_components_id, output var )
+
 	Layout_Components_Save( layout_id, layout_nodes var, deleted_components var )
 	Layout_Components_Save_Lowlevel( layout_id, layout_nodes var )
 	Layout_Components_Delete_Lowlevel( layout_id, deleted_nodes var )
@@ -107,6 +108,12 @@
 	JSON_Layouts_Load_Query( module var )
 	JSON_Component_Attrs_Load_Query( module var )
 	JSON_Components_Load_All( module var )
+
+	LayoutValueReferencesInsert( layout_component_id, attr_id, value )
+	LayoutValueReferencesUpdate( layout_component_id, attr_id, value )
+	LayoutValueReferencesDelete( layout_component_id, attr_id )
+	LayoutValueReferencesDelete_Component( layout_component_id )
+	GeneratedImage_Load_File( file, generated_image var )
 
 </MvCOMMENT>
 
@@ -1510,6 +1517,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponent_Delete_Values" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValueReferencesDelete_Component( l.layout_component_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ?' }"
 			 FIELDS	= "l.layout_component_id">
@@ -1561,6 +1572,10 @@
 			 FIELDS	= "l.layout_value:layouts_components_id, l.layout_value:attr_id, l.layout_value:value">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0001', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT LayoutValueReferencesInsert( l.layout_value:layouts_components_id, l.layout_value:attr_id, l.layout_value:value ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1634,7 +1649,11 @@
 </MvFUNCTION>
 
 
-<MvFUNCTION NAME = "LayoutValue_Update_Lowlevel" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Update_Lowlevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValueReferencesUpdate( l.layout_value:layouts_components_id, l.layout_value:attr_id, l.layout_value:value ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts_Values
 					      SET
@@ -1646,7 +1665,7 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0006', g.MvQUERY_Error ) }">
 	</MvIF>
-	
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -1679,10 +1698,14 @@
 		<MvFUNCTIONRETURN VALUE = "{ LayoutValue_Insert_Lowlevel( l.layout_value ) }">
 	</MvIF>
 
-	<MvFUNCTIONRETURN VALUE = "{ LayoutValue_Update_Lowlevel( l.layout_value ) }">
+	<MvFUNCTIONRETURN VALUE = "{ LayoutValue_Update_Lowlevel( l.layout_value ) }" />
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValueReferencesDelete( l.layout_value:layouts_components_id, l.layout_value:attr_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ? AND attr_id = ?' }"
 			 FIELDS	= "l.layout_value:layouts_components_id, l.layout_value:attr_id">
@@ -1692,6 +1715,28 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
 	</MvIF>
 
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Load_All" PARAMETERS = "layouts_components_id, output var" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Values"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ?' }"
+				FIELDS	= "l.layouts_components_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Values.d.EOF }">
+
+		<MvEVAL EXPR = "{ LayoutValue_Read( l.output[ ++l.count ] ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Values" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Values">
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -2288,4 +2333,105 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
 	</MvIF>
 	[]
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValueReferencesInsert" PARAMETERS = "layout_component_id, attr_id, value" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_ID( l.attr_id, l.attribute ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvIF EXPR = "{ l.attribute:type NE 'image' }">
+		<MvFUNCTIONRETURN VALUE = 1 />
+	</MvIF>
+
+	<MvIF EXPR = "{ [ g.Module_Library_DB ].Image_Load_File( l.value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Increment_RefCount( l.image:id ) }">
+	<MvELSEIF EXPR = "{ GeneratedImage_Load_File( l.value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Increment_RefCount( l.image:image_id ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1 />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValueReferencesUpdate" PARAMETERS = "layout_component_id, attr_id, value" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_ID( l.attr_id, l.attribute ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvIF EXPR = "{ l.attribute:type NE 'image' }">
+		<MvFUNCTIONRETURN VALUE = 1 />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT LayoutValue_Load_Value( l.layout_component_id, l.attr_id, l.prev_value ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvIF EXPR = "{ l.prev_value NE l.value }">
+
+		<MvIF EXPR = "{ [ g.Module_Library_DB ].Image_Load_File( l.prev_value, l.prev_image ) }">
+			<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Library_DB ].Image_Decrement_RefCount( l.prev_image:id ) }">
+		<MvELSEIF EXPR = "{ GeneratedImage_Load_File( l.prev_value, l.prev_image ) }">
+			<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Library_DB ].Image_Decrement_RefCount( l.prev_image:image_id ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ [ g.Module_Library_DB ].Image_Load_File( l.value, l.image ) }">
+			<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Library_DB ].Image_Increment_RefCount( l.image:id ) }">
+		<MvELSEIF EXPR = "{ GeneratedImage_Load_File( l.value, l.image ) }">
+			<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Library_DB ].Image_Increment_RefCount( l.image:image_id ) }">
+		</MvIF>
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1 />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValueReferencesDelete" PARAMETERS = "layout_component_id, attr_id" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_ID( l.attr_id, l.attribute ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvIF EXPR = "{ l.attribute:type NE 'image' }">
+		<MvFUNCTIONRETURN VALUE = 1 />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT LayoutValue_Load_Value( l.layout_component_id, l.attr_id, l.value ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvIF EXPR = "{ [ g.Module_Library_DB ].Image_Load_File( l.value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Decrement_RefCount( l.image:id ) }">
+	<MvELSEIF EXPR = "{ GeneratedImage_Load_File( l.value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Decrement_RefCount( l.image:image_id ) }">
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = 1 />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValueReferencesDelete_Component" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValue_Load_All( l.layout_component_id, l.values ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+
+	<MvFOREACH ITERATOR = "l.value" ARRAY = "l.values">
+		<MvASSIGN NAME = "l.void" VALUE = "{ LayoutValueReferencesDelete( l.layout_component_id, l.value:attr_id ) }">
+	</MvFOREACH>
+	<MvFUNCTIONRETURN VALUE = 1 />
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "GeneratedImage_Load_File" PARAMETERS = "file, generatedimage var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "GeneratedImages"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'GeneratedImages WHERE image = ?' }"
+				FIELDS	= "l.file">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENT-IMAGE-1000', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ GeneratedImages.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "GeneratedImages">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MER-DBP-GIM-00010' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].GeneratedImage_Read( l.generatedimage ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "GeneratedImages">
+
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
