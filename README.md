@@ -2,6 +2,20 @@
 
 ## Notes
 
+feature = provision_store
+```xml
+<MvFUNCTION NAME = "Module_Provision_Store" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
+		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.child_xml:name ) }">
+
+		<MvIF EXPR = "{ l.name EQ 'email_add' }">			<MvEVAL EXPR = "{ Module_Provision_Store_Email_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'email_update' }">	<MvEVAL EXPR = "{ Module_Provision_Store_Email_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'email_delete' }">	<MvEVAL EXPR = "{ Module_Provision_Store_Email_Delete( l.module, l.child_xml ) }">
+		</MvIF>
+	</MvFOREACH>
+</MvFUNCTION>
+```
+
 Potential XML prov. Ideas:
 
 ```xml
