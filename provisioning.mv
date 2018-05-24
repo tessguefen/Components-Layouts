@@ -137,7 +137,12 @@
 <MvFUNCTION NAME = "Module_Provision_Component_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>
 
-		<Component_Delete code="Your_Code_Here" />
+		<ComponentAttribute_Add component="My_Component">
+			<Code>MyAttribute</Code>
+			<Prompt>My Prompt</Prompt>
+			<Type>image</Type>
+			<Required>1</Required>
+		</ComponentAttribute_Add>	
 		
 	</MvCOMMENT>
 
@@ -150,6 +155,28 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Component_Delete( l.component:id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+<MvFUNCTION NAME = "Module_Provision_ComponentAttribute_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component',	l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Load_Code( l.code, l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.componentattribute" MEMBER = "component_id" VALUE = "{ l.component:id }" />
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'R', l.provide_xml,	'Code',		l.componentattribute:code )		OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'R', l.provide_xml,	'Prompt',	l.componentattribute:prompt )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 		'R', l.provide_xml,	'Type',		l.componentattribute:type, 'text,radio,select,checkbox,memo,image,product,category,link', 'text,radio,select,checkbox,memo,image,product,category,link' )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean( 	'R', l.provide_xml,	'Required',	l.componentattribute:required ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Insert( l.componentattribute ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
 </MvFUNCTION>
