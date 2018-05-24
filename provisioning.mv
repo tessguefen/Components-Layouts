@@ -137,12 +137,7 @@
 <MvFUNCTION NAME = "Module_Provision_Component_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>
 
-		<ComponentAttribute_Add component="My_Component">
-			<Code>MyAttribute</Code>
-			<Prompt>My Prompt</Prompt>
-			<Type>image</Type>
-			<Required>1</Required>
-		</ComponentAttribute_Add>	
+		<Component_Delete code="My_Code_Here" />	
 		
 	</MvCOMMENT>
 
@@ -159,6 +154,17 @@
 	</MvIF>
 </MvFUNCTION>
 <MvFUNCTION NAME = "Module_Provision_ComponentAttribute_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<ComponentAttribute_Add component="My_Component">
+			<Code>MyAttribute</Code>
+			<Prompt>My Prompt</Prompt>
+			<Type>image</Type>
+			<Required>1</Required>
+		</ComponentAttribute_Add>	
+		
+	</MvCOMMENT>
+
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component',	l.code ) }">
 		<MvFUNCTIONRETURN>
 	</MvIF>
@@ -179,4 +185,204 @@
 	<MvIF EXPR = "{ NOT ComponentAttrs_Insert( l.componentattribute ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_ComponentAttribute_Update" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<ComponentAttribute_Update component="My_Component" code="Attribute_Code">
+			<Code>MyAttribute</Code>
+			<Prompt>My Prompt</Prompt>
+			<Type>image</Type>
+			<Required>1</Required>
+		</ComponentAttribute_Update>	
+		
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component', l.component_code ) OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Load_Code( l.component_code, l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.component_code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_Code( l.component:id, l.code, l.componentattribute ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component Attribute with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'O', l.provide_xml,	'Code',		l.componentattribute:code )		OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'O', l.provide_xml,	'Prompt',	l.componentattribute:prompt )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 		'O', l.provide_xml,	'Type',		l.componentattribute:type, 'text,radio,select,checkbox,memo,image,product,category,link', 'text,radio,select,checkbox,memo,image,product,category,link' )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean( 	'O', l.provide_xml,	'Required',	l.componentattribute:required ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Update( l.componentattribute ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_ComponentAttribute_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<ComponentAttribute_Delete component="My_Component" code="Attribute_Code" />
+		
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component', l.component_code ) OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Load_Code( l.component_code, l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.component_code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_Code( l.component:id, l.code, l.componentattribute ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component Attribute with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Delete( l.componentattribute:id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+
+ComponentAttrs_Delete
+
+<MvFUNCTION NAME = "Module_Provision_ComponentAttributeOption_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<ComponentAttributeOption_Add component="My_Component" code="Attribute_Code">
+			<Prompt>My Prompt</Prompt>
+		</ComponentAttributeOption_Add>	
+		
+	</MvCOMMENT>
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component', l.component_code ) OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Load_Code( l.component_code, l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.component_code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Load_Code( l.component:id, l.code, l.componentattribute ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component Attribute with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml, 'Prompt', l.componentattributeoption:prompt ) }">
+		<MvFUNCTIONRETURN />
+	</MvIF>
+
+	<MvASSIGN NAME = "l.componentattributeoption" MEMBER = "attr_id" VALUE = "{ l.componentattribute:id }">
+	
+	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.componentattributeoption ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_LayoutComponent_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<LayoutComponent_Add layout="My_Layout_Code">
+			<Component>Component_Code</Component>
+			<Name>Name</Name>
+			<Active>1</Active>
+			<Attributes>
+				<Attribute code="MyAttribute">
+					<Value>My Value Here</Value>
+				</Attribute>
+				<Attribute code="MyAttribute">
+					<Value>My Value Here</Value>
+				</Attribute>
+			</Attributes>
+		</LayoutComponent_Add>	
+		
+	</MvCOMMENT>
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'layout', l.layout_code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.layout_code, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Layout with the code \'' $ l.layout_code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 'R', l.provide_xml, 'Component', l.component_code )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml, 'Name', l.layout_component:name )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean( 'O', l.provide_xml, 'Active',	l.layout_component:active ) }">
+		<MvFUNCTIONRETURN />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Load_Code( l.component_code, l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.component_code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Components_Attrs_Load_All_ID( l.component:id, l.component:attributes ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Could not load attribute for component' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.component_attribute_count" VALUE = "{ miva_array_elements( l.component:attributes ) }">
+
+	<MvIF EXPR = "{ l.component_attribute_count GT 0 }">
+		<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Exists( l.provide_xml, 'Attributes' ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Missing required tag Attributes' ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "layout_id"		VALUE = "{ l.layout:id }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "component_id"	VALUE = "{ l.component:id }">
+
+	<MvIF EXPR = "{ NOT LayoutComponent_Insert( l.layout_component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ l.component_attribute_count GT 0 }">
+		<MvIF EXPR = "{ NOT Module_Provision_LayoutComponent_Attributes( l.provide_xml:tags:Attributes[ 1 ], l.layout_component:id, l.layout_component:component_id ) }">
+			<MvASSIGN NAME = "l.void" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+		</MvIF>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_LayoutComponent_Attributes" PARAMETERS = "provide_xml var, layout_component_id, component_id" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.child_pos"			VALUE = 1>
+	<MvASSIGN NAME = "l.child_count"		VALUE = "{ miva_array_elements( l.provide_xml:children ) }">
+	<MvWHILE EXPR = "{ l.child_pos LE l.child_count }">
+		<MvASSIGN NAME = "l.name"			VALUE = "{ tolower( l.provide_xml:children[ l.child_pos ]:name ) }">
+
+		<MvIF EXPR = "{ l.name NE 'attribute' }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml:children[ l.child_pos ], 'Unknown tag' ) }">
+		</MvIF>
+
+		<MvASSIGN NAME = "l.option" VALUE = "">
+
+		<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml:children[ l.child_pos ], 'code', l.option:code ) OR
+						NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml:children[ l.child_pos ], 'Value', l.option:value ) }">
+			<MvFUNCTIONRETURN>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT ComponentAttrs_Load_Code( l.component_id, l.option:code, l.option:componentattribute ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml:children[ l.child_pos ], 'Component Attribute with the code \'' $ l.option:code $ '\' does not exist' ) }">
+		</MvIF>
+
+		<MvASSIGN NAME = "l.option_count" VALUE = "{ l.option_count + 1 }">
+		<MvASSIGN NAME = "l.option"	MEMBER = "layouts_components_id"	VALUE = "{ l.layout_component_id }">
+		<MvASSIGN NAME = "l.option"	MEMBER = "attr_id"					VALUE = "{ l.option:componentattribute:id }">
+
+		<MvCOMMENT>
+			Need to figure out product, category and link..... & add new tags for it somehow.
+			l.option:componentattribute:type
+		</MvCOMMENT>
+
+		<MvASSIGN NAME = "l.option"	MEMBER = "value"					VALUE = "{ l.option:value }">
+
+		<MvIF EXPR = "{ NOT LayoutValue_Update( l.option ) }">
+			<MvFUNCTIONRETURN>
+		</MvIF>
+
+		<MvASSIGN NAME = "l.child_pos"		VALUE = "{ l.child_pos + 1 }">
+	</MvWHILE>
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>

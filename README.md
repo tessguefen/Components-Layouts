@@ -2,93 +2,68 @@
 
 ## Notes
 
-feature = provision_store
-```xml
-<MvFUNCTION NAME = "Module_Provision_Store" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
-	<MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
-		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.child_xml:name ) }">
-
-		<MvIF EXPR = "{ l.name EQ 'email_add' }">			<MvEVAL EXPR = "{ Module_Provision_Store_Email_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'email_update' }">	<MvEVAL EXPR = "{ Module_Provision_Store_Email_Update( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'email_delete' }">	<MvEVAL EXPR = "{ Module_Provision_Store_Email_Delete( l.module, l.child_xml ) }">
-		</MvIF>
-	</MvFOREACH>
-</MvFUNCTION>
-```
-
-Potential XML prov. Ideas:
+XML Provisioning
 
 ```xml
-<Component_Add>
-	<Code>MyCode</Code>
-	<Name>My Name</Name>
-	<Descrip>My Description</Descrip>
-	<Image>Image/Path.jpg</Image>
-	<Allow_Nest>1</Allow_Nest>
-</Component_Add>
+<Module code="TGCOMPONENTS" feature="util">
+	<Layout_Add>
+		<Code>Your_Code_Here</Code>
+		<Name>Your Name Here</Name>
+	</Layout_Add>
 
-<Component_Update Code="MyCode">
-	<Code>NewCode</Code>
-	<Name>My Name</Name>
-	<Descrip>My Description</Descrip>
-	<Image>Image/Path.jpg</Image>
-	<Allow_Nest>1</Allow_Nest>
-</Component_Update>
+	<Layout_Update code="Your_Code_Here">
+		<Code>Your_New_Code_Here</Code>
+		<Name>Your New Name Here</Name>
+	</Layout_Update>
 
-<ComponentAttribute_Add component="MyComponent">
-	<Code>MyAttribute</Code>
-	<Prompt>My Prompt</Prompt>
-	<Type>image</Type>
-	<Required>1</Required>
-</ComponentAttribute_Add>
+	<Layout_Delete code="Your_Code_Here" />
+	
+	<Component_Add>
+		<Code>Your_Code_Here</Code>
+		<Name>Your Name Here</Name>
+		<Descrip>Your Description</Descrip>
+		<Image>graphics/00000001/leia.png</Image>
+		<Allow_Nest>1</Allow_Nest>
+	</Component_Add>
 
-<ComponentAttribute_Update component="MyComponent" attribute_code="MyAttribute">
-	<Code>MyNewAttribute</Code>
-	<Prompt>My Prompt</Prompt>
-	<Type>image</Type>
-	<Required>1</Required>
-</ComponentAttribute_Add>
+	<Component_Update code="My_Old_Code_Here">
+		<Code>Your_Code_Here</Code>
+		<Name>Your Name Here</Name>
+		<Descrip>Your Description</Descrip>
+		<Image>graphics/00000001/leia.png</Image>
+		<Allow_Nest>1</Allow_Nest>
+	</Component_Update>
 
-<ComponentAttributeOption_Add component="MyComponent" attribute_code="MyAttribute">
-	<Prompt>My Prompt</Prompt>
-</Component>
+	<Component_Delete code="My_Code_Here" />
 
-<ComponentAttributeOption_Update component="MyComponent" attribute_code="MyAttribute" prompt="My Prompt">
-	<Prompt>My New Prompt</Prompt>
-</Component>
+	<ComponentAttribute_Update component="My_Component" code="Attribute_Code">
+		<Code>MyAttribute</Code>
+		<Prompt>My Prompt</Prompt>
+		<Type>image</Type>
+		<Required>1</Required>
+	</ComponentAttribute_Update>
 
-<LayoutAdd>
-	<Code>LayoutCode</Code>
-	<Name>Layout Name</Name>
-</LayoutAdd>
+	<ComponentAttribute_Delete component="My_Component" code="Attribute_Code" />
 
-<LayoutUpdate code="LayoutCode">
-	<Code>LayoutCode</Code>
-	<Name>Layout Name</Name>
-</LayoutUpdate>
+	<ComponentAttributeOption_Add component="My_Component" code="Attribute_Code">
+		<Prompt>My Prompt</Prompt>
+	</ComponentAttributeOption_Add>
 
-<LayoutComponent_Add>
-	<Component>Component_Code</Component>
-	<Name>Some Unique Name I guess</Name>
-	<Attributes>
-		<Attribute code="MyAttribute" value="My Value Here" />
-		<Attribute code="MyAttribute1" value="My Value Here" />
-		<Attribute code="MyAttribute2" value="My Value Here" />
-	</Attributes>
-</LayoutComponent_Add>
+	<LayoutComponent_Add layout="My_Layout_Code">
+		<Component>Component_Code</Component>
+		<Name>Name</Name>
+		<Active>1</Active>
+		<Attributes>
+			<Attribute code="MyAttribute">
+				<Value>My Value Here</Value>
+			</Attribute>
+			<Attribute code="MyAttribute">
+				<Value>My Value Here</Value>
+			</Attribute>
+		</Attributes>
+	</LayoutComponent_Add>
 
-<LayoutComponent_Add>
-	<Component>Component_Code2</Component>
-	<Name>Some Unique Name I guess 2</Name>
-	<Attributes>
-		<Attribute code="MyAttribute" value="My Value Here" />
-		<Attribute code="MyAttribute1" value="My Value Here" />
-		<Attribute code="MyAttribute2" value="My Value Here" />
-	</Attributes>
-	<Parent>Some Unique Name I guess</Name>
-</LayoutComponent_Add>
-
-	..to be continued.
+</Module>
 ```
 ## Features
 

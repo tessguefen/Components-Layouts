@@ -540,6 +540,14 @@
 			<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_add'}">
 			<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_update'}">
+			<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_delete'}">
+			<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Delete( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattributeoption_add'}">
+			<MvEVAL EXPR = "{ Module_Provision_ComponentAttributeOption_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add'}">
+			<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }">
 		</MvIF>
 	</MvFOREACH>
 </MvFUNCTION>

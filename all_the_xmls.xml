@@ -1,8 +1,3 @@
 <Module code="TGCOMPONENTS" feature="util">
-	<ComponentAttribute_Add component="My_Component">
-			<Code>MyAttribute</Code>
-			<Prompt>My Prompt</Prompt>
-			<Type>image</Type>
-			<Required>1</Required>
-		</ComponentAttribute_Add>
+	<ComponentAttribute_Delete component="My_Component" code="test" />
 </Module>
