@@ -1,9 +1,3 @@
 <Module code="TGCOMPONENTS" feature="util">
-	<Component_Add>
-		<Code>Your_Code_Here</Code>
-		<Name>Your Name Here</Name>
-		<Descrip>Your Description</Descrip>
-		<Image>graphics/00000001/leia.png</Image>
-		<Allow_Nest>1</Allow_Nest>
-	</Component_Add>
+	<Component_Delete code="Sup_bro" />
 </Module>

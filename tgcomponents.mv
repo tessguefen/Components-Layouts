@@ -534,10 +534,13 @@
 			<MvEVAL EXPR = "{ Module_Provision_Layout_Update( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'component_add'}">
 			<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_update'}">
+			<MvEVAL EXPR = "{ Module_Provision_Component_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_delete'}">
+			<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
 		</MvIF>
 	</MvFOREACH>
 </MvFUNCTION>
-
 
 <MvINCLUDE FILE = "admin_components.mv">
 <MvINCLUDE FILE = "layout_functions.mv">
