@@ -1,0 +1,37 @@
+<MvCOMMENT>
+	IMPORT
+		Import_Fragment( provide_xml var )
+		PRV_Component_Add( provide_xml var )
+	MISC
+		Add_Status_Field( fields var, code, prompt, initial )
+</MvCOMMENT>
+
+
+<MvFUNCTION NAME = "Import_Fragment" PARAMETERS = "provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.child_pos"		VALUE = 1>
+	<MvASSIGN NAME = "l.child_count"	VALUE = "{ miva_array_elements( l.provide_xml:children ) }">
+	<MvWHILE EXPR = "{ l.child_pos LE l.child_count }">
+		<MvASSIGN NAME = "l.name" VALUE = "{ tolower( l.provide_xml:children[ l.child_pos ]:name ) }">
+
+		<MvIF EXPR = "{ l.name EQ 'component_add' }">
+			<MvEVAL EXPR = "{ PRV_Component_Add( l.provide_xml:children[ l.child_pos ] ) }">
+		</MvIF>
+
+		<MvASSIGN NAME = "l.child_pos"	VALUE = "{ l.child_pos + 1 }">
+	</MvWHILE>
+
+	<MvEVAL EXPR = "{ 'TEST' $ asciichar( 10 ) $ asciichar( 10 ) $ glosub( miva_array_serialize( l.provide_xml ), ',', asciichar( 10 ) ) }">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "PRV_Component_Add" PARAMETERS = "provide_xml var">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Add_Status_Field" PARAMETERS = "fields var, code, prompt, initial" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN       NAME = "l.field_pos"        VALUE = "{ miva_array_max( l.fields ) + 1 }">
+	<MvREFERENCE    NAME = "l.field"            VARIABLE = "{ 'l.fields[' $ l.field_pos $ ']' }">
+	<MvASSIGN       NAME = "l.field:code"       VALUE = "{ l.code }">
+	<MvASSIGN       NAME = "l.field:prompt"     VALUE = "{ l.prompt }">
+	<MvASSIGN       NAME = "l.field:initial"    VALUE = "{ l.initial }">
+</MvFUNCTION>

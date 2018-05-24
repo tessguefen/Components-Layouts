@@ -5,7 +5,7 @@
 	<MvASSIGN NAME = "l.module:version"		VALUE = "1.000">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.00">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Sunshine, Lollipops & Rainbows.">
-	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store">
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -364,7 +364,9 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT g.Admin_Open_Store }"><MvFUNCTIONRETURN></MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
 
 	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module )	}"></MvIF>
@@ -515,7 +517,31 @@
 
 </MvFUNCTION>
 
+
+<MvCOMMENT>
+| ====================================================================================
+|	provision_store
+| ====================================================================================
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_Provision_Store" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
+		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.child_xml:name ) }">
+
+		<MvIF EXPR = "{ l.name EQ 'layout_add' }">
+			<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layout_update'}">
+			<MvEVAL EXPR = "{ Module_Provision_Layout_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_add'}">
+			<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
+		</MvIF>
+	</MvFOREACH>
+</MvFUNCTION>
+
+
 <MvINCLUDE FILE = "admin_components.mv">
 <MvINCLUDE FILE = "layout_functions.mv">
 <MvINCLUDE FILE = "component.mv">
 <MvINCLUDE FILE = "functions.mv">
+<MvINCLUDE FILE = "export_import.mv">
+<MvINCLUDE FILE = "provisioning.mv">

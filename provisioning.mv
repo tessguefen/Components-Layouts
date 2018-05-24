@@ -1,0 +1,120 @@
+<MvCOMMENT>
+	Module_Provision_Layout_Add( module var, provide_xml var )
+	Module_Provision_Layout_Update( module var, provide_xml var )
+	Module_Provision_Layout_Delete( module var, provide_xml var )
+
+	Module_Provision_Component_Add( module var, provide xml )
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Module_Provision_Layout_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<Layout_Add>
+			<Code>Your_Code_Here</Code>
+			<Name>Your Name Here</Name>
+		</Layout_Add>
+
+	</MvCOMMENT>
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 'R', l.provide_xml, 'Code', l.layout:code ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Code must be present.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml, 'Name', l.layout:name ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Name must be present.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Module_Provision_Layout_Update" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<Layout_Update code="Your_Code_Here">
+			<Code>Your_New_Code_Here</Code>
+			<Name>Your New Name Here</Name>
+		</Layout_Update>
+		
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Code must be present.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.code, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Layout with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 'O', l.provide_xml, 'Code', l.layout:code ) }">
+		<MvFUNCTIONRETURN />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'O', l.provide_xml, 'Name', l.layout:name ) }">
+		<MvFUNCTIONRETURN />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Update( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Layout_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<Layout_Delete code="Your_Code_Here" />
+		
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Code must be present.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.code, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Layout with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Delete( l.layout:id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Component_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+
+		<Component_Add>
+			<Code>Your_Code_Here</Code>
+			<Name>Your Name Here</Name>
+			<Descrip>Your Description</Descrip>
+			<Image>graphics/00000001/leia.png</Image>
+			<Allow_Nest>1</Allow_Nest>
+		</Component_Add>
+		
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 'R', l.provide_xml, 'Code', l.component:code ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Code must be present.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml, 'Name', l.component:name ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Name must be present.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'O', l.provide_xml, 'Descrip', l.component:descrip ) }">
+		<MvFUNCTIONRETURN />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'O', l.provide_xml, 'Image', l.component:image ) }">
+		<MvFUNCTIONRETURN />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean( 'R', l.provide_xml, 'Allow_Nest', l.component:allow_children ) }">
+		<MvFUNCTIONRETURN />
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Insert( l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+</MvFUNCTION>
+
