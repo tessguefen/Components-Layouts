@@ -1,3 +1,19 @@
 <Module code="TGCOMPONENTS" feature="util">
-	<ComponentAttribute_Delete component="My_Component" code="test" />
+	<LayoutComponent_Add layout="homepage_slider" component="slide">
+		<Name>Name1</Name>
+		<Active>1</Active>
+		<Parent>test</Parent>
+		<Attributes>
+			<Attribute code="alt_text">
+				<Value>Hiyo</Value>
+			</Attribute>
+			<Attribute code="image">
+				<Value>Hiyo</Value>
+			</Attribute>
+			<Attribute code="link">
+				<LinkType>Product</LinkType>
+				<Value>Product_Code</Value>
+			</Attribute>
+		</Attributes>
+	</LayoutComponent_Add>
 </Module>
