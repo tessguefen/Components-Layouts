@@ -49,19 +49,20 @@ XML Provisioning
 		<Prompt>My Prompt</Prompt>
 	</ComponentAttributeOption_Add>
 
-	<LayoutComponent_Add layout="My_Layout_Code">
-		<Component>Component_Code</Component>
+	<LayoutComponent_Add layout="My_Layout_Code" component="Component_Code">
 		<Name>Name</Name>
 		<Active>1</Active>
+		<Parent>Some Parent</Parent>
 		<Attributes>
 			<Attribute code="MyAttribute">
 				<Value>My Value Here</Value>
 			</Attribute>
-			<Attribute code="MyAttribute">
+			<Attribute code="MyAttributeLink">
+				<LinkType>Product</LinkType>
 				<Value>My Value Here</Value>
 			</Attribute>
 		</Attributes>
-	</LayoutComponent_Add>
+	</LayoutComponent_Add>	
 
 </Module>
 ```
