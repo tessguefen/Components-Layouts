@@ -342,7 +342,7 @@
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Components:Components,TGCOMPONENTS_Sets:Layouts' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Sets:Layouts,TGCOMPONENTS_Components:Components' ) }">
 
 		<MvHIDE FIELDS = "g.Module_Code">
 
@@ -364,9 +364,7 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }"><MvFUNCTIONRETURN></MvIF>
 
 	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module )	}"></MvIF>
