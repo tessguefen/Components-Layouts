@@ -557,14 +557,179 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ExportModule_Export" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Exp_Count" VALUE = "1" />
+
+	<MvIF EXPR = "{ NOT g.Export_Continue }">
+		<MvIF EXPR = "{ fexists( '/' $ g.Export_File ) }">
+			<MvASSIGN NAME = "l.success" VALUE = "{ fdelete( '/' $ g.Export_File ) }">
+		</MvIF>
+		<MvASSIGN NAME = "l.wrapper" VALUE = "<Module code=\"TGCOMPONENTS\" feature=\"util\">">
+		<MvASSIGN NAME = "l.success" VALUE = "{ file_create( '/' $ g.Export_File, 'data', l.wrapper ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ g.Current_Export EQ 'COMPONENTS' }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Start( 'Components Export Progress', 'EXPT' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Show() }">
+		<MvASSIGN NAME = "l.count"	VALUE = "{ Export_Provisioning_Components( l.output ) }">
+	<MvELSEIF EXPR = "{ g.Current_Export EQ 'LAYOUTS' }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Start( 'Layouts Export Progress', 'EXPT' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Show() }">
+		<MvASSIGN NAME = "l.count"	VALUE = "{ Export_Provisioning_Layouts( l.output ) }">
+	<MvCOMMENT>
+	<MvELSE>
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Start( 'Layout Components Export Progress', 'EXPT' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Show() }">
+		<MvASSIGN NAME = "l.count"	VALUE = "{ Export_Provisioning_Component_Layouts( l.output ) }">
+	</MvCOMMENT>
+	</MvIF>
+
+	<MvASSIGN NAME = "l.success" VALUE = "{ file_append( '/' $ g.Export_File, 'data', l.output ) }">
+
+	<MvIF EXPR = "{ NOT g.Export_Continue }">
+		<MvASSIGN NAME = "l.wrapper" VALUE = "</Module>">
+		<MvASSIGN NAME = "l.success" VALUE = "{ file_append( '/' $ g.Export_File, 'data', l.wrapper ) }">
+		<MvIF EXPR = "{ g.Export_SendEmail }">
+			<MvDO FILE = "{ g.Module_Library_Utilities }" NAME = "l.void" VALUE = "{ Send_Email_Attachment( g.Export_Email, g.Export_Email, '', 'Components & Layouts Export', g.Export_File, '/', 'data' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGReviews-SUCCESS-1', 'Review Export Email Sent' ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ g.Current_Export EQ 'COMPONENTS' }">
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( 'Exported Components.' ) }">
+		<MvELSEIF EXPR = "{ g.Current_Export EQ 'LAYOUTS' }">
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( 'Exported Layouts.' ) }">
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( 'Exported Layout Components.' ) }">
+		</MvIF>
+	
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGReviews-SUCCESS-2', 'Reviews Exported to ' $ g.Export_File  ) }">
+	</MvIF>
+
+	<MvHIDE FIELDS = "	g.Exp_Offset,
+						g.Export_Continue,
+						g.Module_Code,
+						g.Exp_Count,
+						g.Offset,
+						g.Export_File,
+						g.Export_SendEmail,
+						g.Export_Email,
+						g.Total_Count,
+						g.Current_Export">
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ExportModule_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Export_File"	VALUE = "{ trim( g.Export_File ) }">
+	<MvASSIGN NAME = "g.Current_Export" VALUE = "{ trim( g.Current_Export ) }">
+
+	<MvIF EXPR = "{ len( g.Export_File ) EQ 0 }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Export_File', 'Please specify a file' ) }">
+	<MvELSE>
+		<MvIF EXPR = "{ '/' IN g.Export_File }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Export_File', 'Please do not include a path in the file name' ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvASSIGN NAME = "g.Export_Email" 	VALUE = "{ trim( g.Export_Email ) }">
+
+	<MvIF EXPR = "{ g.Export_SendEmail }">
+		<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Email( g.Export_Email ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Export_Email', 'Please specify a valid email address' ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL g.Current_Export }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Current_Export', 'Please select an export.' ) }">
+	<MvELSEIF EXPR = "{ g.Current_Export NE 'COMPONENTS' AND g.Current_Export NE 'LAYOUTS' AND g.Current_Export NE 'LAYOUT_COMPONENTS' }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Current_Export', 'Please select an export.' ) }">
+	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ExportModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvIF EXPR = "{ ISNULL g.Export_File }">
+		<MvASSIGN NAME = "g.Export_File" VALUE = "component_layouts.xml">
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL g.Current_Export }">
+		<MvASSIGN NAME = "g.Current_Export" VALUE = "COMPONENTS" />
+	</MvIF>
+
+	<MvIF EXPR = "{ g.Export_Continue EQ 1 }">
+		<script type="text/javascript">
+			function exp_continue()
+			{
+				document.forms[ Screen ].submit();
+			}
+			window.onload = exp_continue;
+		</script>
+
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_End() }">
+
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Export Components & Layouts to XML', 'EXPT', '' ) }">
+		<MvIF EXPR = "{ g.Current_Export EQ 'COMPONENTS' }">
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_JavaScript( 'Exporting Components...', 'EXPT', 'EXPT' ) }">
+		<MvELSEIF EXPR = "{ g.Current_Export EQ 'LAYOUTS' }">
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_JavaScript( 'Exporting Layouts...', 'EXPT', 'EXPT' ) }">
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_JavaScript( 'Exporting Layouts Components...', 'EXPT', 'EXPT' ) }">
+		</MvIF>
+			
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Export Components &amp; Layouts to XML', 'EXPT', '' ) }">
+		<MvDO FILE = "{ g.Module_Admin }" NAME = "l.ok" VALUE = "{ BeginContent() }">
+
+		<div style="font-family: sans-serif;">
+			<MvHIDE FIELDS = "g.Module_Code">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Draw_FieldSet_Open( 'Export Settings', 150 ) }">
+				<table cellspacing="5">
+					<tr>
+						<td valign="top"><strong>Export Components & Layouts to File:</strong></td>
+						<td width="100%">
+							<input type="text" name="Export_File" size="40" value="{ encodeentities( g.Export_File ) }"><br />
+							<em>This is located in the private directory. This will be deleted if it already exists.</em>
+						</td>
+					</tr>
+					<tr>
+						<td valign="top"><strong>Export:</strong></td>
+						<td width="100%">
+							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'COMPONENTS', g.Current_Export, 'Components' ) }"><br />
+							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'LAYOUTS', g.Current_Export, 'Layouts' ) }"><br />
+							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'LAYOUT_COMPONENTS', g.Current_Export, 'Layout Components' ) }">
+						</td>
+					</tr>
+					<tr>
+						<td valign="top">Email File To:</td>
+						<td width="100%">
+							<MvIF EXPR = "{ NOT g.Export_SendEmail }">
+								<label><input type="radio" name="Export_SendEmail" value="0" checked>Do Not Email<br></label>
+								<input type="radio" name="Export_SendEmail" value="1">
+							<MvELSE>
+								<label><input type="radio" name="Export_SendEmail" value="0">Do Not Email<br></label>
+								<input type="radio" name="Export_SendEmail" value="1" checked>
+							</MvIF>
+							<MvIF EXPR = "{ ISNULL g.Export_Email }">
+								<MvASSIGN NAME = "g.Export_Email" VALUE = "{ g.Store:email }">
+							</MvIF>
+							<input type="text" size="40" name="Export_Email" value="{ encodeentities( g.Export_Email ) }">
+						</td>
+					</tr>
+				</table>
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Draw_FieldSet_Close() }">
+		</div>
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_HTML() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Buttons( 'Export', 'EXPT' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 

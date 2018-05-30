@@ -1,37 +1,99 @@
 <MvCOMMENT>
-	IMPORT
-		Import_Fragment( provide_xml var )
-		PRV_Component_Add( provide_xml var )
-	MISC
-		Add_Status_Field( fields var, code, prompt, initial )
 </MvCOMMENT>
 
+<MvFUNCTION NAME = "Export_Provisioning_Components" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Exp_Count ) }">
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
 
-<MvFUNCTION NAME = "Import_Fragment" PARAMETERS = "provide_xml var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.child_pos"		VALUE = 1>
-	<MvASSIGN NAME = "l.child_count"	VALUE = "{ miva_array_elements( l.provide_xml:children ) }">
-	<MvWHILE EXPR = "{ l.child_pos LE l.child_count }">
-		<MvASSIGN NAME = "l.name" VALUE = "{ tolower( l.provide_xml:children[ l.child_pos ]:name ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponents', 's' ) }">
 
-		<MvIF EXPR = "{ l.name EQ 'component_add' }">
-			<MvEVAL EXPR = "{ PRV_Component_Add( l.provide_xml:children[ l.child_pos ] ) }">
-		</MvIF>
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
 
-		<MvASSIGN NAME = "l.child_pos"	VALUE = "{ l.child_pos + 1 }">
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0001', g.MvOPENVIEW_Error ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, g.Offset, g.Count) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+	<MvASSIGN NAME = "g.Total_Count" VALUE = "{ l.total_count }">
+
+	<MvWHILE EXPR = "{ ( NOT TGComponents.d.EOF ) AND ( ( g.Exp_Count EQ 0 ) OR ( l.count LT g.Exp_Count ) ) }">
+		<MvASSIGN NAME = "g.Offset" VALUE = "{ g.Offset + 1 }">
+		<MvEVAL EXPR = "{ Export_Component( l.output[++l.count] ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( g.Offset, g.Total_Count ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
 	</MvWHILE>
 
-	<MvEVAL EXPR = "{ 'TEST' $ asciichar( 10 ) $ asciichar( 10 ) $ glosub( miva_array_serialize( l.provide_xml ), ',', asciichar( 10 ) ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
 
-	<MvFUNCTIONRETURN VALUE = 1>
+	<MvASSIGN NAME = "g.Export_Continue" VALUE = "1" />
+
+	<MvIF EXPR = "{ g.Offset GE g.Total_Count }">
+		<MvASSIGN NAME = "g.Export_Continue" VALUE = "0" />
+	</MvIF>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "PRV_Component_Add" PARAMETERS = "provide_xml var">
+<MvFUNCTION NAME = "Export_Component" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ Component_Read( l.component ) }">
+
+	<MvCAPTURE VARIABLE = "l.output">
+		<MIVA STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+		
+		<Component_Add>
+			<Code><MvEVAL EXPR = "{ l.component:code }"></Code>
+			<Name><MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:name ) }"></Name>
+			<MvIF EXPR = "{ l.component:descrip }">
+				<Descrip><MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:descrip ) }"></Descrip>
+			</MvIF>
+			<MvIF EXPR = "{ l.component:image }">
+				<Image><MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:image ) }"></Image>
+			</MvIF>
+			<MvIF EXPR = "{ l.component:allow_children }">
+				<Allow_Nest>1</Allow_Nest>
+			<MvELSE>
+				<Allow_Nest>0</Allow_Nest>
+			</MvIF>
+		</Component_Add>
+		<MIVA STANDARDOUTPUTLEVEL = "">
+	</MvCAPTURE>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Add_Status_Field" PARAMETERS = "fields var, code, prompt, initial" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN       NAME = "l.field_pos"        VALUE = "{ miva_array_max( l.fields ) + 1 }">
-	<MvREFERENCE    NAME = "l.field"            VARIABLE = "{ 'l.fields[' $ l.field_pos $ ']' }">
-	<MvASSIGN       NAME = "l.field:code"       VALUE = "{ l.code }">
-	<MvASSIGN       NAME = "l.field:prompt"     VALUE = "{ l.prompt }">
-	<MvASSIGN       NAME = "l.field:initial"    VALUE = "{ l.initial }">
+<MvFUNCTION NAME = "Export_Provisioning_Layouts" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Exp_Count ) }">
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGLayouts', 's' ) }">
+
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0003', g.MvOPENVIEW_Error ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGLayouts', l.search_sql, l.search_fields, g.Offset, g.Count) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0004', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+	<MvASSIGN NAME = "g.Total_Count" VALUE = "{ l.total_count }">
+
+	<MvWHILE EXPR = "{ ( NOT TGLayouts.d.EOF ) AND ( ( g.Exp_Count EQ 0 ) OR ( l.count LT g.Exp_Count ) ) }">
+		<MvASSIGN NAME = "g.Offset" VALUE = "{ g.Offset + 1 }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( g.Offset, g.Total_Count ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+
+	<MvASSIGN NAME = "g.Export_Continue" VALUE = "1" />
+
+	<MvIF EXPR = "{ g.Offset GE g.Total_Count }">
+		<MvASSIGN NAME = "g.Export_Continue" VALUE = "0" />
+	</MvIF>
 </MvFUNCTION>
