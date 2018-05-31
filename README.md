@@ -36,6 +36,13 @@ XML Provisioning
 
 	<Component_Delete code="My_Code_Here" />
 
+	<ComponentAttribute_Add component="My_Component">
+		<Code>MyAttribute</Code>
+		<Prompt>My Prompt</Prompt>
+		<Type>image</Type>
+		<Required>1</Required>
+	</ComponentAttribute_Add>
+
 	<ComponentAttribute_Update component="My_Component" code="Attribute_Code">
 		<Code>MyAttribute</Code>
 		<Prompt>My Prompt</Prompt>

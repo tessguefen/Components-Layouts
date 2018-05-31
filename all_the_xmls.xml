@@ -1,18 +1,17 @@
 <Module code="TGCOMPONENTS" feature="util">
-	<LayoutComponent_Add layout="homepage_slider" component="slide">
-		<Name>Name1</Name>
+	<Layout_Add>
+		<Code>homepage_slider</Code>
+		<Name><![CDATA[Homepage Slider]]></Name>
+	</Layout_Add>
+	<LayoutComponent_Add layout="homepage_slider" component="slider_wrap">
+		<Name><![CDATA[test]]></Name>
 		<Active>1</Active>
-		<Parent>test</Parent>
 		<Attributes>
-			<Attribute code="alt_text">
-				<Value>Hiyo</Value>
+			<Attribute code="title">
+				<Value><![CDATA[test]]></Value>
 			</Attribute>
-			<Attribute code="image">
-				<Value>Hiyo</Value>
-			</Attribute>
-			<Attribute code="link">
-				<LinkType>Product</LinkType>
-				<Value>Product_Code</Value>
+			<Attribute code="test">
+				<Value>cat-display</Value>
 			</Attribute>
 		</Attributes>
 	</LayoutComponent_Add>

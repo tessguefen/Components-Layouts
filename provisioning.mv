@@ -349,6 +349,7 @@
 
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "layout_id"		VALUE = "{ l.layout:id }">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "component_id"	VALUE = "{ l.component:id }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "disp_order"		VALUE = "{ LayoutComponent_DispOrder_Last( l.layout_component:id, l.layout_component:parent_id ) }">
 
 	<MvIF EXPR = "{ NOT LayoutComponent_Insert( l.layout_component ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, g.TGCOMPONENTS_Error:message ) }">
@@ -404,17 +405,27 @@
 			<MvIF EXPR = "{ l.option:componentattribute:type EQ 'product' }">
 				<MvASSIGN NAME = "l.option:_product:id" VALUE = "0" />
 				<MvASSIGN NAME = "l.option:_product:code" VALUE = "{ l.option:value }" />
-				<MvIF EXPR = "{ [ g.Module_Library_DB ].Product_Load_Code( l.option:_product:code, l.loaded_product ) }">
-					<MvASSIGN NAME = "l.option:_product:id" VALUE = "{ l.loaded_product:id }" />
+				<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Product_Load_Code( l.option:_product:code, l.loaded_product ) }">
+					<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ 'Product Code \'' $ l.option:_product:code $ '\' was not found.' }">
+					<MvFUNCTIONRETURN />
 				</MvIF>
+				<MvASSIGN NAME = "l.option:_product:id" VALUE = "{ l.loaded_product:id }" />
 				<MvASSIGN NAME = "l.option" MEMBER = "value" VALUE = "{ miva_array_serialize( l.option:_product ) }" />
 			<MvELSEIF EXPR = "{ l.option:componentattribute:type EQ 'category' }">
 				<MvASSIGN NAME = "l.option:_category:id" VALUE = "0" />
 				<MvASSIGN NAME = "l.option:_category:code" VALUE = "{ l.option:value }" />
-				<MvIF EXPR = "{ [ g.Module_Library_DB ].Category_Load_Code( l.option:_category:code, l.loaded_category ) }">
-					<MvASSIGN NAME = "l.option:_category:id" VALUE = "{ l.loaded_category:id }" />
+				<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Category_Load_Code( l.option:_category:code, l.loaded_category ) }">
+					<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ 'Category Code \'' $ l.option:_category:code $ '\' was not found.' }">
+					<MvFUNCTIONRETURN />
 				</MvIF>
+				<MvASSIGN NAME = "l.option:_category:id" VALUE = "{ l.loaded_category:id }" />
 				<MvASSIGN NAME = "l.option" MEMBER = "value" VALUE = "{ miva_array_serialize( l.option:_category ) }" />
+			<MvELSEIF EXPR = "{ l.option:componentattribute:type EQ 'imagetype' }">
+				<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].ImageType_Load_Code( l.option:value, l.imagetype ) }">
+					<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ 'Image Type Code \'' $ l.option:value $ '\' was not found.' }">
+					<MvFUNCTIONRETURN />
+				</MvIF>
+				<MvASSIGN NAME = "l.option:value" VALUE = "{ l.imagetype:id }">
 			</MvIF>
 
 		</MvIF>

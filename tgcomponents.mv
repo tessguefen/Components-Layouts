@@ -575,12 +575,6 @@
 		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Start( 'Layouts Export Progress', 'EXPT' ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Show() }">
 		<MvASSIGN NAME = "l.count"	VALUE = "{ Export_Provisioning_Layouts( l.output ) }">
-	<MvCOMMENT>
-	<MvELSE>
-		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Start( 'Layout Components Export Progress', 'EXPT' ) }">
-		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Show() }">
-		<MvASSIGN NAME = "l.count"	VALUE = "{ Export_Provisioning_Component_Layouts( l.output ) }">
-	</MvCOMMENT>
 	</MvIF>
 
 	<MvASSIGN NAME = "l.success" VALUE = "{ file_append( '/' $ g.Export_File, 'data', l.output ) }">
@@ -597,8 +591,6 @@
 			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( 'Exported Components.' ) }">
 		<MvELSEIF EXPR = "{ g.Current_Export EQ 'LAYOUTS' }">
 			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( 'Exported Layouts.' ) }">
-		<MvELSE>
-			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( 'Exported Layout Components.' ) }">
 		</MvIF>
 	
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGReviews-SUCCESS-2', 'Reviews Exported to ' $ g.Export_File  ) }">
@@ -640,7 +632,7 @@
 
 	<MvIF EXPR = "{ ISNULL g.Current_Export }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Current_Export', 'Please select an export.' ) }">
-	<MvELSEIF EXPR = "{ g.Current_Export NE 'COMPONENTS' AND g.Current_Export NE 'LAYOUTS' AND g.Current_Export NE 'LAYOUT_COMPONENTS' }">
+	<MvELSEIF EXPR = "{ g.Current_Export NE 'COMPONENTS' AND g.Current_Export NE 'LAYOUTS' }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Current_Export', 'Please select an export.' ) }">
 	</MvIF>
 
@@ -675,8 +667,6 @@
 			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_JavaScript( 'Exporting Components...', 'EXPT', 'EXPT' ) }">
 		<MvELSEIF EXPR = "{ g.Current_Export EQ 'LAYOUTS' }">
 			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_JavaScript( 'Exporting Layouts...', 'EXPT', 'EXPT' ) }">
-		<MvELSE>
-			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_JavaScript( 'Exporting Layouts Components...', 'EXPT', 'EXPT' ) }">
 		</MvIF>
 			
 		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Element_ExportProgressBar_CSS() }">
@@ -700,7 +690,6 @@
 						<td width="100%">
 							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'COMPONENTS', g.Current_Export, 'Components' ) }"><br />
 							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'LAYOUTS', g.Current_Export, 'Layouts' ) }"><br />
-							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'LAYOUT_COMPONENTS', g.Current_Export, 'Layout Components' ) }">
 						</td>
 					</tr>
 					<tr>

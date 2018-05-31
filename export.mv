@@ -22,7 +22,8 @@
 
 	<MvWHILE EXPR = "{ ( NOT TGComponents.d.EOF ) AND ( ( g.Exp_Count EQ 0 ) OR ( l.count LT g.Exp_Count ) ) }">
 		<MvASSIGN NAME = "g.Offset" VALUE = "{ g.Offset + 1 }">
-		<MvEVAL EXPR = "{ Export_Component( l.output[++l.count] ) }">
+		<MvASSIGN NAME = "l.count" VALUE = "{ l.count + 1 }">
+		<MvEVAL EXPR = "{ Export_Component( l.output ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( g.Offset, g.Total_Count ) }">
 
 		<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
@@ -39,27 +40,60 @@
 
 <MvFUNCTION NAME = "Export_Component" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
 	<MvEVAL EXPR = "{ Component_Read( l.component ) }">
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
 
 	<MvCAPTURE VARIABLE = "l.output">
 		<MIVA STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-		
-		<Component_Add>
-			<Code><MvEVAL EXPR = "{ l.component:code }"></Code>
-			<Name><MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:name ) }"></Name>
+		<MvEVAL EXPR = "{ asciichar( 10 ) }">
+		<MvEVAL EXPR = "{ l.tab $ '<Component_Add>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Code>' $ l.component:code $ '</Code>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Name>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:name ) $ '</Name>' }">
 			<MvIF EXPR = "{ l.component:descrip }">
-				<Descrip><MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:descrip ) }"></Descrip>
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Descrip>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:descrip ) $ '</Descrip>' }">
 			</MvIF>
 			<MvIF EXPR = "{ l.component:image }">
-				<Image><MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:image ) }"></Image>
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Image>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:image ) $ '</Image>' }">
 			</MvIF>
 			<MvIF EXPR = "{ l.component:allow_children }">
-				<Allow_Nest>1</Allow_Nest>
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Allow_Nest>1</Allow_Nest>' }">
 			<MvELSE>
-				<Allow_Nest>0</Allow_Nest>
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Allow_Nest>0</Allow_Nest>' }">
 			</MvIF>
-		</Component_Add>
+		<MvEVAL EXPR = "{ l.tab $ '</Component_Add>' }">
 		<MIVA STANDARDOUTPUTLEVEL = "">
 	</MvCAPTURE>
+	<MvASSIGN NAME = "l.output" VALUE = "{ l.output $ Export_Component_Attributes( l.component ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Component_Attributes" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvIF EXPR = "{ NOT Components_Attrs_Load_All_ID( l.component:id, l.component:attributes ) }">
+		<MvFUNCTIONRETURN/>
+	</MvIF>
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
+	<MvCAPTURE VARIABLE = "l.attribute_output">
+		<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.component:attributes">
+			<MvEVAL EXPR = "{ asciichar( 10 ) }">
+			<MvEVAL EXPR = "{ l.tab $ '<ComponentAttribute_Add component="' $ l.component:code $ '">' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Code>' $ l.attribute:code $ '</Code>' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Prompt>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.attribute:prompt ) $ '</Prompt>' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Type>' $ l.attribute:type $ '</Type>' }">
+				<MvIF EXPR = "{ l.attribute:required }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Required>1</Required>' }">
+				<MvELSE>
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Required>0</Required>' }">
+				</MvIF>
+			<MvEVAL EXPR = "{ l.tab $ '</ComponentAttribute_Add>' }">
+			<MvIF EXPR = "{ ( l.attribute:type EQ 'select' OR l.attribute:type EQ 'radio' ) AND l.attribute:options }">
+				<MvFOREACH ITERATOR = "l.option" ARRAY = "l.attribute:options">
+					<MvEVAL EXPR = "{ asciichar( 10 ) }">
+					<MvEVAL EXPR = "{ l.tab $ '<ComponentAttributeOption_Add component="' $ l.component:code $ '" code="' $ l.attribute:code $ '">' }">
+						<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Prompt>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.option:prompt ) $ '</Prompt>' }">
+					<MvEVAL EXPR = "{ l.tab $ '</ComponentAttributeOption_Add>' }">
+				</MvFOREACH>
+			</MvIF>
+		</MvFOREACH>
+	</MvCAPTURE>
+	<MvFUNCTIONRETURN VALUE = "{ l.attribute_output }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Export_Provisioning_Layouts" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
@@ -84,6 +118,9 @@
 	<MvWHILE EXPR = "{ ( NOT TGLayouts.d.EOF ) AND ( ( g.Exp_Count EQ 0 ) OR ( l.count LT g.Exp_Count ) ) }">
 		<MvASSIGN NAME = "g.Offset" VALUE = "{ g.Offset + 1 }">
 
+		<MvASSIGN NAME = "l.count" VALUE = "{ l.count + 1 }">
+		<MvEVAL EXPR = "{ Export_Layout( l.output ) }">
+
 		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( g.Offset, g.Total_Count ) }">
 
 		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts" ROWS = 1>
@@ -96,4 +133,83 @@
 	<MvIF EXPR = "{ g.Offset GE g.Total_Count }">
 		<MvASSIGN NAME = "g.Export_Continue" VALUE = "0" />
 	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Layout" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ Layout_Read( l.layout ) }">
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
+
+	<MvCAPTURE VARIABLE = "l.output">
+		<MIVA STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+		<MvEVAL EXPR = "{ asciichar( 10 ) }">
+		<MvEVAL EXPR = "{ l.tab $ '<Layout_Add>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Code>' $ l.layout:code $ '</Code>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Name>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.layout:name ) $ '</Name>' }">
+		<MvEVAL EXPR = "{ l.tab $ '</Layout_Add>' }">
+		<MIVA STANDARDOUTPUTLEVEL = "">
+	</MvCAPTURE>
+	<MvEVAL EXPR = "{ Export_Layout_Components( l.layout, l.null_parent, l.components_output ) }">
+	<MvASSIGN NAME = "l.output" VALUE = "{ l.output $ l.components_output }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Layout_Components" PARAMETERS = "layout var, parent var, output var"  STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Layout_Components_Load_Parent_Lowlevel( l.layout:id, l.parent:id, l.components, l.count ) }">
+		<MvCAPTURE VARIABLE = "l.new_output">
+			<MIVA STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+			<MvEVAL EXPR = "{ asciichar( 10 ) }">
+			<MvEVAL EXPR = "{ l.tab $ '<LayoutComponent_Add layout="' $ l.layout:code $ '" component="' $ l.component:component:code $ '">' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Name>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.component:name ) $ '</Name>' }">
+				<MvIF EXPR = "{ l.component:active }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Active>1</Active>' }">
+				<MvELSE>
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Active>0</Active>' }">
+				</MvIF>
+				<MvIF EXPR = "{ l.parent:id GT 0 }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Parent>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.parent:name ) $ '</Parent>' }">
+				</MvIF>
+				<MvIF EXPR = "{ miva_array_elements( l.component:component:attributes ) }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Attributes>' }">
+						<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.component:component:attributes">
+							<MvIF EXPR = "{ ISNULL l.attribute:value }">
+								<MvFOREACHCONTINUE />
+							</MvIF>
+							<MvEVAL EXPR = "{ asciichar( 10 ) }">
+							<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ '<Attribute code="' $ l.attribute:code $ '">' }">
+								<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<LinkType>' $ Export_LinkType( l.attribute:link:type ) $ '</LinkType>' }">
+									<MvIF EXPR = "{ l.attribute:link:value }">
+										<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.attribute:link:value $ '</Value>' }">
+									</MvIF>
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.attribute:product:code $ '</Value>' }">
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.attribute:category:code $ '</Value>' }">
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'imagetype' }">
+									<MvIF EXPR = "{ [ g.Module_Library_DB ].ImageType_Load_ID( l.attribute:value, l.imagetype ) }">
+										<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.imagetype:code $ '</Value>' }">
+									</MvIF>
+								<MvELSE>
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.attribute:value ) $ '</Value>' }">
+								</MvIF>
+							<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ '</Attribute>' }">
+						</MvFOREACH>
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '</Attributes>' }">
+				</MvIF>
+			<MvEVAL EXPR = "{ l.tab $ '</LayoutComponent_Add>' }">
+			<MIVA STANDARDOUTPUTLEVEL = "">
+		</MvCAPTURE>
+		<MvASSIGN NAME = "l.output" VALUE = "{ l.output $ l.new_output }">
+		<MvIF EXPR = "{ l.component:component:allow_children EQ 1 }">
+			<MvASSIGN NAME = "l.component:node_count" VALUE = "{ Export_Layout_Components( l.layout, l.component, l.output ) }">
+		</MvIF>
+	</MvFOREACH>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_LinkType" PARAMETERS = "link_type" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.link_type EQ 'N' }"><MvFUNCTIONRETURN VALUE = "None" /></MvIF>
+	<MvIF EXPR = "{ l.link_type EQ 'U' }"><MvFUNCTIONRETURN VALUE = "URL" /></MvIF>
+	<MvIF EXPR = "{ l.link_type EQ 'P' }"><MvFUNCTIONRETURN VALUE = "Product" /></MvIF>
+	<MvIF EXPR = "{ l.link_type EQ 'C' }"><MvFUNCTIONRETURN VALUE = "Category" /></MvIF>
+	<MvIF EXPR = "{ l.link_type EQ 'G' }"><MvFUNCTIONRETURN VALUE = "Page" /></MvIF>
 </MvFUNCTION>
