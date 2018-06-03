@@ -128,7 +128,7 @@
 	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ TGComponents.d.allow_children }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Component_Insert_Lowlevel" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Insert_Lowlevel" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents' ) }">
 
 	<MvQUERY NAME	= "Merchant"
@@ -138,7 +138,7 @@
 						  ( ?, ?, ?, ?, ?, ? )' }"
 			 FIELDS	= "l.component:id, l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0001', 'Could not insert Component.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -173,7 +173,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Component_Insert_Lowlevel( l.component ) }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.Error_Message }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -181,13 +181,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Component_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponents"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', 'Could not load component.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponents.d.EOF }">
@@ -201,13 +201,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Component_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponents"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE code = ?' }"
 				FIELDS	= "l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0004', 'Could not load component.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponents.d.EOF }">
@@ -221,7 +221,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Component_Update_LowLevel" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Update_LowLevel" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponents
 						  SET
@@ -234,7 +234,7 @@
 							id		= ?' }"
 			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children, l.component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0006', 'Could not update component.' ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -277,7 +277,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ Component_Update_LowLevel( l.component ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Component_Delete" PARAMETERS = "component_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Delete" PARAMETERS = "component_id" STANDARDOUTPUTLEVEL = ""  ERROROUTPUTLEVEL = "">
 	<MvIF EXPR = "{ Component_Layout_Reference( l.component_id, l.layouts ) }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "This component is referenced in the following layout(s): ">
 		<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -296,9 +296,9 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE id = ?' }"
 			 FIELDS	= "l.component_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete component.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0007', 'Could not delete component.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttrs_Delete_Component( l.component_id ) }">
@@ -307,13 +307,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Component_Layout_Reference" PARAMETERS = "component_id, layouts var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Layout_Reference" PARAMETERS = "component_id, layouts var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT DISTINCT( lc.layout_id ) AS layout_id, l.code AS layout_code  FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components lc LEFT JOIN ' $ g.Store_Table_Prefix $ 'TGLayouts l ON lc.layout_id = l.id WHERE component_id = ?' }"
 				FIELDS	= "l.component_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not load layouts referencing the component.' ) }">
 	</MvIF>
 	
 	<MvASSIGN NAME = "l.count" VALUE = "0" />
@@ -375,7 +375,7 @@
 	<MvASSIGN NAME = "l.layout" MEMBER = "name"	VALUE = "{ TGLayouts.d.name }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Insert_Lowlevel" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Insert_Lowlevel" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.layout" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGLayouts' ) }">
 
 	<MvQUERY NAME	= "Merchant"
@@ -385,7 +385,7 @@
 						  ( ?, ?, ? )' }"
 			 FIELDS	= "l.layout:id, l.layout:code, l.layout:name">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0001', 'Could not add Layout.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -420,7 +420,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Insert_Lowlevel( l.layout ) }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.Error_Message }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -428,13 +428,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-LAYOUTS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-LAYOUTS-0002', 'Could not load layout.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayouts.d.EOF }">
@@ -448,13 +448,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Load_Code" PARAMETERS = "code, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE code = ?' }"
 				FIELDS	= "l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0004', 'Could not load layout.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayouts.d.EOF }">
@@ -468,7 +468,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Update_LowLevel" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Update_LowLevel" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts
 						  SET
@@ -478,7 +478,7 @@
 							id		= ?' }"
 			 FIELDS	= "l.layout:code, l.layout:name, l.layout:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0006', 'Could not update layout.' ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -521,14 +521,14 @@
 	<MvFUNCTIONRETURN VALUE = "{ Layout_Update_LowLevel( l.layout ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Delete" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Delete" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE id = ?' }"
 			 FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete layout.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0007', 'Could not delete layout.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Delete_Components( l.layout_id ) }">
@@ -579,7 +579,7 @@
 	<MvASSIGN NAME = "l.component_attrs" MEMBER = "disp_order"	VALUE = "{ TGComponent_Attrs.d.disp_order }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentAttrs_Insert_Lowlevel" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentAttrs_Insert_Lowlevel" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component_attrs" MEMBER = "id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Attrs' ) }">
 	<MvASSIGN NAME = "l.component_attrs" MEMBER = "disp_order"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Attrs_Disp_Order' ) }">
 
@@ -590,7 +590,7 @@
 						  ( ?, ?, ?, ?, ?, ?, ? )' }"
 			 FIELDS	= "l.component_attrs:id, l.component_attrs:component_id, l.component_attrs:code, l.component_attrs:prompt, l.component_attrs:type, l.component_attrs:required, l.component_attrs:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0001', 'Could not add attribute to component.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -650,7 +650,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttrs_Insert_Lowlevel( l.component_attrs ) }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.Error_Message }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -676,13 +676,13 @@
 	<MvFUNCTIONRETURN VALUE = 1 />
 </MvFUNCTION>
 
-<MvFUNCTION NAME ="ComponentAttrs_Load_Code" PARAMETERS = "component_id, code, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME ="ComponentAttrs_Load_Code" PARAMETERS = "component_id, code, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponent_Attrs"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ? AND code = ?' }"
 				FIELDS	= "l.component_id, l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0002', 'Could not load component attribute.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
@@ -696,13 +696,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentAttrs_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentAttrs_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponent_Attrs"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0004', 'Could not load component attribute.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
@@ -716,7 +716,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentAttrs_Update_Lowlevel" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentAttrs_Update_Lowlevel" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs
 						  SET
@@ -728,7 +728,7 @@
 							id		= ?' }"
 			 FIELDS	= "l.component_attrs:code, l.component_attrs:prompt, l.component_attrs:type, l.component_attrs:required, l.component_attrs:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0006', 'Could not update component attribute.' ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -800,26 +800,26 @@
 	<MvFUNCTIONRETURN VALUE = "{ ComponentAttrs_Update_Lowlevel( l.component_attrs ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentAttrs_Delete" PARAMETERS = "component_attr_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentAttrs_Delete" PARAMETERS = "component_attr_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE id = ?' }"
 			 FIELDS	= "l.component_attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete component attribute.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', 'Could not delete component attribute.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = "{ ComponentOptions_Delete_Attr( l.component_attr_id ) }" />
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentAttrs_Delete_Component" PARAMETERS = "component_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentAttrs_Delete_Component" PARAMETERS = "component_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponent_Attrs"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ?' }"
 				FIELDS	= "l.component_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not delete component attribute.' ) }">
 	</MvIF>
 	
 	<MvASSIGN NAME = "l.count" VALUE = "0" />
@@ -937,7 +937,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentAttrs_Update_Offsets" PARAMETERS = "component_id, fields var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentAttrs_Update_Offsets" PARAMETERS = "component_id, fields var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.pastend_count"				VALUE = 0>
 
 	<MvASSIGN NAME = "l.field_pos"				VALUE = 1>
@@ -961,7 +961,7 @@
 																				   'g.ComponentAttrs_ID, g.Field_component_id',
 																				   l.fields[ l.field_pos ]:offset - 1,
 																				   1 ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0009', g.MvOPENVIEW_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0009', 'Could not load display order for component attribute.' ) }">
 		</MvIF>
 
 		<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
@@ -1003,7 +1003,7 @@
 														disp_order >= ? AND component_id = ?' }" 
 													FIELDS = "l.disp_order, l.component_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0010', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0010', 'Could not update display order for component attribute.' ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Attrs_Disp_Order' ) }">
@@ -1022,7 +1022,7 @@
 														id = ? AND component_id = ?' }" 
 													FIELDS = "l.disp_order, g.ComponentAttrs_ID, l.component_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0011', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0011', 'Could not update display order for component attribute.' ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.field_pos"	VALUE = "{ l.field_pos + 1 }">
@@ -1044,7 +1044,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentAttrs_Update_Offsets_PastEnd" PARAMETERS = "component_id, pastend var, pastend_count" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentAttrs_Update_Offsets_PastEnd" PARAMETERS = "component_id, pastend var, pastend_count" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvCOMMENT>
 	|
 	| Process records moving past the end.  These records must be sorted in ascending order.
@@ -1066,7 +1066,7 @@
 													id = ? AND component_id = ?' }" 
 												FIELDS = "l.disp_order, g.ComponentAttrs_ID, l.component_id">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0012', g.MvQUERY_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0012', 'Could not update display order for component attribute.' ) }">
 		</MvIF>
 		
 		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
@@ -1075,7 +1075,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentOptions_Update_Offsets" PARAMETERS = "attr_id, options var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentOptions_Update_Offsets" PARAMETERS = "attr_id, options var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.pastend_count"				VALUE = 0>
 
 	<MvASSIGN NAME = "l.option_pos"				VALUE = 1>
@@ -1099,7 +1099,7 @@
 																				   'g.Option_Order_AttrID, g.Option_attr_id',
 																				   l.options[ l.option_pos ]:offset - 1,
 																				   1 ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0009', g.MvOPENVIEW_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0009', 'Could not load display order for attribute option.' ) }">
 		</MvIF>
 
 		<MvIF EXPR = "{ TGComponent_Options.d.EOF }">
@@ -1141,7 +1141,7 @@
 														disp_order >= ? AND attr_id = ?' }" 
 													FIELDS = "l.disp_order, l.attr_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0010', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0010', 'Could not update display order for attribute option.' ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Options_Disp_Order' ) }">
@@ -1160,7 +1160,7 @@
 														id = ? AND attr_id = ?' }" 
 													FIELDS = "l.disp_order, g.Option_Order_AttrID, l.attr_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0011', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0011', 'Could not update display order for attribute option.' ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.option_pos"	VALUE = "{ l.option_pos + 1 }">
@@ -1182,7 +1182,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentOptions_Update_Offsets_PastEnd" PARAMETERS = "attr_id, pastend var, pastend_count" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentOptions_Update_Offsets_PastEnd" PARAMETERS = "attr_id, pastend var, pastend_count" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvCOMMENT>
 	|
 	| Process records moving past the end.  These records must be sorted in ascending order.
@@ -1204,7 +1204,7 @@
 													id = ? AND attr_id = ?' }" 
 												FIELDS = "l.disp_order, g.Option_Order_AttrID, l.attr_id">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0012', g.MvQUERY_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0012', 'Could not update display order for attribute option.' ) }">
 		</MvIF>
 		
 		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
@@ -1220,7 +1220,7 @@
 	<MvASSIGN NAME = "l.component_option" MEMBER = "disp_order"	VALUE = "{ TGComponent_Options.d.disp_order }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentOption_Insert_Lowlevel" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentOption_Insert_Lowlevel" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component_option" MEMBER = "id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Options' ) }">
 	<MvASSIGN NAME = "l.component_option" MEMBER = "disp_order"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Options_Disp_Order' ) }">
 
@@ -1231,7 +1231,7 @@
 						  ( ?, ?, ?, ? )' }"
 			 FIELDS	= "l.component_option:id, l.component_option:attr_id, l.component_option:prompt, l.component_option:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0001', 'Could not insert option.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1260,7 +1260,7 @@
 
 
 	<MvIF EXPR = "{ NOT ComponentOption_Insert_Lowlevel( l.component_option ) }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.Error_Message }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -1268,13 +1268,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentOption_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentOption_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponent_Options"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0004', 'Could not load option.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponent_Options.d.EOF }">
@@ -1288,7 +1288,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentOption_Update_Lowlevel" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentOption_Update_Lowlevel" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponent_Options SET 
 			 					prompt = ? 
@@ -1296,7 +1296,7 @@
 			 					id = ?' }"
 				FIELDS	= "l.component_option:prompt, l.component_option:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0006', 'Could not update option.' ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1326,27 +1326,27 @@
 	<MvFUNCTIONRETURN VALUE = "{ ComponentOption_Update_Lowlevel( l.component_option ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentOption_Delete" PARAMETERS = "component_option_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentOption_Delete" PARAMETERS = "component_option_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE id = ?' }"
 			 FIELDS	= "l.component_option_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete option.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0007', 'Could not delete option.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ComponentOptions_Delete_Attr" PARAMETERS = "component_attr_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentOptions_Delete_Attr" PARAMETERS = "component_attr_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE attr_id = ?' }"
 			 FIELDS	= "l.component_attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete all options.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0008', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTOPTION-0008', 'Could not delete all options.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1393,7 +1393,7 @@
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponent_Insert_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponent_Insert_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGLayouts_Components' ) }">
 
 	<MvQUERY NAME	= "Merchant"
@@ -1403,7 +1403,7 @@
 						  ( ?, ?, ?, ?, ?, ?, ? )' }"
 			 FIELDS	= "l.layout_component:id, l.layout_component:layout_id, l.layout_component:component_id, l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0001', 'Could not add component to layout.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1443,7 +1443,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutComponent_Insert_Lowlevel( l.layout_component ) }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.Error_Message }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -1451,13 +1451,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponent_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponent_Load_ID" PARAMETERS = "id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0004', 'Could not load layout component.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayouts_Components.d.EOF }">
@@ -1471,7 +1471,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponent_Update_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponent_Update_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
 					      SET
@@ -1483,7 +1483,7 @@
 						    id		= ?' }"
 			 FIELDS	= "l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0006', 'Could not update layout component.' ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1501,14 +1501,14 @@
 	<MvFUNCTIONRETURN VALUE = "{ LayoutComponent_Update_Lowlevel( l.layout_component ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponent_Delete" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponent_Delete" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE id = ?' }"
 			 FIELDS	= "l.layout_component_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete layout component.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "id">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', 'Could not delete layout component.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutComponent_Delete_Values( l.layout_component_id ) }">
@@ -1518,7 +1518,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponent_Delete_Values" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponent_Delete_Values" PARAMETERS = "layout_component_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT LayoutValueReferencesDelete_Component( l.layout_component_id ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -1527,21 +1527,21 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ?' }"
 			 FIELDS	= "l.layout_component_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete values of layout component.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "id">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', 'Could not delete values of layout component.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Delete_Components" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Delete_Components" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ?' }"
 				FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not load components for layout.' ) }">
 	</MvIF>
 	
 	<MvASSIGN NAME = "l.count" VALUE = "0" />
@@ -1565,7 +1565,7 @@
 	<MvASSIGN NAME = "l.layout_value" MEMBER = "value"					VALUE = "{ TGLayouts_Values.d.value }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Insert_Lowlevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Insert_Lowlevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Values
 						  ( layouts_components_id, attr_id, value )
@@ -1573,7 +1573,7 @@
 						  ( ?, ?, ? )' }"
 			 FIELDS	= "l.layout_value:layouts_components_id, l.layout_value:attr_id, l.layout_value:value">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0001', 'Could not insert value for layout component.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutValueReferencesInsert( l.layout_value:layouts_components_id, l.layout_value:attr_id, l.layout_value:value ) }">
@@ -1613,7 +1613,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutValue_Insert_Lowlevel( l.layout_value ) }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.Error_Message }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -1621,13 +1621,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Load" PARAMETERS = "layouts_components_id, attr_id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Load" PARAMETERS = "layouts_components_id, attr_id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Values"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ? AND attr_id = ?' }"
 				FIELDS	= "l.layouts_components_id, l.attr_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0004', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0004', 'Could not load value for layout component attribute' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayouts_Values.d.EOF }">
@@ -1651,7 +1651,7 @@
 </MvFUNCTION>
 
 
-<MvFUNCTION NAME = "LayoutValue_Update_Lowlevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Update_Lowlevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT LayoutValueReferencesUpdate( l.layout_value:layouts_components_id, l.layout_value:attr_id, l.layout_value:value ) }">
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>
@@ -1665,7 +1665,7 @@
 						    attr_id = ?' }"
 			 FIELDS	= "l.layout_value:value, l.layout_value:layouts_components_id, l.layout_value:attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0006', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0006', 'Could not update values for layout component.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1703,7 +1703,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ LayoutValue_Update_Lowlevel( l.layout_value ) }" />
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT LayoutValueReferencesDelete( l.layout_value:layouts_components_id, l.layout_value:attr_id ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -1712,21 +1712,21 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ? AND attr_id = ?' }"
 			 FIELDS	= "l.layout_value:layouts_components_id, l.layout_value:attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "{ g.MvQUERY_Error }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Could not delete value for layout.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "id">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', 'Could not delete value for layout.' ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Load_All" PARAMETERS = "layouts_components_id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Load_All" PARAMETERS = "layouts_components_id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Values"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Values WHERE layouts_components_id = ?' }"
 				FIELDS	= "l.layouts_components_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not load values for layout.' ) }">
 	</MvIF>
 	
 	<MvASSIGN NAME = "l.count" VALUE = "0" />
@@ -1843,13 +1843,13 @@
 	<MvFUNCTIONRETURN VALUE = "{ l.count }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Components_Load_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Components_Load_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent = ? ORDER BY disp_order' }"
 				FIELDS	= "l.layout_id, l.parent_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not load layout components for parent component.' ) }">
 	</MvIF>
 	
 	<MvASSIGN NAME = "l.count" VALUE = "0" />
@@ -1880,13 +1880,13 @@
 </MvFUNCTION>
 
 
-<MvFUNCTION NAME = "Components_Attrs_Load_All_ID" PARAMETERS = "component_id, return var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Components_Attrs_Load_All_ID" PARAMETERS = "component_id, return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponent_Attrs"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs WHERE component_id = ? ORDER BY disp_order' }"
 				FIELDS	= "l.component_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', 'Could not load attributes for component.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponent_Attrs.d.EOF }">
@@ -1920,13 +1920,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Components_Options_Load_Attr" PARAMETERS = "attr_id, return var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Components_Options_Load_Attr" PARAMETERS = "attr_id, return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponent_Options"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponent_Options WHERE attr_id = ? ORDER BY disp_order' }"
 				FIELDS	= "l.attr_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', 'Could not load options for attribute.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponent_Options.d.EOF }">
@@ -1990,13 +1990,13 @@
 	<MvFUNCTIONRETURN VALUE = "{ l.count }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Runtime_Layout_Components_Load_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Runtime_Layout_Components_Load_Parent_Lowlevel" PARAMETERS = "layout_id, parent_id, components var, count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent = ? AND active = 1 ORDER BY disp_order' }"
 				FIELDS	= "l.layout_id, l.parent_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not load components for parent (runtime).' ) }">
 	</MvIF>
 	
 	<MvASSIGN NAME = "l.count" VALUE = "0" />
@@ -2116,11 +2116,11 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Components_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+<MvFUNCTION NAME = "JSON_Components_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
 	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
-	<MvASSIGN NAME = "g.Offset"			VALUE = "{ trim( g.Offset ) }">
-	<MvASSIGN NAME = "g.Count"			VALUE = "{ trim( g.Count ) }">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Count ) }">
 	<MvASSIGN NAME = "l.search_query"	VALUE = "">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
@@ -2165,11 +2165,11 @@
 	}
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Layouts_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+<MvFUNCTION NAME = "JSON_Layouts_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
 	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
-	<MvASSIGN NAME = "g.Offset"			VALUE = "{ trim( g.Offset ) }">
-	<MvASSIGN NAME = "g.Count"			VALUE = "{ trim( g.Count ) }">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Count ) }">
 	<MvASSIGN NAME = "l.search_query"	VALUE = "">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
@@ -2211,12 +2211,11 @@
 	}
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Component_Attrs_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+<MvFUNCTION NAME = "JSON_Component_Attrs_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "g.Filter" VALUE = "{ trim( g.Filter ) }">
 	<MvASSIGN NAME = "g.Sort" VALUE = "{ trim( g.Sort ) }">
-	<MvASSIGN NAME = "g.Offset" VALUE = "{ trim( g.Offset ) }">
-	<MvASSIGN NAME = "g.Count" VALUE = "{ trim( g.Count ) }">
-	<MvASSIGN NAME = "g.Data_ID" VALUE = "{ trim( g.Data_ID ) }">
+	<MvASSIGN NAME = "g.Offset" VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count" VALUE = "{ int( g.Count ) }">
 
 	<MvASSIGN NAME = "l.search_query"				VALUE = "">
 
@@ -2424,7 +2423,7 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'GeneratedImages WHERE image = ?' }"
 				FIELDS	= "l.file">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENT-IMAGE-1000', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENT-IMAGE-1000', 'Could not load image.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ GeneratedImages.d.EOF }">
@@ -2438,7 +2437,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponentParent_Load_Name" PARAMETERS = "name, layout_id, output var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponentParent_Load_Name" PARAMETERS = "name, layout_id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT Layouts_Components.* FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components Layouts_Components
@@ -2461,7 +2460,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponent_DispOrder_Last" PARAMETERS = "layout_id, parent_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponent_DispOrder_Last" PARAMETERS = "layout_id, parent_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT disp_order FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent_id = ? ORDER BY disp_order DESC LIMIT 1' }"

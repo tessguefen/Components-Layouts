@@ -95,7 +95,7 @@
 
 	<MvIF EXPR = "{ l.screen EQ 'Layout' }">
 		<MvIF EXPR = "{ NOT Layout_Load_ID( g.Layout_ID, l.layout ) }">
-			Could not load Screen for Layout ID: <MvEVAL EXPR = "{ g.Layout_ID }">.
+			Could not load Screen for Layout ID: <MvEVAL EXPR = "{ encodeentities( g.Layout_ID ) }">.
 		<MvELSE>
 			<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components">
 

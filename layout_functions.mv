@@ -5,12 +5,12 @@
 </MvCOMMENT>
 
 
-<MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "return var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponents"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents' }">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', 'Could not load all Components.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponents.d.EOF }">

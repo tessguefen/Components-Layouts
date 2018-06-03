@@ -4,7 +4,7 @@
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
 	<MvASSIGN NAME = "l.module:version"		VALUE = "1.000">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.00">
-	<MvASSIGN NAME = "l.module:description"	VALUE = "Sunshine, Lollipops & Rainbows.">
+	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export">
 </MvFUNCTION>
 
@@ -15,7 +15,7 @@
 </MvCOMMENT>
 
 
-<MvFUNCTION NAME = "Module_Install_Store" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Module_Install_Store" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvCOMMENT>
 	|
 	|	Create TGComponents table.
@@ -41,14 +41,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_1 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1001', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1001', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_2 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1002', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1002', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -77,14 +77,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1004', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1004', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( component_id, code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1005', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1005', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -110,14 +110,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1007', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1007', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( attr_id, prompt )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1008', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1008', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -142,14 +142,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1010', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1010', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1011', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1011', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -178,14 +178,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1013', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1013', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( parent, disp_order )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1014', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1014', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -210,7 +210,7 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Values_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Values ( layouts_components_id, attr_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1016', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1016', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Values.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -584,7 +584,7 @@
 		<MvASSIGN NAME = "l.success" VALUE = "{ file_append( '/' $ g.Export_File, 'data', l.wrapper ) }">
 		<MvIF EXPR = "{ g.Export_SendEmail }">
 			<MvDO FILE = "{ g.Module_Library_Utilities }" NAME = "l.void" VALUE = "{ Send_Email_Attachment( g.Export_Email, g.Export_Email, '', 'Components & Layouts Export', g.Export_File, '/', 'data' ) }">
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGReviews-SUCCESS-1', 'Review Export Email Sent' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGCOMPONENTS-SUCCESS-1', 'Review Export Email Sent' ) }">
 		</MvIF>
 
 		<MvIF EXPR = "{ g.Current_Export EQ 'COMPONENTS' }">
@@ -593,7 +593,7 @@
 			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( 'Exported Layouts.' ) }">
 		</MvIF>
 	
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGReviews-SUCCESS-2', 'Reviews Exported to ' $ g.Export_File  ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGCOMPONENTS-SUCCESS-2', 'Reviews Exported to ' $ g.Export_File  ) }">
 	</MvIF>
 
 	<MvHIDE FIELDS = "	g.Exp_Offset,
