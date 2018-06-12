@@ -26,10 +26,10 @@
 				QUERY = "{ 'CREATE TABLE ' $ g.Store_Table_Prefix $ 'TGComponents
 							(
 								id				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
-								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
-								descrip			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
-								image			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
+								code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
+								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
+								descrip			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
+								image			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								allow_children	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
@@ -41,14 +41,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_1 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1001', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1001', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_2 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1002', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1002', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -62,9 +62,9 @@
 							(
 								id				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								component_id		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
-								prompt			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
-								type			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
+								code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
+								prompt			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
+								type			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								required		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ ',
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
@@ -77,14 +77,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1004', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1004', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( component_id, code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1005', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1005', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -98,7 +98,7 @@
 							(
 								id				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								attr_id			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								prompt			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
+								prompt			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
@@ -110,14 +110,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1007', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1007', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( attr_id, prompt )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1008', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1008', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -130,8 +130,8 @@
 				QUERY = "{ 'CREATE TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts
 							(
 								id				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
-								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ '
+								code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
+								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
@@ -142,14 +142,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1010', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1010', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1011', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1011', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -164,7 +164,7 @@
 								id				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								layout_id		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								component_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 255 )		$ ',
+								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								parent			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								active			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ ',
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ '
@@ -178,14 +178,14 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1013', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1013', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( parent, disp_order )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1014', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1014', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>
@@ -210,7 +210,7 @@
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Values_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Values ( layouts_components_id, attr_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1016', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Values.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1016', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Values.' ) }">
 	</MvIF>
 
 	<MvCOMMENT>

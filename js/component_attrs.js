@@ -7,7 +7,7 @@ function ComponentAttrs_Batchlist_Load_Query( filter, sort, offset, count, callb
 								'&Sort=' + encodeURIComponent( sort ) +
 								'&Offset=' + encodeURIComponent( offset ) +
 								'&Count=' + encodeURIComponent( count ) +
-								'&component_id=' + component_id,
+								'&component_id=' + encodeURIComponent( component_id ),
 								delegator );
 }
 
@@ -26,14 +26,14 @@ function ComponentAttrs_Batchlist_Option_Function( parentlist, fieldlist, _funct
 									   'admin',
 									   'TGCOMPONENTS',
 									   _function,
-									   'Attr_ID=' + parentlist.id,
+									   'Attr_ID=' + encodeURIComponent( parentlist.id ),
 									   fieldlist,
 									   delegator );
 }
 
 function ComponentAttrs_Batchlist_DisplayOrder( fields, _function, callback, delegator ) {
 	var i;
-	var parameters = 'component_id=' + component_id;
+	var parameters = 'component_id=' + encodeURIComponent( component_id );
 	for ( i = 0; i < fields.length; i++ ) {
 		parameters += ( parameters.length ? '&' : '' ) + encodeURIComponent( fields[ i ].name ) + '=' + encodeURIComponent( fields[ i ].value );
 	}

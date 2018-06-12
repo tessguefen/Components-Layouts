@@ -99,7 +99,7 @@
 		<MvELSE>
 			<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components">
 
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Layout: ' $ l.layout:name, l.layout:name, '' ) }">
+				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Layout: ' $ encodeentities( l.layout:name ), encodeentities( l.layout:name ), '' ) }">
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
 				<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Layout' ) }">
@@ -135,9 +135,9 @@
 		</MvIF>
 	<MvELSEIF EXPR = "{ l.screen EQ 'Component' }">
 		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
-			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ g.Component_ID }">.
+			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ encodeentities( g.Component_ID ) }">.
 		<MvELSE>
-			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Component: ' $ l.component:name, l.component:name, '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Component: ' $ encodeentities( l.component:name ), encodeentities( l.component:name ), '' ) }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Attributes' ) }">

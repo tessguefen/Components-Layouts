@@ -330,11 +330,11 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ g.Name }">
-	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
-	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ g.Image }">
-	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Descrip ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Image ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Allow_Children ) }">
 
 	<MvIF EXPR = "{ NOT Component_Insert( l.component ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -344,12 +344,12 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ g.Id }">
-	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ g.Name }">
-	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ g.Descrip }">
-	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ g.Image }">
-	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ g.Allow_Children }">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Descrip ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Image ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Allow_Children ) }">
 
 	<MvIF EXPR = "{ NOT Component_Update( l.component ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -359,6 +359,7 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvIF EXPR = "{ NOT Component_Delete( g.Id ) }">
 		<MvIF EXPR = "{ g.TGCOMPONENTS_Error:name EQ 'referenced_component' }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGCOMPONENTS_Error', g.TGCOMPONENTS_Error:message ) }">
@@ -539,8 +540,8 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.layout" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.layout" MEMBER = "name"				VALUE = "{ g.Name }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "name"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
 
 	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -550,9 +551,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.layout" MEMBER = "id"				VALUE = "{ g.Id }">
-	<MvASSIGN NAME = "l.layout" MEMBER = "code"			VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.layout" MEMBER = "name"			VALUE = "{ g.Name }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "id"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "code"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "name"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
 
 	<MvIF EXPR = "{ NOT Layout_Update( l.layout ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -562,6 +563,7 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvIF EXPR = "{ NOT Layout_Delete( g.Id ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
@@ -838,11 +840,11 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"			VALUE = "{ g.Component_Id }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "type"				VALUE = "{ g.type }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "required"			VALUE = "{ g.Required }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Component_Id ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Prompt ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "type"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.type ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "required"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Required ) }">
 
 	<MvIF EXPR = "{ NOT ComponentAttrs_Insert( l.component_attr ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -852,12 +854,12 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"				VALUE = "{ g.Id }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"		VALUE = "{ g.Component_Id }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "type"				VALUE = "{ g.type }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "required"			VALUE = "{ g.Required }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"		VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Component_Id ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Prompt ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "type"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.type ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "required"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Required ) }">
 
 	<MvIF EXPR = "{ NOT ComponentAttrs_Update( l.component_attr ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -867,6 +869,7 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvIF EXPR = "{ NOT ComponentAttrs_Delete( g.Id ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
@@ -1353,8 +1356,8 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentOption_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"			VALUE = "{ g.Attr_ID }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Attr_ID ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Prompt ) }">
 
 	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.component_attr ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -1364,9 +1367,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentOption_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"				VALUE = "{ g.Id }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"			VALUE = "{ g.Attr_ID }">
-	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ g.Prompt }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Attr_ID ) }">
+	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"			VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Prompt ) }">
 
 	<MvIF EXPR = "{ NOT ComponentOption_Update( l.component_attr ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -1376,6 +1379,7 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentOption_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvIF EXPR = "{ NOT ComponentOption_Delete( g.Id ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
 	</MvIF>
@@ -2093,8 +2097,8 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Duplicate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.layout" MEMBER = "code"				VALUE = "{ g.Code }">
-	<MvASSIGN NAME = "l.layout" MEMBER = "name"				VALUE = "{ g.Name }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.layout" MEMBER = "name"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
 
 	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
@@ -2152,7 +2156,7 @@
 					"name" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.name ) }">",
 					"descrip" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.descrip ) }">",
 					"image" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.image ) }">",
-					"allow_children" : <MvEVAL EXPR = "{ TGComponents.d.allow_children }">
+					"allow_children" : <MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Boolean( TGComponents.d.allow_children ) }">
 					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
 					<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
 					</MvWHILE>
@@ -2423,7 +2427,7 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'GeneratedImages WHERE image = ?' }"
 				FIELDS	= "l.file">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Library_Filename_Utilities ].Error( 'TGCOMPONENT-IMAGE-1000', 'Could not load image.' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-IMAGE-1000', 'Could not load image.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ GeneratedImages.d.EOF }">
