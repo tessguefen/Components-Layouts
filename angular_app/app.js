@@ -130,6 +130,10 @@
 			}
 		}
 
+		$scope.slideToggle = function( node ) {
+			node.hide_nodes = !node.hide_nodes;
+		}
+
 
 		$scope.newComponent = function( scope ) {
 			var nodeData = scope.$modelValue;
