@@ -57,6 +57,10 @@
 				<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 			</span>
 
+			<span ng-if="data.can_add && data.can_edit" ng-click="duplicateComponent( parent, node )" data-nodrag class="layoutcomponent_button mm9_button_light" title="Duplicate Component">
+				<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
+			</span>
+
 			<span ng-if="data.can_delete" ng-click="removeComponent( this, node )" data-nodrag class="layoutcomponent_button mm9_button_light" title="Delete Component">
 				<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 			</span>
@@ -67,7 +71,7 @@
 			</span>
 		</span>
 	</div>
-	<ol ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ui-tree-nodes="" ng-model="node.nodes">
+	<ol ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.nodes">
 		<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp_nodes_hidden': node.hide_nodes }">
 		</li>
 	</ol>
@@ -75,7 +79,7 @@
 
 <div ui-tree>
 	<ol ui-tree-nodes="" ng-model="data.layout.nodes" id="tree-root">
-		<li ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp_nodes_hidden': node.hide_nodes }" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+		<li ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp_nodes_hidden': node.hide_nodes }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
 	</ol>
 </div>
 

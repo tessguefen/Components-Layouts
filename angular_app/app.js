@@ -143,6 +143,25 @@
 			$scope.openPopup( nodeData );
 		}
 
+		$scope.removeIdAndParentId = function( node ) {
+			node.id = 0;
+			node.parent = 0;
+			angular.forEach( node.nodes, function(child) {
+				$scope.removeIdAndParentId( child );
+			});
+		}
+
+		$scope.duplicateComponent = function( parent, node ) {
+			if( $window.confirm('Are you sure you want to duplicate this?') ) {
+				var nodeCopy = angular.copy( node );
+				$scope.removeIdAndParentId( nodeCopy );
+
+				if ( parent.nodes.length === 0 ) parent.nodes = [];
+				parent.nodes.push( nodeCopy );
+			}
+		}
+
+
 		$scope.addComponentTopLevel = function() {
 			$scope.newComponent( $scope.data.layout );
 		}
