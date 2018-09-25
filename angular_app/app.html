@@ -11,9 +11,15 @@
 }
 .layout_mm_dialog input[type=text],
 .layout_mm_dialog select,
-.layout_mm_dialog textarea {
+.layout_mm_dialog textarea,
+.layout_mm_dialog .datetimepicker-value {
 	border: 1px solid #d5d5d5;
 	padding: 6px 4px;
+}
+.layout_mm_dialog .datetimepicker-value {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
 }
 .layout_mm_dialog input[type=checkbox] {
 	position: relative;
@@ -194,6 +200,11 @@
 									<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
 								</select>
 							</td>
+							<td valign="top" width="100%" ng-if="attribute.type == 'datetime'">
+								<span class="datetimepicker-value" ng-if="attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ dateTimeFormatted( attribute.value ) }}</span>
+								<span class="datetimepicker-value" ng-if="!attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ attribute.prompt }}</span>
+								<input id="js-attribute_{{ attribute.id }}" type="hidden" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}"" />
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -318,6 +329,11 @@
 									<option value="">-- Select Image Type --</option>
 									<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
 								</select>
+							</td>
+							<td valign="top" width="100%" ng-if="attribute.type == 'datetime'">
+								<span class="datetimepicker-value" ng-if="attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ dateTimeFormatted( attribute.value ) }}</span>
+								<span class="datetimepicker-value" ng-if="!attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ attribute.prompt }}</span>
+								<input id="js-attribute_{{ attribute.id }}" type="hidden" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}"" />
 							</td>
 						</tr>
 					</table>

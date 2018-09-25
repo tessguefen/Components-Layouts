@@ -662,16 +662,17 @@
 
 <MvFUNCTION NAME = "Validate_ComponentAttr_Type" PARAMETERS = "type" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{
-		l.type NE 'radio' AND
-		l.type NE 'select' AND
-		l.type NE 'checkbox' AND
-		l.type NE 'text' AND
-		l.type NE 'memo' AND
-		l.type NE 'image' AND
-		l.type NE 'product' AND
-		l.type NE 'category' AND
-		l.type NE 'link'	AND
-		l.type NE 'imagetype'
+		l.type NE 'radio'		AND
+		l.type NE 'select'		AND
+		l.type NE 'checkbox'	AND
+		l.type NE 'text'		AND
+		l.type NE 'memo'		AND
+		l.type NE 'image'		AND
+		l.type NE 'product'		AND
+		l.type NE 'category'	AND
+		l.type NE 'link'		AND
+		l.type NE 'imagetype'	AND
+		l.type NE 'datetime'
 	}">
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>

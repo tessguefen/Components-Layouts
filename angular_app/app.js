@@ -354,6 +354,26 @@
 			};
 			image_dialog.Show();
 		}
+
+		$scope.dateTimePopup = function( attr, field ) {
+			var dateTimePicker;
+			if ( attr.value ) {
+				dateTimePicker = new MMDateTimePicker( new Date( attr.value ) );
+			} else {
+				dateTimePicker = new MMDateTimePicker( new Date() );
+			}
+			dateTimePicker.oncomplete = function( date ) {
+				$scope.$apply(function() {
+					attr.value = date.getTime();
+				});
+			};
+			dateTimePicker.Show();
+		}
+
+		$scope.dateTimeFormatted = function( date ) {
+			var d = new Date( date );
+			return d.toLocaleString();
+		}
 	}]);
 
 })( window, window.angular );
