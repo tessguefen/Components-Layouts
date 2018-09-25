@@ -336,7 +336,9 @@
 	</MvIF>
 	
 	<MvIF EXPR = "{ NOT Components_Attrs_Load_All_ID( l.component:id, l.component:attributes ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Could not load attribute for component' ) }">
+		<MvCOMMENT>
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Could not load attribute for component' ) }">
+		</MvCOMMENT>
 	</MvIF>
 
 	<MvASSIGN NAME = "l.component_attribute_count" VALUE = "{ miva_array_elements( l.component:attributes ) }">
