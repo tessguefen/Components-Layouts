@@ -2,8 +2,8 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.002">
-	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.00">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.003">
+	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.06">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export">
 </MvFUNCTION>
@@ -14,6 +14,12 @@
 		UI Updates
 		- Styled Top Level Components
 		- Added Collapse Toggle
+	1.002
+		Bug Fixes
+		- Import Issue with components with no attributes.
+	1.003
+		UI Updates
+		- Added "datetime" attribute for a Date/Time picker. Returns timestamp.
 </MvCOMMENT>
 
 <MvCOMMENT>

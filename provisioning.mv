@@ -428,6 +428,8 @@
 					<MvFUNCTIONRETURN />
 				</MvIF>
 				<MvASSIGN NAME = "l.option:value" VALUE = "{ l.imagetype:id }">
+			<MvELSEIF EXPR = "{ l.option:componentattribute:type EQ 'datetime' }">
+				<MvASSIGN NAME = "l.option:value" VALUE = "{ int( l.option:value ) }">
 			</MvIF>
 
 		</MvIF>
