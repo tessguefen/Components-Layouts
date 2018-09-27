@@ -358,7 +358,8 @@
 		$scope.dateTimePopup = function( attr, field ) {
 			var dateTimePicker;
 			if ( attr.value ) {
-				dateTimePicker = new MMDateTimePicker( new Date( attr.value ) );
+				var nDate = attr.value * 1000;
+				dateTimePicker = new MMDateTimePicker( new Date( nDate ) );
 			} else {
 				dateTimePicker = new MMDateTimePicker( new Date() );
 			}
