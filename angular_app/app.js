@@ -364,15 +364,20 @@
 			}
 			dateTimePicker.oncomplete = function( date ) {
 				$scope.$apply(function() {
-					attr.value = date.getTime();
+					attr.value = date.getTime() / 1000;
 				});
 			};
 			dateTimePicker.Show();
 		}
 
 		$scope.dateTimeFormatted = function( date ) {
+			date = date * 1000;
 			var d = new Date( date );
 			return d.toLocaleString();
+		}
+
+		$scope.removeDateTime = function( attr ) {
+			attr.value = '';
 		}
 	}]);
 

@@ -24,6 +24,13 @@
 	cursor: pointer;
 	min-width: 180px;
 }
+.layout_mm_dialog .datepicker-remove {
+	font-size: 10px;
+    margin-left: 0.25rem;
+    display: inline-block;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+}
 .layout_mm_dialog .datepicker-placeholder {
 	color: rgba(0,0,0,0.55);
 }
@@ -208,6 +215,7 @@
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'datetime'">
 								<span class="datetimepicker-value" ng-if="attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ dateTimeFormatted( attribute.value ) }}</span>
+								<span class="datetimepicker-remove" ng-if="attribute.value" ng-click="removeDateTime( attribute )">Remove</span>
 								<span class="datetimepicker-value datepicker-placeholder" ng-if="!attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">Select Date/Time</span>
 								<input id="js-attribute_{{ attribute.id }}" type="hidden" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}"" />
 							</td>
@@ -338,6 +346,7 @@
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'datetime'">
 								<span class="datetimepicker-value" ng-if="attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ dateTimeFormatted( attribute.value ) }}</span>
+								<span class="datetimepicker-remove" ng-if="attribute.value" ng-click="removeDateTime( attribute )">ˣ</span>
 								<span class="datetimepicker-value datepicker-placeholder" ng-if="!attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">Select Date/Time</span>
 								<input id="js-attribute_{{ attribute.id }}" type="hidden" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}"" />
 							</td>
