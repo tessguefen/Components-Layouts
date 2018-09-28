@@ -1,4 +1,5 @@
 <MvCOMMENT>
+
 	Module_Provision_Layout_Add( module var, provide_xml var )
 	Module_Provision_Layout_Update( module var, provide_xml var )
 	Module_Provision_Layout_Delete( module var, provide_xml var )
@@ -11,6 +12,7 @@
 	Module_Provision_ComponentAttributeOption_Add( module var, provide_xml var )
 	Module_Provision_LayoutComponent_Add( module var, provide_xml var )
 	Module_Provision_LayoutComponent_Attributes( provide_xml var, layout_component_id, component_id )
+	
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_Provision_Layout_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">

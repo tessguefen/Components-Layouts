@@ -1,8 +1,49 @@
 # Components
 
-## Notes
+*Current Version 1.004*
 
-XML Provisioning
+## Features
+
+- Components
+	- Add a **Code**, **Name**, Description, Image, and **Allow Nested Components**
+	- Add specific attributes/ options for each component.
+		- **Code**, **Prompt**, **Type**, **Required**
+		- Types: Text Field, Radio Buttons, Drop-down List, Checkbox, Text Area, Image, Product, Category, Link
+		- Editable Display Order
+- Layouts
+	- Add a **Code**, **Name**
+	- Selecting a layout will give you the option to Duplicate it (you will enter a new code/name).
+	- Add Components, Remove Components, Update Components
+	- Drag & Drop UI to quickly re-arrange components
+	- Image Preview for components (if there is an image set)
+	- Image Preview for component options (image type only)
+	- Product/ Category/ Page Batchlist Popups (when allowed for attribute types: product, category, link)
+	- Update button to save all changes (does not save on the fly)
+	- Internal Caching to help save load time!
+
+## Attribute Types
+
+- Dropdown
+- Radio
+- Checkbox
+- Textfield
+- Textarea
+- Image Upload
+- Category (supply ID)
+- Product (supply ID)
+- Link (Includes Product, Category, Page, URL & None )
+- Image Type
+- Date/Time Picker
+
+	
+## Items
+
+```xml
+<mvt:item name="tgcomponent" param="Layout_Load_Code( 'homepage_slider', l.settings:output )"/>
+```
+
+
+## XML Provisioning
 
 ```xml
 <Module code="TGCOMPONENTS" feature="util">
@@ -73,24 +114,6 @@ XML Provisioning
 
 </Module>
 ```
-## Features
-
-- Components
-	- Add a **Code**, **Name**, Description, Image, and **Allow Nested Components**
-	- Add specific attributes/ options for each component.
-		- **Code**, **Prompt**, **Type**, **Required**
-		- Types: Text Field, Radio Buttons, Drop-down List, Checkbox, Text Area, Image, Product, Category, Link
-		- Editable Display Order
-- Layouts
-	- Add a **Code**, **Name**
-	- Selecting a layout will give you the option to Duplicate it (you will enter a new code/name).
-	- Add Components, Remove Components, Update Components
-	- Drag & Drop UI to quickly re-arrange components
-	- Image Preview for components (if there is an image set)
-	- Image Preview for component options (image type only)
-	- Product/ Category/ Page Batchlist Popups (when allowed for attribute types: product, category, link)
-	- Update button to save all changes (does not save on the fly)
-	
 
 ## Random Screenshots
 
@@ -101,11 +124,6 @@ XML Provisioning
 ![Drag & Drop](https://puu.sh/zF7Zz/e32d8bbd12.png)
 ---
 
-## Items
-
-```xml
-<mvt:item name="tgcomponent" param="Layout_Load_Code( 'homepage_slider', l.settings:output )"/>
-```
 
 ## Example
 
@@ -227,17 +245,3 @@ XML Provisioning
 [2]:name=Featured+Slider+2
 [2]:parent=0
 ```
-
----
-
-## Attribute Types
-
-- Dropdown
-- Radio
-- Checkbox
-- Textfield
-- Textarea
-- Image Upload
-- Category (supply ID)
-- Product (supply ID)
-- Link (Includes Product, Category, Page, URL & None )

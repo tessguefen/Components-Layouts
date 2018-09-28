@@ -108,6 +108,7 @@
 	JSON_Layouts_Load_Query( module var )
 	JSON_Component_Attrs_Load_Query( module var )
 	JSON_Components_Load_All( module var )
+	JSON_Delete_Layout_Cache( module var )
 
 	LayoutValueReferencesInsert( layout_component_id, attr_id, value )
 	LayoutValueReferencesUpdate( layout_component_id, attr_id, value )
@@ -123,6 +124,7 @@
 	Layout_Cache_Save_Lowlevel( layout_id, value var )
 	Layout_Cache_Delete( layout_id )
 	Layout_Cache_Recache( layout_id )
+	Layout_Cache_DeleteAll()
 
 </MvCOMMENT>
 
@@ -2386,6 +2388,14 @@
 	[]
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "JSON_Delete_Layout_Cache" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Cache_DeleteAll() }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
 <MvFUNCTION NAME = "LayoutValueReferencesInsert" PARAMETERS = "layout_component_id, attr_id, value" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT ComponentAttrs_Load_ID( l.attr_id, l.attribute ) }">
 		<MvFUNCTIONRETURN VALUE = 0 />
@@ -2598,4 +2608,13 @@
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>
 	<MvFUNCTIONRETURN VALUE = "{ Layout_Cache_Save( l.layout_id, l.void ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Cache_DeleteAll" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0005', 'Could not all layout cache.' ) }">
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>

@@ -452,6 +452,8 @@
 	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module )	}"></MvIF>
 
 	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Duplicate' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Duplicate( l.module )	}"></MvIF>
+
+	<MvIF EXPR = "{ g.Module_Function EQ 'Delete_Layout_Cache' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Delete_Layout_Cache( l..module )	}"></MvIF>
 </MvFUNCTION>
 
 <MvCOMMENT>

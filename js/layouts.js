@@ -31,6 +31,15 @@ function Layouts_Duplicate( layout_id, code, name, callback ){
 	);
 }
 
+function Layouts_Delete_Cache( callback ) {
+	return AJAX_Call_Module( callback,
+							'admin',
+							'TGCOMPONENTS',
+							'Delete_Layout_Cache',
+							'',
+							'' );
+}
+
 function Layouts_Batchlist() {
 	var self = this;
 	MMBatchList.call( self, 'jsLayoutBatchlist' );
@@ -48,6 +57,8 @@ function Layouts_Batchlist() {
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
 		self.Feature_Delete_Enable('Delete Layout(s)');
 	}
+
+	self.Feature_Buttons_AddButton_Persistent( 'Delete Layout Cache', 'Delete Layout Cache', '', self.DeleteLayoutCache );
 	
 	self.processingdialog = new ProcessingDialog();
 	self.Feature_GoTo_Enable('Open Layout', '');
@@ -91,6 +102,10 @@ Layouts_Batchlist.prototype.onDelete = function( item, callback, delegator ) {
 }
 Layouts_Batchlist.prototype.onGoTo = function( item, e ) {
 	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGCOMPONENTS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Layout_ID': item.record.id, 'Module_Type': 'util', 'TGCOMPONENTS_Screen' : 'Layout' } );
+}
+Layouts_Batchlist.prototype.DeleteLayoutCache = function(){
+	var self = this;
+	Layouts_Delete_Cache( function( response ) { self.Refresh(); } );
 }
 
 Layouts_Batchlist.prototype.DuplicateLayout = function( item, e ) {
