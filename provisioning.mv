@@ -184,7 +184,7 @@
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'R', l.provide_xml,	'Code',		l.componentattribute:code )		OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'R', l.provide_xml,	'Prompt',	l.componentattribute:prompt )	OR
-					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 		'R', l.provide_xml,	'Type',		l.componentattribute:type, 'text,radio,select,checkbox,memo,image,product,category,link,imagetype', 'text,radio,select,checkbox,memo,image,product,category,link,imagetype' )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 		'R', l.provide_xml,	'Type',		l.componentattribute:type, 'text,radio,select,checkbox,memo,image,product,category,link,imagetype,datetime', 'text,radio,select,checkbox,memo,image,product,category,link,imagetype,datetime' )	OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean( 	'R', l.provide_xml,	'Required',	l.componentattribute:required ) }">
 		<MvFUNCTIONRETURN>
 	</MvIF>
@@ -221,7 +221,7 @@
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'O', l.provide_xml,	'Code',		l.componentattribute:code )		OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'O', l.provide_xml,	'Prompt',	l.componentattribute:prompt )	OR
-					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 		'O', l.provide_xml,	'Type',		l.componentattribute:type, 'text,radio,select,checkbox,memo,image,product,category,link,imagetype', 'text,radio,select,checkbox,memo,image,product,category,link,imagetype' )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 		'O', l.provide_xml,	'Type',		l.componentattribute:type, 'text,radio,select,checkbox,memo,image,product,category,link,imagetype,datetime', 'text,radio,select,checkbox,memo,image,product,category,link,imagetype,datetime' )	OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean( 	'O', l.provide_xml,	'Required',	l.componentattribute:required ) }">
 		<MvFUNCTIONRETURN>
 	</MvIF>

@@ -117,6 +117,13 @@
 
 	LayoutComponentParent_Load_Name( name, layout_id, return var )
 
+	Layout_Cache_Load( layout_id, return var )
+	Layout_Cache_Load_Lowlevel( layout_id, return var )
+	Layout_Cache_Save( layout_id, return var )
+	Layout_Cache_Save_Lowlevel( layout_id, value var )
+	Layout_Cache_Delete( layout_id )
+	Layout_Cache_Recache( layout_id )
+
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Component_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
@@ -236,6 +243,12 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0006', 'Could not update component.' ) }">
 	</MvIF>
+
+	<MvIF EXPR = "{ Component_Layout_Reference( l.component:id, l.layouts ) }">
+		<MvFOREACH ITERATOR = "l.layout" ARRAY = "l.layouts">
+			<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout:id ) }">
+		</MvFOREACH>
+	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -286,7 +299,7 @@
 			<MvIF EXPR = "{ l.count GT 1 }">
 				<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ g.TGCOMPONENTS_Error:message $ ', ' }">
 			</MvIF>
-			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ g.TGCOMPONENTS_Error:message $ l.layout }">
+			<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message" VALUE = "{ g.TGCOMPONENTS_Error:message $ l.layout:code }">
 		</MvFOREACH>
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name" VALUE = "referenced_component">
 		<MvFUNCTIONRETURN VALUE = 0 />
@@ -320,7 +333,10 @@
 
 	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
 
-		<MvASSIGN NAME = "l.layouts_count" VALUE = "{ miva_array_insert_var( l.layouts, TGLayouts_Components.d.layout_code, -1 ) }">
+		<MvASSIGN NAME = "l.temp:id" VALUE = "{ TGLayouts_Components.d.layout_id }">
+		<MvASSIGN NAME = "l.temp:code" VALUE = "{ TGLayouts_Components.d.layout_code }">
+
+		<MvASSIGN NAME = "l.layouts_count" VALUE = "{ miva_array_insert_var( l.layouts, l.temp, -1 ) }">
 
 		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
 	</MvWHILE>
@@ -481,7 +497,8 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0006', 'Could not update layout.' ) }">
 	</MvIF>
-	
+
+	<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Recache( l.layout:id ) }">
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -535,6 +552,8 @@
 	<MvIF EXPR = "{ NOT Layout_Delete_Components( l.layout_id ) }">
 		<MVFUNCTIONRETURN VALUE = 0  />
 	</MvIF>
+
+	<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout_id ) }">	
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -593,6 +612,12 @@
 			 FIELDS	= "l.component_attrs:id, l.component_attrs:component_id, l.component_attrs:code, l.component_attrs:prompt, l.component_attrs:type, l.component_attrs:required, l.component_attrs:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0001', 'Could not add attribute to component.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ Component_Layout_Reference( l.component_attrs:component_id, l.layouts ) }">
+		<MvFOREACH ITERATOR = "l.layout" ARRAY = "l.layouts">
+			<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout:id ) }">
+		</MvFOREACH>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -732,6 +757,12 @@
 			 FIELDS	= "l.component_attrs:code, l.component_attrs:prompt, l.component_attrs:type, l.component_attrs:required, l.component_attrs:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0006', 'Could not update component attribute.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ Component_Layout_Reference( l.component_attrs:component_id, l.layouts ) }">
+		<MvFOREACH ITERATOR = "l.layout" ARRAY = "l.layouts">
+			<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout:id ) }">
+		</MvFOREACH>
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1585,6 +1616,10 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
+	<MvIF EXPR = "{ LayoutComponent_Load_ID( l.layout_value:layouts_components_id, l.layout_component ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout_component:layout_id ) }">
+	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -1673,6 +1708,10 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTVALUES-0006', 'Could not update values for layout component.' ) }">
 	</MvIF>
 
+	<MvIF EXPR = "{ LayoutComponent_Load_ID( l.layout_value:layouts_components_id, l.layout_component ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout_component:layout_id ) }">
+	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -1722,6 +1761,10 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTATTRS-0007', 'Could not delete value for layout.' ) }">
 	</MvIF>
 
+	<MvIF EXPR = "{ LayoutComponent_Load_ID( l.layout_value:layouts_components_id, l.layout_component ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout_component:layout_id ) }">
+	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -1754,6 +1797,8 @@
 	<MvIF EXPR = "{ NOT Layout_Components_Delete_Lowlevel( l.layout_id, l.deleted_components ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
+
+	<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Recache( l.layout_id ) }">
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -1983,7 +2028,7 @@
 	<MvIF EXPR = "{ NOT Layout_Load_Code( l.layout_code, l.layout ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
-	<MvFUNCTIONRETURN VALUE = "{ Runtime_Load_Layout_Components( l.layout:id, 0, l.output ) }" />
+	<MvFUNCTIONRETURN VALUE = "{ Layout_Cache_Load( l.layout:id, l.output ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Runtime_Load_Layout_Components" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
@@ -2483,4 +2528,74 @@
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
 
 	<MvFUNCTIONRETURN VALUE = "{ l.return }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Cache_Load" PARAMETERS = "layout_id, return var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Cache_Load_Lowlevel( l.layout_id, l.return ) }">
+		<MvFUNCTIONRETURN VALUE = "{ Layout_Cache_Save( l.layout_id, l.return ) }">
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Cache_Load_Lowlevel" PARAMETERS = "layout_id, return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Cache"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache WHERE layout_id = ?' }"
+				FIELDS	= "l.layout_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0001', 'Could not load Display Order.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGLayouts_Cache.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Cache">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-LAYOUTCACHE-0002' ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.return" VALUE = "{ miva_array_deserialize( TGLayouts_Cache.d.value ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Cache">
+
+	<MvIF EXPR = "{ NOT l.return }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Cache_Save" PARAMETERS = "layout_id, return var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Runtime_Load_Layout_Components( l.layout_id, 0, l.return ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = "{ Layout_Cache_Save_Lowlevel( l.layout_id, l.return ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Cache_Save_Lowlevel" PARAMETERS = "layout_id, value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout_values" VALUE = "{ miva_array_serialize( l.value ) }">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
+						  ( layout_id, value )
+						  VALUES
+						  ( ?, ? )' }"
+			 FIELDS	= "l.layout_id, l.layout_values">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0003', 'Could not save Layout Cache.' ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Cache_Delete" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache WHERE layout_id = ?' }"
+			 FIELDS	= "l.layout_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0004', 'Could not delete layout cache.' ) }">
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Cache_Recache" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Cache_Delete( l.layout_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = "{ Layout_Cache_Save( l.layout_id, l.void ) }">
 </MvFUNCTION>
