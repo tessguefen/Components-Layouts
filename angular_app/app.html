@@ -161,7 +161,7 @@
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'radio'">
 								<label ng-repeat="option in attribute.options">
-									<input type="radio" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-value="option.prompt" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
+									<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.prompt" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
 								</label>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'checkbox'">
@@ -292,7 +292,7 @@
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'radio'">
 								<label ng-repeat="option in attribute.options">
-									<input type="radio" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-value="option.prompt" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
+									<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.prompt" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
 								</label>
 							</td>
 							<td valign="top" width="100%" ng-if="attribute.type == 'checkbox'">
