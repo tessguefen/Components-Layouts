@@ -38,31 +38,31 @@
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
 		// Load in Components
-		$scope.components = new Object();
+		$scope.components = {};
 		ComponentsAPI.getComponents( function( data ) {
 			initComponents( data );
 		});
 
 		// Determine Permissions
-		$scope.permissions = new Object();
+		$scope.permissions = {};
 		$scope.permissions.can_add = CanI( 'TGCOMPONENTS', 0, 1, 0, 0 );
 		$scope.permissions.can_edit = CanI( 'TGCOMPONENTS', 0, 0, 1, 0 );
 		$scope.permissions.can_delete = CanI( 'TGCOMPONENTS', 0, 0, 0, 1 );
 
-		$scope.mmdialog = new Object();
-		$scope.mmdialog.component = new Object();
+		$scope.mmdialog = {};
+		$scope.mmdialog.component = {};
 
 		$scope.nodeActive = 0;
 
 		// Initialize Layout.
 		$scope.initializeLayout = function( layout ) {
 
-			$scope.data = new Object();
+			$scope.data = {};
 			$scope.data.layout = layout;
 
 			$scope.data.layout_id = layout.id;
 
-			$scope.data.itemsForDeletion = new Object();
+			$scope.data.itemsForDeletion = {};
 			$scope.data.itemsForDeletion.nodes = [];
 
 			ComponentsAPI.getData( layout.id, function( data ) {
@@ -75,8 +75,8 @@
 		}
 
 		$scope.resetDialog = function() {
-			$scope.mmdialog = new Object();
-			$scope.mmdialog.component = new Object();
+			$scope.mmdialog = {};
+			$scope.mmdialog.component = {};
 		}
 		$scope.openMMDialog = function( type, parent ) {
 			$scope.resetDialog();

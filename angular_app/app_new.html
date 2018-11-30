@@ -77,7 +77,7 @@
 	
 	<!-- MMDialog Content -->
 	<script type="text/ng-template" id="mm_dialog_content.html">
-		<div ng-form="mmdialog.dialogForm" id="js-dialogForm">
+		<div ng-form="mmdialog.dialogForm">
 			<table width="100%">
 				<tr ng-if="components.length > 0" ng-class="{ 'layoutcomponent_error' : mmdialog.popup_show_errors && mmdialog.dialogForm.layoutcomponent_component.$invalid }">
 					<td valign="top" nowrap><span class="layoutcomponent_prompt layoutcomponent_required">Select Component:</span></td>
