@@ -50,7 +50,7 @@ function Layouts_Batchlist() {
 		self.Feature_Add_Enable('Add Layout');
 	}
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
-		self.Feature_Edit_Enable('Edit Layout(s)');
+		self.Feature_EditDialog_Enable('Edit Layout(s)');
 		self.Feature_RowDoubleClick_Enable();
 		button = this.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', this.DuplicateLayout );
 	}
@@ -61,7 +61,7 @@ function Layouts_Batchlist() {
 	self.Feature_Buttons_AddButton_Persistent( 'Delete Layout Cache', 'Delete Layout Cache', '', self.DeleteLayoutCache );
 	
 	self.processingdialog = new ProcessingDialog();
-	self.Feature_GoTo_Enable('Open Layout', '');
+	//self.Feature_GoTo_Enable('Open Layout', '');
 }
 
 DeriveFrom( MMBatchList, Layouts_Batchlist );
@@ -100,9 +100,26 @@ Layouts_Batchlist.prototype.onInsert = function( item, callback, delegator ) {
 Layouts_Batchlist.prototype.onDelete = function( item, callback, delegator ) {
 	Layouts_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Layout_Delete', callback, delegator );
 }
-Layouts_Batchlist.prototype.onGoTo = function( item, e ) {
-	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGCOMPONENTS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Layout_ID': item.record.id, 'Module_Type': 'util', 'TGCOMPONENTS_Screen' : 'Layout' } );
+
+Layouts_Batchlist.prototype.onEdit = function( item ) {
+	var self = this;
+	var dialog;
+
+	dialog			=	new Layout_Dialog( item.record );
+	dialog.onSave	= function() {
+		// Trigger Angular SAVE.
+		self.Refresh();
+	};
+	dialog.Save	= function() {
+		// Trigger Angular SAVE.
+		dialog.Cancel_LowLevel();
+		self.Refresh();
+	};
+	dialog.onDelete	= function() { self.Refresh(); };
+
+	dialog.Show();
 }
+
 Layouts_Batchlist.prototype.DeleteLayoutCache = function(){
 	var self = this;
 	Layouts_Delete_Cache( function( response ) { self.Refresh(); } );
@@ -204,3 +221,89 @@ DuplicateLayout_Dialog.prototype.onerror	= function( error )	{ Modal_Alert( erro
 DuplicateLayout_Dialog.prototype.oncancel	= function()		{ ; }
 DuplicateLayout_Dialog.prototype.onsave		= function()		{ ; }
 DuplicateLayout_Dialog.prototype.ondelete	= function()		{ ; }
+
+
+function Layout_Dialog( layout )
+{
+	var self = this;
+
+	self.layout	= layout;
+
+	MMDialog.call( this, 'mm9_dialog_layout', null, null );
+
+	self.element_container	= document.getElementById( 'layout_dialog_container' );
+
+	self.button_close_container = document.getElementsByClassName( 'layout_dialog_close_button' )[0];
+	self.button_close_container.innerHTML = '';
+	self.button_close = new MMButton( self.button_close_container );
+	self.button_close.SetText( 'Close' );
+	self.button_close.SetImage( 'cancel' );
+	self.button_close.SetOnClickHandler( function( e ) { return self.onClick_Close( e ); } );
+
+	self.button_update_container = document.getElementsByClassName( 'layout_dialog_bottom_buttons' )[0];
+	self.button_update_container.innerHTML = '';
+	self.button_update = new MMButton( self.button_update_container );
+	self.button_update.SetClassName( 'layout_dialog_bottom_button' );
+	self.button_update.SetText( 'Update' );
+	self.button_update.SetOnClickHandler( function( e ) { return self.Save(); } );
+
+
+	self.SetFullscreenEnabled( true, true );
+}
+DeriveFrom( MMDialog, Layout_Dialog );
+
+Layout_Dialog.prototype.onModalShow = function( z_index )
+{
+	var self = this;
+
+	this.Fullscreen_Start();
+
+	MMDialog.prototype.onModalShow.call( this, z_index );
+
+	initializeLayout( self.layout );
+}
+Layout_Dialog.prototype.onFullscreen_End = function()
+{
+	if ( this.visible )
+	{
+		this.Hide();
+	}
+}
+Layout_Dialog.prototype.onESC = function( e )
+{
+	this.Cancel();
+}
+
+Layout_Dialog.prototype.Cancel = function()
+{
+	return this.DisplayCancelDiscardSaveDialog();
+}
+
+Layout_Dialog.prototype.Cancel_LowLevel = function()
+{
+	this.Fullscreen_End();
+}
+
+Layout_Dialog.prototype.onClick_Close = function( e )
+{
+	this.Cancel();
+	eventStopPropagation( e );
+}
+
+Layout_Dialog.prototype.DisplayCancelDiscardSaveDialog = function()
+{
+	var self = this;
+	var dialog, button_save, button_cancel, button_discard;
+
+	dialog 			= new ActionDialog();
+	dialog.onESC	= function( e ) { button_cancel.SimulateClick(); };
+	dialog.onEnter	= function( e ) { button_save.SimulateClick(); };
+
+	button_cancel	= dialog.Button_Add_Left( 'Cancel',		'', '', 'neutral',	function() { ; } );
+	button_discard	= dialog.Button_Add_Right( 'Discard',	'', '', 'negative',	function() { self.Cancel_LowLevel(); } );
+	button_save		= dialog.Button_Add_Right( 'Save',		'', '', '',			function() { self.Save(); } );
+
+	dialog.SetTitle( 'Save changes?' );
+	dialog.SetMessage( 'Your changes will be lost if you don\'t save them.' );
+	dialog.Show();
+}

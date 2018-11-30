@@ -15,8 +15,20 @@
 			MMScreen_LoadFinished( function() { new Components_Batchlist(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Sets' }">
+		<link type="text/css" rel="stylesheet" href="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=styles.css' }" />
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app2.js' }"></script>
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_CSS() }">
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
@@ -58,6 +70,24 @@
 			<div class="mm_dialog_buttons_right"><input id="DuplicateLayout_dialog_button_save" type="button" value="Add"></div>
 		</div>
 		<!-- Duplicate Layout MM Dialog -->
+
+		<MvEVAL EXPR = "{ Component_HTML_App() }" />
+
+		<!-- Action Dialog -->
+		<span id="mm9_actiondialog">
+			<span id="mm9_actiondialog_title" class="mm9_actiondialog_title"></span>
+			<span id="mm9_actiondialog_message" class="mm9_actiondialog_message"></span>
+			<span id="mm9_actiondialog_actions" class="mm9_actiondialog_actions">
+				<span id="mm9_actiondialog_actions_left" class="mm9_actiondialog_actions_left">
+				</span><span id="mm9_actiondialog_actions_right" class="mm9_actiondialog_actions_right"></span>
+			</span>
+		</span>
+		<!-- Action Dialog -->
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
+
 	</MvIF>
 </MvFUNCTION>
 
@@ -158,5 +188,5 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_HTML_App" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
+	<MvINCLUDE FILE = "angular_app/app_new.html" INTERPRET="OFF" />
 </MvFUNCTION>

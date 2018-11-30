@@ -37,35 +37,109 @@
 
 	// Controller
 	ngModule.controller('ComponentsController', ['$scope', '$window', '$document', '$timeout', 'ComponentsAPI', function( $scope, $window, $document, $timeout, ComponentsAPI ) {
-		// Declare Variables
-		$scope.data = new Object();
-		$scope.data.layout = new Object();
+		// Load in Components
+		$scope.components = new Object();
+		ComponentsAPI.getComponents( function( data ) {
+			initComponents( data );
+		});
 
-		$scope.data.newComponent = new Object();
-		$scope.data.newComponent.component = new Object();
-		$scope.data.newComponent.parent = new Object();
+		// Determine Permissions
+		$scope.permissions = new Object();
+		$scope.permissions.can_add = CanI( 'TGCOMPONENTS', 0, 1, 0, 0 );
+		$scope.permissions.can_edit = CanI( 'TGCOMPONENTS', 0, 0, 1, 0 );
+		$scope.permissions.can_delete = CanI( 'TGCOMPONENTS', 0, 0, 0, 1 );
 
-		$scope.data.editComponent = new Object();
+		$scope.mmdialog = new Object();
+		$scope.mmdialog.component = new Object();
 
-		$scope.data.itemsForDeletion = new Object();
-		$scope.data.itemsForDeletion.nodes = [];
-		//$scope.data.layout_id = layout_id;
+		$scope.nodeActive = 0;
 
-		$scope.data.original_components = new Object();
+		// Initialize Layout.
+		$scope.initializeLayout = function( layout ) {
 
-		$scope.data.can_add = CanI( 'TGCOMPONENTS', 0, 1, 0, 0 );
-		$scope.data.can_edit = CanI( 'TGCOMPONENTS', 0, 0, 1, 0 );
-		$scope.data.can_delete = CanI( 'TGCOMPONENTS', 0, 0, 0, 1 );
+			$scope.data = new Object();
+			$scope.data.layout = layout;
 
-		$scope.initializeLayout = function( layout_id ) {
-			ComponentsAPI.getData( layout_id, function( data ) {
+			$scope.data.layout_id = layout.id;
+
+			$scope.data.itemsForDeletion = new Object();
+			$scope.data.itemsForDeletion.nodes = [];
+
+			ComponentsAPI.getData( layout.id, function( data ) {
 				init( data );
 			});
-
-			ComponentsAPI.getComponents( function( data ) {
-				initComponents( data );
-			});
 		}
+
+		$scope.toggleNodeActions = function( node ) {
+			$scope.nodeActive = node ? node : null;
+		}
+
+		$scope.resetDialog = function() {
+			$scope.mmdialog = new Object();
+			$scope.mmdialog.component = new Object();
+		}
+		$scope.openMMDialog = function( type, parent ) {
+			$scope.resetDialog();
+
+			$scope.mmdialog.type = type;
+			$scope.mmdialog.title = type == 'add' ? 'Add New Component' : 'Edit Component';
+			$scope.mmdialog.component.parent = parent;
+
+			$scope.mmdialog.popup = new LayoutPopup( type );
+			$scope.mmdialog.popup.Show();
+		}
+		$scope.closeMMDialog = function() {
+			$scope.resetDialog();
+			$scope.mmdialog.popup.Hide();
+		}
+
+		$scope.insertNewComponent = function() {
+			$scope.mmdialog.show_errors = 0;
+			$scope.$digest();
+			if ( !$scope.mmdialog.dialogForm.$invalid) {
+				$scope.$apply(function() {
+					if ( $scope.mmdialog.component.parent.nodes.length === 0 ) $scope.mmdialog.component.parent.nodes = [];
+					if ( $scope.mmdialog.component.component.allow_children == 1 ) $scope.mmdialog.component.nodes = [];
+					$scope.mmdialog.component.parent.nodes.push( angular.copy( $scope.mmdialog.component ) );
+					$scope.closePopup();
+				});
+			} else {
+				$scope.$apply(function() {
+					$scope.mmdialog.show_errors = 1;
+				
+				});
+			}
+	
+		}
+
+		/* Master MM Dialog */
+		function LayoutPopup( type ) {
+			var self = this;
+
+			MMDialog.call( this, 'layoutcomponent', 680, 450 );
+
+			self.SetResizeEnabled();
+
+			if ( type == 'add' ) {
+				this.button_add									= null;
+				this.button_save								= this.ActionItem_Add( 'Add', function() { $scope.insertNewComponent(); } );
+				this.button_delete								= null;
+				this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );	
+			}
+		}
+		DeriveFrom( MMDialog, LayoutPopup );
+
+		LayoutPopup.prototype.onEnter = function(){
+			this.Save();
+		}
+
+
+
+
+
+
+
+		///***** no changes ****///
 
 		/* Dialog Functions */
 		function LayoutComponentPopup_add() {
@@ -112,8 +186,7 @@
 
 		var initComponents = function( cmps ) {
 			$timeout( function(){
-				$scope.data.components = cmps;
-				$scope.data.original_components = cmps;
+				$scope.components = cmps;
 			}, 0);
 		}
 
@@ -142,7 +215,7 @@
 			if( !nodeData ) {
 				nodeData = $scope.data.layout;
 			}
-			$scope.openPopup( nodeData );
+			$scope.openMMDialog( 'add', nodeData );
 		}
 
 		$scope.removeIdAndParentId = function( node ) {
@@ -157,15 +230,12 @@
 			if( $window.confirm('Are you sure you want to duplicate this?') ) {
 				var nodeCopy = angular.copy( node );
 				$scope.removeIdAndParentId( nodeCopy );
+				nodeCopy.name = nodeCopy.name + ' - Copy';
 
 				if ( parent.nodes.length === 0 ) parent.nodes = [];
 				parent.nodes.push( nodeCopy );
+				$scope.toggleNodeActions();
 			}
-		}
-
-
-		$scope.addComponentTopLevel = function() {
-			$scope.newComponent( $scope.data.layout );
 		}
 
 		$scope.newComponent_Validation = function( attribute, index ) {
@@ -386,23 +456,9 @@
 
 })( window, window.angular );
 
-function initSaveLayout( button ) {
+function initializeLayout( layout ) {
 	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 	scope.$apply(function () {
-		scope.saveLayout( button );
-	});	
-}
-
-function initAddComponent( button ) {
-	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
-	scope.$apply(function () {
-		scope.addComponentTopLevel();
-	});
-}
-
-function initializeLayout( layout_id ) {
-	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
-	scope.$apply(function () {
-		scope.initializeLayout( layout_id );
+		scope.initializeLayout( layout );
 	});
 }

@@ -489,6 +489,14 @@
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
 		<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
 	</MvIF>
+	<MvIF EXPR = "{ g.Filename EQ 'app2.js' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+		<MvINCLUDE FILE = "angular_app/app2.js" INTERPRET="OFF">
+	</MvIF>
+	<MvIF EXPR = "{ g.Filename EQ 'styles.css' }">
+		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
+		<MvINCLUDE FILE = "angular_app/styles.css" INTERPRET="OFF">
+	</MvIF>
 </MvFUNCTION>
 
 <MvCOMMENT>

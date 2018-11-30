@@ -1,0 +1,677 @@
+#ComponentsController_ID {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+}
+#ComponentsController_ID .mm9_dialog {
+	pointer-events: auto;
+}
+/* MM9 Alert */
+#mm9_actiondialog {
+	position: absolute;
+	display: none;
+	top: 100px;
+	left: 100px;
+	min-width: 200px;
+	text-align: center;
+	font-family: 'MuseoSans';
+	font-weight: normal;
+	background: #fff;
+	border-radius: 3px;
+	box-shadow: 2px 4px 25px 0 rgba( 0, 0, 0, 0.2 );
+	z-index: 2;
+}
+.mm9_actiondialog_title {
+	position: relative;
+	display: none;
+	text-align: left;
+	margin-top: 24px;
+	margin-right: 24px;
+	margin-left: 24px;
+	margin-bottom: 15px;
+	font-size: 20px;
+	font-weight: bold;
+}
+.mm9_actiondialog_title.visible {
+	display: block;
+}
+.mm9_actiondialog_message {
+	position: relative;
+	display: block;
+	text-align: left;
+	margin-top: 24px;
+	margin-right: 24px;
+	margin-left: 24px;
+	font-size: 16px;
+}
+.mm9_actiondialog_title.visible + .mm9_actiondialog_message {
+	margin-top: 15px;
+	color: #666;
+}
+.mm9_actiondialog_default_message {
+	position: relative;
+	display: block;
+	min-width: 200px;
+	max-width: 500px;
+}
+.mm9_actiondialog_actions {
+	position: relative;
+	display: block;
+	margin-top: 35px;
+	padding: 0 6px;
+	text-align: left;
+	white-space: nowrap;
+}
+.mm9_actiondialog_actions_left {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin-right: 50px;
+	width: calc( 50% - 25px );
+	text-align: left;
+}
+.mm9_actiondialog_actions_right {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	width: calc( 50% - 25px );
+	text-align: right;
+}
+.mm_actiondialog_button {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	width: auto;
+	padding: 9px 10px;
+	margin: 8px;
+	background: #fff;
+	border: none;
+	border-radius: 3px;
+	text-align: center;
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+	outline: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	transition: 0.2s all linear;
+}
+.mm9_actiondialog_actions_left .mm_actiondialog_button {
+	margin: 8px 0 8px 8px;
+}
+.mm9_actiondialog_actions_right .mm_actiondialog_button {
+	margin: 8px 8px 8px 0;
+}
+.mm_actiondialog_button.active,
+.mm_actiondialog_button.focus {
+	border-color: none;
+}
+.mm_actiondialog_button .mm9_button_text {
+	color: #1eabbd;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: 'MuseoSans';
+	text-transform: uppercase;
+	letter-spacing: 0.125em;
+}
+.mm_actiondialog_button.neutral .mm9_button_text {
+	color: #666;
+}
+.mm_actiondialog_button.negative .mm9_button_text {
+	color: #ff6b59;
+}
+.mm_actiondialog_button.active .mm9_button_text {
+	color: #000;
+}
+
+
+.angular-ui-tree-dropzone,
+.angular-ui-tree-empty{
+	border:2px dashed #b4b4b4;
+	min-height:100px;
+	background-color:#e5e5e5;
+	background-image:-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);
+	background-image:linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);
+	background-size:60px 60px;
+	background-position:0 0,30px 30px
+}
+.angular-ui-tree-empty{
+	pointer-events:none
+}
+.angular-ui-tree-nodes{
+	position:relative;
+	margin:0;
+	padding:0;
+	list-style:none
+}
+.angular-ui-tree-nodes .angular-ui-tree-nodes{
+	padding-left:20px;
+	padding-right:20px
+}
+.angular-ui-tree-node,.angular-ui-tree-placeholder{
+	position:relative;
+	margin:0;
+	padding:0;
+	min-height:20px;
+	line-height:20px
+}
+.angular-ui-tree-hidden{
+	display:none
+}
+.angular-ui-tree-placeholder{
+	margin:10px;
+	padding:0;
+	min-height:30px
+}
+.angular-ui-tree-handle{
+	cursor:move;
+	text-decoration:none;
+	box-sizing:border-box;
+	min-height:20px;
+	line-height:20px
+}
+.angular-ui-tree-drag{
+	position:absolute;
+	pointer-events:none;
+	z-index:999;
+	opacity:.8
+}
+.angular-ui-tree-drag .tree-node-content{
+	margin-top:0
+}
+tr.angular-ui-tree-empty{
+	height:100px
+}
+.tree-node{
+	border:1px solid #dae2ea;
+	background:#f8faff;
+	color:#7c9eb2
+}
+.nodrop{
+	background-color:#f2dede
+}
+.tree-node-content{
+	margin:10px
+}
+.tree-handle{
+	padding:10px;
+	background:#428bca;
+	color:#FFF;
+	margin-right:10px
+}
+.angular-ui-tree-placeholder{
+	background:#e5e5e5;
+	border:2px dashed #d5d5d5;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box
+}
+
+.layout_dialog_container {
+	display: block;
+	height: 100%;
+	background: #f4f5f5;
+}
+.layout_dialog_close {
+	position: absolute;
+	top: 18px;
+	right: 28px;
+	z-index: 2;
+}
+.layout_dialog_close_button .mm9_button {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	padding: 12px;
+	text-align: center;
+	line-height: 1;
+	cursor: pointer;
+	outline: none;
+	box-shadow: none;
+	box-sizing: border-box;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 0;
+	background: none;
+}
+.layout_dialog_close_button .mm9_mivaicon {
+	color: #999;
+	font-size: 12px;
+	width: 12px;
+	height: 12px;
+	margin-right: 5px;
+}
+.layout_dialog_close_button .mm9_button_text {
+	color: #999;
+	font-size: 10px;
+	font-family: 'MuseoSans';
+	font-weight: bold;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	transition: 0.2s all linear;
+	padding-left: 5px;
+}
+.layout_dialog_titlebar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	background-color: #f4f5f5;
+	border-bottom: 1px solid transparent;
+	box-sizing: border-box;
+	z-index: 1;
+}
+.layout_dialog_titlebar_inner {
+	position: relative;
+	display: block;
+	margin: 80px 90px 0;
+	height: 50px;
+	border-bottom: 1px solid #ddd;
+	background: #f4f5f5;
+}
+.layout_dialog_titlebar_title {
+	position: relative;
+	display: inline-block;
+	margin-right: 15px;
+	font-size: 30px;
+	font-weight: bold;
+	font-family: 'MuseoSans';
+	color: #444;
+}
+.layout_dialog_titlebar_controls {
+	position: absolute;
+	top: -3px;
+	right: 0;
+}
+.layout_dialog_action {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 15px;
+	padding: 11px;
+	line-height: 1;
+	background: #fff;
+	cursor: pointer;
+	outline: none;
+	text-align: center;
+	white-space: normal;
+	box-sizing: border-box;
+	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.layout_dialog_content {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 75px;
+	left: 0;
+	padding-top: 130px;
+	overflow: auto;
+	z-index: 0;
+}
+.layout_dialog_bottom {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 75px;
+	background-color: #fff;
+}
+.layout_dialog_actionbar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: calc(100% - 314px);
+}
+.layout_dialog_bottom_actionbar_subtitle {
+	position: relative;
+	display: block;
+	margin-top: 18px;
+	margin-left: 60px;
+	font-size: 11px;
+	font-weight: bold;
+	font-family: 'MuseoSans';
+	color: #999;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+}
+.layout_dialog_bottom_actionbar_title {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 8px;
+	margin-left: 60px;
+	max-width: calc(100% - 60px - 45px - 30px);
+	font-size: 16px;
+	font-weight: bold;
+	font-family: 'MuseoSans';
+	color: #444;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.layout_dialog_bottom_actionbar_edit {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: 10px;
+	margin-left: 10px;
+	padding-bottom: 1px;
+	font-size: 12px;
+	font-weight: bold;
+	font-family: 'MuseoSans';
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #1eabbd;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border-bottom: 1px solid #1eabbd;
+}
+.layout_dialog_bottom_buttons {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.layout_dialog_bottom_button {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	padding: 30px 0;
+	width: 157px;
+	height: 75px;
+	text-align: center;
+	line-height: 1;
+	background: #fff;
+	cursor: pointer;
+	outline: none;
+	box-sizing: border-box;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	transition: 0.2s all linear;
+	background: #1eabbd;
+}
+.layout_dialog_bottom_button .mm9_button_text {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 13px;
+	font-weight: bold;
+	font-family: 'MuseoSans';
+	letter-spacing: 0.125em;
+	color: #fff;
+	text-transform: uppercase;
+	transition: 0.2s all linear;
+}
+.cmp-components {
+	position: relative;
+	display: block;
+	margin: 15px auto;
+	width: 100%;
+	max-width: 900px;
+	box-sizing: border-box;
+}
+.cmp-component {
+	position: relative;
+	display: block;
+}
+.cmp-component--wrapper {
+	position: relative;
+	display: block;
+	margin: 15px auto;
+	width: 100%;
+	max-width: 900px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border-radius: 3px;
+	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
+}
+.cmp-component--drag {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 10px 26px 10px 0;
+	width: 70px;
+	height: 40px;
+	padding: 18px 24px;
+	border-right: 1px solid #e0e0e0;
+	box-sizing: border-box;
+	background: transparent;
+	line-height: 1;
+	text-align: center;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.cmp-component--drag__line1,
+.cmp-component--drag__line2 {
+	position: absolute;
+	top: 16px;
+	left: 27px;
+	width: 15px;
+	height: 2px;
+	background-color: #b4b4b4;
+	transition: 0.25s all linear;
+}
+.cmp-component--drag__line2 {
+	top: 22px;
+}
+.cmp-component--title {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	padding: 18px 0px;
+	width: calc(100% - 96px - 70px - 91px);
+	font-size: 20px;
+	font-family: 'MuseoSans';
+}
+.cmp-component--title__component {
+	display: block;
+	opacity: .65;
+	font-size: 12px;
+	letter-spacing: 0.015em;
+	margin-bottom: 0.25rem;
+}
+.cmp-component--expand {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 10px;
+	width: 50px;
+	height: 40px;
+	border-radius: 50%;
+	box-sizing: border-box;
+	transition: 0.2s all linear;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: pointer;
+}
+.cmp-component--expand__line1 {
+	position: absolute;
+	top: 20px;
+	left: 17px;
+	width: 10px;
+	height: 2px;
+	background-color: #b4b4b4;
+	transition: 0.25s all linear;
+	transform: rotate(45deg);
+}
+.cmp-component--expand__line2 {
+	position: absolute;
+	top: 20px;
+	left: 23px;
+	width: 10px;
+	height: 2px;
+	background-color: #b4b4b4;
+	transition: 0.25s all linear;
+	transform: rotate(-45deg);
+}
+.cmp-component--expand__toggled .cmp-component--expand__line1 {
+	transform: rotate(-45deg);
+}
+.cmp-component--expand__toggled .cmp-component--expand__line2 {
+	transform: rotate(45deg);
+}
+.cmp-component--actions__row {
+	position: relative;
+	display: inline-block;
+}
+.cmp-component--actions__button {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 10px 0 10px 10px;
+	padding: 18px 24px;
+	width: 70px;
+	height: 40px;
+	line-height: 1;
+	background: transparent;
+	border-left: 1px solid #e0e0e0;
+	cursor: pointer;
+	outline: none;
+	text-align: center;
+	white-space: normal;
+	box-sizing: border-box;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.cmp-component--actions__button_custom {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.cmp-component--actions__button_el1,
+.cmp-component--actions__button_el2,
+.cmp-component--actions__button_el3{
+	position: absolute;
+	top: 18px;
+	left: 26px;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background-color: #b4b4b4;
+	transition: 0.1s all linear;
+}
+.cmp-component--actions__button_el2 {
+	left: 33px;
+}
+.cmp-component--actions__button_el3 {
+	left: 40px;
+}
+.cmp-component--actions__tail_border {
+	position: absolute;
+	display: none;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	z-index: 3;
+	bottom: -5px;
+	border-color: #ddd transparent;
+	border-width: 0 12px 12px;
+	right: calc(50% - 12px);
+	left: auto;
+}
+.cmp-component--actions__tail {
+	position: absolute;
+	display: none;
+	width: 0;
+	height: 0;
+	border-style: solid;
+	z-index: 3;
+	bottom: -6px;
+	border-color: #fff transparent;
+	border-width: 0 12px 12px;
+	right: calc(50% - 12px);
+	left: auto;
+}
+
+.cmp-component--actions__menu {
+	font-size: 12px;
+	z-index: 1;
+	position: absolute;
+	top: 54px;
+	right: 10px;
+	left: auto;
+	padding: 8px 0;
+	width: 170px;
+	display: none;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	box-sizing: border-box;
+	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+.cmp-component--actions__active .cmp-component--actions__menu,
+.cmp-component--actions__active .cmp-component--actions__tail_border,
+.cmp-component--actions__active .cmp-component--actions__tail {
+	display: block;
+}
+.cmp-component--actions__active .cmp-component--actions__button_el1,
+.cmp-component--actions__active .cmp-component--actions__button_el2,
+.cmp-component--actions__active .cmp-component--actions__button_el3{
+	background: #1eabbd;
+}
+.cmp-component--actions__item {
+	position: relative;
+	display: block;
+	padding: 8px 20px 8px 20px;
+	white-space: nowrap;
+	cursor: pointer;
+	color: #000;
+	text-align: left;
+	font-weight: normal;
+	font-size: 12px;
+	font-family: 'MuseoSans';
+}
+.cmp-component--actions__item:hover {
+	background-color: #f0f0f0;
+}
+.cmp-component--actions__divider {
+	position: relative;
+	display: block;
+	margin: 8px 0;
+	background-color: #eee;
+	height: 1px;
+	border: none;
+}
+
+.cmp--nodes__hidden ol {
+	display: none;
+}
