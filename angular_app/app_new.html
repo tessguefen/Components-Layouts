@@ -1,4 +1,4 @@
-<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components" ng-mouseup="toggleNodeActions();">
+<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components" ng-mouseup="toggleNodeActions();" ng-init="dialogForm={};">
 	<div id="mm9_dialog_layout_mmdialog" class="mm9_dialog" data-mmdisableonsubmit="on">
 		<div class="mm9_dialog_container">
 			<div id="mm9_dialog_layout_mmdialog_content_container" class="mm9_dialog_content_container">
@@ -58,7 +58,7 @@
 		<div class="mm9_dialog_container">
 			<div id="layoutcomponent_mmdialog_content_container" class="mm9_dialog_content_container">
 				<div id="layoutcomponent_mmdialog_close" class="mm9_dialog_close mm9_mivaicon icon-cancel"></div>
-				<div id="layoutcomponent_mmdialog_title" class="mm9_dialog_title">{{ dialog.title }}</div>
+				<div id="layoutcomponent_mmdialog_title" class="mm9_dialog_title">{{ mmdialog.title }}</div>
 				<div id="layoutcomponent_mmdialog_content" class="mm9_dialog_content mm9_dialog_content_body">
 					<div ng-include="'mm_dialog_content.html'"></div>
 				</div>
@@ -77,87 +77,114 @@
 	
 	<!-- MMDialog Content -->
 	<script type="text/ng-template" id="mm_dialog_content.html">
-		<div ng-form="mmdialog.dialogForm">
-			<table width="100%">
-				<tr ng-if="components.length > 0" ng-class="{ 'layoutcomponent_error' : mmdialog.popup_show_errors && mmdialog.dialogForm.layoutcomponent_component.$invalid }">
-					<td valign="top" nowrap><span class="layoutcomponent_prompt layoutcomponent_required">Select Component:</span></td>
-					<td valign="top" width="100%">
-						<select name="layoutcomponent_component" ng-model="mmdialog.component.component" required>
-							<option ng-repeat="component in components track by component.id" ng-value="component">{{ component.name }}</option>
-						</select>
-					</td>
-				</tr>
-				<tr ng-if="mmdialog.component.component.descrip">
-					<td valign="top" nowrap><span class="layoutcomponent_prompt">Component Description:</span></td>
-					<td valign="top" width="100%;">{{ mmdialog.component.component.descrip }}</td>
-				</tr>
-				<tr ng-if="mmdialog.component.component.image">
-					<td valign="top" colspan="2">
-						<img ng-src="{{ mmdialog.component.component.image }}" style="max-width:205px; max-height: 205px;" />
-						<br /><em>Reference Image</em>
-					</td>
-				</tr>
-				<tr ng-if="mmdialog.component.component.id > 0">
-					<td colspan="2">
-						<label>
-							<input type="checkbox" name="layoutcomponent_active" ng-model="mmdialog.component.active" ng-true-value="1" ng-false-value="0"> Active
+		<div ng-form="dialogForm">
+			<div class="dialogform--wrapper">
+				<div class="dialogform--header">
+
+					<div ng-if="components.length > 0 && mmdialog.type == 'add'">
+						<div class="dialogform--styledinput" ng-class="{ 'layoutcomponent_error' : mmdialog.popup_show_errors && dialogForm.layoutcomponent_component.$invalid }">
+							<div class="dialogform--styledinput-title">Component</div>
+							<select name="layoutcomponent_component" ng-model="mmdialog.component.component" class="dialogform--styleinput-select" required>
+								<option value="">-- Select One --</option>
+								<option ng-repeat="component in components track by component.id" ng-value="component">{{ component.name }}</option>
+							</select>
+						</div>
+					</div>
+
+					<div ng-if="mmdialog.component.component.descrip">
+						<div class="dialogform--styledtext">
+							<div class="dialogform--styledtext-title">Component Description</div>
+							<div class="dialogform--styledtext-text">{{ mmdialog.component.component.descrip }}</div>
+						</div>
+					</div>
+
+					<div ng-if="mmdialog.component.component.image">
+						<img ng-src="{{ mmdialog.component.component.image }}" style="max-width: 205px; max-height: 205px;" />
+					</div>
+
+					<div ng-if="mmdialog.component.component.id > 0">
+						<label class="dialogform--styledcheckbox">
+							<input type="checkbox" name="layoutcomponent_active" ng-model="mmdialog.component.active" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
+							<span class="dialogform--styledcheckbox-prompt">Active</span>
 						</label>
-					</td>
-				</tr>
-				<tr ng-if="mmdialog.component.component.id > 0">
-						<td colspan="2"><hr /></td>
-				</tr>
-				<tr ng-class="{ 'layoutcomponent_error' : data.popup_show_errors && mmdialog.dialogForm.layoutcomponent_name.$invalid }">
-					<td valign="top" nowrap><span class="layoutcomponent_prompt layoutcomponent_required">Name:</span></td>
-					<td valign="top" width="100%"><input type="text" name="layoutcomponent_name" ng-model="mmdialog.component.name" required /></td>
-				</tr>
-				<tr ng-if="mmdialog.component.component.id > 0" ng-repeat="attribute in mmdialog.component.component.attributes" ng-class="{ 'layoutcomponent_error' : newComponent_Validation( attribute, $index ) }">
-					<td valign="top" nowrap><span class="layoutcomponent_prompt" ng-if="attribute.type != 'checkbox'" ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}:</span></td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'text'">
-						<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'memo'">
+					</div>
+
+				</div>
+			</div>
+
+			<div width="100%">
+				<div ng-if="mmdialog.component.component.id">
+					<div class="dialogform--styledinput" ng-class="{ 'layoutcomponent_error' : data.popup_show_errors && dialogForm.layoutcomponent_name.$invalid }">
+						<div class="dialogform--styledinput-title">Name*</div>
+						<input type="text" name="layoutcomponent_name" ng-model="mmdialog.component.name" class="dialogform--styleinput-input" placeholder="Name" required />
+					</div>
+				</div>
+
+				<div ng-if="mmdialog.component.component.id > 0" ng-repeat="attribute in mmdialog.component.component.attributes" ng-class="{ 'layoutcomponent_error' : newComponent_Validation( attribute, $index ) }">
+
+					<div ng-if="attribute.type == 'text'">
+						<div class="dialogform--styledinput">
+							<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+							<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
+						</div>
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'memo'">
 						<textarea placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}"></textarea>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'select'">
-						<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-init="attribute.value = attribute.value || ''">
-							<option value="">-- Select One --</option>
-							<option ng-repeat="option in attribute.options track by option.id" ng-value="option.prompt">{{ option.prompt }}</option>
-						</select>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'radio'">
-						<label ng-repeat="option in attribute.options">
-							<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.prompt" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
+					</div>
+
+					<div ng-if="attribute.type == 'select'">
+						<div class="dialogform--styledinput">
+							<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+							<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-init="attribute.value = attribute.value || ''" class="dialogform--styleinput-select">
+								<option value="">-- Select One --</option>
+								<option ng-repeat="component in components track by component.id" ng-value="component">{{ component.name }}</option>
+							</select>
+						</div>
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'radio'">
+						<div class="dialogform--styledradio">
+							<div class="dialogform--styledradio-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+							<label ng-repeat="option in attribute.options" class="dialogform--styledradio-label">
+								<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.prompt" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
+							</label>
+						</div>
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'checkbox'">
+						<label class="dialogform--styledcheckbox">
+							<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
+							<span class="dialogform--styledcheckbox-prompt">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</span>
 						</label>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'checkbox'">
-						<label>
-							<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0"><span ng-class="{ 'layoutcomponent_required' : attribute.required }">{{ attribute.prompt }}</span>
-						</label>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'product'">
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'product'">
 						<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.product.code" ng-required="{{ attribute.required ? true : false }}" />
 						<span class="mm9_button_light layoutcomponent_img_button" ng-click="productPopup( 'js-attribute_' + attribute.id )">
 							<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 							<span class="mm9_button_text" style="padding-left: 5px;">Lookup Product</span>
 						</span>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'category'">
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'category'">
 						<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.category.code" ng-required="{{ attribute.required ? true : false }}" />
 						<span class="mm9_button_light layoutcomponent_img_button" ng-click="categoryPopup( 'js-attribute_' + attribute.id )">
 							<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 							<span class="mm9_button_text" style="padding-left: 5px;">Lookup Category</span>
 						</span>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'image'">
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'image'">
 						<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:190px; max-height: 140px;" title="Image for {{ attribute.prompt }}" alt="Image for {{ attribute.prompt }}" /></div>
 						<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 						<span class="mm9_button_light layoutcomponent_img_button" ng-click="imageUpload( 'js-attribute_' + attribute.id )">
 							<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
 							<span class="mm9_button_text" style="padding-left: 5px;">Select Image</span>
 						</span>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'link'">
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'link'">
 						<select name="layoutcomponent_type_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}" ng-init="attribute.link.type = attribute.link.type || 'N'">
 							<option value="N">None</option>
 							<option value="U">URL</option>
@@ -172,21 +199,25 @@
 							<span ng-if="attribute.link.type == 'C'" class="mm9_button_text" style="padding-left: 5px;">Lookup Category</span>
 							<span ng-if="attribute.link.type == 'G'" class="mm9_button_text" style="padding-left: 5px;">Lookup Page</span>
 						</span>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'imagetype'">
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'imagetype'">
 						<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
 							<option value="">-- Select Image Type --</option>
 							<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
 						</select>
-					</td>
-					<td valign="top" width="100%" ng-if="attribute.type == 'datetime'">
+					</div>
+
+					<div valign="top" width="100%" ng-if="attribute.type == 'datetime'">
 						<span class="datetimepicker-value" ng-if="attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ dateTimeFormatted( attribute.value ) }}</span>
 						<span class="datetimepicker-remove" ng-if="attribute.value" ng-click="removeDateTime( attribute )">Remove</span>
 						<span class="datetimepicker-value datepicker-placeholder" ng-if="!attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">Select Date/Time</span>
 						<input id="js-attribute_{{ attribute.id }}" type="hidden" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
-					</td>
-				</tr>
-			</table>
+					</div>
+
+				</div>
+
+			</div>
 		</div>
 	</script>
 
@@ -216,7 +247,7 @@
 				<span class="cmp-component--actions__row">
 					<div class="cmp-component--actions__menu">
 						<span class="cmp-component--actions__item" ng-if="permissions.can_add && permissions.can_edit && node.component.allow_children" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
-						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="editComponent( this, node ); toggleNodeActions();">Edit Component</span>
+						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="editComponent( node ); toggleNodeActions();">Edit Component</span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_add && permissions.can_edit" ng-click="duplicateComponent( parent, node )">Duplicate Component</span>
 						<span class="cmp-component--actions__divider" ng-if="permissions.can_delete"></span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_delete" ng-click="removeComponent( this, node )">Delete Component</span>

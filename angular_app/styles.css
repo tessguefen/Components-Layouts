@@ -429,6 +429,83 @@ tr.angular-ui-tree-empty{
 	text-transform: uppercase;
 	transition: 0.2s all linear;
 }
+
+.dialogform--styledinput,
+.dialogform--styledtext,
+.dialogform--styledcheckbox,
+.dialogform--styledradio {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+	padding: 11px;
+	width: 100%;
+	line-height: 1;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 0;
+	outline: none;
+	box-sizing: border-box;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	transition: 0.2s background-color ease-in-out;
+	margin-bottom: 1rem;
+}
+.dialogform--styledtext,
+.dialogform--styledcheckbox,
+.dialogform--styledradio {
+	border: 0;
+	padding: 0;
+}
+.dialogform--styledinput-title,
+.dialogform--styledtext-title,
+.dialogform--styledcheckbox-prompt,
+.dialogform--styledradio-title {
+	display: block;
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #999;
+}
+.dialogform--styledcheckbox-prompt {
+	display: inline-block;
+	position: relative;
+	top: -3px;
+	cursor: pointer;
+}
+.dialogform--styleinput-select,
+.dialogform--styledtext-text,
+.dialogform--styleinput-input,
+.dialogform--styledradio-label {
+	border: 0;
+	width: 100%;
+	font-size: 14px;
+	color: #000;
+	padding: 0;
+	outline: 0;
+	margin-top: 6px;
+}
+.dialogform--styledradio-label {
+	display: block;
+	font-size: 12px;
+	margin-top: 0.5rem;
+}
+.dialogform--styledradio-label:first-child {
+	margin-top: 0;
+}
+.dialogform--styledcheckbox-checkbox {
+
+}
+.dialogform--styledtext {
+	font-size: 12px;
+}
+
+
 .cmp-components {
 	position: relative;
 	display: block;
