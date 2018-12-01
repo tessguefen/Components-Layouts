@@ -408,6 +408,11 @@ tr.angular-ui-tree-empty{
 	transition: 0.2s all linear;
 }
 
+.dialogform--header {
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 1.5rem;
+}
+
 .dialogform--styledinput,
 .dialogform--styledtext,
 .dialogform--styledcheckbox,
@@ -522,6 +527,18 @@ tr.angular-ui-tree-empty{
 	font-family: 'MuseoSans';
 	color: #999;
 }
+.dialogform--error {
+	border-color: #ff6b59;
+}
+.dialogform--error .dialogform--styledinput-title,
+.dialogform--error .dialogform--styledtext-title,
+.dialogform--error .dialogform--styledcheckbox-prompt,
+.dialogform--error .dialogform--styledradio-title {
+	color: #ff6b59;
+}
+
+
+
 
 .cmp-components {
 	position: relative;

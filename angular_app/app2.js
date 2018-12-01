@@ -122,8 +122,6 @@
 			$scope.mmdialog.show_errors = 0;
 			$scope.$digest();
 
-			console.log( $scope.dialogForm );
-
 			if ( $scope.dialogForm.$invalid) {
 				$scope.$apply(function() {
 					$scope.mmdialog.show_errors = 1;
