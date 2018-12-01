@@ -22,12 +22,13 @@
 								'Components_Load_All' );
 			}
 
-			self.saveLayout = function( layout_id, callback, data ) {
+			self.saveLayout = function( layout_id, data, callback ) {
 				return AJAX_Call_Module_FieldList( callback,
 									   'admin',
 									   'TGCOMPONENTS',
 									   'Layout_Save',
-									   'Layout_ID=' + layout_id + '&Payload=' + data,
+									   'Layout_ID=' + layout_id +
+									   '&Payload=' + encodeURIComponent( data ),
 									   '' );
 			}
 
@@ -60,7 +61,12 @@
 		$scope.initializeLayout = function( layout ) {
 
 			$scope.data = {};
-			$scope.data.layout = layout;
+			$scope.data.layout = {};
+			$scope.data.layout.nodes = {};
+			$scope.data.layout.layout_id = layout.id;
+			$scope.data.layout.name = layout.name;
+			$scope.data.layout.code = layout.code;
+			
 
 			$scope.data.layout_id = layout.id;
 
@@ -115,10 +121,8 @@
 
 		$scope.newComponent = function( scope ) {
 			$scope.resetDialog();
-			var nodeData = scope.$modelValue;
-			if( !nodeData ) {
-				nodeData = $scope.data.layout;
-			}
+			var nodeData = scope && scope.$modelValue ? scope.$modelValue : $scope.data.layout;
+			console.log( nodeData );
 			$scope.openMMDialog( 'add', nodeData );
 		}
 
@@ -133,8 +137,10 @@
 			$scope.$digest();
 			if ( !$scope.dialogForm.$invalid) {
 				$scope.$apply(function() {
-					node = $scope.mmdialog.component;
-					node.active = $scope.mmdialog.component.active ? 1 : 0;
+					console.log( node );
+					node.name = $scope.mmdialog.component.name;
+					node.active = $scope.mmdialog.component.active;
+					node.component = $scope.mmdialog.component.component;
 					$scope.closeMMDialog();
 				});
 			} else {
@@ -171,6 +177,14 @@
 
 		LayoutPopup.prototype.onEnter = function(){
 			this.Save();
+		}
+
+		$scope.saveLayout = function( callback ) {
+			var layout_data = new Object();
+			layout_data.layout = angular.copy( $scope.data.layout );
+			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
+			
+			ComponentsAPI.saveLayout( layout_data.layout.layout_id, JSON.stringify( layout_data ), callback );
 		}
 
 
@@ -316,24 +330,6 @@
 			$scope.data.components = angular.copy( $scope.data.original_components );
 			$scope.data.popup_show_errors = 0;
 			if ( typeof $scope.popup == 'object' ) $scope.popup.Hide();
-		}
-
-		/*** Submission of SAVE ***/
-		$scope.saveLayout = function( button ) {
-			var layout_data = new Object();
-			layout_data.layout = angular.copy( $scope.data.layout );
-
-			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
-
-			DisableButtons( button );
-			DisableOnSubmitFormElements();
-			
-			ComponentsAPI.saveLayout( layout_data.layout.id, function( data ) {
-				$scope.data.itemsForDeletion = new Object();
-				$scope.data.itemsForDeletion.nodes = [];
-				document.getElementById( 'jsLayoutUpdated' ).value = 1;
-				document.forms[ Screen ].submit();
-			}, encodeURIComponent( JSON.stringify( layout_data ) ) );
 		}
 
 		/*** EDIT ***/

@@ -243,7 +243,7 @@
 			</span>
 			<span class="cmp-component--expand" ng-if="!node.nodes.length" data-nodrag></span>
 
-			<span class="cmp-component--actions" data-nodrag ng-class="{ 'cmp-component--actions__active' : nodeActive == node }" ng-click="toggleNodeActions( node )" ng-if="permissions.can_add || permissions.can_edit || permissions.can_delete">
+			<span class="cmp-component--actions" data-nodrag ng-class="{ 'cmp-component--actions__active' : nodeActive == node }" ng-if="permissions.can_add || permissions.can_edit || permissions.can_delete">
 				<span class="cmp-component--actions__row">
 					<div class="cmp-component--actions__menu">
 						<span class="cmp-component--actions__item" ng-if="permissions.can_add && permissions.can_edit && node.component.allow_children" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
@@ -252,7 +252,7 @@
 						<span class="cmp-component--actions__divider" ng-if="permissions.can_delete"></span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_delete" ng-click="removeComponent( this, node )">Delete Component</span>
 					</div>
-					<span class="cmp-component--actions__button" tabindex="0" title="More Options">
+					<span class="cmp-component--actions__button" tabindex="0" title="More Options" ng-click="toggleNodeActions( node )">
 						<span class="cmp-component--actions__button_custom">
 							<span class="cmp-component--actions__button_el1"></span>
 							<span class="cmp-component--actions__button_el2"></span>

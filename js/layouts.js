@@ -107,13 +107,22 @@ Layouts_Batchlist.prototype.onEdit = function( item ) {
 
 	dialog			=	new Layout_Dialog( item.record );
 	dialog.onSave	= function() {
-		// Trigger Angular SAVE.
-		self.Refresh();
+		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
+		scope.$apply(function () {
+			scope.saveLayout( function() {
+				dialog.Cancel_LowLevel();
+				self.Refresh();
+			});
+		});	
 	};
 	dialog.Save	= function() {
-		// Trigger Angular SAVE.
-		dialog.Cancel_LowLevel();
-		self.Refresh();
+		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
+		scope.$apply(function () {
+			scope.saveLayout( function() {
+				dialog.Cancel_LowLevel();
+				self.Refresh();
+			});
+		});	
 	};
 	dialog.onDelete	= function() { self.Refresh(); };
 
