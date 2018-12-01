@@ -165,7 +165,7 @@
 		}
 
 		$scope.cancelEdit = function( node ) {
-			$scope.closePopup();
+			$scope.closeMMDialog();
 		}
 
 		/* Master MM Dialog */
