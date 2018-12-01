@@ -484,6 +484,42 @@ tr.angular-ui-tree-empty{
 .dialogform--styledcheckbox-checkbox {
 
 }
+
+.dialogform--styledlookup {
+	position: relative;
+}
+.dialogform--styledlookup .dialogform--styleinput-input,
+.dialogform--styledlookup .dialogform--styledinput-title {
+	width: calc(100% - 180px);
+}
+.dialogform--lookup-button {
+	position: absolute;
+	right: 0;
+	height: 100%;
+	top: 0;
+	bottom: 0;
+	padding: 0;
+	width: 180px;
+	text-align: center;
+	color: #000;
+	background: #f3f3f3;
+	font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.dialogform--lookup-text {
+	position: absolute;
+	top: 50%;
+	transform: translateY( -50% );
+	display: inline-block;
+	width: 100%;
+	right: 0;
+}
+
+
+
 .dialogform--styledtext {
 	font-size: 12px;
 }

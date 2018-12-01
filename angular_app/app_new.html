@@ -142,7 +142,7 @@
 					</div>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'memo'">
+				<div ng-if="attribute.type == 'memo'">
 					<textarea placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}"></textarea>
 				</div>
 
@@ -156,7 +156,7 @@
 					</div>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'radio'">
+				<div ng-if="attribute.type == 'radio'">
 					<div class="dialogform--styledradio">
 						<div class="dialogform--styledradio-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
 						<label ng-repeat="option in attribute.options" class="dialogform--styledradio-label">
@@ -165,22 +165,24 @@
 					</div>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'checkbox'">
+				<div ng-if="attribute.type == 'checkbox'">
 					<label class="dialogform--styledcheckbox">
 						<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
 						<span class="dialogform--styledcheckbox-prompt">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</span>
 					</label>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'product'">
-					<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.product.code" ng-required="{{ attribute.required ? true : false }}" />
-					<span class="mm9_button_light layoutcomponent_img_button" ng-click="productPopup( 'js-attribute_' + attribute.id )">
-						<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
-						<span class="mm9_button_text" style="padding-left: 5px;">Lookup Product</span>
-					</span>
+				<div ng-if="attribute.type == 'product'">
+					<div class="dialogform--styledinput dialogform--styledlookup">
+						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+						<div class="dialogform--styledlookup-wrap">
+							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.product.code" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
+							<span class="dialogform--lookup-button" ng-click="productPopup( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Lookup Product</span></span>
+						</div>
+					</div>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'category'">
+				<div ng-if="attribute.type == 'category'">
 					<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.category.code" ng-required="{{ attribute.required ? true : false }}" />
 					<span class="mm9_button_light layoutcomponent_img_button" ng-click="categoryPopup( 'js-attribute_' + attribute.id )">
 						<span class="mm9_button_image mm9_mivaicon" style="display: inline-block;"></span>
@@ -188,7 +190,7 @@
 					</span>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'image'">
+				<div ng-if="attribute.type == 'image'">
 					<div ng-if="attribute.value"><img ng-src="{{ attribute.value }}" style="max-width:190px; max-height: 140px;" title="Image for {{ attribute.prompt }}" alt="Image for {{ attribute.prompt }}" /></div>
 					<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 					<span class="mm9_button_light layoutcomponent_img_button" ng-click="imageUpload( 'js-attribute_' + attribute.id )">
@@ -197,7 +199,7 @@
 					</span>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'link'">
+				<div ng-if="attribute.type == 'link'">
 					<select name="layoutcomponent_type_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}" ng-init="attribute.link.type = attribute.link.type || 'N'">
 						<option value="N">None</option>
 						<option value="U">URL</option>
@@ -214,14 +216,14 @@
 					</span>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'imagetype'">
+				<div ng-if="attribute.type == 'imagetype'">
 					<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}">
 						<option value="">-- Select Image Type --</option>
 						<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
 					</select>
 				</div>
 
-				<div valign="top" width="100%" ng-if="attribute.type == 'datetime'">
+				<div ng-if="attribute.type == 'datetime'">
 					<span class="datetimepicker-value" ng-if="attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">{{ dateTimeFormatted( attribute.value ) }}</span>
 					<span class="datetimepicker-remove" ng-if="attribute.value" ng-click="removeDateTime( attribute )">Remove</span>
 					<span class="datetimepicker-value datepicker-placeholder" ng-if="!attribute.value" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )">Select Date/Time</span>
