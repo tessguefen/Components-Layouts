@@ -122,7 +122,6 @@
 		$scope.newComponent = function( scope ) {
 			$scope.resetDialog();
 			var nodeData = scope && scope.$modelValue ? scope.$modelValue : $scope.data.layout;
-			console.log( nodeData );
 			$scope.openMMDialog( 'add', nodeData );
 		}
 
@@ -137,7 +136,6 @@
 			$scope.$digest();
 			if ( !$scope.dialogForm.$invalid) {
 				$scope.$apply(function() {
-					console.log( node );
 					node.name = $scope.mmdialog.component.name;
 					node.active = $scope.mmdialog.component.active;
 					node.component = $scope.mmdialog.component.component;
@@ -187,62 +185,8 @@
 			ComponentsAPI.saveLayout( layout_data.layout.layout_id, JSON.stringify( layout_data ), callback );
 		}
 
-
-
-
-
-
-
-
-		///***** no changes ****///
-
-		/* Dialog Functions */
-		function LayoutComponentPopup_add() {
-			var self = this;
-			MMDialog.call( this, 'layoutcomponent_add', 680, 450 );
-
-			self.SetResizeEnabled();
-			
-			// Buttons
-			this.button_add									= null;
-			this.button_save								= this.ActionItem_Add( 'Add', function() { $scope.insertComponent(); } );
-			this.button_delete								= null;
-			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );	
-		}
-		DeriveFrom( MMDialog, LayoutComponentPopup_add );
-
-		LayoutComponentPopup_add.prototype.onEnter = function(){
-			this.Save();
-		}
-
-		function layoutComponentPopup_EDIT( scope, node ) {
-			var self = this;
-			MMDialog.call( this, 'layoutcomponent_edit', 680, 450 );
-
-			self.SetResizeEnabled();
-			
-			// Buttons
-			this.button_add									= null;
-			this.button_save								= this.ActionItem_Add( 'Save', function() { $scope.updateComponent( scope, node ); } );
-			this.button_delete								= null;
-			this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { $scope.cancelEdit( scope, node ) } );
-		}
-		DeriveFrom( MMDialog, layoutComponentPopup_EDIT );
-
-		layoutComponentPopup_EDIT.prototype.onEnter = function(){
-			this.Save();
-		}
-
-		var init = function( cmps ) {
-			$timeout( function(){
-				$scope.data.layout.nodes = cmps;
-			}, 0);
-		}
-
 		var initComponents = function( cmps ) {
-			$timeout( function(){
-				$scope.components = cmps;
-			}, 0);
+			$scope.components = cmps;
 		}
 
 		$scope.removeComponent = function( scope, node ) {
@@ -285,59 +229,20 @@
 			}
 		}
 
+
+
+
+
+		///***** no changes ****///
+
+
+
 		$scope.newComponent_Validation = function( attribute, index ) {
 			if ( !$scope.data.popup_show_errors ) return false;
 			if ( attribute.type == 'link' && ( attribute.link.type != 'N') && ( !attribute.link.value ) ) return true;
 			if ( !attribute.required ) return false;
 			if ( attribute.type != 'link' && $scope.newComponentForm['layoutcomponent_' + index].$invalid ) return true;
 		}
-
-		$scope.insertComponent = function() {
-			$scope.data.popup_show_errors = 0;
-			$scope.$digest();
-			if ( !$scope.newComponentForm.$invalid) {
-				$scope.$apply(function() {
-					if ( $scope.data.newComponent.parent.nodes.length === 0 ) $scope.data.newComponent.parent.nodes = [];
-					if ( $scope.data.newComponent.component.allow_children == 1 ) $scope.data.newComponent.nodes = [];
-					$scope.data.newComponent.parent.nodes.push( angular.copy( $scope.data.newComponent ) );
-					$scope.closePopup();
-				});
-			} else {
-				$timeout( function(){
-					$scope.data.popup_show_errors = 1;
-				}, 0);
-			}
-	
-		}
-
-		$scope.closePopup = function() {
-			$scope.popup.Hide();
-			$scope.resetPopup();
-		}
-
-		$scope.openPopup = function( parent ) {
-			$scope.resetPopup();
-			$scope.data.newComponent.parent = parent;
-			$scope.data.newComponent.active = 1;
-			$scope.popup = new LayoutComponentPopup_add();
-			$scope.popup.Show();
-		}
-
-		$scope.resetPopup = function() {
-			$scope.data.newComponent = new Object();
-			$scope.data.newComponent.component = new Object();
-			$scope.data.newComponent.parent = new Object();
-			$scope.data.components = angular.copy( $scope.data.original_components );
-			$scope.data.popup_show_errors = 0;
-			if ( typeof $scope.popup == 'object' ) $scope.popup.Hide();
-		}
-
-		/*** EDIT ***/
-		// $scope.editComponent = function( scope, node ) {
-		// 	angular.copy( node, $scope.data.editComponent );
-		// 	$scope.popup = new layoutComponentPopup_EDIT( scope, node );
-		// 	$scope.popup.Show();
-		// }
 
 		$scope.editComponent_Validation = function( attribute, index ) {
 			if ( !$scope.data.popup_show_errors ) return false;
@@ -460,6 +365,7 @@
 
 })( window, window.angular );
 
+// Used in layouts.js
 function initializeLayout( layout ) {
 	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 	scope.$apply(function () {
