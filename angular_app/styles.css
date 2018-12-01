@@ -368,28 +368,6 @@ tr.angular-ui-tree-empty{
 	white-space: nowrap;
 	overflow: hidden;
 }
-.layout_dialog_bottom_actionbar_edit {
-	position: relative;
-	display: inline-block;
-	vertical-align: middle;
-	margin-top: 10px;
-	margin-left: 10px;
-	padding-bottom: 1px;
-	font-size: 12px;
-	font-weight: bold;
-	font-family: 'MuseoSans';
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
-	color: #1eabbd;
-	cursor: pointer;
-	-webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	border-bottom: 1px solid #1eabbd;
-}
 .layout_dialog_bottom_buttons {
 	position: absolute;
 	top: 0;
@@ -504,7 +482,46 @@ tr.angular-ui-tree-empty{
 .dialogform--styledtext {
 	font-size: 12px;
 }
-
+.layout_dialog_loading {
+	position: absolute;
+	display: none;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #f1f1f1;
+	z-index: 1;
+}
+.layout_dialog_loading.layout_dialog_is_loading {
+	display: block;
+}
+.layout_dialog_loading_content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 50px;
+	max-width: 400px;
+	background-color: #fff;
+	text-align: center;
+	box-sizing: border-box;
+	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+.layout_dialog_loading_title {
+	position: relative;
+	display: block;
+	margin-bottom: 8px;
+	font-size: 24px;
+	font-family: 'MuseoSans';
+	color: #444;
+}
+.layout_dialog_loading_subtitle {
+	position: relative;
+	display: block;
+	font-size: 14px;
+	font-family: 'MuseoSans';
+	color: #999;
+}
 
 .cmp-components {
 	position: relative;

@@ -1,4 +1,4 @@
-<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components" ng-mouseup="toggleNodeActions();" ng-init="dialogForm={};">
+<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components" ng-mouseup="toggleNodeActions();">
 	<div id="mm9_dialog_layout_mmdialog" class="mm9_dialog" data-mmdisableonsubmit="on">
 		<div class="mm9_dialog_container">
 			<div id="mm9_dialog_layout_mmdialog_content_container" class="mm9_dialog_content_container">
@@ -21,18 +21,33 @@
 						</div>
 
 						<div class="layout_dialog_content">
+
+							<div class="layout_dialog_loading" ng-class="{ 'layout_dialog_is_loading' : data.is_loading }">
+								<div class="layout_dialog_loading_content">
+									<span class="layout_dialog_loading_title">Loading...</span>
+									<span class="layout_dialog_loading_subtitle">Please wait while your layout is loaded.</span>
+								</div>
+							</div>
+
+							<div class="layout_dialog_loading" ng-class="{ 'layout_dialog_is_loading' : data.is_processing }">
+								<div class="layout_dialog_loading_content">
+									<span class="layout_dialog_loading_title">Processing...</span>
+									<span class="layout_dialog_loading_subtitle">Please wait while your layout is saved.</span>
+								</div>
+							</div>
+
 							<div ui-tree class="cmp-components">
 								<ol ui-tree-nodes="" ng-model="data.layout.nodes" id="tree-root">
 									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
 								</ol>
 							</div>
+
 						</div>
 
 						<div class="layout_dialog_bottom">
 							<span class="layout_dialog_actionbar">
 								<span class="layout_dialog_bottom_actionbar_subtitle">Layout Name</span>
 								<span class="layout_dialog_bottom_actionbar_title">{{ data.layout.name }}</span>
-								<span class="layout_dialog_bottom_actionbar_edit">Edit</span>
 							</span>
 							<span class="layout_dialog_bottom_buttons"></span>
 						</div>
@@ -85,7 +100,7 @@
 						<div class="dialogform--styledinput" ng-class="{ 'layoutcomponent_error' : mmdialog.popup_show_errors && dialogForm.layoutcomponent_component.$invalid }">
 							<div class="dialogform--styledinput-title">Component</div>
 							<select name="layoutcomponent_component" ng-model="mmdialog.component.component" class="dialogform--styleinput-select" required>
-								<option value="">-- Select One --</option>
+								<option value="" disabled>-- Select One --</option>
 								<option ng-repeat="component in components track by component.id" ng-value="component">{{ component.name }}</option>
 							</select>
 						</div>
@@ -120,7 +135,7 @@
 					</div>
 				</div>
 
-				<div ng-if="mmdialog.component.component.id > 0" ng-repeat="attribute in mmdialog.component.component.attributes" ng-class="{ 'layoutcomponent_error' : newComponent_Validation( attribute, $index ) }">
+				<div ng-if="mmdialog.component.component.id > 0" ng-repeat="attribute in mmdialog.component.component.attributes" ng-class="{ 'layoutcomponent_error' : componentValidation( attribute, $index ) }">
 
 					<div ng-if="attribute.type == 'text'">
 						<div class="dialogform--styledinput">

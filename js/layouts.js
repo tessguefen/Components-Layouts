@@ -42,7 +42,9 @@ function Layouts_Delete_Cache( callback ) {
 
 function Layouts_Batchlist() {
 	var self = this;
+
 	MMBatchList.call( self, 'jsLayoutBatchlist' );
+
 	self.Feature_SearchBar_SetPlaceholderText( 'Search Layouts...' );
 	self.SetDefaultSort( 'id', '' );
 
@@ -50,10 +52,13 @@ function Layouts_Batchlist() {
 		self.Feature_Add_Enable('Add Layout');
 	}
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
-		self.Feature_EditDialog_Enable('Edit Layout(s)');
+		self.Feature_Edit_Enable('Edit Layout(s)');
 		self.Feature_RowDoubleClick_Enable();
-		button = this.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', this.DuplicateLayout );
+		self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', self.DuplicateLayout );
 	}
+	
+	self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'View/ Edit Layout', 'View/ Edit Layout', 'goto', self.editLayout );
+	
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
 		self.Feature_Delete_Enable('Delete Layout(s)');
 	}
@@ -61,7 +66,6 @@ function Layouts_Batchlist() {
 	self.Feature_Buttons_AddButton_Persistent( 'Delete Layout Cache', 'Delete Layout Cache', '', self.DeleteLayoutCache );
 	
 	self.processingdialog = new ProcessingDialog();
-	//self.Feature_GoTo_Enable('Open Layout', '');
 }
 
 DeriveFrom( MMBatchList, Layouts_Batchlist );
@@ -101,12 +105,13 @@ Layouts_Batchlist.prototype.onDelete = function( item, callback, delegator ) {
 	Layouts_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Layout_Delete', callback, delegator );
 }
 
-Layouts_Batchlist.prototype.onEdit = function( item ) {
+Layouts_Batchlist.prototype.editLayout = function( item, e ) {
 	var self = this;
 	var dialog;
 
-	dialog			=	new Layout_Dialog( item.record );
-	dialog.onSave	= function() {
+	dialog = new Layout_Dialog( item.record );
+
+	dialog.onSave = function() {
 		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 		scope.$apply(function () {
 			scope.saveLayout( function() {
@@ -115,7 +120,7 @@ Layouts_Batchlist.prototype.onEdit = function( item ) {
 			});
 		});	
 	};
-	dialog.Save	= function() {
+	dialog.Save = function() {
 		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 		scope.$apply(function () {
 			scope.saveLayout( function() {

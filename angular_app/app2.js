@@ -50,9 +50,11 @@
 		$scope.permissions.can_edit = CanI( 'TGCOMPONENTS', 0, 0, 1, 0 );
 		$scope.permissions.can_delete = CanI( 'TGCOMPONENTS', 0, 0, 0, 1 );
 
+		// MMDialog Variables
 		$scope.mmdialog = {};
 		$scope.mmdialog.component = {};
 
+		// Main Dialog Form
 		$scope.dialogForm = {};
 
 		$scope.nodeActive = 0;
@@ -61,6 +63,8 @@
 		$scope.initializeLayout = function( layout ) {
 
 			$scope.data = {};
+			$scope.data.is_processing = 0;
+			$scope.data.is_loading = 1;
 			$scope.data.layout = {};
 			$scope.data.layout.nodes = {};
 			$scope.data.layout.layout_id = layout.id;
@@ -76,6 +80,18 @@
 			ComponentsAPI.getData( layout.id, function( data ) {
 				init( data );
 			});
+		}
+
+		var initComponents = function( cmps ) {
+			$scope.components = cmps;
+		}
+		var init = function( cmps ) {
+
+			$scope.$apply(function() {
+				$scope.data.layout.nodes = cmps;
+				$scope.data.is_loading = 0;
+			});
+
 		}
 
 		$scope.toggleNodeActions = function( node ) {
@@ -105,18 +121,22 @@
 		$scope.insertNewComponent = function() {
 			$scope.mmdialog.show_errors = 0;
 			$scope.$digest();
-			if ( !$scope.dialogForm.$invalid) {
-				$scope.$apply(function() {
-					if ( $scope.mmdialog.component.parent.nodes.length === 0 ) $scope.mmdialog.component.parent.nodes = [];
-					if ( $scope.mmdialog.component.component.allow_children == 1 ) $scope.mmdialog.component.nodes = [];
-					$scope.mmdialog.component.parent.nodes.push( angular.copy( $scope.mmdialog.component ) );
-					$scope.closeMMDialog();
-				});
-			} else {
+
+			console.log( $scope.dialogForm );
+
+			if ( $scope.dialogForm.$invalid) {
 				$scope.$apply(function() {
 					$scope.mmdialog.show_errors = 1;
 				});
+				return;
 			}
+
+			$scope.$apply(function() {
+				if ( $scope.mmdialog.component.parent.nodes.length === 0 ) $scope.mmdialog.component.parent.nodes = [];
+				if ( $scope.mmdialog.component.component.allow_children == 1 ) $scope.mmdialog.component.nodes = [];
+				$scope.mmdialog.component.parent.nodes.push( angular.copy( $scope.mmdialog.component ) );
+				$scope.closeMMDialog();
+			});
 		}
 
 		$scope.newComponent = function( scope ) {
@@ -178,16 +198,22 @@
 		}
 
 		$scope.saveLayout = function( callback ) {
+			if ( $scope.data.is_processing == 1 ) return;
+
 			var layout_data = new Object();
 			layout_data.layout = angular.copy( $scope.data.layout );
 			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
 			
-			ComponentsAPI.saveLayout( layout_data.layout.layout_id, JSON.stringify( layout_data ), callback );
+			$scope.data.is_processing = 1;
+
+			ComponentsAPI.saveLayout( layout_data.layout.layout_id, JSON.stringify( layout_data ), function() {
+				$scope.$apply(function() {
+					$scope.data.is_processing = 0;
+				});
+				if ( typeof callback == 'function' ) callback();
+			} );
 		}
 
-		var initComponents = function( cmps ) {
-			$scope.components = cmps;
-		}
 
 		$scope.removeComponent = function( scope, node ) {
 			if( $window.confirm('Are you sure you want to delete this?') ) {
@@ -229,27 +255,17 @@
 			}
 		}
 
+		$scope.componentValidation = function( attribute, index ) {
+			if ( !$scope.mmdialog.show_errors ) return false;
+			if ( attribute.type == 'link' && ( attribute.link.type != 'N') && ( !attribute.link.value ) ) return true;
+			if ( !attribute.required ) return false;
+			if ( attribute.type != 'link' && $scope.dialogForm['layoutcomponent_' + index].$invalid ) return true;
+		}
 
 
 
 
 		///***** no changes ****///
-
-
-
-		$scope.newComponent_Validation = function( attribute, index ) {
-			if ( !$scope.data.popup_show_errors ) return false;
-			if ( attribute.type == 'link' && ( attribute.link.type != 'N') && ( !attribute.link.value ) ) return true;
-			if ( !attribute.required ) return false;
-			if ( attribute.type != 'link' && $scope.newComponentForm['layoutcomponent_' + index].$invalid ) return true;
-		}
-
-		$scope.editComponent_Validation = function( attribute, index ) {
-			if ( !$scope.data.popup_show_errors ) return false;
-			if ( attribute.type == 'link' && ( attribute.link.type != 'N') && ( !attribute.link.value ) ) return true;
-			if ( !attribute.required ) return false;
-			if ( attribute.type != 'link' && $scope.editComponentForm['layoutcomponent_' + index].$invalid ) return true;
-		}
 
 
 		/*** Popups for Forms ***/
