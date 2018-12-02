@@ -606,6 +606,10 @@ tr.angular-ui-tree-empty{
 	color: #ff6b59;
 }
 
+.cmp-component--title__inactive {
+	opacity: .5;
+}
+
 
 
 
