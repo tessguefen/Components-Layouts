@@ -56,7 +56,7 @@ function Layouts_Batchlist() {
 		self.Feature_RowDoubleClick_Enable();
 		self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', self.DuplicateLayout );
 	}
-	
+
 	self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'View/ Edit Layout', 'View/ Edit Layout', 'goto', self.editLayout );
 	
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
@@ -111,15 +111,6 @@ Layouts_Batchlist.prototype.editLayout = function( item, e ) {
 
 	dialog = new Layout_Dialog( item.record );
 
-	dialog.onSave = function() {
-		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
-		scope.$apply(function () {
-			scope.saveLayout( function() {
-				dialog.Cancel_LowLevel();
-				self.Refresh();
-			});
-		});	
-	};
 	dialog.Save = function() {
 		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 		scope.$apply(function () {

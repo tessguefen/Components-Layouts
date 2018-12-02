@@ -372,8 +372,12 @@
 			return d.toLocaleString();
 		}
 
-		$scope.removeDateTime = function( attr ) {
-			attr.value = '';
+		$scope.imagetypeDescrip = function( attr ) {
+			if ( !attr.value ) return;
+			angular.forEach( attr.options, function(opt) {
+				console.log( opt.id, attr.value );
+				if ( opt.id == attr.value ) return opt.descrip;
+			});
 		}
 	}]);
 

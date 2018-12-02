@@ -99,6 +99,7 @@ Components_Batchlist.Update_Nests = function( item, checked, callback, delegator
 	for ( i = 0; i < item.record.mmbatchlist_fieldlist.length; i++ ) {
 		if ( item.record.mmbatchlist_fieldlist[ i ].name == 'allow_children' ) {
 			item.record.mmbatchlist_fieldlist[ i ].value = checked ? 1 : 0;
+			item.record.mmbatchlist_fieldlist[ i ].encoded_value = checked ? 1 : 0;
 			break;
 		}
 	}

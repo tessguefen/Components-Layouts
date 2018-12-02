@@ -464,7 +464,10 @@ tr.angular-ui-tree-empty{
 .dialogform--styleinput-select,
 .dialogform--styledtext-text,
 .dialogform--styleinput-input,
-.dialogform--styledradio-label {
+.dialogform--styledradio-label,
+.dialogform--styleinput-textarea,
+.dialogform--styleinput-linkselect,
+.dialogform--styleinput-linkvalue {
 	border: 0;
 	width: 100%;
 	font-size: 14px;
@@ -472,6 +475,26 @@ tr.angular-ui-tree-empty{
 	padding: 0;
 	outline: 0;
 	margin-top: 6px;
+}
+.dialogform--styleinput-select {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	opacity: 0;
+}
+.dialogform--styleinput-linkselect {
+	width: 100px;
+}
+.dialogform--styleinput-linkvalue {
+	width: calc(100% - 280px);
+}
+.dialogform--styleinput-datetime {
+	width: 150px;
+	border: 0;
+	padding: 0;
+	outline: 0;
 }
 .dialogform--styledradio-label {
 	display: block;
@@ -516,6 +539,16 @@ tr.angular-ui-tree-empty{
 	display: inline-block;
 	width: 100%;
 	right: 0;
+}
+
+.datetimepicker-remove {
+	margin-left: 0.5rem;
+	cursor: pointer;
+	font-size: 10px;
+	font-weight: bold;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: #999;
 }
 
 
