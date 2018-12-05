@@ -2,6 +2,9 @@
 
 *Current Version 1.005*
 
+## Notes to self
+Element_ActionDialog_CSS, Element_ActionDialog_HTML, Element_ActionDialog_JavaScript
+
 ## Features
 
 - Components
