@@ -2,7 +2,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.005">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.006">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.00">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export">
@@ -24,6 +24,10 @@
 		Added Layout Caching! :sunglasses:
 	1.005
 		- Fixed UI issue with Radio buttons.
+	1.006
+		- Added Date Cached
+		- Added Date Start/ End per Layout > Components
+
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -341,6 +345,31 @@
 					QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache ( layout_id )' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1002', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache.' ) }">
+		</MvIF>
+	</MvIF>
+	<MvIF EXPR = "{ l.version LT 1.006 }">
+		<MvCOMMENT>
+			Add Timestamp for when it was last cached.
+		</MvCOMMENT>
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
+				 				ADD
+				 				(
+				 					dt_cached	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 ) $ '
+				 				)'}">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1003', 'Could not add `dt_cached`.' ) }">
+		</MvIF>
+
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
+				 				ADD
+				 				(
+				 					dt_start	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 ) $ ',
+				 					dt_end		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 ) $ '
+				 				)'}">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1004', 'Could not add `dt_start` and `dt_end`.' ) }">
 		</MvIF>
 	</MvIF>
 	<MvFUNCTIONRETURN VALUE = 1 />

@@ -59,8 +59,17 @@
 
 		$scope.nodeActive = 0;
 
+		if ( typeof layoutHadChanges == 'undefined' ) {
+			var layoutHadChanges = 0;
+		}
+		layoutHadChanges = 0;
+
+		var scopeWatch = $scope.$watch( 'data.layout.nodes', function() {
+			layoutHadChanges = 1;
+		}, true )
+
 		// Initialize Layout.
-		$scope.initializeLayout = function( layout ) {
+		$scope.initializeLayout = function( layout, layoutDialog ) {
 
 			$scope.data = {};
 			$scope.data.is_processing = 0;
@@ -78,18 +87,24 @@
 			$scope.data.itemsForDeletion.nodes = [];
 
 			ComponentsAPI.getData( layout.id, function( data ) {
-				init( data );
+				init( data, layoutDialog );
 			});
 		}
 
 		var initComponents = function( cmps ) {
 			$scope.components = cmps;
 		}
-		var init = function( cmps ) {
+		var init = function( cmps, layoutDialog ) {
 
 			$scope.$apply(function() {
 				$scope.data.layout.nodes = cmps;
 				$scope.data.is_loading = 0;
+
+				layoutDialog.layoutHadChanges = 0;
+				scopeWatch();
+				scopeWatch = $scope.$watch( 'data.layout.nodes', function( newVal, oldVal ) {
+					layoutDialog.layoutHadChanges = 1;
+				}, true );
 			});
 
 		}
@@ -157,6 +172,8 @@
 					node.name = $scope.mmdialog.component.name;
 					node.active = $scope.mmdialog.component.active;
 					node.component = $scope.mmdialog.component.component;
+					node.dt_start = $scope.mmdialog.component.dt_start;
+					node.dt_end = $scope.mmdialog.component.dt_end;
 					$scope.closeMMDialog();
 				});
 			} else {
@@ -350,17 +367,39 @@
 			image_dialog.Show();
 		}
 
-		$scope.dateTimePopup = function( attr, field ) {
+		$scope.dateTimePopup = function( attr, field, type ) {
 			var dateTimePicker;
-			if ( attr.value ) {
-				var nDate = attr.value * 1000;
-				dateTimePicker = new MMDateTimePicker( new Date( nDate ) );
-			} else {
-				dateTimePicker = new MMDateTimePicker( new Date() );
+			if ( type == 'attribute' ) {
+				if ( attr.value ) {
+					var nDate = attr.value * 1000;
+					dateTimePicker = new MMDateTimePicker( new Date( nDate ) );
+				} else {
+					dateTimePicker = new MMDateTimePicker( new Date() );
+				}
+			} else if ( type == 'dt_start' ) {
+				if ( attr.dt_start ) {
+					var nDate = attr.dt_start * 1000;
+					dateTimePicker = new MMDateTimePicker( new Date( nDate ) );
+				} else {
+					dateTimePicker = new MMDateTimePicker( new Date() );
+				}
+			} else if ( type == 'dt_end' ) {
+				if ( attr.dt_end ) {
+					var nDate = attr.dt_end * 1000;
+					dateTimePicker = new MMDateTimePicker( new Date( nDate ) );
+				} else {
+					dateTimePicker = new MMDateTimePicker( new Date() );
+				}
 			}
 			dateTimePicker.oncomplete = function( date ) {
 				$scope.$apply(function() {
-					attr.value = date.getTime() / 1000;
+					if ( type == 'attribute' ) {
+						attr.value = date.getTime() / 1000;
+					} else if ( type == 'dt_start' ) {
+						attr.dt_start = date.getTime() / 1000;
+					} else if ( type == 'dt_end' ) {
+						attr.dt_end = date.getTime() / 1000;
+					}
 				});
 			};
 			dateTimePicker.Show();
@@ -384,9 +423,9 @@
 })( window, window.angular );
 
 // Used in layouts.js
-function initializeLayout( layout ) {
+function initializeLayout( layout, layoutDialog ) {
 	var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 	scope.$apply(function () {
-		scope.initializeLayout( layout );
+		scope.initializeLayout( layout, layoutDialog );
 	});
 }

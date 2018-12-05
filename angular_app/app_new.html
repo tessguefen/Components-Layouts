@@ -117,10 +117,39 @@
 				</div>
 
 				<div ng-if="mmdialog.component.component.id > 0">
+
 					<label class="dialogform--styledcheckbox">
 						<input type="checkbox" name="layoutcomponent_active" ng-model="mmdialog.component.active" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
 						<span class="dialogform--styledcheckbox-prompt">Active</span>
 					</label>
+
+					<div class="dialogform--styledinput dialogform--styledlookup">
+						<div class="dialogform--styledinput-title">Not Valid Before</div>
+						<div class="dialogform--styledlookup-wrap">
+							<input id="js-component-dt_start" ng-model="mmdialog.component.dt_start" type="hidden" />
+							<div class="dialogform--styleinput-input">
+								<input type="text" value="{{ mmdialog.component.dt_start ? dateTimeFormatted( mmdialog.component.dt_start ) : '' }}" placeholder="Select Date/Time" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_start', 'dt_start' )" class="dialogform--styleinput-datetime" readonly />
+								<span class="datetimepicker-remove" ng-if="mmdialog.component.dt_start" ng-click="mmdialog.component.dt_start = ''">Remove</span>
+							</div>
+							<span class="dialogform--lookup-button" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_start', 'dt_start' )"><span class="dialogform--lookup-text">Select Date/
+							Time</span></span>
+						</div>
+					</div>
+
+					<div class="dialogform--styledinput dialogform--styledlookup">
+						<div class="dialogform--styledinput-title">Not Valid After</div>
+						<div class="dialogform--styledlookup-wrap">
+							<input id="js-component-dt_end" ng-model="mmdialog.component.dt_end" type="hidden" />
+							<div class="dialogform--styleinput-input">
+								<input type="text" value="{{ mmdialog.component.dt_end ? dateTimeFormatted( mmdialog.component.dt_end ) : '' }}" placeholder="Select Date/Time" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_end', 'dt_end' )" class="dialogform--styleinput-datetime" readonly />
+								<span class="datetimepicker-remove" ng-if="mmdialog.component.dt_end" ng-click="mmdialog.component.dt_end = ''">Remove</span>
+							</div>
+							<span class="dialogform--lookup-button" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_end', 'dt_end' )"><span class="dialogform--lookup-text">Select Date/
+							Time</span></span>
+						</div>
+					</div>
+					
+
 				</div>
 
 			</div>
@@ -204,7 +233,7 @@
 					<div class="dialogform--styledinput dialogform--styledlookup">
 						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
 						<div class="dialogform--styledlookup-wrap">
-							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.category.code" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
+							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
 							<span class="dialogform--lookup-button" ng-click="imageUpload( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Upload Image</span></span>
 						</div>
 					</div>
@@ -246,10 +275,10 @@
 						<div class="dialogform--styledlookup-wrap">
 							<input id="js-attribute_{{ attribute.id }}" type="hidden" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
 							<div class="dialogform--styleinput-input">
-								<input type="text" value="{{ attribute.value ? dateTimeFormatted( attribute.value ) : '' }}" ng-attr-placeholder="Select Date/Time" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )" class="dialogform--styleinput-datetime" readonly />
+								<input type="text" value="{{ attribute.value ? dateTimeFormatted( attribute.value ) : '' }}" ng-attr-placeholder="Select Date/Time" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id, 'attribute' )" class="dialogform--styleinput-datetime" readonly />
 								<span class="datetimepicker-remove" ng-if="attribute.value" ng-click="attribute.value = ''">Remove</span>
 							</div>
-							<span class="dialogform--lookup-button" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Select Date/
+							<span class="dialogform--lookup-button" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id, 'attribute' )"><span class="dialogform--lookup-text">Select Date/
 							Time</span></span>
 						</div>
 					</div>
@@ -285,9 +314,11 @@
 			<span class="cmp-component--actions" data-nodrag ng-class="{ 'cmp-component--actions__active' : nodeActive == node }" ng-if="permissions.can_add || permissions.can_edit || permissions.can_delete">
 				<span class="cmp-component--actions__row">
 					<div class="cmp-component--actions__menu">
-						<span class="cmp-component--actions__item" ng-if="permissions.can_add && permissions.can_edit && node.component.allow_children" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
+						<span class="cmp-component--actions__item" ng-if="permissions.can_add && node.component.allow_children" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="editComponent( node ); toggleNodeActions();">Edit Component</span>
-						<span class="cmp-component--actions__item" ng-if="permissions.can_add && permissions.can_edit" ng-click="duplicateComponent( parent, node )">Duplicate Component</span>
+						<span class="cmp-component--actions__item" ng-if="permissions.can_add" ng-click="duplicateComponent( parent, node )">Duplicate Component</span>
+						<span class="cmp-component--actions__divider" ng-if="permissions.can_edit"></span>
+						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="node.active = !node.active">{{ node.active ? 'De-activate' : 'Activate' }}</span>
 						<span class="cmp-component--actions__divider" ng-if="permissions.can_delete"></span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_delete" ng-click="removeComponent( this, node )">Delete Component</span>
 					</div>

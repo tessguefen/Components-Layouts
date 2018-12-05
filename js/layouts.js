@@ -252,6 +252,7 @@ function Layout_Dialog( layout )
 	self.button_update.SetText( 'Update' );
 	self.button_update.SetOnClickHandler( function( e ) { return self.Save(); } );
 
+	self.layoutHadChanges = 0;
 
 	self.SetFullscreenEnabled( true, true );
 }
@@ -265,7 +266,7 @@ Layout_Dialog.prototype.onModalShow = function( z_index )
 
 	MMDialog.prototype.onModalShow.call( this, z_index );
 
-	initializeLayout( self.layout );
+	initializeLayout( self.layout, self );
 }
 Layout_Dialog.prototype.onFullscreen_End = function()
 {
@@ -300,13 +301,15 @@ Layout_Dialog.prototype.DisplayCancelDiscardSaveDialog = function()
 	var self = this;
 	var dialog, button_save, button_cancel, button_discard;
 
-	dialog 			= new ActionDialog();
-	dialog.onESC	= function( e ) { button_cancel.SimulateClick(); };
-	dialog.onEnter	= function( e ) { button_save.SimulateClick(); };
+	if ( self.layoutHadChanges == 0 ) return self.Cancel_LowLevel();
 
-	button_cancel	= dialog.Button_Add_Left( 'Cancel',		'', '', 'neutral',	function() { ; } );
-	button_discard	= dialog.Button_Add_Right( 'Discard',	'', '', 'negative',	function() { self.Cancel_LowLevel(); } );
-	button_save		= dialog.Button_Add_Right( 'Save',		'', '', '',			function() { self.Save(); } );
+	dialog 			= new ActionDialog();
+	dialog.onESC	= function( e ) { self.Cancel_LowLevel(); };
+	dialog.onEnter	= function( e ) { self.button_save.SimulateClick(); };
+
+	self. button_cancel		= dialog.Button_Add_Left( 'Cancel',		'', '', 'neutral',	function() { ; } );
+	self. button_discard	= dialog.Button_Add_Right( 'Discard',	'', '', 'negative',	function() { self.Cancel_LowLevel(); } );
+	self. button_save		= dialog.Button_Add_Right( 'Save',		'', '', '',			function() { self.Save(); } );
 
 	dialog.SetTitle( 'Save changes?' );
 	dialog.SetMessage( 'Your changes will be lost if you don\'t save them.' );

@@ -1429,6 +1429,8 @@
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_start"		VALUE = "{ TGLayouts_Components.d.dt_start }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_end"			VALUE = "{ TGLayouts_Components.d.dt_end }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponent_Insert_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -1436,10 +1438,10 @@
 
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
-						  ( id, layout_id, component_id, name, parent, active, disp_order )
+						  ( id, layout_id, component_id, name, parent, active, disp_order, dt_start, dt_end )
 						  VALUES
-						  ( ?, ?, ?, ?, ?, ?, ? )' }"
-			 FIELDS	= "l.layout_component:id, l.layout_component:layout_id, l.layout_component:component_id, l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order">
+						  ( ?, ?, ?, ?, ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.layout_component:id, l.layout_component:layout_id, l.layout_component:component_id, l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order. l.layout_component:dt_start, l.layout_component:dt_end">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0001', 'Could not add component to layout.' ) }">
 	</MvIF>
@@ -1516,10 +1518,12 @@
 							name = ?,
 							parent = ?,
 							active = ?,
-							disp_order = ?
+							disp_order = ?,
+							dt_start = ?,
+							dt_end = ?
 					      WHERE
 						    id		= ?' }"
-			 FIELDS	= "l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:id">
+			 FIELDS	= "l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end, l.layout_component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0006', 'Could not update layout component.' ) }">
 	</MvIF>
@@ -1918,13 +1922,15 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Read_Layout_Component" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ TGLayouts_Components.d.id }">
-	<MvASSIGN NAME = "l.component" MEMBER = "component_id"		VALUE = "{ TGLayouts_Components.d.component_id }">
-	<MvASSIGN NAME = "l.component" MEMBER = "layout_id"			VALUE = "{ TGLayouts_Components.d.layout_id }">
-	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ TGLayouts_Components.d.name }">
-	<MvASSIGN NAME = "l.component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
-	<MvASSIGN NAME = "l.component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
-	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
+	<MvASSIGN NAME = "l.component" MEMBER = "id"			VALUE = "{ TGLayouts_Components.d.id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "component_id"	VALUE = "{ TGLayouts_Components.d.component_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "layout_id"		VALUE = "{ TGLayouts_Components.d.layout_id }">
+	<MvASSIGN NAME = "l.component" MEMBER = "name"			VALUE = "{ TGLayouts_Components.d.name }">
+	<MvASSIGN NAME = "l.component" MEMBER = "parent"		VALUE = "{ TGLayouts_Components.d.parent }">
+	<MvASSIGN NAME = "l.component" MEMBER = "active"		VALUE = "{ TGLayouts_Components.d.active }">
+	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"	VALUE = "{ TGLayouts_Components.d.disp_order  }">
+	<MvASSIGN NAME = "l.component" MEMBER = "dt_start"		VALUE = "{ TGLayouts_Components.d.dt_start  }">
+	<MvASSIGN NAME = "l.component" MEMBER = "dt_end"		VALUE = "{ TGLayouts_Components.d.dt_end  }">
 
 	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:component_id, l.component:component ) }">
 	<MvASSIGN NAME = "l.void" VALUE = "{ Components_Attrs_Load_All_ID( l.component:component_id, l.component:component:attributes ) }">
@@ -2582,10 +2588,10 @@
 	<MvASSIGN NAME = "l.layout_values" VALUE = "{ miva_array_serialize( l.value ) }">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
-						  ( layout_id, value )
+						  ( layout_id, value, dt_cached )
 						  VALUES
-						  ( ?, ? )' }"
-			 FIELDS	= "l.layout_id, l.layout_values">
+						  ( ?, ?, ? )' }"
+			 FIELDS	= "l.layout_id, l.layout_values, s.dyn_time_t">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0003', 'Could not save Layout Cache.' ) }">
 	</MvIF>
