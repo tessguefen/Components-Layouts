@@ -38,7 +38,7 @@
 
 							<div ui-tree class="cmp-components">
 								<ol ui-tree-nodes="" ng-model="data.layout.nodes" id="tree-root">
-									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
+									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
 								</ol>
 							</div>
 
@@ -298,7 +298,7 @@
 				<span class="cmp-component--drag__line2"></span>
 			</span>
 
-			<span class="cmp-component--title" ng-class="{ 'cmp-component--title__inactive' : !node.active }">
+			<span class="cmp-component--title">
 				<span class="cmp-component--title__component">{{node.component.name}}</span>
 				<span class="cmp-component--title__name">{{node.name}}</span>
 			</span>
@@ -335,7 +335,7 @@
 			</span>
 		</div>
 		<ol ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.nodes">
-			<li class="cmp-component" ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes }">
+			<li class="cmp-component" ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }">
 			</li>
 		</ol>
 	</script>
