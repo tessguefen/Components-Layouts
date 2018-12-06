@@ -189,7 +189,7 @@
 		function LayoutPopup( type, node ) {
 			var self = this;
 
-			MMDialog.call( this, 'layoutcomponent', 680, 450 );
+			MMDialog.call( this, 'layoutcomponent', 900, window.outerHeight * .8 );
 
 			self.SetResizeEnabled();
 
@@ -417,10 +417,13 @@
 
 		$scope.imagetypeDescrip = function( attr ) {
 			if ( !attr.value ) return;
+			var val = '';
 			angular.forEach( attr.options, function(opt) {
-				console.log( opt.id, attr.value );
-				if ( opt.id == attr.value ) return opt.descrip;
+				if ( opt.id == attr.value ) {
+					val = opt.descrip;
+				}
 			});
+			return val;
 		}
 	}]);
 
