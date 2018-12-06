@@ -1444,7 +1444,7 @@
 						  ( id, layout_id, component_id, name, parent, active, disp_order, dt_start, dt_end )
 						  VALUES
 						  ( ?, ?, ?, ?, ?, ?, ?, ?, ? )' }"
-			 FIELDS	= "l.layout_component:id, l.layout_component:layout_id, l.layout_component:component_id, l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order. l.layout_component:dt_start, l.layout_component:dt_end">
+			 FIELDS	= "l.layout_component:id, l.layout_component:layout_id, l.layout_component:component_id, l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0001', 'Could not add component to layout.' ) }">
 	</MvIF>
