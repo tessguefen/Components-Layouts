@@ -249,6 +249,10 @@
 			node.hide_nodes = !node.hide_nodes;
 		}
 
+		$scope.toggleActive = function( node ) {
+			node.active = node.active ? 0 : 1;
+		}
+
 
 		$scope.removeIdAndParentId = function( node ) {
 			node.id = 0;

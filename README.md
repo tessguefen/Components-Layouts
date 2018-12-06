@@ -1,36 +1,6 @@
 # Components
 
-*Current Version 1.005*
-
-## Notes to self
-Element_ActionDialog_CSS, Element_ActionDialog_HTML, Element_ActionDialog_JavaScript
-
-```sql
-SELECT
-	layoutcache.layout_id
-FROM
-	s01_TGLayouts_Cache layoutcache
-JOIN
-	s01_TGLayouts_Components layoutcomponents
-ON
-	layoutcache.layout_id = layoutcomponents.layout_id
-WHERE
-		( 
-			layoutcomponents.dt_start > 0
-			AND
-			layoutcomponents.dt_start <= 1544038981  
-			AND
-			layoutcache.dt_cached <= layoutcomponents.dt_start
-		)
-		OR
-		(
-			layoutcomponents.dt_end > 0
-			AND
-			layoutcomponents.dt_end >= 1544038981  
-			AND
-			layoutcache.dt_cached <= layoutcomponents.dt_end
-		)
-```
+*Current Version 1.007*
 
 ## Features
 

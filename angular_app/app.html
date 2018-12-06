@@ -118,6 +118,13 @@
 
 				<div ng-if="mmdialog.component.component.id > 0">
 
+					<div ng-if="mmdialog.component.component.id">
+						<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_name.$invalid }">
+							<div class="dialogform--styledinput-title">Component Name*</div>
+							<input type="text" name="layoutcomponent_name" ng-model="mmdialog.component.name" class="dialogform--styleinput-input" placeholder="Component Name" required />
+						</div>
+					</div>
+
 					<label class="dialogform--styledcheckbox">
 						<input type="checkbox" name="layoutcomponent_active" ng-model="mmdialog.component.active" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
 						<span class="dialogform--styledcheckbox-prompt">Active</span>
@@ -156,12 +163,6 @@
 		</div>
 
 		<div>
-			<div ng-if="mmdialog.component.component.id">
-				<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_name.$invalid }">
-					<div class="dialogform--styledinput-title">Name*</div>
-					<input type="text" name="layoutcomponent_name" ng-model="mmdialog.component.name" class="dialogform--styleinput-input" placeholder="Name" required />
-				</div>
-			</div>
 
 			<div ng-if="mmdialog.component.component.id > 0" ng-repeat="attribute in mmdialog.component.component.attributes" ng-class="{ 'dialogform--error' : componentValidation( attribute, $index ) }">
 
@@ -318,7 +319,7 @@
 						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="editComponent( node ); toggleNodeActions();">Edit Component</span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_add" ng-click="duplicateComponent( parent, node )">Duplicate Component</span>
 						<span class="cmp-component--actions__divider" ng-if="permissions.can_edit"></span>
-						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="node.active = !node.active">{{ node.active ? 'De-activate' : 'Activate' }}</span>
+						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="toggleActive( node )">{{ node.active ? 'De-activate' : 'Activate' }}</span>
 						<span class="cmp-component--actions__divider" ng-if="permissions.can_delete"></span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_delete" ng-click="removeComponent( this, node )">Delete Component</span>
 					</div>
