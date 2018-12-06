@@ -97,6 +97,7 @@
 	Runtime_Layout_Components_Load_Parent_Lowlevel( layout_id, parent_id, components var, count var )
 	Runtime_Read_Layout_Component( component var )
 	Runtime_Load_Values( component var, output var )
+	Determine_Active_Schedule( dt_start, dt_end )
 	
 	Load_URI( link var )
 	Layout_Components_Duplicate( new_layout_id, old_layout_id )
@@ -125,6 +126,8 @@
 	Layout_Cache_Delete( layout_id )
 	Layout_Cache_Recache( layout_id )
 	Layout_Cache_DeleteAll()
+
+	Check_Layout_Cache()
 
 </MvCOMMENT>
 
@@ -2060,8 +2063,9 @@
 	<MvASSIGN NAME = "l.count" VALUE = "0" />
 
 	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
-
-		<MvEVAL EXPR = "{ Runtime_Read_Layout_Component( l.components[ ++l.count ] ) }">
+		<MvIF EXPR = "{ Determine_Active_Schedule( TGLayouts_Components.d.dt_start, TGLayouts_Components.d.dt_end ) }">
+			<MvEVAL EXPR = "{ Runtime_Read_Layout_Component( l.components[ ++l.count ] ) }">
+		</MvIF>
 
 		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
 	</MvWHILE>
@@ -2101,6 +2105,16 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "Determine_Active_Schedule" PARAMETERS = "dt_start, dt_end" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ( l.dt_start GT 0 ) AND ( l.dt_start GT s.dyn_time_t ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+	<MvIF EXPR = "{ ( l.dt_end GT 0 ) AND ( l.dt_end LE s.dyn_time_t ) }">
+		<MvFUNCTIONRETURN VALUE = 0 />
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = 1 />
+</MvFUNCTION>
+
 <MvFUNCTION NAME = "Load_URI" PARAMETERS = "link var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.flags:nosession" VALUE = "1" />
 	<MvIF EXPR = "{ l.link:type EQ 'P' AND l.link:value }">
@@ -2114,6 +2128,7 @@
 	</MvIF>
 	<MvFUNCTIONRETURN VALUE = "" />
 </MvFUNCTION>
+
 
 <MvCOMMENT>
 	Function Deticated to Ann
@@ -2622,5 +2637,52 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0005', 'Could not all layout cache.' ) }">
 	</MvIF>
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Check_Layout_Cache" STANDARDOUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Cache"
+				QUERY	= "{
+								'SELECT
+									layoutcache.layout_id
+								FROM
+									' $ g.Store_Table_Prefix $ 'TGLayouts_Cache layoutcache
+								JOIN
+									' $ g.Store_Table_Prefix $ 'TGLayouts_Components layoutcomponents
+								ON
+									layoutcache.layout_id = layoutcomponents.layout_id
+								WHERE
+									( 
+										layoutcomponents.dt_start > 0 AND
+										layoutcomponents.dt_start < ? AND
+										layoutcomponents.dt_start > layoutcache.dt_cached
+									)
+									OR
+									(
+										layoutcomponents.dt_end > 0 AND
+										layoutcomponents.dt_end < ? AND
+										layoutcomponents.dt_end > layoutcache.dt_cached
+									)'
+							}"
+				FIELDS	= "s.dyn_time_t, s.dyn_time_t">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0006', 'Could not Load Layouts.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGLayouts_Cache.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Cache">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Cache.d.EOF }">
+
+		<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( TGLayouts_Cache.d.layout_id ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Cache" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Cache">
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>

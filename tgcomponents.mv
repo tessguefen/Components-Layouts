@@ -2,10 +2,10 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.006">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.007">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.00">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
-	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export">
+	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -27,6 +27,9 @@
 	1.006
 		- Added Date Cached
 		- Added Date Start/ End per Layout > Components
+	1.007
+		- Actually Added Scheduling
+		- Added Scheduled Task
 
 </MvCOMMENT>
 
@@ -189,7 +192,9 @@
 								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								parent			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								active			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ ',
-								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ '
+								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+								dt_start		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 )	$ ',
+				 				dt_end			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 )	$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
@@ -244,7 +249,8 @@
 				QUERY = "{ 'CREATE TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
 							(
 								layout_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								value		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ '
+								value		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ ',
+								dt_cached	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 )	$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
@@ -309,6 +315,31 @@
 		</MvIF>
 	</MvIF>
 
+	<MvCOMMENT>
+	|
+	| Scheduled Task
+	|
+	</MvCOMMENT>
+
+	<MvASSIGN NAME = "l.task"				VALUE = "">
+	<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
+	<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
+	<MvASSIGN NAME = "l.task:trig"			VALUE = "">
+	<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
+	<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
+	<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
+	<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
+	<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
+	<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
+	<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
+	<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
+	<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
+	<MvASSIGN NAME = "l.task:config"		VALUE = "">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_TUI_MGR ].TemplateManager_Create_Item( 'tgcomponent',  l.module:code ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2023', 'An error occured while creating the item tgcomponent.' ) }">
@@ -370,6 +401,35 @@
 				 				)'}">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1004', 'Could not add `dt_start` and `dt_end`.' ) }">
+		</MvIF>
+		<MvIF EXPR = "{ NOT Layout_Cache_DeleteAll() }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1005', 'Did not clear out Layout Cache.' ) }">
+		</MvIF>
+	</MvIF>
+	<MvIF EXPR = "{ l.version LT 1.007 }">
+		<MvCOMMENT>
+		|
+		| Scheduled Tasks
+		|
+		</MvCOMMENT>
+
+		<MvASSIGN NAME = "l.task"				VALUE = "">
+		<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
+		<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
+		<MvASSIGN NAME = "l.task:trig"			VALUE = "">
+		<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
+		<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
+		<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
+		<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
+		<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
+		<MvASSIGN NAME = "l.task:config"		VALUE = "">
+
+		<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvIF>
 	<MvFUNCTIONRETURN VALUE = 1 />
@@ -517,10 +577,6 @@
 	<MvIF EXPR = "{ g.Filename EQ 'app.js' }">
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
 		<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
-	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'app2.js' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "angular_app/app2.js" INTERPRET="OFF">
 	</MvIF>
 	<MvIF EXPR = "{ g.Filename EQ 'styles.css' }">
 		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
@@ -821,6 +877,67 @@
 
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
 
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvCOMMENT>
+| ====================================================================================
+|	scheduledtask
+| ====================================================================================
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Capabilities" PARAMETERS = "module var, capabilities var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.capabilities:provision_settings" VALUE = 0>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Operations" PARAMETERS = "module var, operations var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.operations" INDEX = 1 MEMBER = "code"		VALUE = "check_layout_cache">
+	<MvASSIGN NAME = "l.operations" INDEX = 1 MEMBER = "descrip"	VALUE = "Layout Cache & Scheduled Component Check">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Fields" PARAMETERS = "module var, task var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Prompt" PARAMETERS = "module var, field_id" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = "">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Field" PARAMETERS = "module var, field_id" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Invalid" PARAMETERS = "module var, field_id" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 0>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Validate" PARAMETERS = "module var, task var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Update" PARAMETERS = "module var, task var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Delete" PARAMETERS = "module var, task var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Execute" PARAMETERS = "module var, task var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.task:operation NE 'check_layout_cache' }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-SCHEDULEDTASK-0001', 'Unsupported operation' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Check_Layout_Cache() }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ [ g.Module_Feature_SCH_DB ].ScheduledTaskLog_Insert( l.task:id, 'W', g.Error_Code $ ': ' $ g.Error_Message ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ScheduledTaskModule_Provision_Settings" PARAMETERS = "module var, task var, provide_xml var" STANDARDOUTPUTLEVEL = "">
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 

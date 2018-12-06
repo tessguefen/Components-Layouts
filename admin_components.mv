@@ -18,7 +18,7 @@
 		<link type="text/css" rel="stylesheet" href="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=styles.css' }" />
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app2.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
@@ -27,8 +27,12 @@
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
 
-		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_JavaScript() }">
-		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
+
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
@@ -44,51 +48,43 @@
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Sets' }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
 		<div id="jsLayoutBatchlist"></div>
-		<!-- Duplicate Layout MM Dialog -->
-		<div id="DuplicateLayout_dialog" class="mm_dialog">
-			<div id="DuplicateLayout_dialog_title" class="mm_dialog_title">Duplicate Layout</div>
-			<div class="mm_clear"></div>
-			<table>
-				<tbody>
-					<tr>
-						<td class="mm_dialog_prompt_required">New Code:</td>
-						<td class="DuplicateLayout_dialog_field">
-							<input type="text" name="new_code" id="DuplicateLayout_New_Code" />
-						</td>
-					</tr>
-					<tr>
-						<td class="mm_dialog_prompt_required">New Name:</td>
-						<td class="DuplicateLayout_dialog_field">
-							<input type="text" name="new_name" id="DuplicateLayout_New_Name" />
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="mm_dialog_buttons_left">
-				<input id="DuplicateLayout_dialog_button_cancel" type="button" value="Cancel">
-			</div>
-			<div class="mm_dialog_buttons_right"><input id="DuplicateLayout_dialog_button_save" type="button" value="Add"></div>
-		</div>
-		<!-- Duplicate Layout MM Dialog -->
+		
+		<MvEVAL EXPR = "{ DuplicateLayout_Dialog_HTML() }">
 
 		<MvEVAL EXPR = "{ Component_HTML_App() }" />
 
-		<!-- Action Dialog -->
-		<span id="mm9_actiondialog">
-			<span id="mm9_actiondialog_title" class="mm9_actiondialog_title"></span>
-			<span id="mm9_actiondialog_message" class="mm9_actiondialog_message"></span>
-			<span id="mm9_actiondialog_actions" class="mm9_actiondialog_actions">
-				<span id="mm9_actiondialog_actions_left" class="mm9_actiondialog_actions_left">
-				</span><span id="mm9_actiondialog_actions_right" class="mm9_actiondialog_actions_right"></span>
-			</span>
-		</span>
-		<!-- Action Dialog -->
-
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_HTML() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
 		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
-
 	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "DuplicateLayout_Dialog_HTML" STANDARDOUTPUTLEVEL = "html, text">
+<div id="DuplicateLayout_dialog" class="mm_dialog">
+	<div id="DuplicateLayout_dialog_title" class="mm_dialog_title">Duplicate Layout</div>
+	<div class="mm_clear"></div>
+	<table>
+		<tbody>
+			<tr>
+				<td class="mm_dialog_prompt_required">New Code:</td>
+				<td class="DuplicateLayout_dialog_field">
+					<input type="text" name="new_code" id="DuplicateLayout_New_Code" />
+				</td>
+			</tr>
+			<tr>
+				<td class="mm_dialog_prompt_required">New Name:</td>
+				<td class="DuplicateLayout_dialog_field">
+					<input type="text" name="new_name" id="DuplicateLayout_New_Name" />
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="mm_dialog_buttons_left">
+		<input id="DuplicateLayout_dialog_button_cancel" type="button" value="Cancel">
+	</div>
+	<div class="mm_dialog_buttons_right"><input id="DuplicateLayout_dialog_button_save" type="button" value="Add"></div>
+</div>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentsScreen_HeadTag" PARAMETERS = "screen" STANDARDOUTPUTLEVEL = "html, text">
@@ -100,20 +96,6 @@
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new ComponentAttrs_Batchlist( component_id ); } );
 		</script>
-	<MvELSEIF EXPR = "{ l.screen EQ 'Layout' }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].JavaScript_Set_A_Variable( 'layout_id', g.Layout_ID ) }">
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
-
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_CSS() }">
-
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
-
-		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_JavaScript() }">
-		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_CSS() }">
 	</MvIF>
 </MvFUNCTION>
 
@@ -123,47 +105,7 @@
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
 
 
-	<MvIF EXPR = "{ l.screen EQ 'Layout' }">
-		<MvIF EXPR = "{ NOT Layout_Load_ID( g.Layout_ID, l.layout ) }">
-			Could not load Screen for Layout ID: <MvEVAL EXPR = "{ encodeentities( g.Layout_ID ) }">.
-		<MvELSE>
-			<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components">
-
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Layout: ' $ encodeentities( l.layout:name ), encodeentities( l.layout:name ), '' ) }">
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
-
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Layout' ) }">
-
-				<MvIF EXPR = "{ g.Layout_Updated EQ 1 }">
-					<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons_Message( 'Layout Updated!' ) }">
-				</MvIF>
-
-				<div class="layoutcomponent_wrapper">
-
-					<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
-
-					<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Layout_ID">
-
-					<input type="hidden" name="Layout_Updated" value="0" id="jsLayoutUpdated" />
-
-					<MvEVAL EXPR = "{ Component_HTML_App() }" />
-				</div>
-
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
-				<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
-
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
-				<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">
-					<MvASSIGN NAME = "l.buttons" VALUE = "Components:+ Add Component;initAddComponent( this ),">
-				</MvIF>
-				<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) OR [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) OR [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">
-					<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( l.buttons $ 'Components:[UPDATE];initSaveLayout( this )' ) }">
-				</MvIF>
-				<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
-			</div>
-		</MvIF>
-	<MvELSEIF EXPR = "{ l.screen EQ 'Component' }">
+	<MvIF EXPR = "{ l.screen EQ 'Component' }">
 		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
 			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ encodeentities( g.Component_ID ) }">.
 		<MvELSE>
@@ -188,5 +130,5 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_HTML_App" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvINCLUDE FILE = "angular_app/app_new.html" INTERPRET="OFF" />
+	<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
 </MvFUNCTION>
