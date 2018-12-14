@@ -101,6 +101,8 @@
 		<Name>Name</Name>
 		<Active>1</Active>
 		<Parent>Some Parent</Parent>
+		<Date_Start><![CDATA[12/05/2018 21:10:03]]></Date_Start>
+		<Date_End><![CDATA[12/29/2018 21:10:05]]></Date_End>
 		<Attributes>
 			<Attribute code="MyAttribute">
 				<Value>My Value Here</Value>
