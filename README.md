@@ -1,6 +1,6 @@
 # Components
 
-*Current Version 1.007*
+*Current Version 1.008*
 
 ## Features
 
