@@ -168,6 +168,12 @@
 				<MvIF EXPR = "{ l.parent:id GT 0 }">
 					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Parent>' $ miva_cdata_encode( l.parent:name ) $ '</Parent>' }">
 				</MvIF>
+				<MvIF EXPR = "{ l.component:dt_start GT 0 }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Date_Start>' $ miva_cdata_encode( [ g.Module_Library_Utilities ].Format_Date( l.component:dt_start, 'en-US' ) $ ' ' $ [ g.Module_Library_Utilities ].Format_Time_Short( l.component:dt_start, 'en-US' ) ) $ '</Date_Start>' }">
+				</MvIF>
+				<MvIF EXPR = "{ l.component:dt_end GT 0 }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Date_End>' $ miva_cdata_encode( [ g.Module_Library_Utilities ].Format_Date( l.component:dt_end, 'en-US' ) $ ' ' $ [ g.Module_Library_Utilities ].Format_Time_Short( l.component:dt_end, 'en-US' ) ) $ '</Date_End>' }">
+				</MvIF>
 				<MvIF EXPR = "{ miva_array_elements( l.component:component:attributes ) }">
 					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Attributes>' }">
 						<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.component:component:attributes">

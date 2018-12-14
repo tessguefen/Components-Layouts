@@ -2,8 +2,8 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.007">
-	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.00">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.008">
+	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
 </MvFUNCTION>
@@ -30,7 +30,9 @@
 	1.007
 		- Actually Added Scheduling
 		- Added Scheduled Task
-
+	1.008
+		- Updated PRV tags
+		- Updated api_ver
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -470,10 +472,22 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "StoreUtilityModule_LeftNavigation"  PARAMETERS = "module var, indent" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">
+<MvFUNCTION NAME = "StoreUtilityModule_Action_Privileges" PARAMETERS = "module var">
+	<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
+	<MvFUNCTIONRETURN VALUE = -1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_Screen_Privileges" PARAMETERS = "module var">
+	<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+	<MvFUNCTIONRETURN VALUE = -1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "StoreUtilityModule_LeftNavigation"  PARAMETERS = "module var, indent" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }"><MvFUNCTIONRETURN VALUE = 1></MvIF>
 	<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].LeftNavigation_Dot( l.indent - 1, 'Screen=SUTL&Store_Code=' $ encodeattribute( g.Store:code ) $ '&Module_Code=' $ encodeattribute( l.module:code ), 'Main', 'Components and Layouts' ) }">
 	</MvIF>
@@ -481,9 +495,7 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "StoreUtilityModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">
-		<MvFUNCTIONRETURN VALUE = 1>
-	</MvIF>
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }"><MvFUNCTIONRETURN VALUE = 1></MvIF>
 
 	<MvIF EXPR = "{ g.TGCOMPONENTS_Screen }">
 		<MvEVAL EXPR = "{ ComponentsScreen_UI( g.TGCOMPONENTS_Screen ) }">
@@ -623,6 +635,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentModule_Prerender" PARAMETERS = "module var, item, all_settings var, settings var, param" STANDARDOUTPUTLEVEL = "">
+</MVFUNCTION>
+
+<MvFUNCTION NAME = "ComponentModule_Render_Head" PARAMETERS = "module var, item, all_settings var, settings" STANDARDOUTPUTLEVEL = "">
 </MVFUNCTION>
 
 <MvFUNCTION NAME = "ComponentModule_Render_Start" PARAMETERS = "module var, item, settings var, item_settings var, param" STANDARDOUTPUTLEVEL = "">
@@ -905,7 +920,7 @@
 	<MvFUNCTIONRETURN VALUE = "">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "ScheduledTaskModule_Field" PARAMETERS = "module var, field_id" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+<MvFUNCTION NAME = "ScheduledTaskModule_Field" PARAMETERS = "module var, field_id" STANDARDOUTPUTLEVEL = "">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ScheduledTaskModule_Invalid" PARAMETERS = "module var, field_id" STANDARDOUTPUTLEVEL = "">
