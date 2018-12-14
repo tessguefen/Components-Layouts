@@ -20,6 +20,7 @@
 	- Product/ Category/ Page Batchlist Popups (when allowed for attribute types: product, category, link)
 	- Update button to save all changes (does not save on the fly)
 	- Internal Caching to help save load time!
+	- Added Scheduling with **Not Valid Before** and **Not Valid After** fields
 
 ## Attribute Types
 
