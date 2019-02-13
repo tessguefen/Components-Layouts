@@ -118,8 +118,9 @@
 			$scope.mmdialog.component = {};
 		}
 		$scope.openMMDialog = function( type, parent, node ) {
+			console.log( node );
 			$scope.mmdialog.type = type;
-			$scope.mmdialog.title = type == 'add' ? 'Add New Component' : 'Edit Component';
+			$scope.mmdialog.title = type == 'add' ? 'Add New Component' : 'Edit Component - ' + node.component.name + ' (' + node.component.code + ')';
 
 			if ( type == 'add' && parent ) {
 				$scope.mmdialog.component.parent = parent;

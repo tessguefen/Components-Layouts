@@ -8,10 +8,13 @@
 	Component_Update( component var )
 	Component_Delete( component_id )
 	Component_Layout_Reference( component_id, layouts var )
+	Components_Update_Offsets( components var )
+	Components_Update_Offsets_PastEnd( pastend var, pastend_count )
 
 	JSON_Component_Insert( module var )
 	JSON_Component_Update( module var )
 	JSON_Component_Delete( module var )
+	JSON_Components_DisplayOrder_Update( module var )
 
 	Layout_Read( component var )
 	Layout_Insert_Lowlevel( layout var )
@@ -138,17 +141,19 @@
 	<MvASSIGN NAME = "l.component" MEMBER = "descrip"			VALUE = "{ TGComponents.d.descrip }">
 	<MvASSIGN NAME = "l.component" MEMBER = "image"				VALUE = "{ TGComponents.d.image }">
 	<MvASSIGN NAME = "l.component" MEMBER = "allow_children"	VALUE = "{ TGComponents.d.allow_children }">
+	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGComponents.d.disp_order }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_Insert_Lowlevel" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents' ) }">
+	<MvASSIGN NAME = "l.component" MEMBER = "disp_order" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Disp_Order' ) }">
 
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGComponents
-						  ( id, code, name, descrip, image, allow_children )
+						  ( id, code, name, descrip, image, allow_children, disp_order )
 						  VALUES
-						  ( ?, ?, ?, ?, ?, ? )' }"
-			 FIELDS	= "l.component:id, l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children">
+						  ( ?, ?, ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.component:id, l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children, l.component:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0001', 'Could not insert Component.' ) }">
 	</MvIF>
@@ -241,10 +246,11 @@
 							name = ?,
 							descrip = ?,
 							image = ?,
-							allow_children = ?
+							allow_children = ?,
+							disp_order = ?
 						  WHERE
 							id		= ?' }"
-			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children, l.component:id">
+			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children, l.component:disp_order, l.component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0006', 'Could not update component.' ) }">
 	</MvIF>
@@ -350,6 +356,146 @@
 	<MvFUNCTIONRETURN VALUE = "{ l.layouts_count }">
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "Components_Update_Offsets" PARAMETERS = "components var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.pastend_count"						VALUE = 0>
+
+	<MvASSIGN NAME = "l.state_pos"							VALUE = 1>
+	<MvASSIGN NAME = "l.state_count"						VALUE = "{ miva_array_elements( l.components ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray( l.components, l.state_count ) }">
+
+	<MvWHILE EXPR = "{ l.state_pos LE l.state_count }">
+		<MvASSIGN NAME = "g.Components_Order_ID"		VALUE = "{ l.components[ l.state_pos ]:id }">
+
+		<MvCOMMENT>
+		|
+		| Determine disp_order of current state at this offset.
+		|
+		</MvCOMMENT>
+
+		<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range( 'Merchant',
+																				   'TGComponents',
+																				   'SELECT id, disp_order FROM ' $ g.Store_Table_Prefix $ 'TGComponents WHERE id <> ? ORDER BY disp_order',
+																				   'g.Components_Order_ID',
+																				   l.components[ l.state_pos ]:offset - 1,
+																				   1 ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-DISPORDER-00001', g.MvOPENVIEW_Error ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ TGComponents.d.EOF }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+			<MvCOMMENT>
+			|
+			| Offset was higher than the last record.  This case requires specialized processing, so save this record for later.
+			|
+			</MvCOMMENT>
+
+			<MvASSIGN NAME = "l.pastend_count"							VALUE = "{ l.pastend_count + 1 }">
+			<MvASSIGN NAME = "l.pastend" INDEX = "{ l.pastend_count }"	VALUE = "{ l.components[ l.state_pos ] }">
+
+			<MvASSIGN NAME = "l.state_pos"	VALUE = "{ l.state_pos + 1 }">
+		<MvELSEIF EXPR = "{ l.pastend_count }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+			<MvIF EXPR = "{ NOT Components_Update_Offsets_PastEnd( l.pastend, l.pastend_count ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			<MvASSIGN NAME = "l.pastend_count" VALUE = 0>
+		<MvELSE>
+			<MvASSIGN NAME = "l.disp_order" VALUE = "{ TGComponents.d.disp_order }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+			<MvCOMMENT>
+			|
+			| Make a hole by shifting components after this disp_order down
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME	= "Merchant"
+					 QUERY	= "{ 'UPDATE ' 
+									$ g.Store_Table_Prefix $ 'TGComponents 
+								  SET 
+									disp_order = disp_order + 1 
+								  WHERE 
+									disp_order >= ?' }" 
+					 FIELDS	= "l.disp_order">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-DISPORDER-00002', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Disp_Order' ) }">
+
+			<MvCOMMENT>
+			|
+			| Put the state in the newly created hole
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME	= "Merchant"
+					 QUERY	= "{ 'UPDATE ' 
+									$ g.Store_Table_Prefix $ 'TGComponents 
+								  SET 
+									disp_order = ? 
+								  WHERE 
+									id = ?' }" 
+					 FIELDS	= "l.disp_order, g.Components_Order_ID">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-DISPORDER-00003', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.state_pos"	VALUE = "{ l.state_pos + 1 }">
+		</MvIF>
+	</MvWHILE>
+
+	<MvCOMMENT>
+	|
+	| If all the downward records were past the end, they must be processed here.
+	|
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ l.pastend_count }">
+		<MvIF EXPR = "{ NOT Components_Update_Offsets_PastEnd( l.pastend, l.pastend_count ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>		
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Components_Update_Offsets_PastEnd" PARAMETERS = "pastend var, pastend_count" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvCOMMENT>
+	|
+	| Process records moving past the end.  These records must be sorted in ascending order.
+	|
+	</MvCOMMENT>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray_PastEnd( l.pastend, l.pastend_count ) }">
+
+	<MvASSIGN NAME = "l.pastend_pos"		VALUE = 1>
+	<MvWHILE EXPR = "{ l.pastend_pos LE l.pastend_count }">
+		<MvASSIGN NAME = "g.Components_Order_ID" 	VALUE = "{ l.pastend[ l.pastend_pos ]:id }">
+		<MvASSIGN NAME = "l.disp_order"					VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Disp_Order' ) }">
+
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'UPDATE ' 
+								$ g.Store_Table_Prefix $ 'TGComponents 
+							  SET 
+								disp_order = ? 
+							  WHERE 
+								id = ?' }" 
+				 FIELDS	= "l.disp_order, g.Components_Order_ID">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-DISPORDER-00004', g.MvQUERY_Error ) }">
+		</MvIF>
+		
+		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
+	</MvWHILE>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
 <MvFUNCTION NAME = "JSON_Component_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
 	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
@@ -386,6 +532,36 @@
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'TGCOMPONENTS_Error', g.TGCOMPONENTS_Error:message ) }">
 		</MvIF>
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Components_DisplayOrder_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }"><MvFUNCTIONRETURN></MvIF>
+
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "g.Components_Order" INDEX = "l.pos">
+		<MvASSIGN NAME = "l.component:id"				VALUE = "{ int( l.component:id ) }">
+		<MvASSIGN NAME = "l.component:offset"			VALUE = "{ int( l.component:offset ) }">
+		<MvASSIGN NAME = "l.component:original_offset"	VALUE = "{ int( l.component:original_offset ) }">
+
+		<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_WholeNumber_Positive_Required( l.component:offset ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Components_Order[' $ l.pos $ ']', g.Validation_Message ) }">
+		</MvIF>
+	</MvFOREACH>
+
+	<MvASSIGN NAME = "l.change_count"							VALUE = 0>
+
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "g.Components_Order">
+		<MvASSIGN NAME = "l.changes" INDEX = "{ ++l.change_count }"	VALUE = "{ l.component }">
+	</MvFOREACH>
+
+	<MvIF EXPR = "{ l.change_count EQ 0 }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Components_Update_Offsets( l.changes ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
 	</MvIF>
 	
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
@@ -2200,9 +2376,9 @@
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponents', 's' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,allow_children:s.allow_children' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,allow_children:s.allow_children,disp_order:s.disp_order' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields(l.search_query, g.Sort, 'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,allow_children:s.allow_children', 's.id' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields(l.search_query, g.Sort, 'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,allow_children:s.allow_children,disp_order:s.disp_order', 's.disp_order' ) }">
 
 	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
 
@@ -2225,7 +2401,8 @@
 					"name" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.name ) }">",
 					"descrip" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.descrip ) }">",
 					"image" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.image ) }">",
-					"allow_children" : <MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Boolean( TGComponents.d.allow_children ) }">
+					"allow_children" : <MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Boolean( TGComponents.d.allow_children ) }">,
+					"disp_order": <MvEVAL EXPR = "{ int( TGComponents.d.disp_order ) }">
 					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
 					<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
 					</MvWHILE>

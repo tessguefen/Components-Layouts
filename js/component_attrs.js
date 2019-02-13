@@ -69,7 +69,7 @@ function ComponentAttrs_Batchlist( component_id ) {
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
 		self.Feature_Edit_Enable( 'Edit Field(s)' );
 		self.Feature_RowDoubleClick_Enable();
-		self.Feature_DisplayOrder_Enable( 'disp_order', 'Attrs_DisplayOrder' );
+		self.Feature_DisplayOrder_Enable( 'disp_order', 'Components_Order' );
 	}
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
 		self.Feature_Delete_Enable( 'Delete Field(s)' );

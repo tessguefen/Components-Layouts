@@ -2,7 +2,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.008">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.009">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -33,6 +33,9 @@
 	1.008
 		- Updated PRV tags
 		- Updated api_ver
+	1.009
+		- Added Check for Layout Cache for Start/End Dates per Layout on Runtime Call
+		- Display Order for Components (o.m.g.)
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -57,7 +60,8 @@
 								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								descrip			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								image			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
-								allow_children	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ '
+								allow_children	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_BOOL()			$ ',
+								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
@@ -277,6 +281,11 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2016', 'An error occured while creating the store key, TGComponents. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponents_Disp_Order', 1 ) }">
+		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2024', 'An error occured while creating the store key, TGComponents_Disp_Order. Please make sure this does not already exsist.' ) }">
+	</MvIF>
+
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Attrs', 1 ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2017', 'An error occured while creating the store key, TGComponent_Attrs. Please make sure this does not already exsist.' ) }">
@@ -320,27 +329,30 @@
 	<MvCOMMENT>
 	|
 	| Scheduled Task
+	|	Removed 1.009 cuz... why not.
 	|
 	</MvCOMMENT>
 
-	<MvASSIGN NAME = "l.task"				VALUE = "">
-	<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
-	<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
-	<MvASSIGN NAME = "l.task:trig"			VALUE = "">
-	<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
-	<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
-	<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
-	<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
-	<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
-	<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
-	<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
-	<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
-	<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
-	<MvASSIGN NAME = "l.task:config"		VALUE = "">
+	<MvCOMMENT>
+		<MvASSIGN NAME = "l.task"				VALUE = "">
+		<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
+		<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
+		<MvASSIGN NAME = "l.task:trig"			VALUE = "">
+		<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
+		<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
+		<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
+		<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
+		<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
+		<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
+		<MvASSIGN NAME = "l.task:config"		VALUE = "">
 
-	<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
-	</MvIF>
+		<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_TUI_MGR ].TemplateManager_Create_Item( 'tgcomponent',  l.module:code ) }">
 		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
@@ -412,28 +424,79 @@
 		<MvCOMMENT>
 		|
 		| Scheduled Tasks
+		|	Removed 1.009 cuz... why not.
 		|
 		</MvCOMMENT>
+		
+		<MvCOMMENT>
+			<MvASSIGN NAME = "l.task"				VALUE = "">
+			<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
+			<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
+			<MvASSIGN NAME = "l.task:trig"			VALUE = "">
+			<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
+			<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
+			<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
+			<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
+			<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
+			<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
+			<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
+			<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
+			<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
+			<MvASSIGN NAME = "l.task:config"		VALUE = "">
 
-		<MvASSIGN NAME = "l.task"				VALUE = "">
-		<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
-		<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
-		<MvASSIGN NAME = "l.task:trig"			VALUE = "">
-		<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
-		<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
-		<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
-		<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
-		<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
-		<MvASSIGN NAME = "l.task:config"		VALUE = "">
-
-		<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
+			<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		</MvCOMMENT>
 	</MvIF>
+	<MvIF EXPR = "{ l.version LT 1.009 }">
+		<MvCOMMENT>
+			Add Timestamp for when it was last cached.
+		</MvCOMMENT>
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGComponents
+				 				ADD
+				 				(
+				 					disp_order	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) $ '
+				 				)'}">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1006', 'Could not add `disp_order`.' ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponents_Disp_Order', 1 ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-UPGRADE-1007', 'An error occured while creating the store key, TGComponents_Disp_Order. Please make sure this does not already exsist.' ) }">
+		</MvIF>
+
+		<MvCOMMENT>
+			Update Them Display Orders man.
+		</MvCOMMENT>
+
+		<MvOPENVIEW NAME	= "Merchant"
+					VIEW	= "TGComponents"
+					QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents' }">
+
+		<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-UPGRADE-1008', 'Could not load Components to update Display Order!' ) }">
+		</MvIF>
+		
+		<MvASSIGN NAME = "l.count" VALUE = "0">
+		<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
+
+			<MvEVAL EXPR = "{ Component_Read( l.components[ ++l.count ] ) }">
+			<MvASSIGN NAME = "l.components" INDEX = "{ l.count }" MEMBER = "disp_order" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Disp_Order' ) }">
+
+			<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
+		</MvWHILE>
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+		<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components">
+			<MvIF EXPR = "{ NOT Component_Update( l.component ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-UPGRADE-1009', g.TGCOMPONENTS_Error:message $ '|' $ glosub( miva_array_serialize( l.component ), ',', asciichar( 10 ) ) ) }">
+			</MvIF>
+		</MvFOREACH>
+
+	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1 />
 </MvFUNCTION>
 
@@ -446,6 +509,7 @@
 	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Values'	}">
 
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents' ) 						}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Disp_Order' ) 			}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs' )					}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs_Disp_Order' )		}">
 	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Options' )				}">
@@ -534,6 +598,7 @@
 	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Delete( l.module )	}"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'Components_DisplayOrder_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Components_DisplayOrder_Update( l.module ) }"></MvIF>
 
 	<MvIF EXPR = "{ g.Module_Function EQ 'Layouts_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layouts_Load_Query( l.module )	}"></MvIF>
 	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module )	}"></MvIF>

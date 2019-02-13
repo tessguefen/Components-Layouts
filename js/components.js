@@ -30,6 +30,7 @@ function Components_Batchlist() {
 	}
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
 		self.Feature_Edit_Enable('Edit Component(s)');
+		self.Feature_DisplayOrder_Enable( 'disp_order', 'Components_Order' );
 		self.Feature_RowDoubleClick_Enable();
 	}
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
@@ -37,6 +38,8 @@ function Components_Batchlist() {
 	}
 	self.processingdialog = new ProcessingDialog();
 	self.Feature_GoTo_Enable('Open Component', '');
+
+	self.SetDefaultSort( 'disp_order', '' );
 }
 
 DeriveFrom( MMBatchList, Components_Batchlist );
@@ -63,6 +66,12 @@ Components_Batchlist.prototype.onCreateRootColumnList = function() {
 
 			return element;
 		}),
+		new MMBatchList_Column( 'Display Order', 'disp_order')
+		.SetDisplayInList( false )
+		.SetSearchable( false )
+		.SetSortByField( 'disp_order' )
+		.SetUpdateOnModifiedOnly( true )
+
 	];
 
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
@@ -83,6 +92,7 @@ Components_Batchlist.prototype.onCreate = function() {
 	record.descrip = '';
 	record.image = '';
 	record.allow_children = 0;
+	record.disp_order = 0;
 	return record;
 }
 
@@ -107,4 +117,29 @@ Components_Batchlist.Update_Nests = function( item, checked, callback, delegator
 }
 Components_Batchlist.prototype.onGoTo = function( item, e ) {
 	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGCOMPONENTS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Component_ID': item.record.id, 'Module_Type': 'util', 'TGCOMPONENTS_Screen' : 'Component' } );
+}
+Components_Batchlist.prototype.onDisplayOrderSave = function( fieldlist, callback, delegator ) {
+	Components_Batchlist_Function( fieldlist, 'Components_DisplayOrder_Update', callback, delegator );
+}
+
+Components_Batchlist.prototype.onSetDisplayOrder = function( recordlist, start_index ){
+	var i, i_len, j, j_len;
+
+	for ( i = 0, i_len = recordlist.length; i < i_len; i++ )
+	{
+		this.Feature_DisplayOrder_SetRecordOrder( recordlist[ i ], start_index + i + 1 );
+
+		if ( recordlist[ i ] )
+		{
+			if ( !recordlist[ i ].options )
+			{
+				continue;
+			}
+
+			for ( j = 0, j_len = recordlist[ i ].options.length; j < j_len; j++ )
+			{
+				this.Feature_DisplayOrder_SetRecordOrder( recordlist[ i ].options[ j ], j + 1 );
+			}
+		}
+	}
 }
