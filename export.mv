@@ -8,6 +8,7 @@
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponents', 's' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, 'disp_order', 'disp_order', 'disp_order' ) }">
 
 	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
 
@@ -195,6 +196,8 @@
 									<MvIF EXPR = "{ [ g.Module_Library_DB ].ImageType_Load_ID( l.attribute:value, l.imagetype ) }">
 										<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.imagetype:code $ '</Value>' }">
 									</MvIF>
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'multitext' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ miva_cdata_encode( miva_joinstring( l.attribute:value, '|', 'trim' ) ) $ '</Value>' }">
 								<MvELSE>
 									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ miva_cdata_encode( l.attribute:value ) $ '</Value>' }">
 								</MvIF>

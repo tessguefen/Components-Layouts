@@ -364,6 +364,7 @@ Fields_Column_Type.prototype.onDisplayEdit = function( record, item ) {
 	select.options[ select.options.length ] = new Option( 'Link', 'link' );
 	select.options[ select.options.length ] = new Option( 'Image Type', 'imagetype' );
 	select.options[ select.options.length ] = new Option( 'Date/ Time', 'datetime' );
+	select.options[ select.options.length ] = new Option( 'Multi-Text', 'multitext' );
 
 	for ( i = 0, i_len = select.options.length; i < i_len; i++ )
 	{
@@ -390,6 +391,7 @@ Fields_Column_Type.prototype.onDisplayData = function( record ) {
 	else if ( record.type == 'link' )			text.innerHTML = 'Link';
 	else if ( record.type == 'imagetype' )		text.innerHTML = 'Image Type';
 	else if ( record.type == 'datetime' )		text.innerHTML = 'Date/ Time';
+	else if ( record.type == 'multitext' )		text.innerHTML = 'Multi-Text';
 
 	return text;
 }

@@ -94,7 +94,21 @@
 		var initComponents = function( cmps ) {
 			$scope.components = cmps;
 		}
+		
+		var multiTextUpdate = function( cmps ) {
+			angular.forEach( cmps, function(cmp) {
+				angular.forEach( cmp.component.attributes, function(attr) {
+					if ( attr.type == 'multitext' && attr.value ) {
+						attr.value = attr.value.join( '\n' );
+					}
+				});
+				if ( cmp.node_count > 0 ) multiTextUpdate( cmp.nodes );
+			});
+		}
+
 		var init = function( cmps, layoutDialog ) {
+
+			multiTextUpdate( cmps );
 
 			$scope.$apply(function() {
 				$scope.data.layout.nodes = cmps;
@@ -108,6 +122,7 @@
 			});
 
 		}
+
 
 		$scope.toggleNodeActions = function( node ) {
 			$scope.nodeActive = node ? node : null;

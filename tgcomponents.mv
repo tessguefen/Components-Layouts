@@ -2,7 +2,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.009">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.010">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -36,6 +36,8 @@
 	1.009
 		- Added Check for Layout Cache for Start/End Dates per Layout on Runtime Call
 		- Display Order for Components (o.m.g.)
+	1.010
+		- Array Field Type
 </MvCOMMENT>
 
 <MvCOMMENT>
