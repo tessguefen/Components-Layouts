@@ -1,6 +1,6 @@
 # Components
 
-*Current Version 1.009*
+*Current Version 1.010*
 
 ## Features
 
@@ -35,6 +35,10 @@
 - Link (Includes Product, Category, Page, URL & None )
 - Image Type
 - Date/Time Picker
+- Multi-Text
+	- To Update via XML, Pipe Seperated.
+	- To update via Admin, Line Breaks are used to seperate.
+	- `:value` will return an array.
 
 	
 ## Items
