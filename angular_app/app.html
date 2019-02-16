@@ -176,7 +176,7 @@
 				<div ng-if="attribute.type == 'multitext'">
 					<div class="dialogform--styledinput">
 						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<textarea placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-textarea"></textarea>
+						<textarea rows="7" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-textarea"></textarea>
 					</div>
 				</div>
 

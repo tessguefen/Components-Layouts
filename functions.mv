@@ -24,6 +24,7 @@
 	Layout_Update_LowLevel( layout var )
 	Layout_Update( layout var )
 	Layout_Delete( layout_id )
+	Layout_Load_All( layouts var )
 
 	JSON_Layout_Insert( module var )
 	JSON_Layout_Update( module var )
@@ -737,6 +738,27 @@
 	<MvASSIGN NAME = "l.void" VALUE = "{ Layout_Cache_Delete( l.layout_id ) }">	
 
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Load_All" PARAMETERS = "layouts var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1008', 'Could not load all layouts.' ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts.d.EOF }">
+
+		<MvEVAL EXPR = "{ Layout_Read( l.layouts[ ++l.count ] ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'TGCOMPONENT-LAYOUT-1009', l.count ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">

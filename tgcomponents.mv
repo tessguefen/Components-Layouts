@@ -2,7 +2,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.010">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.011">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -38,6 +38,9 @@
 		- Display Order for Components (o.m.g.)
 	1.010
 		- Array Field Type
+	1.011
+		- Added Export Option for All Layouts, or a specific layout
+		- Made 'multitext' textarea larger.
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -929,7 +932,13 @@
 						<td valign="top"><strong>Export:</strong></td>
 						<td width="100%">
 							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'COMPONENTS', g.Current_Export, 'Components' ) }"><br />
-							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'LAYOUTS', g.Current_Export, 'Layouts' ) }"><br />
+							<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawRadio( 'Current_Export', 'LAYOUTS', g.Current_Export, '' ) }"> 
+							<select name="LAYOUT_OPTION">
+								<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawOption( 0, g.LAYOUT_OPTION, 'All Layouts' ) }">
+								<MvFOREACH ITERATOR = "l.layout" ARRAY = "l.layouts" COUNT = "{ Layout_Load_All( l.layouts ) }">
+									<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].DrawOption( l.layout:id, g.LAYOUT_OPTION, l.layout:name ) }">
+								</MvFOREACH>
+							</select><br />
 						</td>
 					</tr>
 					<tr>

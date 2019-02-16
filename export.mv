@@ -100,10 +100,15 @@
 <MvFUNCTION NAME = "Export_Provisioning_Layouts" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
 	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Exp_Count ) }">
+	<MvASSIGN NAME = "g.LAYOUT_OPTION"	VALUE = "{ int( g.LAYOUT_OPTION ) }">
 	<MvASSIGN NAME = "l.search_query"	VALUE = "">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGLayouts', 's' ) }">
+
+	<MvIF EXPR = "{ g.LAYOUT_OPTION GT 0 }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 's.id = ?', 'g.LAYOUT_OPTION' ) }">
+	</MvIF>
 
 	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
 
