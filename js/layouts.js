@@ -114,9 +114,13 @@ Layouts_Batchlist.prototype.editLayout = function( item, e ) {
 	dialog.Save = function() {
 		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 		scope.$apply(function () {
-			scope.saveLayout( function() {
-				dialog.Cancel_LowLevel();
-				self.Refresh();
+			scope.saveLayout( function( errors, duplicate_codes ) {
+				if ( !errors ) {
+					dialog.Cancel_LowLevel();
+					self.Refresh();
+				} else {
+					dialog.DisplayErrorsDialog( duplicate_codes );
+				}
 			});
 		});	
 	};
@@ -314,4 +318,20 @@ Layout_Dialog.prototype.DisplayCancelDiscardSaveDialog = function()
 	dialog.SetTitle( 'Save changes?' );
 	dialog.SetMessage( 'Your changes will be lost if you don\'t save them.' );
 	dialog.Show();
+}
+
+Layout_Dialog.prototype.DisplayErrorsDialog = function( duplicates )
+{
+	var self = this;
+	var dialog2, button_save, button_cancel, button_discard;
+
+	dialog2 			= new ActionDialog();
+	dialog2.onESC	= function() { ; }
+	dialog2.onEnter	= function() { ; }
+
+	self. button_save		= dialog2.Button_Add_Right( 'Go Back to Review',		'', '', '',			function() { ; } );
+
+	dialog2.SetTitle( 'Errors!' );
+	dialog2.SetMessage( "You have some duplicate component codes! Please review and make sure they are all unique. The following codes are duplicates: " + duplicates.join( ', ') );
+	dialog2.Show();
 }

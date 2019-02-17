@@ -227,18 +227,38 @@
 		LayoutPopup.prototype.onEnter = function(){
 			this.Save();
 		}
+		var thingamabob = function( parent, codes, dupes ) {
+			angular.forEach( parent.nodes, function( node ) {
+				if ( codes.indexOf( node.code ) > -1 ) {
+					dupes.push( node.code );
+				} else {
+					codes.push( node.code );
+				}
+				if ( node.nodes && node.nodes.length ) {
+					thingamabob( node, codes, dupes );
+				}
+			});
+		}
 
 		$scope.saveLayout = function( callback ) {
 			if ( $scope.data.is_processing == 1 ) return;
 
 			$scope.data.is_processing = 1;
 
-			// Check that `code` is unique errwhere.
-			// var uniqueCodes = [];
-			// angular.forEach( $scope.data.layout, function( ) {
-				
-			// });
+			var errors = 0;
 
+			// Check that `code` is unique errwhere.
+			var uniqueCodes = [];
+			var duplicate_codes = [];
+
+			thingamabob(  $scope.data.layout, uniqueCodes, duplicate_codes );
+
+			if (  duplicate_codes.length > 0 ) {
+				errors = 1;
+				$scope.data.is_processing = 0;
+				if ( typeof callback == 'function' ) callback( errors, duplicate_codes );
+				return false;
+			}
 
 			var layout_data = new Object();
 			layout_data.layout = angular.copy( $scope.data.layout );
@@ -248,7 +268,7 @@
 				$scope.$apply(function() {
 					$scope.data.is_processing = 0;
 				});
-				if ( typeof callback == 'function' ) callback();
+				if ( typeof callback == 'function' ) callback( errors, duplicate_codes );
 			} );
 		}
 
