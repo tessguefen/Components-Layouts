@@ -527,7 +527,7 @@
 
 
 		<MvOPENVIEW NAME	= "Merchant"
-					VIEW	= "TGComponents"
+					VIEW	= "TGLayouts_Components"
 					QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components' }">
 		<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-UPGRADE-1012', 'Could not load Layout Components to update codes!' ) }">
@@ -536,7 +536,7 @@
 		<MvASSIGN NAME = "l.count"		VALUE = "0">
 		<MvASSIGN NAME = "l.components"	VALUE = "">
 
-		<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
+		<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
 			<MvEVAL EXPR = "{ LayoutComponent_Read( l.components[ ++l.count ] ) }">
 			<MvASSIGN NAME = "l.components" INDEX = "{ l.count }" MEMBER = "code" VALUE = "{ l.components[ l.count ]:id }">
 
