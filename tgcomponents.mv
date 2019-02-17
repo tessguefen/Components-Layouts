@@ -510,7 +510,7 @@
 			</MvIF>
 		</MvFOREACH>
 	</MvIF>
-	<MvIF EXPR = "{ l.version LT 1.011 }">
+	<MvIF EXPR = "{ l.version LT 1.012 }">
 		<MvCOMMENT>
 			Add column `code` ~_~
 		</MvCOMMENT>
