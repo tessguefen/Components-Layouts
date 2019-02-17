@@ -166,6 +166,7 @@
 			<MvEVAL EXPR = "{ asciichar( 10 ) }">
 			<MvEVAL EXPR = "{ l.tab $ '<LayoutComponent_Add layout="' $ l.layout:code $ '" component="' $ l.component:component:code $ '">' }">
 				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Name>' $ miva_cdata_encode( l.component:name ) $ '</Name>' }">
+				<MvEVAL EXPR = "{ l.tab  $ l.tab $ '<Code>' $ l.component:code $ '</Code>' }">
 				<MvIF EXPR = "{ l.component:active }">
 					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Active>1</Active>' }">
 				<MvELSE>
@@ -173,6 +174,7 @@
 				</MvIF>
 				<MvIF EXPR = "{ l.parent:id GT 0 }">
 					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Parent>' $ miva_cdata_encode( l.parent:name ) $ '</Parent>' }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Parent_Code>' $ l.parent:code $ '</Parent_Code>' }">
 				</MvIF>
 				<MvIF EXPR = "{ l.component:dt_start GT 0 }">
 					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Date_Start>' $ miva_cdata_encode( [ g.Module_Library_Utilities ].Format_Date( l.component:dt_start, 'en-US' ) $ ' ' $ [ g.Module_Library_Utilities ].Format_Time_Short( l.component:dt_start, 'en-US' ) ) $ '</Date_Start>' }">

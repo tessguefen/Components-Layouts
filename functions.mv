@@ -122,6 +122,7 @@
 	GeneratedImage_Load_File( file, generated_image var )
 
 	LayoutComponentParent_Load_Name( name, layout_id, return var )
+	LayoutComponentParent_Load_Code( code, layout_id, return var )
 
 	Layout_Cache_Load( layout_id, return var )
 	Layout_Cache_Load_Lowlevel( layout_id, return var )
@@ -2776,6 +2777,30 @@
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponentParent_Load_Code" PARAMETERS = "code, layout_id, output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Components"
+				QUERY	= "{ 'SELECT Layouts_Components.* FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components Layouts_Components
+								LEFT JOIN ' $ g.Store_Table_Prefix $ 'TGComponents Components
+								ON Components.id = Layouts_Components.component_id
+								WHERE Layouts_Components.layout_id = ? AND Layouts_Components.code = ? AND Components.allow_children = 1 LIMIT 1' }"
+				FIELDS	= "l.layout_id, l.code">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0007', 'Could not load Layout Component Parent Code.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGLayouts_Components.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-LAYOUTCOMPONENTS-0008' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ LayoutComponent_Read( l.output ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
 
 <MvFUNCTION NAME = "LayoutComponent_DispOrder_Last" PARAMETERS = "layout_id, parent_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
