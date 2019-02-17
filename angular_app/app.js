@@ -133,7 +133,6 @@
 			$scope.mmdialog.component = {};
 		}
 		$scope.openMMDialog = function( type, parent, node ) {
-			console.log( node );
 			$scope.mmdialog.type = type;
 			$scope.mmdialog.title = type == 'add' ? 'Add New Component' : 'Edit Component - ' + node.component.name + ' (' + node.component.code + ')';
 
@@ -232,11 +231,18 @@
 		$scope.saveLayout = function( callback ) {
 			if ( $scope.data.is_processing == 1 ) return;
 
+			$scope.data.is_processing = 1;
+
+			// Check that `code` is unique errwhere.
+			// var uniqueCodes = [];
+			// angular.forEach( $scope.data.layout, function( ) {
+				
+			// });
+
+
 			var layout_data = new Object();
 			layout_data.layout = angular.copy( $scope.data.layout );
 			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
-			
-			$scope.data.is_processing = 1;
 
 			ComponentsAPI.saveLayout( layout_data.layout.layout_id, JSON.stringify( layout_data ), function() {
 				$scope.$apply(function() {
