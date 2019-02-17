@@ -794,13 +794,13 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttrs_Read" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "id"			VALUE = "{ TGComponent_Attrs.d.id }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "id"				VALUE = "{ TGComponent_Attrs.d.id }">
 	<MvASSIGN NAME = "l.component_attrs" MEMBER = "component_id"	VALUE = "{ TGComponent_Attrs.d.component_id }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code"		VALUE = "{ TGComponent_Attrs.d.code }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt"		VALUE = "{ TGComponent_Attrs.d.prompt }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type"		VALUE = "{ TGComponent_Attrs.d.type }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "required"	VALUE = "{ TGComponent_Attrs.d.required }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "disp_order"	VALUE = "{ TGComponent_Attrs.d.disp_order }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code"			VALUE = "{ TGComponent_Attrs.d.code }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt"			VALUE = "{ TGComponent_Attrs.d.prompt }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type"			VALUE = "{ TGComponent_Attrs.d.type }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "required"		VALUE = "{ TGComponent_Attrs.d.required }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "disp_order"		VALUE = "{ TGComponent_Attrs.d.disp_order }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttrs_Insert_Lowlevel" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -827,9 +827,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttrs_Insert" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code" VALUE = "{ trim( l.component_attrs:code ) }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt" VALUE = "{ trim( l.component_attrs:prompt ) }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type" VALUE = "{ trim( l.component_attrs:type ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code"	VALUE = "{ trim( l.component_attrs:code ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt"	VALUE = "{ trim( l.component_attrs:prompt ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type"	VALUE = "{ trim( l.component_attrs:type ) }">
 
 	<MvIF EXPR = "{ ISNULL l.component_attrs:component_id }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID must be present.">
@@ -1633,6 +1633,7 @@
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order }">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_start"		VALUE = "{ TGLayouts_Components.d.dt_start }">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_end"			VALUE = "{ TGLayouts_Components.d.dt_end }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "code"			VALUE = "{ TGLayouts_Components.d.code }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponent_Insert_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -1640,10 +1641,10 @@
 
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
-						  ( id, layout_id, component_id, name, parent, active, disp_order, dt_start, dt_end )
+						  ( id, layout_id, component_id, name, parent, active, disp_order, dt_start, dt_end, code )
 						  VALUES
-						  ( ?, ?, ?, ?, ?, ?, ?, ?, ? )' }"
-			 FIELDS	= "l.layout_component:id, l.layout_component:layout_id, l.layout_component:component_id, l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end">
+						  ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.layout_component:id, l.layout_component:layout_id, l.layout_component:component_id, l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end, l.layout_component:code">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0001', 'Could not add component to layout.' ) }">
 	</MvIF>
@@ -1653,10 +1654,23 @@
 
 <MvFUNCTION NAME = "LayoutComponent_Insert" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "name " VALUE = "{ trim( l.layout_component:name ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "code " VALUE = "{ trim( l.layout_component:code ) }">
 
 	<MvIF EXPR = "{ ISNULL l.layout_component:name }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.layout_component:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.layout_component:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -1722,10 +1736,11 @@
 							active = ?,
 							disp_order = ?,
 							dt_start = ?,
-							dt_end = ?
+							dt_end = ?,
+							code = ?
 					      WHERE
 						    id		= ?' }"
-			 FIELDS	= "l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end, l.layout_component:id">
+			 FIELDS	= "l.layout_component:name, l.layout_component:parent, l.layout_component:active, l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end, l.layout_component:code, l.layout_component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0006', 'Could not update layout component.' ) }">
 	</MvIF>
@@ -1735,10 +1750,23 @@
 
 <MvFUNCTION NAME = "LayoutComponent_Update" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "name" VALUE = "{ trim( l.layout_component:name ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "code" VALUE = "{ trim( l.layout_component:code ) }">
 
 	<MvIF EXPR = "{ ISNULL l.layout_component:name }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Name must be present.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "name">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ISNULL l.layout_component:code }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Code must be present.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_Code( l.layout_component:code ) }">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Please enter a Valid Code.">
+		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "code">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -2336,6 +2364,7 @@
 <MvCOMMENT>
 	Function Deticated to Ann
 </MvCOMMENT>
+
 <MvFUNCTION NAME = "Layout_Components_Duplicate" PARAMETERS = "new_layout_id, old_layout_id" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component_count" VALUE = "{ Recursive_Nes_Attack( l.old_layout_id, 0, l.layout_nodes:nodes ) }">
 	<MvFUNCTIONRETURN VALUE = "{ Layout_Components_Duplicate_Lowlevel( l.new_layout_id, l.layout_nodes ) }" />
@@ -2688,6 +2717,7 @@
 	<MvELSEIF EXPR = "{ GeneratedImage_Load_File( l.value, l.image ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Decrement_RefCount( l.image:image_id ) }">
 	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1 />
 </MvFUNCTION>
 
@@ -2699,6 +2729,7 @@
 	<MvFOREACH ITERATOR = "l.value" ARRAY = "l.values">
 		<MvASSIGN NAME = "l.void" VALUE = "{ LayoutValueReferencesDelete( l.layout_component_id, l.value:attr_id ) }">
 	</MvFOREACH>
+
 	<MvFUNCTIONRETURN VALUE = 1 />
 </MvFUNCTION>
 
@@ -2829,6 +2860,7 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0004', 'Could not delete layout cache.' ) }">
 	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -2836,6 +2868,7 @@
 	<MvIF EXPR = "{ NOT Layout_Cache_Delete( l.layout_id ) }">
 		<MvFUNCTIONRETURN VALUE = 0 />
 	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = "{ Layout_Cache_Save( l.layout_id, l.void ) }">
 </MvFUNCTION>
 
@@ -2845,6 +2878,7 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0005', 'Could not all layout cache.' ) }">
 	</MvIF>
+	
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
