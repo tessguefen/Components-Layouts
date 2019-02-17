@@ -71,6 +71,7 @@
 	LayoutComponent_Delete( layout_component_id )
 	LayoutComponent_Delete_Values( layout_component_id )
 	Layout_Delete_Components( layout_id )
+	LayoutComponent_Load_Code( layout_id, code )
 	
 	LayoutValue_Read( layout_value var )
 	LayoutValue_Insert_Lowlevel( layout_value var )
@@ -1831,6 +1832,30 @@
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
 	<MvFUNCTIONRETURN VALUE = 1>
 </MVFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponent_Load_Code" PARAMETERS = "layout_id, code" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts_Components"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( 'code' ) $ ' = ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( '?' ) }"
+				FIELDS	= "l.layout_id, l.code">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not load component for layout.' ) }">
+	</MvIF>
+	
+	<MvASSIGN NAME = "l.count" VALUE = "0" />
+
+	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
+
+		<MvIF EXPR = "{ NOT LayoutComponent_Delete( TGLayouts_Components.d.id  ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutValue_Read" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.layout_value" MEMBER = "layouts_components_id"	VALUE = "{ TGLayouts_Values.d.layouts_components_id  }">
