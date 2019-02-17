@@ -123,6 +123,11 @@
 							<div class="dialogform--styledinput-title">Component Name*</div>
 							<input type="text" name="layoutcomponent_name" ng-model="mmdialog.component.name" class="dialogform--styleinput-input" placeholder="Component Name" required />
 						</div>
+
+						<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_code.$invalid }">
+							<div class="dialogform--styledinput-title">Component Code*</div>
+							<input type="text" name="layoutcomponent_code" ng-model="mmdialog.component.code" class="dialogform--styleinput-input" placeholder="Component Code" required />
+						</div>
 					</div>
 
 					<label class="dialogform--styledcheckbox">

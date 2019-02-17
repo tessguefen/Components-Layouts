@@ -2163,6 +2163,7 @@
 	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"	VALUE = "{ TGLayouts_Components.d.disp_order  }">
 	<MvASSIGN NAME = "l.component" MEMBER = "dt_start"		VALUE = "{ TGLayouts_Components.d.dt_start  }">
 	<MvASSIGN NAME = "l.component" MEMBER = "dt_end"		VALUE = "{ TGLayouts_Components.d.dt_end  }">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"		VALUE = "{ TGLayouts_Components.d.code  }">
 
 	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:component_id, l.component:component ) }">
 	<MvASSIGN NAME = "l.void" VALUE = "{ Components_Attrs_Load_All_ID( l.component:component_id, l.component:component:attributes ) }">
@@ -2878,7 +2879,7 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0005', 'Could not all layout cache.' ) }">
 	</MvIF>
-	
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 

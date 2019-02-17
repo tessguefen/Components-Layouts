@@ -190,6 +190,7 @@
 					node.component = $scope.mmdialog.component.component;
 					node.dt_start = $scope.mmdialog.component.dt_start;
 					node.dt_end = $scope.mmdialog.component.dt_end;
+					node.code = $scope.mmdialog.component.code;
 					$scope.closeMMDialog();
 				});
 			} else {
