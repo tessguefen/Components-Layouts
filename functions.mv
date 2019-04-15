@@ -2838,7 +2838,7 @@
 
 	<MvIF EXPR = "{ TGLayouts_Components.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-LAYOUTCOMPONENTS-0011' ) }">
+		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
 
 	<MvASSIGN NAME = "l.return" VALUE = "{ TGLayouts_Components.d.disp_order + 1 }">
