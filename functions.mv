@@ -2336,6 +2336,7 @@
 	<MvASSIGN NAME = "l.component" MEMBER = "parent"			VALUE = "{ TGLayouts_Components.d.parent }">
 	<MvASSIGN NAME = "l.component" MEMBER = "active"			VALUE = "{ TGLayouts_Components.d.active }">
 	<MvASSIGN NAME = "l.component" MEMBER = "disp_order"		VALUE = "{ TGLayouts_Components.d.disp_order  }">
+	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ TGLayouts_Components.d.code  }">
 
 	<MvASSIGN NAME = "l.void" VALUE = "{ Component_Load_ID( l.component:component_id, l.component:component ) }">
 	<MvASSIGN NAME = "l.void" VALUE = "{ Runtime_Load_Values( l.component, l.component:attributes ) }">
