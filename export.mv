@@ -184,11 +184,19 @@
 				</MvIF>
 				<MvIF EXPR = "{ miva_array_elements( l.component:component:attributes ) }">
 					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Attributes>' }">
+						<MvASSIGN NAME = "l.attr_pos" VALUE = 0>
 						<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.component:component:attributes">
 							<MvIF EXPR = "{ ISNULL l.attribute:value }">
 								<MvFOREACHCONTINUE />
+							<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' AND ISNULL l.attribute:product:code }">
+								<MvFOREACHCONTINUE />
+							<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' AND ISNULL l.attribute:category:code }">
+								<MvFOREACHCONTINUE />
 							</MvIF>
-							<MvEVAL EXPR = "{ asciichar( 10 ) }">
+							<MvASSIGN NAME = "l.attr_pos" VALUE = "{ l.attr_pos + 1 }">
+							<MvIF EXPR = "{ l.attr_pos GT 1 }">
+								<MvEVAL EXPR = "{ asciichar( 10 ) }">
+							</MvIF>
 							<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ '<Attribute code="' $ l.attribute:code $ '">' }">
 								<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
 									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<LinkType>' $ Export_LinkType( l.attribute:link:type ) $ '</LinkType>' }">

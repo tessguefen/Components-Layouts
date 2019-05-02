@@ -323,7 +323,7 @@
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'R', l.provide_xml,	'Code',			l.layout_component:code )			OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean(	'O', l.provide_xml, 'Active',		l.layout_component:active )			OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text(		'O', l.provide_xml, 'Parent',		l.layout_component:parent_name )	OR
-					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code(		'O', l.provide_xml, 'ParentCode',	l.layout_component:parent_code )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code(		'O', l.provide_xml, 'Parent_Code',	l.layout_component:parent_code )	OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text(		'O', l.provide_xml, 'Date_Start',	l.layout_component:dt_start )		OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text(		'O', l.provide_xml, 'Date_End',		l.layout_component:dt_end ) }">
 		<MvFUNCTIONRETURN />
@@ -345,7 +345,7 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.component_code $ '\' does not exist' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ LayoutComponent_Load_Code( l.layout:id, l.layout_component:code ) }">
+	<MvIF EXPR = "{ LayoutComponent_Load_Code( l.layout:id, l.layout_component:code, l.null ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.layout_component:code $ '\' already exists.' ) }">
 	</MvIF>
 	
@@ -377,7 +377,7 @@
 
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "layout_id"		VALUE = "{ l.layout:id }">
 	<MvASSIGN NAME = "l.layout_component" MEMBER = "component_id"	VALUE = "{ l.component:id }">
-	<MvASSIGN NAME = "l.layout_component" MEMBER = "disp_order"		VALUE = "{ LayoutComponent_DispOrder_Last( l.layout_component:id, l.layout_component:parent_id ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "disp_order"		VALUE = "{ LayoutComponent_DispOrder_Last( l.layout_component:layout_id, l.layout_component:parent ) }">
 
 
 	<MvIF EXPR = "{ NOT LayoutComponent_Insert( l.layout_component ) }">

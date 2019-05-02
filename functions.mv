@@ -71,7 +71,7 @@
 	LayoutComponent_Delete( layout_component_id )
 	LayoutComponent_Delete_Values( layout_component_id )
 	Layout_Delete_Components( layout_id )
-	LayoutComponent_Load_Code( layout_id, code )
+	LayoutComponent_Load_Code( layout_id, code, layout_component var )
 	
 	LayoutValue_Read( layout_value var )
 	LayoutValue_Insert_Lowlevel( layout_value var )
@@ -1833,7 +1833,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MVFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponent_Load_Code" PARAMETERS = "layout_id, code" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponent_Load_Code" PARAMETERS = "layout_id, code, layout_component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( 'code' ) $ ' = ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( '?' ) }"
@@ -1841,18 +1841,14 @@
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-LAYOUT-1000', 'Could not load component for layout.' ) }">
 	</MvIF>
+
+	<MvIF EXPR = "{ TGLayouts_Components.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvEVAL EXPR = "{ Read_Layout_Component( l.layout_component ) }">
 	
-	<MvASSIGN NAME = "l.count" VALUE = "0" />
-
-	<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
-
-		<MvIF EXPR = "{ NOT LayoutComponent_Delete( TGLayouts_Components.d.id  ) }">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
-
-		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
-	</MvWHILE>
-
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -2830,7 +2826,7 @@
 <MvFUNCTION NAME = "LayoutComponent_DispOrder_Last" PARAMETERS = "layout_id, parent_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Components"
-				QUERY	= "{ 'SELECT disp_order FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent_id = ? ORDER BY disp_order ASC LIMIT 1' }"
+				QUERY	= "{ 'SELECT disp_order FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Components WHERE layout_id = ? AND parent = ? ORDER BY disp_order DESC LIMIT 1' }"
 				FIELDS	= "l.layout_id, l.parent_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCOMPONENTS-0010', 'Could not load Display Order.' ) }">
