@@ -114,12 +114,12 @@ Layouts_Batchlist.prototype.editLayout = function( item, e ) {
 	dialog.Save = function() {
 		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
 		scope.$apply(function () {
-			scope.saveLayout( function( errors, duplicate_codes ) {
+			scope.saveLayout( function( errors, duplicate_codes, invalid_codes ) {
 				if ( !errors ) {
 					dialog.Cancel_LowLevel();
 					self.Refresh();
 				} else {
-					dialog.DisplayErrorsDialog( duplicate_codes );
+					dialog.DisplayErrorsDialog( duplicate_codes, invalid_codes );
 				}
 			});
 		});	
@@ -320,7 +320,7 @@ Layout_Dialog.prototype.DisplayCancelDiscardSaveDialog = function()
 	dialog.Show();
 }
 
-Layout_Dialog.prototype.DisplayErrorsDialog = function( duplicates )
+Layout_Dialog.prototype.DisplayErrorsDialog = function( duplicates, invalid_codes )
 {
 	var self = this;
 	var dialog2, button_save, button_cancel, button_discard;
@@ -331,7 +331,19 @@ Layout_Dialog.prototype.DisplayErrorsDialog = function( duplicates )
 
 	self. button_save		= dialog2.Button_Add_Right( 'Go Back to Review',		'', '', '',			function() { ; } );
 
+	var msg_span = document.createElement( 'span' );
+	msg_span.innerHTML = 
+
 	dialog2.SetTitle( 'Errors!' );
-	dialog2.SetMessage( "You have some duplicate component codes! Please review and make sure they are all unique. The following codes are duplicates: " + duplicates.join( ', ') );
+
+	if ( duplicates.length && invalid_codes.length ) {
+		msg_span.innerHTML = "You have some duplicate and invalid component codes! Please review and make sure they are all unique and valid.<br> The following codes are duplicates:<br><strong>" + duplicates.join( ', ') + "</strong><br><br>The following codes are invalid:<br><strong>" + invalid_codes.join( ', ') + "</strong>";
+	} else if ( duplicates.length ) {
+		msg_span.innerHTML = "You have some duplicate component codes! Please review and make sure they are all unique.<br>The following codes are duplicates:<br><strong>" + duplicates.join( ', ') + "</strong>";
+	} else {
+		msg_span.innerHTML = "You have some invalid component codes! Please review and make sure they are all valid.<br>The following codes are invalid:<br><strong>" + invalid_codes.join( ', ') + "</strong>";
+	}
+	dialog2.SetMessage( msg_span );
+
 	dialog2.Show();
 }

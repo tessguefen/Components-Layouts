@@ -59,15 +59,6 @@
 
 		$scope.nodeActive = 0;
 
-		if ( typeof layoutHadChanges == 'undefined' ) {
-			var layoutHadChanges = 0;
-		}
-		layoutHadChanges = 0;
-
-		var scopeWatch = $scope.$watch( 'data.layout.nodes', function() {
-			layoutHadChanges = 1;
-		}, true )
-
 		// Initialize Layout.
 		$scope.initializeLayout = function( layout, layoutDialog ) {
 
@@ -115,8 +106,7 @@
 				$scope.data.is_loading = 0;
 
 				layoutDialog.layoutHadChanges = 0;
-				scopeWatch();
-				scopeWatch = $scope.$watch( 'data.layout.nodes', function( newVal, oldVal ) {
+				$scope.$watch( 'data.layout.nodes', function( newVal, oldVal ) {
 					layoutDialog.layoutHadChanges = 1;
 				}, true );
 			});
@@ -227,15 +217,22 @@
 		LayoutPopup.prototype.onEnter = function(){
 			this.Save();
 		}
-		var thingamabob = function( parent, codes, dupes ) {
+		var checkforUniqueCodes = function( parent, codes, dupes, invalid_codes ) {
+			var regex = /^[a-z0-9]*$/i; /* Matches alphanumeric values only */
+			
 			angular.forEach( parent.nodes, function( node ) {
-				if ( codes.indexOf( node.code ) > -1 ) {
+				node.code = String( node.code );
+				temp_value = node.code.toString().replace( /-/g, '' ).replace( /_/g, '' );
+
+				if( !temp_value.match( regex ) ) {
+					invalid_codes.push( node.code );
+				} else if ( codes.indexOf( node.code ) > -1 ) {
 					dupes.push( node.code );
 				} else {
 					codes.push( node.code );
 				}
 				if ( node.nodes && node.nodes.length ) {
-					thingamabob( node, codes, dupes );
+					checkforUniqueCodes( node, codes, dupes, invalid_codes );
 				}
 			});
 		}
@@ -250,13 +247,14 @@
 			// Check that `code` is unique errwhere.
 			var uniqueCodes = [];
 			var duplicate_codes = [];
+			var invalid_codes = [];
 
-			thingamabob(  $scope.data.layout, uniqueCodes, duplicate_codes );
+			checkforUniqueCodes(  $scope.data.layout, uniqueCodes, duplicate_codes, invalid_codes );
 
-			if (  duplicate_codes.length > 0 ) {
+			if ( duplicate_codes.length > 0 || invalid_codes.length > 0 ) {
 				errors = 1;
 				$scope.data.is_processing = 0;
-				if ( typeof callback == 'function' ) callback( errors, duplicate_codes );
+				if ( typeof callback == 'function' ) callback( errors, duplicate_codes, invalid_codes );
 				return false;
 			}
 
@@ -268,7 +266,7 @@
 				$scope.$apply(function() {
 					$scope.data.is_processing = 0;
 				});
-				if ( typeof callback == 'function' ) callback( errors, duplicate_codes );
+				if ( typeof callback == 'function' ) callback( errors, duplicate_codes, invalid_codes );
 			} );
 		}
 
@@ -310,6 +308,7 @@
 				var nodeCopy = angular.copy( node );
 				$scope.removeIdAndParentId( nodeCopy );
 				nodeCopy.name = nodeCopy.name + ' - Copy';
+				nodeCopy.code = nodeCopy.code + '_' + Math.floor( Math.random() * 1001 );
 
 				if ( parent.nodes.length === 0 ) parent.nodes = [];
 				parent.nodes.push( nodeCopy );
