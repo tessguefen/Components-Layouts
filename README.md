@@ -21,6 +21,11 @@
 	- Update button to save all changes (does not save on the fly)
 	- Internal Caching to help save load time!
 	- Added Scheduling with **Not Valid Before** and **Not Valid After** fields
+- Data Management
+	- Import via XML Provisioning
+	- Export
+		- Export Components (All)
+		- Export Layouts (All or select one layout)
 
 ## Attribute Types
 
@@ -106,6 +111,7 @@
 		<Name>Name</Name>
 		<Active>1</Active>
 		<Parent>Some Parent</Parent>
+		<Parent_Code>Some_Parent_Code</Parent_Code>
 		<Date_Start><![CDATA[12/05/2018 21:10:03]]></Date_Start>
 		<Date_End><![CDATA[12/29/2018 21:10:05]]></Date_End>
 		<Attributes>
