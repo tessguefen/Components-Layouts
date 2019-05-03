@@ -298,6 +298,7 @@
 		$scope.removeIdAndParentId = function( node ) {
 			node.id = 0;
 			node.parent = 0;
+			node.code = node.code + '_' + Math.floor( Math.random() * 1001 );
 			angular.forEach( node.nodes, function(child) {
 				$scope.removeIdAndParentId( child );
 			});
@@ -308,7 +309,6 @@
 				var nodeCopy = angular.copy( node );
 				$scope.removeIdAndParentId( nodeCopy );
 				nodeCopy.name = nodeCopy.name + ' - Copy';
-				nodeCopy.code = nodeCopy.code + '_' + Math.floor( Math.random() * 1001 );
 
 				if ( parent.nodes.length === 0 ) parent.nodes = [];
 				parent.nodes.push( nodeCopy );
