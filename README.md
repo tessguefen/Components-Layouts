@@ -263,7 +263,6 @@
 ## Experimental Recusrive Component Rendering
 
 ```xml
-<mvt:miva output="on" compresswhitespace="on" />
 <mvt:if expr="ISNULL l.settings:page:layout_code">
 	<mvt:exit />
 </mvt:if>
