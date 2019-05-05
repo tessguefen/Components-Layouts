@@ -259,3 +259,117 @@
 [2]:name=Featured+Slider+2
 [2]:parent=0
 ```
+
+## Experimental Recusrive Component Rendering
+
+```xml
+<mvt:miva output="on" compresswhitespace="on" />
+<mvt:if expr="ISNULL l.settings:page:layout_code">
+	<mvt:exit />
+</mvt:if>
+
+<mvt:assign name="l.settings:layout" value="''" />
+<mvt:item name="tgcomponent" param="Layout_Load_Code( l.settings:page:layout_code, l.settings:layout )"/>
+
+<mvt:if expr="ISNULL l.settings:layout">
+	<mvt:exit />
+</mvt:if>
+
+<mvt:do file="g.Module_Library_Utilities" name="l.success" value="QuickSortArray( l.settings:layout, ':disp_order', -1 )" />
+
+<mvt:assign name="l.components"				value="l.settings:layout" />
+<mvt:assign name="l.data"					value="''" />
+<mvt:assign name="l.components_count"		value="miva_array_elements( l.components )" />
+<mvt:assign name="l.while_pos"				value="1" />
+<mvt:assign name="l.settings:final_output" 	value="''" />
+<mvt:assign name="l.settings:unique_id" 	value="'tgcl-parent'" />
+
+<mvt:while expr="( l.while_pos LE l.components_count )">
+
+	<mvt:assign name="l.settings:current_item" value="miva_variable_value( 'l.components[' $ l.while_pos $ ']' )" />
+
+	<mvt:if expr="l.settings:current_item:component:code">
+		<mvt:capture variable="l.data">
+			<mvt:if expr="l.settings:current_item:component:code EQ 'shadows_hero'">
+				<section class="o-layout">
+					<div class="o-layout__item">
+						<mvt:if expr="l.settings:current_item:attributes:link:value">
+							<a class="x-hero" href="&mvte:current_item:attributes:link:value";">
+								<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
+							</a>
+						<mvt:else>
+							<span class="x-hero">
+								<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
+							</span>
+						</mvt:if>
+					</div>
+				</section>
+				<br>
+			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_text'">
+				<section class="o-layout t-storefront-about">
+					<div class="o-layout__item u-text-center">
+						<br>
+						<h3 class="c-heading-charlie c-heading--keyline u-text-bold u-text-uppercase">
+							<mvt:if expr="l.settings:current_item:attributes:subtitle:value">
+								<span class="c-heading--subheading u-color-gray-30">&mvt:current_item:attributes:subtitle:value;</span>
+								<mvt:if expr="l.settings:current_item:attributes:title:value"><br></mvt:if>
+							</mvt:if>
+							&mvt:current_item:attributes:title:value;
+						</h3>
+						<p>
+							<span class="u-inline-block u-text-constrain t-storefront-about__brief">&mvt:current_item:attributes:text:value;</span>
+						</p>
+						<br>
+					</div>
+				</section>
+				<br>
+			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_large_promo'">
+				<section class="o-layout">
+					<div class="o-layout__item">
+						<mvt:if expr="l.settings:current_item:attributes:link:value">
+							<a href="&mvte:current_item:attributes:link:value";">
+								<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
+							</a>
+						<mvt:else>
+							<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
+						</mvt:if>
+					</div>
+				</section>
+				<br>
+			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_small_promo_wrap'">
+				<mvt:if expr="l.settings:current_item:children_count GT 0">
+					<section class="o-layout u-grids-1 u-grids-2--m">
+						<!--[&mvt:unique_id;:&mvt:current_item:id;]-->
+					</section>
+				</mvt:if>
+			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_small_promo'">
+				<p class="o-layout__item">
+					<mvt:if expr="l.settings:current_item:attributes:link:value">
+						<a href="&mvte:current_item:attributes:link:value";">
+							<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
+						</a>
+					<mvt:else>
+						<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
+					</mvt:if>
+				</p>
+			</mvt:if>
+		</mvt:capture>
+	</mvt:if>
+
+	<mvt:if expr="l.settings:current_item:children_count GT 0">
+		<mvt:do file="g.Module_Library_Utilities" name="l.success" value="QuickSortArray( l.settings:current_item:children, ':disp_order', -1 )" />
+		<mvt:assign name="l.components_count" value="miva_array_merge( l.settings:current_item:children, 1, l.settings:current_item:children_count, l.components, -1 )" />
+	</mvt:if>
+	
+	<mvt:assign name="l.find_me" value="'<!--[' $ l.settings:unique_id $ ':' $ l.settings:current_item:parent $ ']-->'" />
+	<mvt:assign name="l.index" value="indexof( l.find_me, l.settings:final_output, 1 )" />
+	<mvt:if expr="l.index GT 0">
+		<mvt:assign name="l.index_findme_length" value="l.index + len_var( l.find_me )" />
+		<mvt:assign name="l.settings:final_output" value="substring_var( l.settings:final_output, 1, l.index_findme_length ) $ l.data $ substring_var( l.settings:final_output, l.index_findme_length, len_var( l.settings:final_output ) )" />
+	<mvt:else>
+		<mvt:assign name="l.settings:final_output" value="l.data $ l.settings:final_output" />
+	</mvt:if>
+
+	<mvt:assign name="l.while_pos" value="l.while_pos + 1" />
+</mvt:while>
+```
