@@ -372,3 +372,8 @@
 	<mvt:assign name="l.while_pos" value="l.while_pos + 1" />
 </mvt:while>
 ```
+
+## SQL to grab all image paths.
+```mysql
+SELECT s01_TGLayouts_Values.value FROM s01_TGLayouts_Values LEFT JOIN s01_TGComponent_Attrs ON s01_TGComponent_Attrs.id = s01_TGLayouts_Values.attr_id WHERE s01_TGComponent_Attrs.type = 'image'
+```
