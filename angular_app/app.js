@@ -119,6 +119,7 @@
 		}
 
 		$scope.resetDialog = function() {
+			delete $scope.mmdialog;
 			$scope.mmdialog = {};
 			$scope.mmdialog.component = {};
 		}
