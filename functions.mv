@@ -1119,13 +1119,13 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }"><MvFUNCTIONRETURN></MvIF>
 	<MvASSIGN NAME = "l.component_id" VALUE = "{ g.component_id }">
 
-	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Attrs_DisplayOrder" INDEX = "l.pos">
+	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Components_Order" INDEX = "l.pos">
 		<MvASSIGN NAME = "l.attrs_order:id"					VALUE = "{ int( l.attrs_order:id ) }">
 		<MvASSIGN NAME = "l.attrs_order:offset"				VALUE = "{ int( l.attrs_order:offset ) }">
 		<MvASSIGN NAME = "l.attrs_order:original_offset"	VALUE = "{ int( l.attrs_order:original_offset ) }">
 
 		<MvIF EXPR = "{ NOT [ g.Module_Admin ].Validate_WholeNumber_Positive_Required( l.attrs_order:offset ) }">
-			<MvFUNCTIONRETURN VALUE VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attrs_DisplayOrder[' $ l.pos $ ']', g.Validation_Message ) }">
+			<MvFUNCTIONRETURN VALUE VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Components_Order[' $ l.pos $ ']', g.Validation_Message ) }">
 		</MvIF>
 	</MvFOREACH>
 
@@ -1143,7 +1143,7 @@
 
 	<MvASSIGN NAME = "l.field_count" VALUE = 0>
 
-	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Attrs_DisplayOrder">
+	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Components_Order">
 		<MvIF EXPR = "{ l.attrs_order:offset EQ l.attrs_order:original_offset }">
 			<MvFOREACHCONTINUE>
 		</MvIF>
