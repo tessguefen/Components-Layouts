@@ -1639,7 +1639,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponent_Insert_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.layout_component" MEMBER = "id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGLayouts_Components' ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGLayouts_Components' ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "parent"		VALUE = "{ int( l.layout_component:parent ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_start"	VALUE = "{ int( l.layout_component:dt_start ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_end"		VALUE = "{ int( l.layout_component:dt_end ) }">
 
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
@@ -1730,6 +1733,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponent_Update_Lowlevel" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "parent"		VALUE = "{ int( l.layout_component:parent ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_start"	VALUE = "{ int( l.layout_component:dt_start ) }">
+	<MvASSIGN NAME = "l.layout_component" MEMBER = "dt_end"		VALUE = "{ int( l.layout_component:dt_end ) }">
+
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
 					      SET
