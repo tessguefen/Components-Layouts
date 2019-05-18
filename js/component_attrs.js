@@ -1,4 +1,5 @@
-function ComponentAttrs_Batchlist_Load_Query( filter, sort, offset, count, callback, delegator ) {
+function ComponentAttrs_Batchlist_Load_Query( filter, sort, offset, count, callback, delegator )
+{
 	return AJAX_Call_Module(	callback,
 								'admin',
 								'TGCOMPONENTS',
@@ -11,7 +12,8 @@ function ComponentAttrs_Batchlist_Load_Query( filter, sort, offset, count, callb
 								delegator );
 }
 
-function ComponentAttrs_Batchlist_Function( fieldlist, _function, callback, delegator ) { 
+function ComponentAttrs_Batchlist_Function( fieldlist, _function, callback, delegator )
+{ 
 	return AJAX_Call_Module_FieldList( callback,
 									   'admin',
 									   'TGCOMPONENTS',
@@ -21,7 +23,8 @@ function ComponentAttrs_Batchlist_Function( fieldlist, _function, callback, dele
 									   delegator );
 }
 
-function ComponentAttrs_Batchlist_Option_Function( parentlist, fieldlist, _function, callback, delegator ) { 
+function ComponentAttrs_Batchlist_Option_Function( parentlist, fieldlist, _function, callback, delegator )
+{ 
 	return AJAX_Call_Module_FieldList( callback,
 									   'admin',
 									   'TGCOMPONENTS',
@@ -31,12 +34,15 @@ function ComponentAttrs_Batchlist_Option_Function( parentlist, fieldlist, _funct
 									   delegator );
 }
 
-function ComponentAttrs_Batchlist_DisplayOrder( fields, _function, callback, delegator ) {
+function ComponentAttrs_Batchlist_DisplayOrder( fields, _function, callback, delegator )
+{
 	var i;
 	var parameters = 'component_id=' + encodeURIComponent( component_id );
+
 	for ( i = 0; i < fields.length; i++ ) {
 		parameters += ( parameters.length ? '&' : '' ) + encodeURIComponent( fields[ i ].name ) + '=' + encodeURIComponent( fields[ i ].value );
 	}
+
 	return AJAX_Call_Module_FieldList( callback,
 									   'admin',
 									   'TGCOMPONENTS',
@@ -46,7 +52,8 @@ function ComponentAttrs_Batchlist_DisplayOrder( fields, _function, callback, del
 									   delegator );
 }
 
-function ComponentAttrs_Batchlist( component_id ) {
+function ComponentAttrs_Batchlist( component_id )
+{
 	var self = this;
 	self.component_id = component_id;
 
@@ -66,11 +73,13 @@ function ComponentAttrs_Batchlist( component_id ) {
 	if ( CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) ) {
 		self.Feature_Add_Enable( 'Add Field', 'Save Field', 'Add Option', 'Cancel', 'Add Field', 'Save Field', 'Add Option', '' );
 	}
+
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
 		self.Feature_Edit_Enable( 'Edit Field(s)' );
 		self.Feature_RowDoubleClick_Enable();
 		self.Feature_DisplayOrder_Enable( 'disp_order', 'Components_Order' );
 	}
+
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
 		self.Feature_Delete_Enable( 'Delete Field(s)' );
 	}
@@ -85,7 +94,8 @@ DeriveFrom( MMBatchList, ComponentAttrs_Batchlist );
 
 ComponentAttrs_Batchlist.prototype.onLoad = ComponentAttrs_Batchlist_Load_Query;
 
-ComponentAttrs_Batchlist.prototype.onCreateRootColumnList = function() {
+ComponentAttrs_Batchlist.prototype.onCreateRootColumnList = function()
+{
 	var columnlist;
 	var self = this;
 
@@ -126,7 +136,8 @@ ComponentAttrs_Batchlist.prototype.onCreateRootColumnList = function() {
 	return columnlist;
 }
 
-ComponentAttrs_Batchlist.prototype.CreateColumnList_Options = function() {
+ComponentAttrs_Batchlist.prototype.CreateColumnList_Options = function()
+{
 	var self = this;
 	var columnlist =
 	[
@@ -158,8 +169,8 @@ ComponentAttrs_Batchlist.prototype.onRetrieveChildBranch = function( item )
 	return null;
 }
 
-
-ComponentAttrs_Batchlist.prototype.onSave = function( item, callback, delegator ) {
+ComponentAttrs_Batchlist.prototype.onSave = function( item, callback, delegator )
+{
 	var self = this;
 	var original_callback;
 
@@ -194,11 +205,12 @@ ComponentAttrs_Batchlist.prototype.onSave = function( item, callback, delegator 
 			original_callback( response );
 		}
 	}
+
 	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentAttrs_Update', callback, delegator );
 }
 
-
-ComponentAttrs_Batchlist.prototype.onCreate = function() {
+ComponentAttrs_Batchlist.prototype.onCreate = function()
+{
 	var record;
 
 	record			= new Object();
@@ -212,19 +224,23 @@ ComponentAttrs_Batchlist.prototype.onCreate = function() {
 	return record;
 }
 
-ComponentAttrs_Batchlist.prototype.onDelete = function( item, callback, delegator ) {
+ComponentAttrs_Batchlist.prototype.onDelete = function( item, callback, delegator )
+{
 	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentAttrs_Delete', callback, delegator );
 }
 
-ComponentAttrs_Batchlist.prototype.onInsert = function( item, callback, delegator ) {
+ComponentAttrs_Batchlist.prototype.onInsert = function( item, callback, delegator )
+{
 	ComponentAttrs_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'ComponentAttrs_Insert', callback, delegator );
 }
 
-ComponentAttrs_Batchlist.prototype.onDisplayOrderSave = function( fieldlist, callback ) {
+ComponentAttrs_Batchlist.prototype.onDisplayOrderSave = function( fieldlist, callback )
+{
 	ComponentAttrs_Batchlist_DisplayOrder( fieldlist, 'ComponentAttrs_DisplayOrder_Update', callback, '' );
 }
 
-ComponentAttrs_Batchlist.prototype.onSetDisplayOrder = function( recordlist, start_index ){
+ComponentAttrs_Batchlist.prototype.onSetDisplayOrder = function( recordlist, start_index )
+{
 	var i, i_len, j, j_len;
 
 	for ( i = 0, i_len = recordlist.length; i < i_len; i++ )
@@ -246,9 +262,8 @@ ComponentAttrs_Batchlist.prototype.onSetDisplayOrder = function( recordlist, sta
 	}
 }
 
-
-
-ComponentAttrs_Batchlist.prototype.Option_Create = function() {
+ComponentAttrs_Batchlist.prototype.Option_Create = function()
+{
 	var record;
 
 	record				= new Object();
@@ -260,9 +275,10 @@ ComponentAttrs_Batchlist.prototype.Option_Create = function() {
 	return record;
 }
 
-ComponentAttrs_Batchlist.prototype.Option_Insert = function( item, callback, delegator ) {
+ComponentAttrs_Batchlist.prototype.Option_Insert = function( item, callback, delegator )
+{
 	var attribute_record, error;
-	
+
 	if ( ( attribute_record = this.GetListItemRecord_Parent( item.index ) ) == null )
 	{
 		error							= new Object();
@@ -275,7 +291,8 @@ ComponentAttrs_Batchlist.prototype.Option_Insert = function( item, callback, del
 	ComponentAttrs_Batchlist_Option_Function( attribute_record, item.record.mmbatchlist_fieldlist, 'ComponentOption_Insert', callback, delegator );
 }
 
-ComponentAttrs_Batchlist.prototype.Field_RowSupportsChildren_Hook = function( item ) {
+ComponentAttrs_Batchlist.prototype.Field_RowSupportsChildren_Hook = function( item )
+{
 	if ( !item || !item.record ) {
 		return false;
 	}
@@ -288,7 +305,8 @@ ComponentAttrs_Batchlist.prototype.Field_RowSupportsChildren_Hook = function( it
 } 
 
 
-ComponentAttrs_Batchlist.prototype.onProcessLoadedData = function( recordlist, start_index ) {
+ComponentAttrs_Batchlist.prototype.onProcessLoadedData = function( recordlist, start_index )
+{
 	var i, j, index, root_index;
 
 	index = start_index;
@@ -308,13 +326,15 @@ ComponentAttrs_Batchlist.prototype.onProcessLoadedData = function( recordlist, s
 	}
 }
 
-ComponentAttrs_Batchlist.prototype.Option_FindIndex_Params = function( item ){
+ComponentAttrs_Batchlist.prototype.Option_FindIndex_Params = function( item )
+{
 	var attribute_record = this.GetListItemRecord_Parent( item.index );
 
 	return { 'Attribute_ID': attribute_record ? attribute_record.id : '', 'Option_Prompt': item && item.record ? item.record.prompt : '' };
 }
 
-ComponentAttrs_Batchlist.prototype.Option_FindIndex_Compare = function( item, params ) {
+ComponentAttrs_Batchlist.prototype.Option_FindIndex_Compare = function( item, params )
+{
 	var attribute_record = this.GetListItemRecord_Parent( item.index );
 
 	if ( item.record											&&
@@ -328,27 +348,31 @@ ComponentAttrs_Batchlist.prototype.Option_FindIndex_Compare = function( item, pa
 	return false;
 }
 
-ComponentAttrs_Batchlist.prototype.Option_Save = function( item, callback, delegator ) {
+ComponentAttrs_Batchlist.prototype.Option_Save = function( item, callback, delegator )
+{
 	var parent_field = this.GetListItemRecord_Parent( item.index );
 	ComponentAttrs_Batchlist_Option_Function( parent_field, item.record.mmbatchlist_fieldlist, 'ComponentOption_Update', callback, delegator );
 
 }
 
-ComponentAttrs_Batchlist.prototype.Option_Delete = function( item, callback, delegator ) {
+ComponentAttrs_Batchlist.prototype.Option_Delete = function( item, callback, delegator )
+{
 	var parent_field = this.GetListItemRecord_Parent( item.index );
 	ComponentAttrs_Batchlist_Option_Function( parent_field, item.record.mmbatchlist_fieldlist, 'ComponentOption_Delete', callback, delegator );
 }
 
-// Column 'type'
-function Fields_Column_Type() {
+function Fields_Column_Type()
+{
 	MMBatchList_Column_Text.call( this, 'Type', 'type', 'type' );
 
 	this.SetOnDisplayData( this.onDisplayData );
 	this.SetOnDisplayEdit( this.onDisplayEdit );
 }
+
 DeriveFrom( MMBatchList_Column_Text, Fields_Column_Type );
 
-Fields_Column_Type.prototype.onDisplayEdit = function( record, item ) {
+Fields_Column_Type.prototype.onDisplayEdit = function( record, item )
+{
 	var i, i_len;
 	var select;
 
@@ -377,7 +401,8 @@ Fields_Column_Type.prototype.onDisplayEdit = function( record, item ) {
 	return select;
 }
 
-Fields_Column_Type.prototype.onDisplayData = function( record ) {
+Fields_Column_Type.prototype.onDisplayData = function( record )
+{
 	var text = newElement( 'div', null, null, null );
 
 	if ( record.type == 'radio' )				text.innerHTML = 'Radio Buttons';
