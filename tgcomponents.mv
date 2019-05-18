@@ -26,7 +26,7 @@
 		- Fixed UI issue with Radio buttons.
 	1.006
 		- Added Date Cached
-		- Added Date Start/ End per Layout > Components
+		- Added Date Start/ End per Layout> Components
 	1.007
 		- Actually Added Scheduling
 		- Added Scheduled Task
@@ -445,7 +445,7 @@
 		<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-UPGRADE-1008', 'Could not load Components to update Display Order!' ) }">
 		</MvIF>
-		
+
 		<MvASSIGN NAME = "l.count" VALUE = 0>
 
 		<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
@@ -487,7 +487,7 @@
 		<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-UPGRADE-1012', 'Could not load Layout Components to update codes!' ) }">
 		</MvIF>
-		
+
 		<MvASSIGN NAME = "l.count"		VALUE = 0>
 		<MvASSIGN NAME = "l.components"	VALUE = "">
 
@@ -1035,19 +1035,6 @@
 |
 |	Custom Functions
 |
-|	ComponentsTab_HeadTag( tab )
-|	ComponentTab_UI( tab )
-|	DuplicateLayout_Dialog_HTML()
-|	ComponentsScreen_HeadTag( screen )
-|	ComponentsScreen_UI( screen )
-|	Component_HTML_App()
-|	Components_Load_All( return var )
-|	Item_Runtime_Load_Layout( module var, param, layout_code, return var )
-|
-|	Parse_Function_Parameters( string, function_name var, parameters var, parameter_count var )
-|	Parameter_Error( param, message )
-|	Is_Variable( variable var )
-|
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ComponentsTab_HeadTag" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "html, text">
@@ -1095,7 +1082,7 @@
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Sets' }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
 		<div id="jsLayoutBatchlist"></div>
-		
+
 		<MvEVAL EXPR = "{ DuplicateLayout_Dialog_HTML() }">
 
 		<MvEVAL EXPR = "{ Component_HTML_App() }">
@@ -1514,7 +1501,7 @@
 								  SET 
 									disp_order = disp_order + 1 
 								  WHERE 
-									disp_order >= ?' }" 
+									disp_order>= ?' }" 
 					 FIELDS	= "l.disp_order">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
 				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-DISPORDER-00002', g.MvQUERY_Error ) }">
@@ -1584,7 +1571,7 @@
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-DISPORDER-00004', g.MvQUERY_Error ) }">
 		</MvIF>
-		
+
 		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
 	</MvWHILE>
 
@@ -1949,11 +1936,11 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttrs_Insert" PARAMETERS = "component_attrs var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "component_id"	VALUE = "{ int( l.component_attrs:component_id ) }">
 	<MvASSIGN NAME = "l.component_attrs" MEMBER = "code"			VALUE = "{ trim( l.component_attrs:code ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "component_id"	VALUE = "{ int( l.component_attrs:component_id ) }">
 	<MvASSIGN NAME = "l.component_attrs" MEMBER = "prompt"			VALUE = "{ trim( l.component_attrs:prompt ) }">
-	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type"			VALUE = "{ trim( l.component_attrs:type ) }">
 	<MvASSIGN NAME = "l.component_attrs" MEMBER = "required"		VALUE = "{ [ g.Module_Admin ].Trim_Boolean( l.component_attrs:required ) }">
+	<MvASSIGN NAME = "l.component_attrs" MEMBER = "type"			VALUE = "{ trim( l.component_attrs:type ) }">
 
 	<MvIF EXPR = "{ ISNULL l.component_attrs:component_id }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Component ID must be present.">
@@ -2304,7 +2291,7 @@
 
 	<MvFOREACH ITERATOR = "l.attrs_order" ARRAY = "g.Option_Order" INDEX = "l.attr_id">
 		<MvASSIGN NAME = "l.option_count" VALUE = 0>
-		
+
 		<MvFOREACH ITERATOR = "l.option_order" ARRAY = "l.attrs_order" INDEX = "l.option_pos">
 			<MvIF EXPR = "{ l.option_order:offset EQ l.option_order:original_offset }">
 				<MvFOREACHCONTINUE>
@@ -2386,7 +2373,7 @@
 													SET 
 														disp_order = disp_order + 1 
 													WHERE 
-														disp_order >= ? AND component_id = ?' }" 
+														disp_order>= ? AND component_id = ?' }" 
 													FIELDS = "l.disp_order, l.component_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
 				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0010', 'Could not update display order for component attribute.' ) }">
@@ -2454,7 +2441,7 @@
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENT-DISPORDER-0012', 'Could not update display order for component attribute.' ) }">
 		</MvIF>
-		
+
 		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
 	</MvWHILE>
 
@@ -2524,7 +2511,7 @@
 													SET 
 														disp_order = disp_order + 1 
 													WHERE 
-														disp_order >= ? AND attr_id = ?' }" 
+														disp_order>= ? AND attr_id = ?' }" 
 													FIELDS = "l.disp_order, l.attr_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
 				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0010', 'Could not update display order for attribute option.' ) }">
@@ -2592,7 +2579,7 @@
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCD-OPTION-0012', 'Could not update display order for attribute option.' ) }">
 		</MvIF>
-		
+
 		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
 	</MvWHILE>
 
@@ -2624,9 +2611,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentOption_Insert" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_option" MEMBER = "prompt" VALUE = "{ trim( l.component_option:prompt ) }">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "prompt"		VALUE = "{ trim( l.component_option:prompt ) }">
+	<MvASSIGN NAME = "l.component_option" MEMBER = "attr_id"	VALUE = "{ int( l.component_option:attr_id ) }">
 
-	<MvIF EXPR = "{ ISNULL l.component_option:attr_id }">
+	<MvIF EXPR = "{ l.component_option:attr_id EQ 0 }">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:message"	VALUE = "Attribute ID must be present.">
 		<MvASSIGN NAME = "g.TGCOMPONENTS_Error:name"	VALUE = "attr_id">
 
@@ -4151,15 +4139,15 @@
 									layoutcache.layout_id = layoutcomponents.layout_id
 								WHERE
 									( 
-										layoutcomponents.dt_start > 0 AND
+										layoutcomponents.dt_start> 0 AND
 										layoutcomponents.dt_start < ? AND
-										layoutcomponents.dt_start > layoutcache.dt_cached
+										layoutcomponents.dt_start> layoutcache.dt_cached
 									)
 									OR
 									(
-										layoutcomponents.dt_end > 0 AND
+										layoutcomponents.dt_end> 0 AND
 										layoutcomponents.dt_end < ? AND
-										layoutcomponents.dt_end > layoutcache.dt_cached
+										layoutcomponents.dt_end> layoutcache.dt_cached
 									)'
 							}"
 				FIELDS	= "s.dyn_time_t, s.dyn_time_t">
@@ -4197,15 +4185,15 @@
 								WHERE
 									layoutcomponents.layout_id = ? AND
 									( 
-										layoutcomponents.dt_start > 0 AND
+										layoutcomponents.dt_start> 0 AND
 										layoutcomponents.dt_start < ? AND
-										layoutcomponents.dt_start > layoutcache.dt_cached
+										layoutcomponents.dt_start> layoutcache.dt_cached
 									)
 									OR
 									(
-										layoutcomponents.dt_end > 0 AND
+										layoutcomponents.dt_end> 0 AND
 										layoutcomponents.dt_end < ? AND
-										layoutcomponents.dt_end > layoutcache.dt_cached
+										layoutcomponents.dt_end> layoutcache.dt_cached
 									)'
 							}"
 				FIELDS	= "l.layout_id, s.dyn_time_t, s.dyn_time_t">
@@ -4228,7 +4216,262 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvINCLUDE FILE = "export.mv">
+<MvCOMMENT>
+|
+|	Export Helper Functions
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "Export_Provisioning_Components" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Exp_Count ) }">
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponents', 's' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, 'disp_order', 'disp_order', 'disp_order' ) }">
+
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0001', g.Error_Message ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, g.Offset, g.Count) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0002', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+	<MvASSIGN NAME = "g.Total_Count" VALUE = "{ l.total_count }">
+
+	<MvWHILE EXPR = "{ ( NOT TGComponents.d.EOF ) AND ( ( g.Exp_Count EQ 0 ) OR ( l.count LT g.Exp_Count ) ) }">
+		<MvASSIGN NAME = "g.Offset"	VALUE = "{ g.Offset + 1 }">
+		<MvASSIGN NAME = "l.count"	VALUE = "{ l.count + 1 }">
+
+		<MvEVAL EXPR = "{ Export_Component( l.output ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( g.Offset, g.Total_Count ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+	<MvASSIGN NAME = "g.Export_Continue" VALUE = 1>
+
+	<MvIF EXPR = "{ g.Offset GE g.Total_Count }">
+		<MvASSIGN NAME = "g.Export_Continue" VALUE = 0>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Component" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ Component_Read( l.component ) }">
+
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
+
+	<MvCAPTURE VARIABLE = "l.output">
+		<MIVA STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+		<MvEVAL EXPR = "{ asciichar( 10 ) }">
+		<MvEVAL EXPR = "{ l.tab $ '<Component_Add>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Code>' $ l.component:code $ '</Code>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Name>' $ miva_cdata_encode( l.component:name ) $ '</Name>' }">
+			<MvIF EXPR = "{ l.component:descrip }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Descrip>' $ miva_cdata_encode( l.component:descrip ) $ '</Descrip>' }">
+			</MvIF>
+			<MvIF EXPR = "{ l.component:image }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Image>' $ miva_cdata_encode( l.component:image ) $ '</Image>' }">
+			</MvIF>
+			<MvIF EXPR = "{ l.component:allow_children }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Allow_Nest>1</Allow_Nest>' }">
+			<MvELSE>
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Allow_Nest>0</Allow_Nest>' }">
+			</MvIF>
+		<MvEVAL EXPR = "{ l.tab $ '</Component_Add>' }">
+		<MIVA STANDARDOUTPUTLEVEL = "">
+	</MvCAPTURE>
+
+	<MvASSIGN NAME = "l.output" VALUE = "{ l.output $ Export_Component_Attributes( l.component ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Component_Attributes" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvIF EXPR = "{ NOT Components_Attrs_Load_All_ID( l.component:id, l.component:attributes ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
+
+	<MvCAPTURE VARIABLE = "l.attribute_output">
+		<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.component:attributes">
+			<MvEVAL EXPR = "{ asciichar( 10 ) }">
+			<MvEVAL EXPR = "{ l.tab $ '<ComponentAttribute_Add component="' $ l.component:code $ '">' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Code>' $ l.attribute:code $ '</Code>' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Prompt>' $ miva_cdata_encode( l.attribute:prompt ) $ '</Prompt>' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Type>' $ l.attribute:type $ '</Type>' }">
+				<MvIF EXPR = "{ l.attribute:required }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Required>1</Required>' }">
+				<MvELSE>
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Required>0</Required>' }">
+				</MvIF>
+			<MvEVAL EXPR = "{ l.tab $ '</ComponentAttribute_Add>' }">
+			<MvIF EXPR = "{ ( l.attribute:type EQ 'select' OR l.attribute:type EQ 'radio' ) AND l.attribute:options }">
+				<MvFOREACH ITERATOR = "l.option" ARRAY = "l.attribute:options">
+					<MvEVAL EXPR = "{ asciichar( 10 ) }">
+					<MvEVAL EXPR = "{ l.tab $ '<ComponentAttributeOption_Add component="' $ l.component:code $ '" code="' $ l.attribute:code $ '">' }">
+						<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Prompt>' $ miva_cdata_encode( l.option:prompt ) $ '</Prompt>' }">
+					<MvEVAL EXPR = "{ l.tab $ '</ComponentAttributeOption_Add>' }">
+				</MvFOREACH>
+			</MvIF>
+		</MvFOREACH>
+	</MvCAPTURE>
+
+	<MvFUNCTIONRETURN VALUE = "{ l.attribute_output }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Provisioning_Layouts" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Exp_Count ) }">
+	<MvASSIGN NAME = "g.LAYOUT_OPTION"	VALUE = "{ int( g.LAYOUT_OPTION ) }">
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGLayouts', 's' ) }">
+
+	<MvIF EXPR = "{ g.LAYOUT_OPTION GT 0 }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 's.id = ?', 'g.LAYOUT_OPTION' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0003', g.Error_Message ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGLayouts', l.search_sql, l.search_fields, g.Offset, g.Count) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-EXPORT-0004', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count"			VALUE = 0>
+	<MvASSIGN NAME = "g.Total_Count"	VALUE = "{ l.total_count }">
+
+	<MvWHILE EXPR = "{ ( NOT TGLayouts.d.EOF ) AND ( ( g.Exp_Count EQ 0 ) OR ( l.count LT g.Exp_Count ) ) }">
+		<MvASSIGN NAME = "g.Offset"	VALUE = "{ g.Offset + 1 }">
+		<MvASSIGN NAME = "l.count"	VALUE = "{ l.count + 1 }">
+
+		<MvEVAL EXPR = "{ Export_Layout( l.output ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( g.Offset, g.Total_Count ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+
+	<MvASSIGN NAME = "g.Export_Continue" VALUE = 1>
+
+	<MvIF EXPR = "{ g.Offset GE g.Total_Count }">
+		<MvASSIGN NAME = "g.Export_Continue" VALUE = 0>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Layout" PARAMETERS = "output var" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ Layout_Read( l.layout ) }">
+
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
+
+	<MvCAPTURE VARIABLE = "l.output">
+		<MIVA STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+		<MvEVAL EXPR = "{ asciichar( 10 ) }">
+		<MvEVAL EXPR = "{ l.tab $ '<Layout_Add>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Code>' $ l.layout:code $ '</Code>' }">
+			<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Name>' $ miva_cdata_encode( l.layout:name ) $ '</Name>' }">
+		<MvEVAL EXPR = "{ l.tab $ '</Layout_Add>' }">
+		<MIVA STANDARDOUTPUTLEVEL = "">
+	</MvCAPTURE>
+
+	<MvEVAL EXPR = "{ Export_Layout_Components( l.layout, l.null_parent, l.components_output ) }">
+	<MvASSIGN NAME = "l.output" VALUE = "{ l.output $ l.components_output }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_Layout_Components" PARAMETERS = "layout var, parent var, output var"  STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.tab" VALUE = "{ asciichar( 09 ) }">
+
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ Layout_Components_Load_Parent_Lowlevel( l.layout:id, l.parent:id, l.components, l.count ) }">
+		<MvCAPTURE VARIABLE = "l.new_output">
+			<MIVA STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+			<MvEVAL EXPR = "{ asciichar( 10 ) }">
+			<MvEVAL EXPR = "{ l.tab $ '<LayoutComponent_Add layout="' $ l.layout:code $ '" component="' $ l.component:component:code $ '">' }">
+				<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Name>' $ miva_cdata_encode( l.component:name ) $ '</Name>' }">
+				<MvEVAL EXPR = "{ l.tab  $ l.tab $ '<Code>' $ l.component:code $ '</Code>' }">
+				<MvIF EXPR = "{ l.component:active }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Active>1</Active>' }">
+				<MvELSE>
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Active>0</Active>' }">
+				</MvIF>
+				<MvIF EXPR = "{ l.parent:id GT 0 }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Parent>' $ miva_cdata_encode( l.parent:name ) $ '</Parent>' }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Parent_Code>' $ l.parent:code $ '</Parent_Code>' }">
+				</MvIF>
+				<MvIF EXPR = "{ l.component:dt_start GT 0 }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Date_Start>' $ miva_cdata_encode( [ g.Module_Library_Utilities ].Format_Date( l.component:dt_start, 'en-US' ) $ ' ' $ [ g.Module_Library_Utilities ].Format_Time_Short( l.component:dt_start, 'en-US' ) ) $ '</Date_Start>' }">
+				</MvIF>
+				<MvIF EXPR = "{ l.component:dt_end GT 0 }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Date_End>' $ miva_cdata_encode( [ g.Module_Library_Utilities ].Format_Date( l.component:dt_end, 'en-US' ) $ ' ' $ [ g.Module_Library_Utilities ].Format_Time_Short( l.component:dt_end, 'en-US' ) ) $ '</Date_End>' }">
+				</MvIF>
+				<MvIF EXPR = "{ miva_array_elements( l.component:component:attributes ) }">
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '<Attributes>' }">
+						<MvASSIGN NAME = "l.attr_pos" VALUE = 0>
+						<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.component:component:attributes">
+							<MvIF EXPR = "{ ISNULL l.attribute:value }">
+								<MvFOREACHCONTINUE>
+							<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' AND ISNULL l.attribute:product:code }">
+								<MvFOREACHCONTINUE>
+							<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' AND ISNULL l.attribute:category:code }">
+								<MvFOREACHCONTINUE>
+							</MvIF>
+							<MvASSIGN NAME = "l.attr_pos" VALUE = "{ l.attr_pos + 1 }">
+							<MvIF EXPR = "{ l.attr_pos GT 1 }">
+								<MvEVAL EXPR = "{ asciichar( 10 ) }">
+							</MvIF>
+							<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ '<Attribute code="' $ l.attribute:code $ '">' }">
+								<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<LinkType>' $ Export_LinkType( l.attribute:link:type ) $ '</LinkType>' }">
+									<MvIF EXPR = "{ l.attribute:link:value }">
+										<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.attribute:link:value $ '</Value>' }">
+									</MvIF>
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.attribute:product:code $ '</Value>' }">
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.attribute:category:code $ '</Value>' }">
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'imagetype' }">
+									<MvIF EXPR = "{ [ g.Module_Library_DB ].ImageType_Load_ID( l.attribute:value, l.imagetype ) }">
+										<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ l.imagetype:code $ '</Value>' }">
+									</MvIF>
+								<MvELSEIF EXPR = "{ l.attribute:type EQ 'multitext' }">
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ miva_cdata_encode( miva_joinstring( l.attribute:value, '|', 'trim' ) ) $ '</Value>' }">
+								<MvELSE>
+									<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ l.tab $ '<Value>' $ miva_cdata_encode( l.attribute:value ) $ '</Value>' }">
+								</MvIF>
+							<MvEVAL EXPR = "{ l.tab $ l.tab $ l.tab $ '</Attribute>' }">
+						</MvFOREACH>
+					<MvEVAL EXPR = "{ l.tab $ l.tab $ '</Attributes>' }">
+				</MvIF>
+			<MvEVAL EXPR = "{ l.tab $ '</LayoutComponent_Add>' }">
+			<MIVA STANDARDOUTPUTLEVEL = "">
+		</MvCAPTURE>
+
+		<MvASSIGN NAME = "l.output" VALUE = "{ l.output $ l.new_output }">
+
+		<MvIF EXPR = "{ l.component:component:allow_children EQ 1 }">
+			<MvASSIGN NAME = "l.component:node_count" VALUE = "{ Export_Layout_Components( l.layout, l.component, l.output ) }">
+		</MvIF>
+	</MvFOREACH>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Export_LinkType" PARAMETERS = "link_type" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.link_type EQ 'N' }">		<MvFUNCTIONRETURN VALUE = "None">
+	<MvELSEIF EXPR = "{ l.link_type EQ 'U' }">	<MvFUNCTIONRETURN VALUE = "URL">
+	<MvELSEIF EXPR = "{ l.link_type EQ 'P' }">	<MvFUNCTIONRETURN VALUE = "Product">
+	<MvELSEIF EXPR = "{ l.link_type EQ 'C' }">	<MvFUNCTIONRETURN VALUE = "Category">
+	<MvELSEIF EXPR = "{ l.link_type EQ 'G' }">	<MvFUNCTIONRETURN VALUE = "Page">
+	</MvIF>
+</MvFUNCTION>
+
+
 <MvINCLUDE FILE = "provisioning.mv">
 
 <MvFUNCTION NAME = "Parse_Function_Parameters" PARAMETERS = "string, function_name var, parameters var, parameter_count var" STANDARDOUTPUTLEVEL = "">	
@@ -4258,11 +4501,11 @@
 		<MvIF EXPR = "{ l.quote_pos AND NOT l.end_quote_pos }">
 			<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Missing single quote' ) }">
 		</MvIF>
-		
+
 		<MvWHILE EXPR = "{ ( l.comma_pos LT l.end_quote_pos ) AND ( l.comma_pos GT l.quote_pos ) }">
 			<MvASSIGN NAME = "l.comma_pos" VALUE = "{ indexof( ',', l.string, l.comma_pos + 1 ) }">
 		</MvWHILE>
-		
+
 		<MvIF EXPR = "{ l.comma_pos EQ 0 }">
 			<MvASSIGN NAME = "l.start" 			VALUE = "{ l.starting_pos }">
 			<MvASSIGN NAME = "l.end" 			VALUE = "{ len_var( l.string ) - l.starting_pos }">
@@ -4275,7 +4518,7 @@
 		</MvIF>
 
 		<MvASSIGN NAME = "l.param" VALUE = "{ trim( substring_var( l.string, l.start, l.end ) ) }">
-		
+
 		<MvIF EXPR = "{ ISNULL l.param }">
 			<MvIF EXPR = "{ l.comma_pos EQ 0 AND l.parameter_count EQ 0 }">
 				<MvFUNCTIONRETURN VALUE = 1>
@@ -4283,9 +4526,9 @@
 
 			<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Parameter number ' $ ( ++l.parameter_count ) $ ' cannot be empty' ) }">
 		</MvIF>
-		
+
 		<MvASSIGN NAME = "l.parameters" INDEX = "{ ++l.parameter_count }" VALUE = "{ l.param }">
-		
+
 		<MvIF EXPR = "{ l.quote_pos EQ 0 AND l.comma_pos EQ 0 }">
 			<MvWHILESTOP>
 		</MvIF>
@@ -4293,7 +4536,7 @@
 		<MvIF EXPR = "{ l.loop_counter GT 1000 }">
 			<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Error parsing parameters' ) }">
 		</MvIF>
-		
+
 		<MvASSIGN NAME = "l.loop_counter" VALUE = "{ l.loop_counter + 1 }">
 	</MvWHILE>
 
@@ -4324,7 +4567,7 @@
 
 			<MvFORCONTINUE>
 		</MvIF>
-		
+
 		<MvIF EXPR = "{ l.char EQ '[' }">
 			<MvASSIGN NAME = "l.bracket_count" 				VALUE = "{ l.bracket_count + 1 }">
 			<MvASSIGN NAME = "l.opening_square_bracket_pos" VALUE = "{ indexof( '[', l.variable, l.pos + 1 ) }">
