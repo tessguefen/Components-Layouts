@@ -1,4 +1,4 @@
-<MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "compresswhitespace">
+<MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
@@ -50,9 +50,9 @@
 </MvCOMMENT>
 
 <MvCOMMENT>
-| ====================================================================================
+|
 |	INSTALL
-| ====================================================================================
+|
 </MvCOMMENT>
 
 
@@ -75,21 +75,21 @@
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1000', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGComponents. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_1 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1001', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_2 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1002', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
@@ -111,21 +111,21 @@
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1003', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1004', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( component_id, code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1005', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
@@ -144,21 +144,21 @@
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1006', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGComponent_Options. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1007', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( attr_id, prompt )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1008', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
@@ -176,21 +176,21 @@
 								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1009', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1010', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1011', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
@@ -215,28 +215,28 @@
 				 				code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1012', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts_Components. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1013', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( parent, disp_order )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1014', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_3 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( layout_id, code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1019', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
@@ -254,14 +254,14 @@
 								value				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1015', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts_Values. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Values_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Values ( layouts_components_id, attr_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1016', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Values.' ) }">
 	</MvIF>
 
@@ -278,14 +278,14 @@
 								dt_cached	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 )	$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1017', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache ( layout_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1018', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache.' ) }">
 	</MvIF>
 
@@ -296,42 +296,42 @@
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponents', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2016', 'An error occured while creating the store key, TGComponents. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponents_Disp_Order', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2024', 'An error occured while creating the store key, TGComponents_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Attrs', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2017', 'An error occured while creating the store key, TGComponent_Attrs. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Attrs_Disp_Order', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2018', 'An error occured while creating the store key, TGComponent_Attrs_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Options', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2019', 'An error occured while creating the store key, TGComponent_Options. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Options_Disp_Order', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2020', 'An error occured while creating the store key, TGComponent_Options_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGLayouts', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2021', 'An error occured while creating the store key, TGLayouts. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGLayouts_Components', 1 ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2022', 'An error occured while creating the store key, TGLayouts_Components. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
@@ -345,45 +345,10 @@
 		</MvIF>
 	</MvIF>
 
-	<MvCOMMENT>
-	|
-	| Scheduled Task
-	|	Removed 1.009 cuz... why not.
-	|
-	</MvCOMMENT>
-
-	<MvCOMMENT>
-		<MvASSIGN NAME = "l.task"				VALUE = "">
-		<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
-		<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
-		<MvASSIGN NAME = "l.task:trig"			VALUE = "">
-		<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
-		<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
-		<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
-		<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
-		<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
-		<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
-		<MvASSIGN NAME = "l.task:config"		VALUE = "">
-
-		<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
-	</MvCOMMENT>
-
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_TUI_MGR ].TemplateManager_Create_Item( 'tgcomponent',  l.module:code ) }">
-		<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2023', 'An error occured while creating the item tgcomponent.' ) }">
 	</MvIF>
-
-
-	<MvCOMMENT>
-	|
-	|	Sunshine, Lollipops And Rainbows
-	|
-	</MvCOMMENT>
 
 	<MvFUNCTIONRETURN VALUE = 1 />
 </MvFUNCTION>
@@ -395,6 +360,7 @@
 		|	Create TGLayouts_Cache table
 		|
 		</MvCOMMENT>
+
 		<MvQUERY	NAME = "Merchant"
 					QUERY = "{ 'CREATE TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
 								(
@@ -411,10 +377,14 @@
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1002', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache.' ) }">
 		</MvIF>
 	</MvIF>
+
 	<MvIF EXPR = "{ l.version LT 1.006 }">
 		<MvCOMMENT>
-			Add Timestamp for when it was last cached.
+		|
+		|	Add Timestamp for when it was last cached.
+		|
 		</MvCOMMENT>
+
 		<MvQUERY NAME	= "Merchant"
 				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
 				 				ADD
@@ -435,43 +405,19 @@
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1004', 'Could not add `dt_start` and `dt_end`.' ) }">
 		</MvIF>
+
 		<MvIF EXPR = "{ NOT Layout_Cache_DeleteAll() }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1005', 'Did not clear out Layout Cache.' ) }">
 		</MvIF>
 	</MvIF>
-	<MvIF EXPR = "{ l.version LT 1.007 }">
-		<MvCOMMENT>
-		|
-		| Scheduled Tasks
-		|	Removed 1.009 cuz... why not.
-		|
-		</MvCOMMENT>
-		
-		<MvCOMMENT>
-			<MvASSIGN NAME = "l.task"				VALUE = "">
-			<MvASSIGN NAME = "l.task:descrip"		VALUE = "Check Layout Cache & Scheduled Components">
-			<MvASSIGN NAME = "l.task:enabled"		VALUE = 1>
-			<MvASSIGN NAME = "l.task:trig"			VALUE = "">
-			<MvASSIGN NAME = "l.task:trig_delay"	VALUE = 0>
-			<MvASSIGN NAME = "l.task:runint"		VALUE = 600>
-			<MvASSIGN NAME = "l.task:runonce"		VALUE = 0>
-			<MvASSIGN NAME = "l.task:mnt_mode"		VALUE = 0>
-			<MvASSIGN NAME = "l.task:mnt_advnce"	VALUE = 0>
-			<MvASSIGN NAME = "l.task:lastrun"		VALUE = 0>
-			<MvASSIGN NAME = "l.task:nextrun"		VALUE = 0>
-			<MvASSIGN NAME = "l.task:module_id"		VALUE = "{ l.module:id }">
-			<MvASSIGN NAME = "l.task:operation"		VALUE = "check_layout_cache">
-			<MvASSIGN NAME = "l.task:config"		VALUE = "">
 
-			<MvIF EXPR = "{ NOT [ g.Module_Feature_SCH_DB ].ScheduledTask_Insert( l.task ) }">
-				<MvFUNCTIONRETURN VALUE = 0>
-			</MvIF>
-		</MvCOMMENT>
-	</MvIF>
 	<MvIF EXPR = "{ l.version LT 1.009 }">
 		<MvCOMMENT>
-			Add Timestamp for when it was last cached.
+		|
+		|	Add display_order for TGComponents
+		|
 		</MvCOMMENT>
+
 		<MvQUERY NAME	= "Merchant"
 				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGComponents
 				 				ADD
@@ -487,7 +433,9 @@
 		</MvIF>
 
 		<MvCOMMENT>
-			Update Them Display Orders man.
+		|
+		|	Update default Display Order
+		|
 		</MvCOMMENT>
 
 		<MvOPENVIEW NAME	= "Merchant"
@@ -499,13 +447,14 @@
 		</MvIF>
 		
 		<MvASSIGN NAME = "l.count" VALUE = "0">
-		<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
 
+		<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
 			<MvEVAL EXPR = "{ Component_Read( l.components[ ++l.count ] ) }">
 			<MvASSIGN NAME = "l.components" INDEX = "{ l.count }" MEMBER = "disp_order" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Disp_Order' ) }">
 
 			<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
 		</MvWHILE>
+
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
 
 		<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components">
@@ -514,9 +463,12 @@
 			</MvIF>
 		</MvFOREACH>
 	</MvIF>
+
 	<MvIF EXPR = "{ l.version LT 1.012 }">
 		<MvCOMMENT>
-			Add column `code` ~_~
+		|
+		|	Add column `code`
+		|
 		</MvCOMMENT>
 
 		<MvQUERY NAME	= "Merchant"
@@ -528,7 +480,6 @@
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1010', 'Could not add `disp_order`.' ) }">
 		</MvIF>
-
 
 		<MvOPENVIEW NAME	= "Merchant"
 					VIEW	= "TGLayouts_Components"
@@ -556,47 +507,47 @@
 		</MvFOREACH>
 
 		<MvCOMMENT>
-			Add index ~_~
+		|
+		|	Add unique index
+		|
 		</MvCOMMENT>
 
 		<MvQUERY	NAME = "Merchant"
 					QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ADD UNIQUE INDEX TGLayouts_Components_3 ( layout_id, code )' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
-			<MvASSIGN NAME = "l.void" VALUE = "{ Module_Uninstall_Store( l.module ) }">
+			<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1012', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 		</MvIF>
 	</MvIF>
 
-	<MvFUNCTIONRETURN VALUE = 1 />
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Module_Uninstall_Store" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGComponents'				}">
-	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs'		}">
-	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGComponent_Options'		}">
-	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts'				}">
-	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components'		}">
-	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Values'			}">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGComponents' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGComponent_Options' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components' }">
+	<MvQUERY NAME = "Merchant" QUERY = "{ 'DROP TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Values' }">
 
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents' ) 						}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Disp_Order' ) 			}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs' )					}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs_Disp_Order' )		}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Options' )				}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Options_Disp_Order' )	}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGLayouts' )							}">
-	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGLayouts_Components' )				}">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents' ) }">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Disp_Order' ) }">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs' ) }">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponent_Attrs_Disp_Order' ) }">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Options' ) }">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGComponents_Options_Disp_Order' ) }">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGLayouts' ) }">
+	<MvASSIGN NAME = "l.success" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Delete( 'TGLayouts_Components' ) }">
 
-	<MvFUNCTIONRETURN VALUE = 1 />
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-
 <MvCOMMENT>
-| ====================================================================================
+|
 |	UTIL
-| ====================================================================================
+|
 </MvCOMMENT>
-
 
 <MvFUNCTION NAME = "StoreUtilityModule_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -606,30 +557,38 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "StoreUtilityModule_Action_Privileges" PARAMETERS = "module var">
+<MvFUNCTION NAME = "StoreUtilityModule_Action_Privileges" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = -1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "StoreUtilityModule_Screen_Privileges" PARAMETERS = "module var">
+<MvFUNCTION NAME = "StoreUtilityModule_Screen_Privileges" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = -1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "StoreUtilityModule_LeftNavigation"  PARAMETERS = "module var, indent" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }"><MvFUNCTIONRETURN VALUE = 1></MvIF>
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
 	<MvIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].LeftNavigation_Dot( l.indent - 1, 'Screen=SUTL&Store_Code=' $ encodeattribute( g.Store:code ) $ '&Module_Code=' $ encodeattribute( l.module:code ), 'Main', 'Components and Layouts' ) }">
 	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "StoreUtilityModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }"><MvFUNCTIONRETURN VALUE = 1></MvIF>
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
 
 	<MvIF EXPR = "{ g.TGCOMPONENTS_Screen }">
 		<MvEVAL EXPR = "{ ComponentsScreen_UI( g.TGCOMPONENTS_Screen ) }">
@@ -649,92 +608,76 @@
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
-
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvCOMMENT>
-| ====================================================================================
+|
 |	JSON
-| ====================================================================================
+|
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }"><MvFUNCTIONRETURN></MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
 
-	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Delete( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Components_DisplayOrder_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Components_DisplayOrder_Update( l.module ) }"></MvIF>
+	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Update' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Delete' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_DisplayOrder_Update' }">		<MvFUNCTIONRETURN VALUE = "{ JSON_Components_DisplayOrder_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layouts_Load_Query' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Layouts_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Update' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Delete' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Attrs_Load_Query' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Attrs_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Insert' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Update' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Delete' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_DisplayOrder_Update' }">	<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_DisplayOrder_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Insert' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Update' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Delete' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Load_Components' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_Components( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_Load_All' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_All( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Duplicate' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Duplicate( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Delete_Layout_Cache' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Delete_Layout_Cache( l..module ) }">
+	</MvIF>
 
-	<MvIF EXPR = "{ g.Module_Function EQ 'Layouts_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layouts_Load_Query( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Update( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Delete( l.module )	}"></MvIF>
-
-	<MvIF EXPR = "{ g.Module_Function EQ 'Component_Attrs_Load_Query' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Component_Attrs_Load_Query( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Insert( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Update( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Delete( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_DisplayOrder_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_DisplayOrder_Update( l.module ) }"></MvIF>
-
-	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Insert' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Insert( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Update' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Update( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Delete' }"><MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Delete( l.module )	}"></MvIF>
-
-	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Load_Components' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_Components( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_All' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_All( l.module )	}"></MvIF>
-	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module )	}"></MvIF>
-
-	<MvIF EXPR = "{ g.Module_Function EQ 'Layout_Duplicate' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Duplicate( l.module )	}"></MvIF>
-
-	<MvIF EXPR = "{ g.Module_Function EQ 'Delete_Layout_Cache' }"><MvFUNCTIONRETURN VALUE = "{ JSON_Delete_Layout_Cache( l..module )	}"></MvIF>
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvCOMMENT>
-| ====================================================================================
+|
 |	CLIENTSIDE
-| ====================================================================================
+|
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_Clientside" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, compresswhitespace" ERROROUTPUTLEVEL = "">
-	<MvIF EXPR = "{ g.Filename EQ 'components.js' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "js/components.js" INTERPRET="OFF">
+	<MvIF EXPR = "{ ( '.js' EIN g.Filename ) EQ len_var( g.Filename ) }">		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
+	<MvELSEIF EXPR = "{ ( '.css' EIN g.Filename ) EQ len_var( g.Filename ) }">	<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
 	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'layouts.js' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "js/layouts.js" INTERPRET="OFF">
+
+	<MvIF EXPR = "{ g.Filename EQ 'components.js' }">				<MvINCLUDE FILE = "js/components.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">				<MvINCLUDE FILE = "js/layouts.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'component_attrs.js' }">		<MvINCLUDE FILE = "js/component_attrs.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">			<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">	<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">					<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'styles.css' }">				<MvINCLUDE FILE = "angular_app/styles.css" INTERPRET="OFF">
 	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'component_attrs.js' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "js/component_attrs.js" INTERPRET="OFF">
-	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'angular.min.js' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
-	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
-	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'app.js' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
-		<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
-	</MvIF>
-	<MvIF EXPR = "{ g.Filename EQ 'styles.css' }">
-		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
-		<MvINCLUDE FILE = "angular_app/styles.css" INTERPRET="OFF">
-	</MvIF>
+
+	<MvASSIGN NAME = "l.null" VALUE = "{ miva_output_header( 'Status', '404 Not Found' ) }">
 </MvFUNCTION>
 
 <MvCOMMENT>
-| ====================================================================================
+|
 |	COMPONENT
-| ====================================================================================
+|
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ComponentModule_Initialize" PARAMETERS = "module var, item, all_settings var, settings var" STANDARDOUTPUTLEVEL = "">
@@ -791,7 +734,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT l.new_param }">
-		<MvFUNCTIONRETURN VALUE = 0 />
+		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvASSEMBLY>
@@ -820,48 +763,37 @@
 			retn
 		L_asm_success:				
     </MvASSEMBLY>
-
 </MvFUNCTION>
 
 
 <MvCOMMENT>
-| ====================================================================================
+|
 |	provision_store
-| ====================================================================================
+|
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_Provision_Store" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
 	<MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
 		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.child_xml:name ) }">
 
-		<MvIF EXPR = "{ l.name EQ 'layout_add' }">
-			<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'layout_update'}">
-			<MvEVAL EXPR = "{ Module_Provision_Layout_Update( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'component_add'}">
-			<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'component_update'}">
-			<MvEVAL EXPR = "{ Module_Provision_Component_Update( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'component_delete'}">
-			<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_add'}">
-			<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_update'}">
-			<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Update( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_delete'}">
-			<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Delete( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattributeoption_add'}">
-			<MvEVAL EXPR = "{ Module_Provision_ComponentAttributeOption_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add'}">
-			<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }">
+		<MvIF EXPR = "{ l.name EQ 'layout_add' }">						<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layout_update'}">				<MvEVAL EXPR = "{ Module_Provision_Layout_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_add'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_update'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_delete'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_add'}">		<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_update'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_delete'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Delete( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattributeoption_add'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttributeOption_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add'}">			<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }">
 		</MvIF>
 	</MvFOREACH>
 </MvFUNCTION>
 
 <MvCOMMENT>
-| ====================================================================================
+|
 |	export
-| ====================================================================================
+|
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ExportModule_Export" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
@@ -871,6 +803,7 @@
 		<MvIF EXPR = "{ fexists( '/' $ g.Export_File ) }">
 			<MvASSIGN NAME = "l.success" VALUE = "{ fdelete( '/' $ g.Export_File ) }">
 		</MvIF>
+
 		<MvASSIGN NAME = "l.wrapper" VALUE = "<Module code=\"TGCOMPONENTS\" feature=\"util\">">
 		<MvASSIGN NAME = "l.success" VALUE = "{ file_create( '/' $ g.Export_File, 'data', l.wrapper ) }">
 	</MvIF>
@@ -890,6 +823,7 @@
 	<MvIF EXPR = "{ NOT g.Export_Continue }">
 		<MvASSIGN NAME = "l.wrapper" VALUE = "</Module>">
 		<MvASSIGN NAME = "l.success" VALUE = "{ file_append( '/' $ g.Export_File, 'data', l.wrapper ) }">
+
 		<MvIF EXPR = "{ g.Export_SendEmail }">
 			<MvDO FILE = "{ g.Module_Library_Utilities }" NAME = "l.void" VALUE = "{ Send_Email_Attachment( g.Export_Email, g.Export_Email, '', 'Components & Layouts Export', g.Export_File, '/', 'data' ) }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( 'TGCOMPONENTS-SUCCESS-1', 'Review Export Email Sent' ) }">
@@ -1037,9 +971,9 @@
 </MvFUNCTION>
 
 <MvCOMMENT>
-| ====================================================================================
+|
 |	scheduledtask
-| ====================================================================================
+|
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ScheduledTaskModule_Capabilities" PARAMETERS = "module var, capabilities var" STANDARDOUTPUTLEVEL = "">
