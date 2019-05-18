@@ -1042,6 +1042,11 @@
 |	ComponentsScreen_UI( screen )
 |	Component_HTML_App()
 |	Components_Load_All( return var )
+|	Item_Runtime_Load_Layout( module var, param, layout_code, return var )
+|
+|	Parse_Function_Parameters( string, function_name var, parameters var, parameter_count var )
+|	Parameter_Error( param, message )
+|	Is_Variable( variable var )
 |
 </MvCOMMENT>
 
@@ -1204,8 +1209,143 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "Item_Runtime_Load_Layout" PARAMETERS = "module var, param, layout_code, return var" STANDARDOUTPUTLEVEL = "">
+	<MvFUNCTIONRETURN VALUE = "{ Runtime_Load_Layout( l.layout_code, l.return ) }" />
+</MvFUNCTION>
 
-<MvINCLUDE FILE = "component.mv">
+
 <MvINCLUDE FILE = "functions.mv">
 <MvINCLUDE FILE = "export.mv">
 <MvINCLUDE FILE = "provisioning.mv">
+
+<MvFUNCTION NAME = "Parse_Function_Parameters" PARAMETERS = "string, function_name var, parameters var, parameter_count var" STANDARDOUTPUTLEVEL = "">	
+	<MvASSIGN NAME = "l.parameter_count" 	VALUE = 0>
+	<MvASSIGN NAME = "l.loop_counter" 		VALUE = 0>
+	<MvASSIGN NAME = "l.string" 			VALUE = "{ trim( l.string ) }">
+	<MvASSIGN NAME = "l.starting_pos" 		VALUE = "{ indexof( '(', l.string, 1 ) + 1 }">
+	<MvASSIGN NAME = "l.function_name" 		VALUE = "{ tolower( substring_var( l.string, 1, l.starting_pos - 2 ) ) }">
+	
+	<MvIF EXPR = "{ l.starting_pos EQ 1 }">
+		<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Expected \'(\' to start the function call' ) }">
+	</MvIF>
+	
+	<MvIF EXPR = "{ ISNULL l.function_name }">
+		<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Missing function name' ) }">
+	</MvIF>
+	
+	<MvIF EXPR = "{ substring_var( l.string, len_var( l.string ), 1 ) NE ')' }">
+		<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Expected \')\' to end the function call' ) }">
+	</MvIF>
+
+	<MvWHILE EXPR = "{ 1 }">
+		<MvASSIGN NAME = "l.quote_pos" 		VALUE = "{ indexof( '\'', l.string, l.starting_pos ) }">
+		<MvASSIGN NAME = "l.end_quote_pos" 	VALUE = "{ indexof( '\'', l.string, l.quote_pos + 1 ) }">
+		<MvASSIGN NAME = "l.comma_pos" 		VALUE = "{ indexof( ',', l.string, l.starting_pos ) }">
+
+		<MvIF EXPR = "{ l.quote_pos AND NOT l.end_quote_pos }">
+			<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Missing single quote' ) }">
+		</MvIF>
+		
+		<MvWHILE EXPR = "{ ( l.comma_pos LT l.end_quote_pos ) AND ( l.comma_pos GT l.quote_pos ) }">
+			<MvASSIGN NAME = "l.comma_pos" VALUE = "{ indexof( ',', l.string, l.comma_pos + 1 ) }">
+		</MvWHILE>
+		
+		<MvIF EXPR = "{ l.comma_pos EQ 0 }">
+			<MvASSIGN NAME = "l.start" 			VALUE = "{ l.starting_pos }">
+			<MvASSIGN NAME = "l.end" 			VALUE = "{ len_var( l.string ) - l.starting_pos }">
+			<MvASSIGN NAME = "l.starting_pos" 	VALUE = "{ len_var( l.string ) }">
+			<MvASSIGN NAME = "l.quote_pos" 		VALUE = 0>
+		<MvELSE>
+			<MvASSIGN NAME = "l.start" 			VALUE = "{ l.starting_pos }">
+			<MvASSIGN NAME = "l.end" 			VALUE = "{ l.comma_pos - l.starting_pos }">
+			<MvASSIGN NAME = "l.starting_pos" 	VALUE = "{ l.comma_pos + 1 }">
+		</MvIF>
+
+		<MvASSIGN NAME = "l.param" VALUE = "{ trim( substring_var( l.string, l.start, l.end ) ) }">
+		
+		<MvIF EXPR = "{ ISNULL l.param }">
+			<MvIF EXPR = "{ l.comma_pos EQ 0 AND l.parameter_count EQ 0 }">
+				<MvFUNCTIONRETURN VALUE = 1>
+			</MvIF>
+			
+			<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Parameter number ' $ ( ++l.parameter_count ) $ ' cannot be empty' ) }">
+		</MvIF>
+		
+		<MvASSIGN NAME = "l.parameters" INDEX = "{ ++l.parameter_count }" VALUE = "{ l.param }">
+		
+		<MvIF EXPR = "{ l.quote_pos EQ 0 AND l.comma_pos EQ 0 }">
+			<MvWHILESTOP>
+		</MvIF>
+
+		<MvIF EXPR = "{ l.loop_counter GT 1000 }">
+			<MvFUNCTIONRETURN VALUE = "{ Parameter_Error( l.string, 'Error parsing parameters' ) }">
+		</MvIF>
+		
+		<MvASSIGN NAME = "l.loop_counter" VALUE = "{ l.loop_counter + 1 }">
+	</MvWHILE>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Parameter_Error" PARAMETERS = "param, message" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.error_count"																VALUE = "{ miva_array_elements( g.Session:tgcomponents ) }">
+	<MvASSIGN NAME = "g.Session:tgcomponents" INDEX = "{ l.error_count + 1 }" MEMBER = "param"		VALUE = "{ l.param }">
+	<MvASSIGN NAME = "g.Session:tgcomponents" INDEX = "{ l.error_count + 1 }" MEMBER = "message"	VALUE = "{ l.message }">
+	
+	<MvFUNCTIONRETURN VALUE = 0>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Is_Variable" PARAMETERS = "variable var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.valid_chars" 		VALUE = "_.: ">
+	<MvASSIGN NAME = "l.square_bracket_pos" VALUE = 0>
+	<MvASSIGN NAME = "l.bracket_count" 		VALUE = 0>
+
+	<MvFOR INDEX = "l.pos" COUNT = "{ len_var( l.variable ) }">
+		<MvASSIGN NAME = "l.char" VALUE = "{ substring_var( l.variable, l.pos, 1 ) }">
+
+		<MvIF EXPR = "{ l.pos EQ 1 }">
+			<MvIF EXPR = "{ ( NOT isalpha( l.char ) ) AND
+							( l.char NE '_' ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+			
+			<MvFORCONTINUE>
+		</MvIF>
+		
+		<MvIF EXPR = "{ l.char EQ '[' }">
+			<MvASSIGN NAME = "l.bracket_count" 				VALUE = "{ l.bracket_count + 1 }">
+			<MvASSIGN NAME = "l.opening_square_bracket_pos" VALUE = "{ indexof( '[', l.variable, l.pos + 1 ) }">
+			<MvASSIGN NAME = "l.closing_square_bracket_pos" VALUE = "{ indexof( ']', l.variable, l.pos ) }">
+			
+			<MvIF EXPR = "{ ( l.opening_square_bracket_pos GT 0 ) AND
+							( l.opening_square_bracket_pos LT l.closing_square_bracket_pos ) }">
+				<MvASSIGN NAME = "l.pos" VALUE = "{ l.opening_square_bracket_pos - 1 }">
+			<MvELSEIF EXPR = "{ l.closing_square_bracket_pos GT 0 }">
+				<MvASSIGN NAME = "l.pos" VALUE = "{ l.closing_square_bracket_pos - 1 }">
+			</MvIF>
+		<MvELSEIF EXPR = "{ l.char EQ ']' }">
+			<MvASSIGN NAME = "l.bracket_count" 				VALUE = "{ l.bracket_count - 1 }">
+			<MvASSIGN NAME = "l.opening_square_bracket_pos" VALUE = "{ indexof( '[', l.variable, l.pos ) }">
+			<MvASSIGN NAME = "l.closing_square_bracket_pos" VALUE = "{ indexof( ']', l.variable, l.pos + 1 ) }">
+			
+			<MvIF EXPR = "{ ( l.opening_square_bracket_pos GT 0 ) AND
+							( l.opening_square_bracket_pos LT l.closing_square_bracket_pos ) }">
+				<MvASSIGN NAME = "l.pos" VALUE = "{ l.opening_square_bracket_pos - 1 }">
+			<MvELSEIF EXPR = "{ l.closing_square_bracket_pos GT 0 }">
+				<MvASSIGN NAME = "l.pos" VALUE = "{ l.closing_square_bracket_pos - 1 }">
+			</MvIF>
+		<MvELSE>
+			<MvIF EXPR = "{ ( NOT isdigit( l.char ) ) AND
+							( NOT isalpha( l.char ) ) AND
+							( NOT ( l.char IN l.valid_chars ) ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		</MvIF>
+	</MvFOR>
+	
+	<MvIF EXPR = "{ l.bracket_count NE 0 }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
