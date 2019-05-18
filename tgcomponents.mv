@@ -668,9 +668,8 @@
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">	<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">					<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'styles.css' }">				<MvINCLUDE FILE = "angular_app/styles.css" INTERPRET="OFF">
+	<MvELSE>														<MvASSIGN NAME = "l.null" VALUE = "{ miva_output_header( 'Status', '404 Not Found' ) }">
 	</MvIF>
-
-	<MvASSIGN NAME = "l.null" VALUE = "{ miva_output_header( 'Status', '404 Not Found' ) }">
 </MvFUNCTION>
 
 <MvCOMMENT>
