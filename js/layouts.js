@@ -1,4 +1,5 @@
-function Layouts_Batchlist_Load_Query( filter, sort, offset, count, callback, delegator ) {
+function Layouts_Batchlist_Load_Query( filter, sort, offset, count, callback, delegator )
+{
 	return AJAX_Call_Module(	callback,
 								'admin',
 								'TGCOMPONENTS',
@@ -10,7 +11,8 @@ function Layouts_Batchlist_Load_Query( filter, sort, offset, count, callback, de
 								delegator );
 }
 
-function Layouts_Batchlist_Function( fieldlist, _function, callback, delegator ) { 
+function Layouts_Batchlist_Function( fieldlist, _function, callback, delegator )
+{ 
 	return AJAX_Call_Module_FieldList( callback,
 									   'admin',
 									   'TGCOMPONENTS',
@@ -20,7 +22,8 @@ function Layouts_Batchlist_Function( fieldlist, _function, callback, delegator )
 									   delegator );
 }
 
-function Layouts_Duplicate( layout_id, code, name, callback ){
+function Layouts_Duplicate( layout_id, code, name, callback )
+{
 	return AJAX_Call_Module(	callback,
 								'admin',
 								'TGCOMPONENTS',
@@ -31,7 +34,8 @@ function Layouts_Duplicate( layout_id, code, name, callback ){
 	);
 }
 
-function Layouts_Delete_Cache( callback ) {
+function Layouts_Delete_Cache( callback )
+{
 	return AJAX_Call_Module( callback,
 							'admin',
 							'TGCOMPONENTS',
@@ -40,7 +44,8 @@ function Layouts_Delete_Cache( callback ) {
 							'' );
 }
 
-function Layouts_Batchlist() {
+function Layouts_Batchlist()
+{
 	var self = this;
 
 	MMBatchList.call( self, 'jsLayoutBatchlist' );
@@ -58,13 +63,13 @@ function Layouts_Batchlist() {
 	}
 
 	self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'View/ Edit Layout', 'View/ Edit Layout', 'goto', self.editLayout );
-	
+
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
 		self.Feature_Delete_Enable('Delete Layout(s)');
 	}
 
 	self.Feature_Buttons_AddButton_Persistent( 'Delete Layout Cache', 'Delete Layout Cache', '', self.DeleteLayoutCache );
-	
+
 	self.processingdialog = new ProcessingDialog();
 }
 
@@ -72,7 +77,8 @@ DeriveFrom( MMBatchList, Layouts_Batchlist );
 
 Layouts_Batchlist.prototype.onLoad = Layouts_Batchlist_Load_Query;
 
-Layouts_Batchlist.prototype.onCreateRootColumnList = function() {
+Layouts_Batchlist.prototype.onCreateRootColumnList = function()
+{
 	var columnlist =
 	[
 		new MMBatchList_Column_Name( 'Component ID', 'id', 'id')
@@ -83,10 +89,12 @@ Layouts_Batchlist.prototype.onCreateRootColumnList = function() {
 		new MMBatchList_Column_Code( 'Code', 'code', 'code'),
 		new MMBatchList_Column_Name( 'Name', 'name', 'name')
 	];
+
 	return columnlist;
 }
 
-Layouts_Batchlist.prototype.onCreate = function() {
+Layouts_Batchlist.prototype.onCreate = function()
+{
 	var record;
 	record = new Object();
 	record.id = 0;
@@ -95,17 +103,21 @@ Layouts_Batchlist.prototype.onCreate = function() {
 	return record;
 }
 
-Layouts_Batchlist.prototype.onSave = function( item, callback, delegator ) {
+Layouts_Batchlist.prototype.onSave = function( item, callback, delegator )
+{
 	Layouts_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Layout_Update', callback, delegator );
 }
-Layouts_Batchlist.prototype.onInsert = function( item, callback, delegator ) {
+Layouts_Batchlist.prototype.onInsert = function( item, callback, delegator )
+{
 	Layouts_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Layout_Insert', callback, delegator );
 }
-Layouts_Batchlist.prototype.onDelete = function( item, callback, delegator ) {
+Layouts_Batchlist.prototype.onDelete = function( item, callback, delegator )
+{
 	Layouts_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Layout_Delete', callback, delegator );
 }
 
-Layouts_Batchlist.prototype.editLayout = function( item, e ) {
+Layouts_Batchlist.prototype.editLayout = function( item, e )
+{
 	var self = this;
 	var dialog;
 
@@ -113,6 +125,7 @@ Layouts_Batchlist.prototype.editLayout = function( item, e ) {
 
 	dialog.Save = function() {
 		var scope = angular.element(document.getElementById('ComponentsController_ID')).scope();
+
 		scope.$apply(function () {
 			scope.saveLayout( function( errors, duplicate_codes, invalid_codes ) {
 				if ( !errors ) {
@@ -124,17 +137,19 @@ Layouts_Batchlist.prototype.editLayout = function( item, e ) {
 			});
 		});	
 	};
-	dialog.onDelete	= function() { self.Refresh(); };
 
+	dialog.onDelete	= function() { self.Refresh(); };
 	dialog.Show();
 }
 
-Layouts_Batchlist.prototype.DeleteLayoutCache = function(){
+Layouts_Batchlist.prototype.DeleteLayoutCache = function()
+{
 	var self = this;
 	Layouts_Delete_Cache( function( response ) { self.Refresh(); } );
 }
 
-Layouts_Batchlist.prototype.DuplicateLayout = function( item, e ) {
+Layouts_Batchlist.prototype.DuplicateLayout = function( item, e )
+{
 	var self = this;
 	var duplicatelayout;
 
@@ -147,7 +162,8 @@ Layouts_Batchlist.prototype.DuplicateLayout = function( item, e ) {
 	duplicatelayout.Show();
 }
 
-function DuplicateLayout_Dialog( layout ){
+function DuplicateLayout_Dialog( layout )
+{
 	var self = this;
 
 	// Variables
@@ -168,21 +184,24 @@ function DuplicateLayout_Dialog( layout ){
 	if ( this.button_save )		this.button_save.onclick		= function() { self.Save(); }
 }
 
-DuplicateLayout_Dialog.prototype.Show = function(){
+DuplicateLayout_Dialog.prototype.Show = function()
+{
 	Modal_Show( this.dialog, this.button_save.onclick, this.button_cancel.onclick );
 }
 
-
-DuplicateLayout_Dialog.prototype.Hide = function(){
+DuplicateLayout_Dialog.prototype.Hide = function()
+{
 	Modal_Hide();
 }
 
-DuplicateLayout_Dialog.prototype.Cancel = function(){
+DuplicateLayout_Dialog.prototype.Cancel = function()
+{
 	this.Hide();
 	this.oncancel();
 }
 
-DuplicateLayout_Dialog.prototype.Save = function(){
+DuplicateLayout_Dialog.prototype.Save = function()
+{
 	var type;
 	var self = this;
 
@@ -203,7 +222,8 @@ DuplicateLayout_Dialog.prototype.Save = function(){
 	Layouts_Duplicate( this.layout.id, this.new_code.value, this.new_name.value, function( response ) { self.Save_Callback( response ); } );
 }
 
-DuplicateLayout_Dialog.prototype.Save_Callback = function( response ){
+DuplicateLayout_Dialog.prototype.Save_Callback = function( response )
+{
 	this.button_save.value		= "Add";
 	this.button_save.disabled	= false;
 
@@ -230,7 +250,6 @@ DuplicateLayout_Dialog.prototype.onerror	= function( error )	{ Modal_Alert( erro
 DuplicateLayout_Dialog.prototype.oncancel	= function()		{ ; }
 DuplicateLayout_Dialog.prototype.onsave		= function()		{ ; }
 DuplicateLayout_Dialog.prototype.ondelete	= function()		{ ; }
-
 
 function Layout_Dialog( layout )
 {
@@ -272,6 +291,7 @@ Layout_Dialog.prototype.onModalShow = function( z_index )
 
 	initializeLayout( self.layout, self );
 }
+
 Layout_Dialog.prototype.onFullscreen_End = function()
 {
 	if ( this.visible )
@@ -279,6 +299,7 @@ Layout_Dialog.prototype.onFullscreen_End = function()
 		this.Hide();
 	}
 }
+
 Layout_Dialog.prototype.onESC = function( e )
 {
 	this.Cancel();
@@ -329,7 +350,7 @@ Layout_Dialog.prototype.DisplayErrorsDialog = function( duplicates, invalid_code
 	dialog2.onESC	= function() { ; }
 	dialog2.onEnter	= function() { ; }
 
-	self. button_save		= dialog2.Button_Add_Right( 'Go Back to Review',		'', '', '',			function() { ; } );
+	self. button_save		= dialog2.Button_Add_Right( 'Go Back to Review', '', '', '', function() { ; } );
 
 	var msg_span = document.createElement( 'span' );
 	msg_span.innerHTML = 
