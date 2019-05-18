@@ -1041,6 +1041,7 @@
 |	ComponentsScreen_HeadTag( screen )
 |	ComponentsScreen_UI( screen )
 |	Component_HTML_App()
+|	Components_Load_All( return var )
 |
 </MvCOMMENT>
 
@@ -1176,10 +1177,34 @@
 	<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponents"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents ORDER BY disp_order' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0002', 'Could not load all Components.' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponents.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'TGComponents-COMPONENTS-0003' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+
+	<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
+		<MvASSIGN NAME = "l.void"	VALUE = "{ Component_Read( l.return[ ++l.count ] ) }">
+		<MvASSIGN NAME = "l.void"	VALUE = "{ Components_Attrs_Load_All_ID( l.return[ l.count ]:id, l.return[ l.count ]:attributes ) }">
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
 
 
-
-<MvINCLUDE FILE = "layout_functions.mv">
 <MvINCLUDE FILE = "component.mv">
 <MvINCLUDE FILE = "functions.mv">
 <MvINCLUDE FILE = "export.mv">
