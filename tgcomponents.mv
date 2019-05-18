@@ -2,7 +2,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.013">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.014">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -47,6 +47,9 @@
 		- Minor bug fix (display order of Component Attributes)
 		- Updated `Code` display on Layout Edit
 		- Fixed left over data in previous modal issue (since )
+	1.014
+		- Major clean up / formatting
+		- Added int() on certain values when inserting via lowlevel functions
 </MvCOMMENT>
 
 <MvCOMMENT>
