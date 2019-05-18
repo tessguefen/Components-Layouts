@@ -1031,7 +1031,154 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvINCLUDE FILE = "admin_components.mv">
+<MvCOMMENT>
+|
+|	Custom Functions
+|
+|	ComponentsTab_HeadTag( tab )
+|	ComponentTab_UI( tab )
+|	DuplicateLayout_Dialog_HTML()
+|	ComponentsScreen_HeadTag( screen )
+|	ComponentsScreen_UI( screen )
+|	Component_HTML_App()
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "ComponentsTab_HeadTag" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "html, text">
+	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=components.js' }"></script>
+		<script language="JavaScript">
+			MMScreen_LoadFinished( function() { new Components_Batchlist(); } );
+		</script>
+	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Sets' }">
+		<link type="text/css" rel="stylesheet" href="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=styles.css' }" />
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
+
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
+		<script language="JavaScript">
+			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
+		</script>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentTab_UI" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "html, text">
+	<MvEVAL EXPR = "{ ComponentsTab_HeadTag( l.tab ) }">
+
+	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
+		<div id="jsComponentBatchlist"></div>
+	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Sets' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
+		<div id="jsLayoutBatchlist"></div>
+		
+		<MvEVAL EXPR = "{ DuplicateLayout_Dialog_HTML() }">
+
+		<MvEVAL EXPR = "{ Component_HTML_App() }" />
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "DuplicateLayout_Dialog_HTML" STANDARDOUTPUTLEVEL = "html, text">
+	<div id="DuplicateLayout_dialog" class="mm_dialog">
+		<div id="DuplicateLayout_dialog_title" class="mm_dialog_title">Duplicate Layout</div>
+		<div class="mm_clear"></div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="mm_dialog_prompt_required">New Code:</td>
+					<td class="DuplicateLayout_dialog_field">
+						<input type="text" name="new_code" id="DuplicateLayout_New_Code" />
+					</td>
+				</tr>
+				<tr>
+					<td class="mm_dialog_prompt_required">New Name:</td>
+					<td class="DuplicateLayout_dialog_field">
+						<input type="text" name="new_name" id="DuplicateLayout_New_Name" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="mm_dialog_buttons_left">
+			<input id="DuplicateLayout_dialog_button_cancel" type="button" value="Cancel">
+		</div>
+		<div class="mm_dialog_buttons_right"><input id="DuplicateLayout_dialog_button_save" type="button" value="Add"></div>
+	</div>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentsScreen_HeadTag" PARAMETERS = "screen" STANDARDOUTPUTLEVEL = "html, text">
+	<MvIF EXPR = "{ l.screen EQ 'Component' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=component_attrs.js' }"></script>
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].JavaScript_Set_A_Variable( 'component_id', g.Component_ID ) }">
+
+		<script language="JavaScript">
+			MMScreen_LoadFinished( function() { new ComponentAttrs_Batchlist( component_id ); } );
+		</script>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentsScreen_UI" PARAMETERS = "screen" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components', '', '' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+
+	<MvIF EXPR = "{ l.screen EQ 'Component' }">
+		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
+			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ encodeentities( g.Component_ID ) }">.
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Component: ' $ encodeentities( l.component:name ), encodeentities( l.component:name ), '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Attributes' ) }">
+
+			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Component_ID">
+			
+			<MvEVAL EXPR = "{ ComponentsScreen_HeadTag( l.screen ) }">
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
+			<div id="jsComponentAttributes"></div>
+			
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+		</MvIF>
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Component_HTML_App" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF" />
+</MvFUNCTION>
+
+
+
+
 <MvINCLUDE FILE = "layout_functions.mv">
 <MvINCLUDE FILE = "component.mv">
 <MvINCLUDE FILE = "functions.mv">
