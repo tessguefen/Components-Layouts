@@ -52,6 +52,7 @@
 		- Added int() on certain values when inserting via lowlevel functions
 	1.015
 		- Security Bug Fixes Release
+		- Minor XML Import Bug fix
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -4777,7 +4778,7 @@
 		<MvASSIGN NAME = "l.layout_component:parent" VALUE = "{ l.loaded_parent:id }">
 	</MvIF>
 
-	<MvASSIGN NAME = "l.component_attribute_count" VALUE = "{ miva_array_elements( l.component:attributes ) }">
+	<MvASSIGN NAME = "l.component_attribute_count" VALUE = "{ Components_Attrs_Load_All_ID( l.component:id, l.component:attributes ) }">
 
 	<MvIF EXPR = "{ l.component_attribute_count GT 0 }">
 		<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Exists( l.provide_xml, 'Attributes' ) }">
@@ -4878,9 +4879,9 @@
 			</MvIF>
 		</MvIF>
 
-		<MvASSIGN NAME = "l.option_count"								VALUE = "{ l.option_count + 1 }">
-		<MvASSIGN NAME = "l.option"	MEMBER = "layouts_components_id"	VALUE = "{ l.layout_component_id }">
-		<MvASSIGN NAME = "l.option"	MEMBER = "attr_id"					VALUE = "{ l.option:componentattribute:id }">
+		<MvASSIGN NAME = "l.option_count"					VALUE = "{ l.option_count + 1 }">
+		<MvASSIGN NAME = "l.option:layouts_components_id"	VALUE = "{ l.layout_component_id }">
+		<MvASSIGN NAME = "l.option:attr_id"					VALUE = "{ l.option:componentattribute:id }">
 
 		<MvIF EXPR = "{ NOT LayoutValue_Update( l.option ) }">
 			<MvFUNCTIONRETURN>
