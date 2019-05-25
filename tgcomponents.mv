@@ -77,21 +77,18 @@
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1000', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGComponents. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_1 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1001', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponents_2 ON ' $ g.Store_Table_Prefix $ 'TGComponents ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1002', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponents.' ) }">
 	</MvIF>
 
@@ -113,21 +110,18 @@
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1003', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1004', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs ( component_id, code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1005', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Attrs.' ) }">
 	</MvIF>
 
@@ -146,21 +140,18 @@
 								disp_order		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1006', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGComponent_Options. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_1 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1007', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponent_Options_2 ON ' $ g.Store_Table_Prefix $ 'TGComponent_Options ( attr_id, prompt )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1008', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGComponent_Options.' ) }">
 	</MvIF>
 
@@ -178,21 +169,18 @@
 								name			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1009', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1010', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts ( code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1011', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts.' ) }">
 	</MvIF>
 
@@ -217,28 +205,24 @@
 				 				code			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1012', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts_Components. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1013', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_2 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( parent, disp_order )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1014', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Components_3 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ( layout_id, code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1019', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 	</MvIF>
 
@@ -256,14 +240,12 @@
 								value				' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1015', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts_Values. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Values_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Values ( layouts_components_id, attr_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1016', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Values.' ) }">
 	</MvIF>
 
@@ -280,14 +262,12 @@
 								dt_cached	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 )	$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1017', 'An error occured while creating the table ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache. Please make sure this table was not already created.' ) }">
 	</MvIF>
 
 	<MvQUERY	NAME = "Merchant"
 				QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache ( layout_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1018', 'Could not create a unique index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache.' ) }">
 	</MvIF>
 
@@ -298,42 +278,34 @@
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponents', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2016', 'An error occured while creating the store key, TGComponents. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponents_Disp_Order', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2024', 'An error occured while creating the store key, TGComponents_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Attrs', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2017', 'An error occured while creating the store key, TGComponent_Attrs. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Attrs_Disp_Order', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2018', 'An error occured while creating the store key, TGComponent_Attrs_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Options', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2019', 'An error occured while creating the store key, TGComponent_Options. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponent_Options_Disp_Order', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2020', 'An error occured while creating the store key, TGComponent_Options_Disp_Order. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGLayouts', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2021', 'An error occured while creating the store key, TGLayouts. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGLayouts_Components', 1 ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2022', 'An error occured while creating the store key, TGLayouts_Components. Please make sure this does not already exsist.' ) }">
 	</MvIF>
 
@@ -348,7 +320,6 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_TUI_MGR ].TemplateManager_Create_Item( 'tgcomponent',  l.module:code ) }">
-		<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-INSTALL-2023', 'An error occured while creating the item tgcomponent.' ) }">
 	</MvIF>
 
@@ -517,7 +488,6 @@
 		<MvQUERY	NAME = "Merchant"
 					QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ADD UNIQUE INDEX TGLayouts_Components_3 ( layout_id, code )' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
-			<MvEVAL EXPR = "{ Module_Uninstall_Store( l.module ) }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1012', 'Could not create an index on ' $ g.Store_Table_Prefix $ 'TGLayouts_Components.' ) }">
 		</MvIF>
 	</MvIF>
@@ -622,10 +592,6 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
-
 	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Update' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module ) }">
@@ -1577,9 +1543,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
 	<MvASSIGN NAME = "l.component" MEMBER = "name"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
@@ -1595,9 +1561,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.component" MEMBER = "id"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvASSIGN NAME = "l.component" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
@@ -1614,9 +1580,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 
@@ -1632,9 +1598,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Components_DisplayOrder_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvFOREACH ITERATOR = "l.component" ARRAY = "g.Components_Order" INDEX = "l.pos">
 		<MvASSIGN NAME = "l.component:id"				VALUE = "{ int( l.component:id ) }">
@@ -1855,9 +1821,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.layout" MEMBER = "code" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
 	<MvASSIGN NAME = "l.layout" MEMBER = "name" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
@@ -1870,9 +1836,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.layout" MEMBER = "id"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvASSIGN NAME = "l.layout" MEMBER = "code"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
@@ -1886,9 +1852,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 
@@ -2190,9 +2156,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"		VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Component_Id ) }">
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "code"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
@@ -2208,9 +2174,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"				VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "component_id"		VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Component_Id ) }">
@@ -2227,9 +2193,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 
@@ -2241,9 +2207,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttrs_DisplayOrder_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.component_id" VALUE = "{ g.component_id }">
 
@@ -2731,9 +2697,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentOption_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Attr_ID ) }">
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "prompt"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Prompt ) }">
@@ -2746,9 +2712,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentOption_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "id"		VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 	<MvASSIGN NAME = "l.component_attr" MEMBER = "attr_id"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Attr_ID ) }">
@@ -2762,9 +2728,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentOption_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">
-		<MvFUNCTIONRETURN>
-	</MvIF>
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
 	<MvASSIGN NAME = "g.Id" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Id ) }">
 
@@ -3461,6 +3427,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Load_Components" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvASSIGN NAME = "l.components_count" VALUE = "{ Recursive_Nes_Attack( g.Layout_ID, 0, l.components ) }">
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
 </MvFUNCTION>
@@ -3604,6 +3574,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Duplicate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvASSIGN NAME = "l.layout" MEMBER = "code" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
 	<MvASSIGN NAME = "l.layout" MEMBER = "name" VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Name ) }">
 
@@ -3619,6 +3593,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layout_Save" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvASSIGN NAME = "g.Payload"	VALUE = "{ decodeattribute( g.Payload ) }">
 	<MvASSIGN NAME = "l.void"		VALUE = "{ miva_json_decode( g.Payload, l.payload ) }">
 
@@ -3630,6 +3608,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Components_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
 	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
 	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
@@ -3680,6 +3662,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Layouts_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
 	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
 	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
@@ -3726,6 +3712,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Component_Attrs_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
 	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
 	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
@@ -3843,6 +3833,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Components_Load_All" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text, compresswhitespace">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvIF EXPR = "{ Components_Load_All( l.components ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
 	</MvIF>
@@ -3850,6 +3844,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_Delete_Layout_Cache" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
 	<MvIF EXPR = "{ NOT Layout_Cache_DeleteAll() }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
 	</MvIF>
