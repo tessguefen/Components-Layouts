@@ -2113,3 +2113,300 @@
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MVFUNCTION>
+
+<MvCOMMENT>
+|
+|	sNN_TGLayoutValues
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "LayoutValue_Read" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout_value:lc_id"					VALUE = "{ TGLayoutValues.d.lc_id  }">
+	<MvASSIGN NAME = "l.layout_value:attr_id"				VALUE = "{ TGLayoutValues.d.attr_id }">
+	<MvASSIGN NAME = "l.layout_value:value"					VALUE = "{ TGLayoutValues.d.value }">
+
+	<MvCOMMENT>
+	|
+	|	For backwards compatibility
+	|
+	</MvCOMMENT>
+
+	<MvASSIGN NAME = "l.layout_value:layouts_components_id"	VALUE = "{ TGLayoutValues.d.lc_id  }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Insert" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValue_Insert_LowLevel( l.layout_value ) OR
+					NOT LayoutValue_Reference_Insert( l.layout_value ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Insert_LowLevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayoutValues
+						  ( lc_id, attr_id, value )
+						  VALUES
+						  ( ?, ?, ? )' }"
+			 FIELDS	= "l.layout_value:lc_id, l.layout_value:attr_id, l.layout_value:value">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Load" PARAMETERS = "lc_id, attr_id, layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutValues"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ? AND attr_id = ?' }"
+				FIELDS	= "l.lc_id, l.attr_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGLayoutValues.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( '#Error#' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ LayoutValue_Read( l.layout_value ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Load_All" PARAMETERS = "lc_id, layout_values var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutValues"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ?' }"
+				FIELDS	= "l.lc_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+
+	<MvWHILE EXPR = "{ NOT TGLayoutValues.d.EOF }">
+		<MvEVAL EXPR = "{ LayoutValue_Read( l.layout_values[ ++l.count ] ) }">
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutValues" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Update" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValue_Update_Lowlevel( l.layout_value ) OR
+					NOT LayoutValue_Reference_Update( l.layout_value ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Update_Lowlevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayoutValues
+					      SET
+							value = ?
+					      WHERE
+						    lc_id = ? AND
+						    attr_id = ?' }"
+			 FIELDS	= "l.layout_value:value, l.layout_value:lc_id, l.layout_value:attr_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValue_Delete_LowLevel( l.layout_value ) OR
+					NOT LayoutValue_Reference_Delete( l.layout_value ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ? AND attr_id = ?' }"
+			 FIELDS	= "l.layout_value:lc_id, l.layout_value:attr_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvCOMMENT>
+|
+|	sNN_TGLayoutCache
+|
+</MvCOMMENT>
+
+<MvFUNCTION NAME = "LayoutCache_Read" PARAMETERS = "layout_cache var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout_value:layout_id"	VALUE = "{ TGLayoutCache.d.layout_id  }">
+	<MvASSIGN NAME = "l.layout_value:value"		VALUE = "{ miva_array_deserialize( TGLayoutCache.d.value ) }">
+	<MvASSIGN NAME = "l.layout_value:dt_cached"	VALUE = "{ TGLayoutCache.d.dt_cached }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutCache_Insert" PARAMETERS = "layout_cache var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout_cache:value" VALUE = "{ miva_array_serialize( l.layout_cache:value ) }">
+
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayoutCache
+						  ( layout_id, value, dt_cached )
+						  VALUES
+						  ( ?, ?, ? )' }"
+			 FIELDS	= "l.layout_cache:layout_id, l.layout_cache:value, s.dyn_time_t">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutCache_Load" PARAMETERS = "layout_id, layout_cache var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutCache"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutCache WHERE layout_id = ?' }"
+				FIELDS	= "l.layout_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( '#Error#' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ LayoutCache_Read( l.layout_cache ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutCache_Delete" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutCache WHERE layout_id = ?' }"
+			 FIELDS	= "l.layout_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutCache_Delete_All" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutCache' }">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutCache_Check_All" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutCache"
+				QUERY	= "{
+								'SELECT
+									layoutcache.layout_id
+								FROM
+									' $ g.Store_Table_Prefix $ 'TGLayoutCache layoutcache
+								JOIN
+									' $ g.Store_Table_Prefix $ 'TGLayouts_Components layoutcomponents
+								ON
+									layoutcache.layout_id = layoutcomponents.layout_id
+								WHERE
+									( 
+										layoutcomponents.dt_start> 0 AND
+										layoutcomponents.dt_start < ? AND
+										layoutcomponents.dt_start> layoutcache.dt_cached
+									)
+									OR
+									(
+										layoutcomponents.dt_end> 0 AND
+										layoutcomponents.dt_end < ? AND
+										layoutcomponents.dt_end> layoutcache.dt_cached
+									)'
+							}"
+				FIELDS	= "s.dyn_time_t, s.dyn_time_t">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGLayoutCache.d.EOF }">
+		<MvIF EXPR = "{ NOT LayoutCache_Delete( TGLayoutCache.d.layout_id ) }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutCache" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutCache_Check_Layout" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutCache"
+				QUERY	= "{
+								'SELECT
+									layoutcache.layout_id
+								FROM
+									' $ g.Store_Table_Prefix $ 'TGLayoutCache layoutcache
+								JOIN
+									' $ g.Store_Table_Prefix $ 'TGLayouts_Components layoutcomponents
+								ON
+									layoutcache.layout_id = layoutcomponents.layout_id
+								WHERE
+									layoutcomponents.layout_id = ? AND
+									( 
+										layoutcomponents.dt_start> 0 AND
+										layoutcomponents.dt_start < ? AND
+										layoutcomponents.dt_start> layoutcache.dt_cached
+									)
+									OR
+									(
+										layoutcomponents.dt_end> 0 AND
+										layoutcomponents.dt_end < ? AND
+										layoutcomponents.dt_end> layoutcache.dt_cached
+									)'
+							}"
+				FIELDS	= "l.layout_id, s.dyn_time_t, s.dyn_time_t">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGLayoutCache.d.EOF }">
+		<MvIF EXPR = "{ NOT LayoutCache_Delete( TGLayoutCache.d.layout_id ) }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutCache" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
