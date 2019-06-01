@@ -853,28 +853,28 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Update' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Delete' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Delete( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_DisplayOrder_Update' }">		<MvFUNCTIONRETURN VALUE = "{ JSON_Components_DisplayOrder_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layouts_Load_Query' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Layouts_Load_Query( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Update' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Delete' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Delete( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Attrs_Load_Query' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Attrs_Load_Query( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Insert' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Insert( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Update' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_Delete' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_Delete( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttrs_DisplayOrder_Update' }">	<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttrs_DisplayOrder_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Insert' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Insert( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Update' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Delete' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Delete( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Load_Components' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_Components( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_Load_All' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_All( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Duplicate' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Duplicate( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Delete_Layout_Cache' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Delete_Layout_Cache( l..module ) }">
+	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Update' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Delete' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_DisplayOrder_Update' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_Components_DisplayOrder_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layouts_Load_Query' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layouts_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Update' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Delete' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Attributes_Load_Query' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Attributes_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttributes_Insert' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttributes_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttributes_Update' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttributes_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttributes_Delete' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttributes_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttributes_DisplayOrder_Update' }">	<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttributes_DisplayOrder_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Insert' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Insert( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Update' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Update( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Delete' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Delete( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Load_Components' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_Components( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_Load_All' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_All( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }">								<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Duplicate' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Duplicate( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Delete_Layout_Cache' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Delete_Layout_Cache( l..module ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -2684,3 +2684,152 @@
 
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Component_Attributes_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
+	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
+	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
+	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
+	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Count ) }">
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query, 'attr.id				AS attr_id,
+																				 attr.cmpnt_id			AS attr_cmpnt_id,
+																				 attr.code				AS attr_code,
+																				 attr.prompt			AS attr_prompt,
+																				 attr.type				AS attr_type,
+																				 attr.required			AS attr_required,
+																				 attr.disp_order		AS attr_disp_order,
+																				 opt.id					AS opt_id,
+																				 opt.attr_id			AS opt_attr_id,
+																				 opt.prompt				AS opt_prompt,
+																				 opt.disp_order			AS opt_disp_order' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponentAttributes', 'attr' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_LEFT_OUTER_JOIN( l.search_query, 'attr', g.Store_Table_Prefix $ 'TGComponentOptions', 'opt', 'opt.attr_id = attr.id', '' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 'attr.cmpnt_id = ?', 'g.cmpnt_id' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'code:attr.code;opt.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, g.Sort,
+																		'code:attr.code;opt.code,
+																		 prompt:attr.prompt;opt.prompt,
+																		 type:attr.type,
+																		 required:attr.required',
+																		'attr.disp_order;opt.disp_order' ) }">
+																			
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB ].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponentAttributes"
+				QUERY	= "{ l.search_sql }"
+				FIELDS	= "{ l.search_fields }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.total_count"	VALUE = 0>
+	<MvASSIGN NAME = "l.attr_count"		VALUE = 0>
+	<MvASSIGN NAME = "l.opt_count"		VALUE = 0>
+	<MvASSIGN NAME = "l.last_attr_id"	VALUE = 0>
+	<MvASSIGN NAME = "l.last_opt_id"	VALUE = 0>
+
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
+	{
+		"data":
+		[
+		<MvWHILE EXPR = "{ NOT TGComponentAttributes.d.EOF }">
+			<MvIF EXPR = "{ l.last_attr_id NE TGComponentAttributes.d.attr_id }">
+				<MvIF EXPR = "{ l.opt_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+					]
+				</MvIF>
+
+				<MvIF EXPR = "{ l.attr_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+				</MvIF>
+
+				<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.attr_count ) }">
+				"id":			<MvEVAL EXPR = "{ int( TGComponentAttributes.d.attr_id ) }">,
+				"cmpnt_id":		<MvEVAL EXPR = "{ int( TGComponentAttributes.d.attr_cmpnt_id ) }">,
+				"code":			"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponentAttributes.d.attr_code ) }">",
+				"prompt":		"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponentAttributes.d.attr_prompt ) }">",
+				"type":			"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponentAttributes.d.attr_type ) }">",
+				"required":		<MvEVAL EXPR = "{ int( TGComponentAttributes.d.attr_required ) }">,
+				"disp_order":	<MvEVAL EXPR = "{ int( TGComponentAttributes.d.attr_disp_order ) }">
+
+				<MvASSIGN NAME = "l.total_count"	VALUE = "{ l.total_count + 1 }">
+				<MvASSIGN NAME = "l.last_attr_id"	VALUE = "{ TGComponentAttributes.d.attr_id }">
+				<MvASSIGN NAME = "l.last_opt_id"	VALUE = 0>
+				<MvASSIGN NAME = "l.opt_count"		VALUE = 0>
+			</MvIF>
+
+			<MvIF EXPR = "{ l.last_opt_id NE TGComponentAttributes.d.opt_id AND NOT ISNULL TGComponentAttributes.d.opt_id }">
+				<MvIF EXPR = "{ l.opt_count }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+				</MvIF>
+
+				<MvIF EXPR = "{ NOT l.opt_count }">
+					, "options":
+					[
+				</MvIF>
+
+				<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.opt_count ) }">
+				"id":			<MvEVAL EXPR = "{ int( TGComponentAttributes.d.opt_id ) }">,
+				"attr_id":		<MvEVAL EXPR = "{ int( TGComponentAttributes.d.opt_attr_id ) }">,
+				"prompt":		"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponentAttributes.d.opt_prompt ) }">",
+				"disp_order":	<MvEVAL EXPR = "{ int( TGComponentAttributes.d.opt_disp_order ) }">
+
+				<MvASSIGN NAME = "l.total_count" VALUE = "{ l.total_count + 1 }">
+				<MvASSIGN NAME = "l.last_opt_id" VALUE = "{ TGComponentAttributes.d.opt_id }">
+			</MvIF>
+
+			<MvSKIP NAME = "Merchant" VIEW = "TGComponentAttributes" ROWS = 1>
+		</MvWHILE>
+
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
+
+		<MvIF EXPR = "{ l.opt_count }">
+			<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+			]
+		</MvIF>
+
+		<MvIF EXPR = "{ l.attr_count }">
+			<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_End() }">
+		</MvIF>
+		],
+		"start_offset": 0,
+		"total_count": <MvEVAL EXPR = "{ int( l.total_count ) }">
+	}
+}
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_ComponentAttributes_Insert" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'o', 'Id',			l.component:id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component:code )			OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'r', 'Name',		l.component:name )			OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',		l.component:descrip )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Image',		l.component:image )			OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'O', 'children',	l.component:children ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.component_attr:cmpnt_id"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.cmpnt_id ) }">
+	<MvASSIGN NAME = "l.component_attr:code"		VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Code ) }">
+	<MvASSIGN NAME = "l.component_attr:prompt"		VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Prompt ) }">
+	<MvASSIGN NAME = "l.component_attr:type"		VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.type ) }">
+	<MvASSIGN NAME = "l.component_attr:required"	VALUE = "{ [ g.Module_JSON ].JSON_Decode( g.Required ) }">
+
+	<MvIF EXPR = "{ NOT ComponentAttrs_Insert( l.component_attr ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( g.TGCOMPONENTS_Error:name, g.TGCOMPONENTS_Error:message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
