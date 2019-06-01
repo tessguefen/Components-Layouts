@@ -249,16 +249,16 @@
 	<MvQUERY NAME = "Merchant"
 			 QUERY = "{ 'CREATE TABLE ' $ g.Store_Table_Prefix $ 'TGLayoutValues
 							(
-								lyt_cmpnt	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								attr_id		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
-								value		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ '
+								lc_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+								attr_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+								value	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvQUERY NAME = "Merchant"
-			 QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TTGLayoutValues_1 ON ' $ g.Store_Table_Prefix $ 'TTGLayoutValues ( lyt_cmpnt, attr_id )' }">
+			 QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayoutValues_1 ON ' $ g.Store_Table_Prefix $ 'TGLayoutValues ( lc_id, attr_id )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -318,6 +318,8 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Module_Upgrade_Store" PARAMETERS = "module var, version" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -463,7 +465,7 @@
 
 		<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components">
 			<MvIF EXPR = "{ NOT LayoutComponent_Update( l.component ) }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.TGCOMPONENTS_Error:message ) }">
+				<<MvFUNCTIONRETURN VALUE = 0>
 			</MvIF>
 		</MvFOREACH>
 
@@ -602,7 +604,7 @@
 		</MvIF>
 
 		<MvQUERY NAME = "Merchant"
-				 QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayoutValues CHANGE COLUMN layouts_components_id lyt_cmpnt ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) }">
+				 QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayoutValues CHANGE COLUMN layouts_components_id lc_id ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 		</MvIF>
@@ -631,13 +633,13 @@
 		|
 		</MvCOMMENT>
 
-		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponents',						l.TGComponents )					OR
-						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponents_Disp_Order',			l.TGComponents_Disp_Order )			OR
-						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Attrs',					l.TGComponent_Attrs )				OR
-						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Attrs_Disp_Order',		l.TGComponent_Attrs_Disp_Order )	OR
-						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Options',				l.TGComponent_Options )				OR
-						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Options_Disp_Order',	l.TGComponent_Options_Disp_Order )	OR
-						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGLayouts_Components',				l.TGLayouts_Components ) }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponents',							l.TGComponents )					OR
+						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponents_Disp_Order',				l.TGComponents_Disp_Order )			OR
+						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Attrs',						l.TGComponent_Attrs )				OR
+						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Attrs_Disp_Order',			l.TGComponent_Attrs_Disp_Order )	OR
+						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Options',					l.TGComponent_Options )				OR
+						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGComponent_Options_Disp_Order',		l.TGComponent_Options_Disp_Order )	OR
+						NOT [ g.Module_Library_DB ].StoreKey_Load( 'TGLayouts_Components',					l.TGLayouts_Components ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
@@ -1175,13 +1177,21 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Component_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component:id"			VALUE = "{ TGComponents.d.id }">
-	<MvASSIGN NAME = "l.component:code"			VALUE = "{ TGComponents.d.code }">
-	<MvASSIGN NAME = "l.component:name"			VALUE = "{ TGComponents.d.name }">
-	<MvASSIGN NAME = "l.component:descrip"		VALUE = "{ TGComponents.d.descrip }">
-	<MvASSIGN NAME = "l.component:image"		VALUE = "{ TGComponents.d.image }">
-	<MvASSIGN NAME = "l.component:children"		VALUE = "{ TGComponents.d.children }">
-	<MvASSIGN NAME = "l.component:disp_order"	VALUE = "{ TGComponents.d.disp_order }">
+	<MvASSIGN NAME = "l.component:id"				VALUE = "{ TGComponents.d.id }">
+	<MvASSIGN NAME = "l.component:code"				VALUE = "{ TGComponents.d.code }">
+	<MvASSIGN NAME = "l.component:name"				VALUE = "{ TGComponents.d.name }">
+	<MvASSIGN NAME = "l.component:descrip"			VALUE = "{ TGComponents.d.descrip }">
+	<MvASSIGN NAME = "l.component:image"			VALUE = "{ TGComponents.d.image }">
+	<MvASSIGN NAME = "l.component:children"			VALUE = "{ TGComponents.d.children }">
+	<MvASSIGN NAME = "l.component:disp_order"		VALUE = "{ TGComponents.d.disp_order }">
+
+	<MvCOMMENT>
+	|
+	|	For backwards compatibility
+	|
+	</MvCOMMENT>
+
+	<MvASSIGN NAME = "l.component:allow_children"	VALUE = "{ TGComponents.d.children }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_Insert" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -1252,16 +1262,10 @@
 							children = ?,
 							disp_order = ?
 						  WHERE
-							id		= ?' }"
+							id = ?' }"
 			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:children, l.component:disp_order, l.component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
-	</MvIF>
-
-	<MvIF EXPR = "{ Component_Layout_Reference( l.component:id, l.layouts ) }">
-		<MvFOREACH ITERATOR = "l.layout" ARRAY = "l.layouts">
-			<MvASSIGN NAME = "l.null" VALUE = "{ Layout_Cache_Delete( l.layout:id ) }">
-		</MvFOREACH>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1466,6 +1470,14 @@
 	<MvASSIGN NAME = "l.component_attribute:type"			VALUE = "{ TGComponentAttributes.d.type }">
 	<MvASSIGN NAME = "l.component_attribute:required"		VALUE = "{ TGComponentAttributes.d.required }">
 	<MvASSIGN NAME = "l.component_attribute:disp_order"		VALUE = "{ TGComponentAttributes.d.disp_order }">
+
+	<MvCOMMENT>
+	|
+	|	For backwards compatibility
+	|
+	</MvCOMMENT>
+
+	<MvASSIGN NAME = "l.component_attribute:component_id"	VALUE = "{ TGComponentAttributes.d.cmpnt_id }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttribute_Insert" PARAMETERS = "component_attribute var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -1534,11 +1546,192 @@
 							type = ?,
 							required = ?
 						  WHERE
-							id		= ?' }"
+							id = ?' }"
 			 FIELDS	= "l.component_attribute:code, l.component_attribute:prompt, l.component_attribute:type, l.component_attribute:required, l.component_attribute:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttribute_Delete" PARAMETERS = "component_attribute_id" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Delete_LowLevel( l.component_attribute_id ) OR
+					NOT ComponentOptions_Delete_Attribute( l.component_attribute_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttribute_Delete_LowLevel" PARAMETERS = "component_attribute_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE id = ?' }"
+			 FIELDS	= "l.component_attribute_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttribute_Delete_Component" PARAMETERS = "cmpnt_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponentAttributes"
+				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE cmpnt_id = ?' }"
+				FIELDS	= "l.cmpnt_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGComponentAttributes.d.EOF }">
+		<MvIF EXPR = "{ NOT ComponentAttrs_Delete( ComponentAttribute_Delete.d.id  ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponentAttributes" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttribute_Update_Offsets" PARAMETERS = "cmpnt_id, fields var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.pastend_count"			VALUE = 0>
+
+	<MvASSIGN NAME = "l.field_pos"				VALUE = 1>
+	<MvASSIGN NAME = "l.field_count"			VALUE = "{ miva_array_elements( l.fields ) }">
+	<MvASSIGN NAME = "g.Field_cmpnt_id"		VALUE = "{ l.cmpnt_id }">
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray( l.fields, l.field_count ) }">
+
+	<MvWHILE EXPR = "{ l.field_pos LE l.field_count }">
+		<MvASSIGN NAME = "g.ComponentAttribute_ID" 	VALUE = "{ l.fields[ l.field_pos ]:id }">
+
+		<MvCOMMENT>
+		|
+		| Determine disp_order of current field at this offset.
+		|
+		</MvCOMMENT>
+
+		<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range( 'Merchant',
+																				   'TGComponentAttributes',
+																				   'SELECT id, disp_order FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE id <> ? AND cmpnt_id = ? ORDER BY disp_order',
+																				   'g.ComponentAttribute_ID, g.Field_cmpnt_id',
+																				   l.fields[ l.field_pos ]:offset - 1,
+																				   1 ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.Error_Message ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ TGComponentAttributes.d.EOF }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
+
+			<MvCOMMENT>
+			|
+			| Offset was higher than the last record.  This case requires specialized processing, so save this record for later.
+			|
+			</MvCOMMENT>
+
+			<MvASSIGN NAME = "l.pastend_count"							VALUE = "{ l.pastend_count + 1 }">
+			<MvASSIGN NAME = "l.pastend" INDEX = "{ l.pastend_count }"	VALUE = "{ l.fields[ l.field_pos ] }">
+
+			<MvASSIGN NAME = "l.field_pos"	VALUE = "{ l.field_pos + 1 }">
+		<MvELSEIF EXPR = "{ l.pastend_count }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
+
+			<MvIF EXPR = "{ NOT ComponentAttribute_Update_Offsets_PastEnd( l.cmpnt_id, l.pastend, l.pastend_count ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			<MvASSIGN NAME = "l.pastend_count" VALUE = 0>
+		<MvELSE>
+			<MvASSIGN NAME = "l.disp_order" VALUE = "{ TGComponentAttributes.d.disp_order }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
+
+			<MvCOMMENT>
+			|
+			| Make a hole by shifting fields after this disp_order down
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+														$ g.Store_Table_Prefix $ 'TGComponentAttributes 
+													SET 
+														disp_order = disp_order + 1 
+													WHERE 
+														disp_order>= ? AND cmpnt_id = ?' }" 
+													FIELDS = "l.disp_order, l.cmpnt_id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponentAttributeDisplayOrder' ) }">
+
+			<MvCOMMENT>
+			|
+			| Put the field in the newly created hole
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+														$ g.Store_Table_Prefix $ 'TGComponentAttributes 
+													SET 
+														disp_order = ? 
+													WHERE 
+														id = ? AND cmpnt_id = ?' }" 
+													FIELDS = "l.disp_order, g.ComponentAttribute_ID, l.cmpnt_id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.field_pos"	VALUE = "{ l.field_pos + 1 }">
+		</MvIF>
+	</MvWHILE>
+
+	<MvCOMMENT>
+	|
+	| If all the downward records were past the end, they must be processed here.
+	|
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ l.pastend_count }">
+		<MvIF EXPR = "{ NOT ComponentAttribute_Update_Offsets_PastEnd( l.cmpnt_id, l.pastend, l.pastend_count ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>		
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "ComponentAttribute_Update_Offsets_PastEnd" PARAMETERS = "cmpnt_id, pastend var, pastend_count" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvCOMMENT>
+	|
+	| Process records moving past the end.  These records must be sorted in ascending order.
+	|
+	</MvCOMMENT>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray_PastEnd( l.pastend, l.pastend_count ) }">
+
+	<MvASSIGN NAME = "l.pastend_pos" VALUE = 1>
+
+	<MvWHILE EXPR = "{ l.pastend_pos LE l.pastend_count }">
+		<MvASSIGN NAME = "g.ComponentAttribute_ID" 	VALUE = "{ l.pastend[ l.pastend_pos ]:id }">
+		<MvASSIGN NAME = "l.disp_order"				VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponentAttributeDisplayOrder' ) }">
+
+		<MvQUERY NAME = "Merchant" QUERY = "{ 'UPDATE ' 
+													$ g.Store_Table_Prefix $ 'TGComponentAttributes 
+												SET 
+													disp_order = ? 
+												WHERE 
+													id = ? AND cmpnt_id = ?' }" 
+												FIELDS = "l.disp_order, g.ComponentAttribute_ID, l.cmpnt_id">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+		</MvIF>
+
+		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
+	</MvWHILE>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
