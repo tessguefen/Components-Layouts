@@ -728,31 +728,84 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "StoreUtilityModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">
-		<MvFUNCTIONRETURN VALUE = 1>
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">									<MvFUNCTIONRETURN VALUE = 1>
+	<MvELSEIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
 
-	<MvIF EXPR = "{ g.TGCOMPONENTS_Screen }">
-		<MvEVAL EXPR = "{ ComponentsScreen_UI( g.TGCOMPONENTS_Screen ) }">
-	<MvELSE>
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components & Layouts', '', '' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components & Layouts', '', '' ) }">
 
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Sets:Layouts,TGCOMPONENTS_Components:Components' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Layouts:Layouts,TGCOMPONENTS_Components:Components' ) }">
 
-		<MvHIDE FIELDS = "g.Module_Code">
+	<MvHIDE FIELDS = "g.Module_Code">
 
-		<MvEVAL EXPR = "{ ComponentTab_UI( g.Tab ) }">
+	<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
 
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
-	</MvIF>
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
 
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Element_ComponentsAndLayouts_HTML" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+	<MvIF EXPR = "{ g.Element_ComponentsAndLayouts_HTML }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_HTML() }">
+
+	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Layouts' }">
+		<div id="tgcomponents_layouts"></div>
+
+		<MvEVAL EXPR = "{ Element_DuplicateLayout_Dialog_HTML() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_HTML() }">
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
+	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
+		<div id="tgcomponents_components"></div>
+	</MvIF>
+
+	<MvASSIGN NAME = "g.Element_ComponentsAndLayouts_HTML" VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "DuplicateLayout_Dialog_HTML" STANDARDOUTPUTLEVEL = "html, text">
+	<MvIF EXPR = "{ g.DuplicateLayout_Dialog_HTML }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<div id="DuplicateLayout_dialog" class="mm_dialog">
+		<div id="DuplicateLayout_dialog_title" class="mm_dialog_title">Duplicate Layout</div>
+		<div class="mm_clear"></div>
+		<table>
+			<tbody>
+				<tr>
+					<td class="mm_dialog_prompt_required">New Code:</td>
+					<td class="DuplicateLayout_dialog_field">
+						<input type="text" name="new_code" id="DuplicateLayout_New_Code">
+					</td>
+				</tr>
+				<tr>
+					<td class="mm_dialog_prompt_required">New Name:</td>
+					<td class="DuplicateLayout_dialog_field">
+						<input type="text" name="new_name" id="DuplicateLayout_New_Name">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="mm_dialog_buttons_left">
+			<input id="DuplicateLayout_dialog_button_cancel" type="button" value="Cancel">
+		</div>
+		<div class="mm_dialog_buttons_right"><input id="DuplicateLayout_dialog_button_save" type="button" value="Add"></div>
+	</div>
+
+	<MvASSIGN NAME = "g.DuplicateLayout_Dialog_HTML" VALUE = 1>
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -813,7 +866,7 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
-		<MvASSIGN NAME = "l.new_param" VALUE = "{ 'Item_Runtime_Load_Layout( l.module, l.param, ' $ l.parameters $ ')' }">
+		<MvASSIGN NAME = "l.new_param" VALUE = "{ 'Component_Layout_Load_Code( l.module, l.param, ' $ l.parameters $ ')' }">
 	<MvELSE>
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -870,11 +923,11 @@
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Insert' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Update' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Delete' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Delete( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Load_Components' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_Components( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Load_LayoutComponents' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_LayoutComponents( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_Load_All' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_All( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }">								<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Duplicate' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Duplicate( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Delete_Layout_Cache' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Delete_Layout_Cache( l..module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'LayoutCache_Delete' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_LayoutCache_Delete( l..module ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1458,6 +1511,45 @@
 
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( '#Error#', l.layouts_count ) }">
 </MvFUNCTION>
+
+<MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponents"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents ORDER BY disp_order' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponents.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( '#Error#' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+
+	<MvWHILE EXPR = "{ NOT TGComponents.d.EOF }">
+		<MvEVAL EXPR = "{ Component_Read( l.component[ ++l.count ] ) }">
+
+		<MvIF EXPR = "{	ComponentAttributes_Load_All( l.component[ l.count ]:id, l.component[ l.count ]:attributes ) }">
+			<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvCOMMENT>
+|
+|	sNN_TGComponentAttributes
+|
+</MvCOMMENT>
 
 <MvFUNCTION NAME = "ComponentAttribute_Read" PARAMETERS = "component_attribute var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component_attribute:id"				VALUE = "{ TGComponentAttributes.d.id }">
@@ -2052,7 +2144,7 @@
 
 <MvFUNCTION NAME = "Layout_Update" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT Layout_Update_LowLevel( l.layout ) OR
-					NOT LayoutCache_Recache( l.layout:id ) }">
+					NOT LayoutCache_Recache( l.layout:id, l.null ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -2111,6 +2203,47 @@
 			 FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Duplicate_LowLevel" PARAMETERS = "layout_id, layout_components var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+	|
+	|	Recursive Function that will duplicate the layout components.
+	|
+	</MvCOMMENT>
+
+	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
+
+	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.layout_components:children">
+		<MvASSIGN NAME = "l.layout_component:layout_id"		VALUE = "{ l.layout_id }">
+		<MvASSIGN NAME = "l.layout_component:id"			VALUE = 0>
+		<MvASSIGN NAME = "l.layout_component:parent"		VALUE = "{ int( l.layout_components:id ) }">
+		<MvASSIGN NAME = "l.layout_component:cmpnt_id"		VALUE = "{ int( l.layout_component:component:id ) }">
+		<MvASSIGN NAME = "l.layout_component:disp_order"	VALUE = "{ ++l.disp_order }">
+
+		<MvIF EXPR = "{ NOT LayoutComponent_Insert( l.layout_component ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutComponents_Save_Attributes( l.layout_component ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout_component ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvFOREACH>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Layout_Duplicate" PARAMETERS = "layout_id, duplicate_layout_id" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutComponents_Load_Parent( l.duplicate_layout_id, 0, l.layout:children ) OR
+					NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -2365,8 +2498,8 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutValue_Update" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT LayoutValue_Update_Lowlevel( l.layout_value ) OR
-					NOT LayoutValue_Reference_Update( l.layout_value ) }">
+	<MvIF EXPR = "{ NOT LayoutValue_Reference_Update( l.layout_value ) OR
+					NOT LayoutValue_Update_Lowlevel( l.layout_value ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -2389,22 +2522,111 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT LayoutValue_Delete_LowLevel( l.layout_value ) OR
-					NOT LayoutValue_Reference_Delete( l.layout_value ) }">
+<MvFUNCTION NAME = "LayoutValue_Delete" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutValue_Reference_Delete( l.layout_value ) OR
+					NOT LayoutValue_Delete_LowLevel( l.layout_value ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Delete_LowLevel" PARAMETERS = "layout_value" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Delete_LowLevel" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ? AND attr_id = ?' }"
 			 FIELDS	= "l.layout_value:lc_id, l.layout_value:attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValues_Delete_LayoutComponent" PARAMETERS = "lc_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ?' }"
+			 FIELDS	= "l.layout_value:lc_id, l.layout_value:attr_id">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Reference_Insert" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.layout_value:attr_id, l.attribute ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.attribute:type NE 'image' }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvIF EXPR = "{ [ g.Module_Library_DB ].Image_Load_File( l.layout_value:value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Increment_RefCount( l.image:id ) }">
+	<MvELSEIF EXPR = "{ GeneratedImage_Load_File( l.layout_value:value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Increment_RefCount( l.image:image_id ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Reference_Update" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.layout_value:attr_id, l.attribute ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.attribute:type NE 'image' }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvASSIGN NAME = "l.null" VALUE = "{ LayoutValue_Load( l.layout_value:lc_id, l.layout_value:attr_id, l.prev_layout_value ) }">
+
+	<MvIF EXPR = "{ l.prev_layout_value:value NE l.layout_value:value }">
+
+		<MvIF EXPR = "{ NOT LayoutValue_Reference_Delete( l.prev_layout_value ) OR
+						NOT LayoutValue_Reference_Insert( l.layout_value ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValue_Reference_Delete" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.layout_value:attr_id, l.attribute ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.attribute:type NE 'image' }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvIF EXPR = "{ [ g.Module_Library_DB ].Image_Load_File( l.layout_value:value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Decrement_RefCount( l.image:id ) }">
+	<MvELSEIF EXPR = "{ GeneratedImage_Load_File( l.layout_value:value, l.image ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Image_Decrement_RefCount( l.image:image_id ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "GeneratedImage_Load_File" PARAMETERS = "file, generatedimage var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "GeneratedImages"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'GeneratedImages WHERE image = ?' }"
+				FIELDS	= "l.file">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ GeneratedImages.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "GeneratedImages">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( '#Error#' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].GeneratedImage_Read( l.generatedimage ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "GeneratedImages">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -2574,6 +2796,39 @@
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutCache_Recache" PARAMETERS = "layout_id, layout var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout:layout_id" VALUE = "{ l.layout_id }">
+
+	<MvIF EXPR = "{ NOT LayoutCache_Delete( l.layout:layout_id )					OR
+					NOT Runtime_Layout_Load( l.layout:layout_id, l.layout:value )	OR
+					NOT LayoutCache_Insert( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_LayoutCache_Load" PARAMETERS = "layout_id, layout var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+	|
+	|	Check if Layout Cache needs to be deleted first.
+	|
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT LayoutCache_Check_Layout( l.layout_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT LayoutCache_Load( l.layout_id, l.layout ) }">
+		<MvIF EXPR = "{ NOT LayoutCache_Recache( l.layout_id, l.layout ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
 
 <MvCOMMENT>
 |
@@ -2993,7 +3248,7 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT ComponentAttrs_Insert( l.component_attribute ) }">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Insert( l.component_attribute ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
 	</MvIF>
 
@@ -3026,7 +3281,7 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT ComponentAttrs_Update( l.component_attribute ) }">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Update( l.component_attribute ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
 	</MvIF>
 
@@ -3174,6 +3429,84 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "JSON_Layout_Load_LayoutComponents" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Layout_ID', l.layout_id, -1, -1 ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.layout_components_count" VALUE = "{ LayoutComponents_Load_Parent( l.layout_id, 0, l.layout_components ) }">
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.layout_components ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Components_Load_All" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
+	<MvIF EXPR = "{ Components_Load_All( l.components ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = "[]">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Layout_Save" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Layout_ID', l.layout_id, -1, -1 ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.null" VALUE = "{ miva_json_decode( g.Layout_Data, l.layout_data ) }">
+
+	<MvIF EXPR = "{ NOT LayoutComponents_Save( l.layout_id, l.layout_data:layout, l.layout_data:deleted ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_Layout_Duplicate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Layout_ID',	l.duplicate_layout_id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.layout:code )						OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.layout:name )}">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Duplicate( l.layout:id, l.duplicate_layout_id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "JSON_LayoutCache_Delete" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
+
+	<MvIF EXPR = "{ NOT LayoutCache_Delete_All() }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
+</MvFUNCTION>
+
 <MvCOMMENT>
 |
 |	Custom functions
@@ -3183,10 +3516,20 @@
 <MvFUNCTION NAME = "LayoutComponents_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
 	<MvEVAL EXPR = "{ LayoutComponent_Read( l.component ) }">
 
-	<MvIF EXPR = "{ NOT Component_Load_ID( l.component:cmpnt_id, l.component:component )						OR
-					NOT ComponentAttributes_Load_All( l.component:cmpnt_id, l.component:component:attributes )	OR
-					NOT LayoutComponent_Load_Values( l.component:id, l.component:component:attributes ) }">
+	<MvIF EXPR = "{ NOT Component_Load_ID( l.component:cmpnt_id, l.component:component ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{	NOT ComponentAttributes_Load_All( l.component:cmpnt_id, l.component:component:attributes ) }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{	NOT LayoutComponent_Load_Values( l.component:id, l.component:component:attributes ) }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3286,7 +3629,7 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponents_Load_Parent" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.components_count" VALUE = "{ Layout_Components_Load_Parent_Lowlevel( l.layout_id, l.parent_id, l.components ) }">
+	<MvASSIGN NAME = "l.components_count" VALUE = "{ LayoutComponents_Load_Parent_LowLevel( l.layout_id, l.parent_id, l.components ) }">
 
 	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ l.components_count }">
 		<MvIF EXPR = "{ l.component:component:children EQ 1 }">
@@ -3295,6 +3638,182 @@
 	</MvFOREACH>
 
 	<MvFUNCTIONRETURN VALUE = "{ l.components_count }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponents_Save" PARAMETERS = "layout_id, layout_components var, deleted_components var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layout_components:children"		VALUE = "{ l.components }">
+	<MvASSIGN NAME = "l.deleted_components:children"	VALUE = "{ l.deleted_components }">
+
+	<MvIF EXPR = "{ NOT LayoutComponents_Save_LowLevel( l.layout_id, l.layout_components )	OR
+					NOT LayoutComponents_Delete_Components( l.deleted_components )			OR
+					NOT LayoutCache_Recache( l.layout_id, l.null ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_LayoutComponents_Load_Parent_LowLevel" PARAMETERS = "layout_id, parent_id, layout_components var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutComponents"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ? AND parent = ? AND active = 1 ORDER BY disp_order' }"
+				FIELDS	= "l.layout_id, l.parent_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.count" VALUE = 0>
+
+	<MvWHILE EXPR = "{ NOT TGLayoutComponents.d.EOF }">
+		<MvIF EXPR = "{ Runtime_LayoutComponent_Schedule_Active( TGLayoutComponents.d.dt_start, TGLayoutComponents.d.dt_end ) }">
+			<MvIF EXPR = "{ NOT LayoutComponents_Read( l.components[ ++l.count ] ) }">
+				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutComponents" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( '#Error#', l.count ) }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_LayoutComponents_Load_Parent" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.components_count" VALUE = "{ Runtime_LayoutComponents_Load_Parent_LowLevel( l.layout_id, l.parent_id, l.components ) }">
+
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ l.components_count }">
+		<MvIF EXPR = "{ l.component:component:children EQ 1 }">
+			<MvASSIGN NAME = "l.component:children_count" VALUE = "{ Runtime_LayoutComponents_Load_Parent( l.component:layout_id, l.component:id, l.component:children ) }">
+		</MvIF>
+	</MvFOREACH>
+
+	<MvFUNCTIONRETURN VALUE = "{ l.components_count }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_LayoutComponent_Schedule_Active" PARAMETERS = "dt_start, dt_end" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ ( l.dt_start GT 0 ) AND ( l.dt_start GT s.dyn_time_t ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ ( l.dt_end GT 0 ) AND ( l.dt_end LE s.dyn_time_t ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Runtime_Layout_Load" PARAMETERS = "layout_id, layout var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Load_ID( l.layout_id, l.loaded_layout ) OR
+					NOT Runtime_LayoutComponents_Load_Parent( l.layout_id, 0, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+	
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponents_Save_LowLevel" PARAMETERS = "layout_id, layout_components var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+	|
+	|	Recursive Function that will update the layout components.
+	|
+	</MvCOMMENT>
+
+	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
+
+	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.layout_components:children">
+		<MvASSIGN NAME = "l.layout_component:layout_id"		VALUE = "{ l.layout_id }">
+		<MvASSIGN NAME = "l.layout_component:id"			VALUE = "{ int( l.layout_component:id ) }">
+		<MvASSIGN NAME = "l.layout_component:parent"		VALUE = "{ int( l.layout_components:id ) }">
+		<MvASSIGN NAME = "l.layout_component:cmpnt_id"		VALUE = "{ int( l.layout_component:component:id ) }">
+		<MvASSIGN NAME = "l.layout_component:disp_order"	VALUE = "{ ++l.disp_order }">
+
+		<MvIF EXPR = "{ l.layout_component:id EQ 0 AND NOT LayoutComponent_Insert( l.layout_component ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		<MvELSEIF EXPR = "{ NOT LayoutComponent_Update( l.layout_component ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutComponents_Save_Attributes( l.layout_component ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutComponents_Save_LowLevel( l.layout_id, l.layout_component ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvFOREACH>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponents_Save_Attributes" PARAMETERS = "layout_component var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.layout_component:component:attributes">
+		<MvASSIGN NAME = "l.attribute:lc_id"	VALUE = "{ l.layout_component:id }">
+		<MvASSIGN NAME = "l.attribute:attr_id"	VALUE = "{ l.attribute:id }">
+		<MvASSIGN NAME = "l.attribute:value"	VALUE = "{ l.attribute:value }">
+
+		<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ miva_array_serialize( l.attribute:link ) }">
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' }">
+			<MvASSIGN NAME = "l.attribute:product:id" VALUE = 0>
+
+			<MvIF EXPR = "{ [ g.Module_Library_DB ].Product_Load_Code( l.attribute:product:code, l.loaded_product ) }">
+				<MvASSIGN NAME = "l.attribute:product:id" VALUE = "{ l.loaded_product:id }">
+				<MvASSIGN NAME = "l.attribute:product:code" VALUE = "{ l.loaded_product:code }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ miva_array_serialize( l.attribute:product ) }">
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
+			<MvASSIGN NAME = "l.attribute:category:id" VALUE = 0>
+
+			<MvIF EXPR = "{ [ g.Module_Library_DB ].Category_Load_Code( l.attribute:category:code, l.loaded_category ) }">
+				<MvASSIGN NAME = "l.attribute:category:id" VALUE = "{ l.loaded_category:id }">
+				<MvASSIGN NAME = "l.attribute:category:code" VALUE = "{ l.loaded_category:code }">
+			</MvIF>
+
+			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ miva_array_serialize( l.attribute:category ) }">
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'multitext' }">
+			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ glosub( l.attribute:value, asciichar( 10 ), '|' ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutValue_Update( l.attribute ) }">
+			<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_Error_IsIndexDuplicate( g.Error_Message ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			<MvELSEIF EXPR = "{ NOT LayoutValue_Insert( l.attribute ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+		</MvIF>
+	</MvFOREACH>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponents_Delete_Components" PARAMETERS = "deleted_nodes var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.deleted_nodes:children">
+		<MvASSIGN NAME = "l.layout_component:id" VALUE = "{ int( l.layout_component:id ) }">
+
+		<MvIF EXPR = "{ l.layout_component:id EQ 0 }">
+			<MvFOREACHCONTINUE>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutComponent_Delete( l.layout_component:id ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvFOREACH>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Component_Layout_Load_Code" PARAMETERS = "module var, param, layout_code, layout var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.layout_code, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Runtime_LayoutCache_Load( l.layout:id, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvCOMMENT>
