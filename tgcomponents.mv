@@ -11,7 +11,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.015">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "2.000">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -622,7 +622,7 @@
 		</MvIF>
 
 		<MvQUERY NAME = "Merchant"
-				 QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache MODIFY COLUMN dt_cached ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) }">
+				 QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayoutCache MODIFY COLUMN dt_cached ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 		</MvIF>
@@ -727,31 +727,57 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "StoreUtilityModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }">									<MvFUNCTIONRETURN VALUE = 1>
-	<MvELSEIF EXPR = "{ [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN VALUE = 1>
+<MvFUNCTION NAME = "StoreUtilityModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html">
+	<MvIF EXPR = "{ ISNULL g.Admin_Open_Store }"> <MvFUNCTIONRETURN VALUE = 1> </MvIF>
+
+	<MvIF EXPR = "{ g.TGCOMPONENTS_Screen }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components', '', '' ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
+		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
+
+		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
+			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ encodeentities( g.Component_ID ) }">.
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Component: ' $ encodeentities( l.component:name ), encodeentities( l.component:name ), '' ) }">
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Attributes' ) }">
+
+			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Component_ID">
+
+			<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
+		</MvIF>
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+	<MvELSE>
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components & Layouts', '', '' ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
+		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Layouts:Layouts,TGCOMPONENTS_Components:Components' ) }">
+
+		<MvHIDE FIELDS = "g.Module_Code">
+
+		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
 	</MvIF>
-
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components & Layouts', '', '' ) }">
-
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
-
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Layouts:Layouts,TGCOMPONENTS_Components:Components' ) }">
-
-	<MvHIDE FIELDS = "g.Module_Code">
-
-	<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
-
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawButtons( '' ) }">
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Element_ComponentsAndLayouts_HTML" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
+<MvFUNCTION NAME = "Element_ComponentsAndLayouts_HTML" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "text, html">
 	<MvIF EXPR = "{ g.Element_ComponentsAndLayouts_HTML }">
 		<MvFUNCTIONRETURN>
 	</MvIF>
@@ -769,14 +795,74 @@
 		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_HTML() }">
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
 		<div id="tgcomponents_components"></div>
+	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_SCREEN_Components' }">
+		<div id="tgcomponents_componentattributes"></div>
 	</MvIF>
 
 	<MvASSIGN NAME = "g.Element_ComponentsAndLayouts_HTML" VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "Element_ComponentsAndLayouts_CSS" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "text, html">
+	<MvIF EXPR = "{ g.Element_ComponentsAndLayouts_CSS }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
 
-<MvFUNCTION NAME = "DuplicateLayout_Dialog_HTML" STANDARDOUTPUTLEVEL = "html, text">
-	<MvIF EXPR = "{ g.DuplicateLayout_Dialog_HTML }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+
+	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Layouts' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_CSS() }">
+		<link type="text/css" rel="stylesheet" href="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=styles.css' }">
+	</MvIF>
+
+	<MvASSIGN NAME = "g.Element_ComponentsAndLayouts_CSS" VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Element_ComponentsAndLayouts_JavaScript" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "text, html">
+	<MvIF EXPR = "{ g.Element_ComponentsAndLayouts_JavaScript }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
+
+	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Layouts' }">
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_JavaScript() }">
+
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
+		<script language="JavaScript">
+			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
+		</script>
+	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=components.js' }"></script>
+		<script language="JavaScript">
+			MMScreen_LoadFinished( function() { new Components_Batchlist(); } );
+		</script>
+	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_SCREEN_Components' }">
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=ComponentAttributes.js' }"></script>
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].JavaScript_Set_A_Variable( 'cmpnt_id', g.Component_ID ) }">
+
+		<script language="JavaScript">
+			MMScreen_LoadFinished( function() { new ComponentAttributes_Batchlist( cmpnt_id ); } );
+		</script>
+	</MvIF>
+
+	<MvASSIGN NAME = "g.Element_ComponentsAndLayouts_JavaScript" VALUE = 1>
+</MvFUNCTION>
+
+
+<MvFUNCTION NAME = "Element_DuplicateLayout_Dialog_HTML" STANDARDOUTPUTLEVEL = "html, text">
+	<MvIF EXPR = "{ g.Element_DuplicateLayout_Dialog_HTML }">
 		<MvFUNCTIONRETURN>
 	</MvIF>
 
@@ -805,7 +891,7 @@
 		<div class="mm_dialog_buttons_right"><input id="DuplicateLayout_dialog_button_save" type="button" value="Add"></div>
 	</div>
 
-	<MvASSIGN NAME = "g.DuplicateLayout_Dialog_HTML" VALUE = 1>
+	<MvASSIGN NAME = "g.Element_DuplicateLayout_Dialog_HTML" VALUE = 1>
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -915,7 +1001,7 @@
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Update' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Delete' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Delete( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Attributes_Load_Query' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Attributes_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttributes_Load_Query' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttributes_Load_Query( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttribute_Insert' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttribute_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttribute_Update' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttribute_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentAttribute_Delete' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentAttribute_Delete( l.module ) }">
@@ -946,7 +1032,7 @@
 
 	<MvIF EXPR = "{ g.Filename EQ 'components.js' }">				<MvINCLUDE FILE = "js/components.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">				<MvINCLUDE FILE = "js/layouts.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'component_attrs.js' }">		<MvINCLUDE FILE = "js/component_attrs.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'ComponentAttributes.js' }">	<MvINCLUDE FILE = "js/component_attrs.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">			<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">	<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">					<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
@@ -962,7 +1048,7 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_Provision_Store" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
-	<MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
+	<MvCOMMENT><MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
 		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.child_xml:name ) }">
 
 		<MvIF EXPR = "{ l.name EQ 'layout_add' }">						<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
@@ -976,7 +1062,7 @@
 		<MvELSEIF EXPR = "{ l.name EQ 'componentattributeoption_add'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttributeOption_Add( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add'}">			<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }">
 		</MvIF>
-	</MvFOREACH>
+	</MvFOREACH></MvCOMMENT>
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -986,7 +1072,7 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "ExportModule_Export" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "g.Exp_Count" VALUE = 1>
+	<MvCOMMENT><MvASSIGN NAME = "g.Exp_Count" VALUE = 1>
 
 	<MvIF EXPR = "{ NOT g.Export_Continue }">
 		<MvIF EXPR = "{ fexists( '/' $ g.Export_File ) }">
@@ -1036,13 +1122,13 @@
 						g.Export_SendEmail,
 						g.Export_Email,
 						g.Total_Count,
-						g.Current_Export">
+						g.Current_Export"></MvCOMMENT>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ExportModule_Validate" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "g.Export_File"	VALUE = "{ trim( g.Export_File ) }">
+	<MvCOMMENT><MvASSIGN NAME = "g.Export_File"	VALUE = "{ trim( g.Export_File ) }">
 	<MvASSIGN NAME = "g.Current_Export" VALUE = "{ trim( g.Current_Export ) }">
 
 	<MvIF EXPR = "{ len( g.Export_File ) EQ 0 }">
@@ -1065,13 +1151,13 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Current_Export', 'Please select an export.' ) }">
 	<MvELSEIF EXPR = "{ g.Current_Export NE 'COMPONENTS' AND g.Current_Export NE 'LAYOUTS' }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'Current_Export', 'Please select an export.' ) }">
-	</MvIF>
+	</MvIF></MvCOMMENT>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ExportModule_Screen" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvIF EXPR = "{ ISNULL g.Export_File }">
+	<MvCOMMENT><MvIF EXPR = "{ ISNULL g.Export_File }">
 		<MvASSIGN NAME = "g.Export_File" VALUE = "component_layouts.xml">
 	</MvIF>
 
@@ -1154,7 +1240,7 @@
 
 		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Buttons( 'Export', 'EXPT' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].EndScreen() }"></MvCOMMENT>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -2897,9 +2983,9 @@
 
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component:code )		OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.component:name )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'O', 'Descrip',		l.component:descrip )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'O', 'Image',		l.component:image )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'O', 'children',	l.component:children ) }">
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',		l.component:descrip )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Image',		l.component:image )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'children',	l.component:children ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -2922,9 +3008,9 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',			l.component:id,	-1, -1 )	OR
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component:code )			OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.component:name )			OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'O', 'Descrip',		l.component:descrip )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'O', 'Image',		l.component:image )			OR
-					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'O', 'children',	l.component:children ) }">
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',		l.component:descrip )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Image',		l.component:image )			OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'children',	l.component:children ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3047,8 +3133,8 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Code( 'R', 'Code', l.layout:code ) OR
-					NOT [ g.Module_JSON ].JSON_Input_Text( 'R', 'Name', l.layout:name ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Code( 'R', 'code', l.layout:code ) OR
+					NOT [ g.Module_JSON ].JSON_Input_Text( 'R', 'name', l.layout:name ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3068,14 +3154,14 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',			l.layout:id,	-1, -1 )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.layout:code )				OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.layout:name ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'id',			l.layout:id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'code',		l.layout:code )				OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'name',		l.layout:name ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Load_ID( l.layout:id, l.previous_layout ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Id', 'Layout not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'id', 'Layout not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ ( toupper( l.previous_layout:code ) NE toupper( l.layout:code ) ) AND
@@ -3095,7 +3181,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Id', l.id, -1, -1 ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'id', l.id, -1, -1 ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3106,7 +3192,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Component_Attributes_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "JSON_ComponentAttributes_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
 	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
@@ -3232,11 +3318,13 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
+	<MvASSIGN NAME = "l.component_attribute_types" VALUE = "{ ComponentAttribute_Types() }">
+
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'cmpnt_id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component_attribute:code )															OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',		l.component_attribute:prompt )															OR
-					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',		l.component_attribute:type,	ComponentAttribute_Types(),	ComponentAttribute_Types() )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'O', 'Required',	l.component_attribute:required ) }">
+					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',		l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'Required',	l.component_attribute:required ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3260,11 +3348,13 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
+	<MvASSIGN NAME = "l.component_attribute_types" VALUE = "{ ComponentAttribute_Types() }">
+
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',			l.component_attribute:id,	-1, -1 )													OR
 					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'cmpnt_id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component_attribute:code )															OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',		l.component_attribute:prompt )															OR
-					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',		l.component_attribute:type,	ComponentAttribute_Types(),	ComponentAttribute_Types() )	OR
+					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',		l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
 					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'O', 'Required',	l.component_attribute:required ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>

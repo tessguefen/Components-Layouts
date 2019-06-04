@@ -48,7 +48,7 @@ function Layouts_Batchlist()
 {
 	var self = this;
 
-	MMBatchList.call( self, 'jsLayoutBatchlist' );
+	MMBatchList.call( self, 'tgcomponents_layouts' );
 
 	self.Feature_SearchBar_SetPlaceholderText( 'Search Layouts...' );
 	self.SetDefaultSort( 'id', '' );
@@ -81,7 +81,7 @@ Layouts_Batchlist.prototype.onCreateRootColumnList = function()
 {
 	var columnlist =
 	[
-		new MMBatchList_Column_Name( 'Component ID', 'id', 'id')
+		new MMBatchList_Column_Name( 'Layout ID', 'id', 'id')
 		.SetAdvancedSearchEnabled(false)
 		.SetDisplayInMenu(false)
 		.SetDisplayInList(false)
