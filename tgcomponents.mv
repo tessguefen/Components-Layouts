@@ -2621,7 +2621,7 @@
 <MvFUNCTION NAME = "LayoutValues_Delete_LayoutComponent" PARAMETERS = "lc_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ?' }"
-			 FIELDS	= "l.layout_value:lc_id, l.layout_value:attr_id">
+			 FIELDS	= "l.lc_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -3913,8 +3913,8 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponents_Delete_Components" PARAMETERS = "deleted_nodes var" STANDARDOUTPUTLEVEL = "">
-	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.deleted_nodes:children">
+<MvFUNCTION NAME = "LayoutComponents_Delete_Components" PARAMETERS = "deleted_components var" STANDARDOUTPUTLEVEL = "">
+	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.deleted_components:children">
 		<MvASSIGN NAME = "l.layout_component:id" VALUE = "{ int( l.layout_component:id ) }">
 
 		<MvIF EXPR = "{ l.layout_component:id EQ 0 }">
@@ -3922,6 +3922,10 @@
 		</MvIF>
 
 		<MvIF EXPR = "{ NOT LayoutComponent_Delete( l.layout_component:id ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutComponents_Delete_Components( l.layout_component ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvFOREACH>
