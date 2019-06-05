@@ -614,13 +614,13 @@
 	<MvELSEIF EXPR = "{ ( '.css' EIN g.Filename ) EQ len_var( g.Filename ) }">	<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ g.Filename EQ 'components.js' }">				<MvINCLUDE FILE = "js/components.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">				<MvINCLUDE FILE = "js/layouts.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'component_attrs.js' }">		<MvINCLUDE FILE = "js/component_attrs.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">			<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">	<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">					<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'styles.css' }">				<MvINCLUDE FILE = "angular_app/styles.css" INTERPRET="OFF">
+	<MvIF EXPR = "{ g.Filename EQ 'components.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "js/components.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "js/layouts.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'component_attrs.js' }">		<MvINCLUDE INTERPRET = "off" FILE = "js/component_attrs.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">			<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular.min.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">	<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular-ui-tree.min.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">					<MvINCLUDE INTERPRET = "off" FILE = "angular_app/app.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'styles.css' }">				<MvINCLUDE INTERPRET = "off" FILE = "angular_app/styles.css">
 	<MvELSE>														<MvASSIGN NAME = "l.null" VALUE = "{ miva_output_header( 'Status', '404 Not Found' ) }">
 	</MvIF>
 </MvFUNCTION>
@@ -1115,7 +1115,7 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_HTML_App" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF">
+	<MvINCLUDE INTERPRET = "off" FILE = "angular_app/app.html">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">

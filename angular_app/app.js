@@ -11,7 +11,7 @@
 				return AJAX_Call_Module( callback,
 								'admin',
 								'TGCOMPONENTS',
-								'Layout_Load_Components',
+								'Layout_Load_LayoutComponents',
 								'Layout_ID=' + layout_id );
 			}
 
@@ -28,7 +28,7 @@
 									   'TGCOMPONENTS',
 									   'Layout_Save',
 									   'Layout_ID=' + layout_id +
-									   '&Payload=' + encodeURIComponent( data ),
+									   '&Layout_Data=' + encodeURIComponent( data ),
 									   '' );
 			}
 
@@ -66,7 +66,7 @@
 			$scope.data.is_processing = 0;
 			$scope.data.is_loading = 1;
 			$scope.data.layout = {};
-			$scope.data.layout.nodes = {};
+			$scope.data.layout.children = {};
 			$scope.data.layout.layout_id = layout.id;
 			$scope.data.layout.name = layout.name;
 			$scope.data.layout.code = layout.code;
@@ -75,7 +75,7 @@
 			$scope.data.layout_id = layout.id;
 
 			$scope.data.itemsForDeletion = {};
-			$scope.data.itemsForDeletion.nodes = [];
+			$scope.data.itemsForDeletion.children = [];
 
 			ComponentsAPI.getData( layout.id, function( data ) {
 				init( data, layoutDialog );
@@ -93,7 +93,7 @@
 						attr.value = attr.value.join( '\n' );
 					}
 				});
-				if ( cmp.node_count > 0 ) multiTextUpdate( cmp.nodes );
+				if ( cmp.node_count > 0 ) multiTextUpdate( cmp.children );
 			});
 		}
 
@@ -102,11 +102,11 @@
 			multiTextUpdate( cmps );
 
 			$scope.$apply(function() {
-				$scope.data.layout.nodes = cmps;
+				$scope.data.layout.children = cmps;
 				$scope.data.is_loading = 0;
 
 				layoutDialog.layoutHadChanges = 0;
-				$scope.$watch( 'data.layout.nodes', function( newVal, oldVal ) {
+				$scope.$watch( 'data.layout.children', function( newVal, oldVal ) {
 					layoutDialog.layoutHadChanges = 1;
 				}, true );
 			});
@@ -151,9 +151,9 @@
 			}
 
 			$scope.$apply(function() {
-				if ( $scope.mmdialog.component.parent.nodes.length === 0 ) $scope.mmdialog.component.parent.nodes = [];
-				if ( $scope.mmdialog.component.component.allow_children == 1 ) $scope.mmdialog.component.nodes = [];
-				$scope.mmdialog.component.parent.nodes.push( angular.copy( $scope.mmdialog.component ) );
+				if ( $scope.mmdialog.component.parent.children.length === 0 ) $scope.mmdialog.component.parent.children = [];
+				if ( $scope.mmdialog.component.component.alw_chldrn == 1 ) $scope.mmdialog.component.children = [];
+				$scope.mmdialog.component.parent.children.push( angular.copy( $scope.mmdialog.component ) );
 				$scope.closeMMDialog();
 			});
 		}
@@ -221,7 +221,7 @@
 		var checkforUniqueCodes = function( parent, codes, dupes, invalid_codes ) {
 			var regex = /^[a-z0-9]*$/i; /* Matches alphanumeric values only */
 			
-			angular.forEach( parent.nodes, function( node ) {
+			angular.forEach( parent.children, function( node ) {
 				node.code = String( node.code );
 				temp_value = node.code.toString().replace( /-/g, '' ).replace( /_/g, '' );
 
@@ -232,7 +232,7 @@
 				} else {
 					codes.push( node.code );
 				}
-				if ( node.nodes && node.nodes.length ) {
+				if ( node.children && node.children.length ) {
 					checkforUniqueCodes( node, codes, dupes, invalid_codes );
 				}
 			});
@@ -274,21 +274,21 @@
 
 		$scope.removeComponent = function( scope, node ) {
 			if( $window.confirm('Are you sure you want to delete this?') ) {
-				$scope.data.itemsForDeletion.nodes.push( node );
+				$scope.data.itemsForDeletion.children.push( node );
 				scope.remove();
 			}
 		};
 
 		$scope.checkNodes = function( node ) {
-			if ( ( typeof node.component != 'undefined' ) && ( node.component.allow_children == 1 ) ) {
-				if ( node.nodes.length === 0 ) {
-					node.nodes = [];
+			if ( ( typeof node.component != 'undefined' ) && ( node.component.alw_chldrn == 1 ) ) {
+				if ( node.children.length === 0 ) {
+					node.children = [];
 				}
 			}
 		}
 
 		$scope.slideToggle = function( node ) {
-			node.hide_nodes = !node.hide_nodes;
+			node.hide_children = !node.hide_children;
 		}
 
 		$scope.toggleActive = function( node ) {
@@ -300,7 +300,7 @@
 			node.id = 0;
 			node.parent = 0;
 			node.code = node.code + '_' + Math.floor( Math.random() * 1001 );
-			angular.forEach( node.nodes, function(child) {
+			angular.forEach( node.children, function(child) {
 				$scope.removeIdAndParentId( child );
 			});
 		}
@@ -311,8 +311,8 @@
 				$scope.removeIdAndParentId( nodeCopy );
 				nodeCopy.name = nodeCopy.name + ' - Copy';
 
-				if ( parent.nodes.length === 0 ) parent.nodes = [];
-				parent.nodes.push( nodeCopy );
+				if ( parent.children.length === 0 ) parent.children = [];
+				parent.children.push( nodeCopy );
 				$scope.toggleNodeActions();
 			}
 		}

@@ -39,7 +39,7 @@ function Layouts_Delete_Cache( callback )
 	return AJAX_Call_Module( callback,
 							'admin',
 							'TGCOMPONENTS',
-							'Delete_Layout_Cache',
+							'LayoutCache_Delete',
 							'',
 							'' );
 }

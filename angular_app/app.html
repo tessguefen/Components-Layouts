@@ -37,8 +37,8 @@
 							</div>
 
 							<div ui-tree class="cmp-components">
-								<ol ui-tree-nodes="" ng-model="data.layout.nodes" id="tree-root">
-									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
+								<ol ui-tree-nodes="" ng-model="data.layout.children" id="tree-root">
+									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.children" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
 								</ol>
 							</div>
 
@@ -316,13 +316,13 @@
 				<span class="cmp-component--title__name">{{node.name}}</span>
 			</span>
 
-			<span class="cmp-component--expand" ng-if="node.nodes.length" ng-click="slideToggle( node )" data-nodrag>
+			<span class="cmp-component--expand" ng-if="node.children.length" ng-click="slideToggle( node )" data-nodrag>
 				<span class="cmp-component--expand__icon" ng-attr-title="{{ node.hide_nodes ? 'Show Children' : 'Hide Children' }}" ng-class="{ 'cmp-component--expand__toggled' : node.hide_nodes }">
 					<span class="cmp-component--expand__line1"></span>
 					<span class="cmp-component--expand__line2"></span>
 				</span>
 			</span>
-			<span class="cmp-component--expand" ng-if="!node.nodes.length" data-nodrag></span>
+			<span class="cmp-component--expand" ng-if="!node.children.length" data-nodrag></span>
 
 			<span class="cmp-component--actions" data-nodrag ng-class="{ 'cmp-component--actions__active' : nodeActive == node }" ng-if="permissions.can_add || permissions.can_edit || permissions.can_delete">
 				<span class="cmp-component--actions__row">
@@ -347,8 +347,8 @@
 				</span>
 			</span>
 		</div>
-		<ol ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.nodes">
-			<li class="cmp-component" ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }">
+		<ol ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.children">
+			<li class="cmp-component" ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }">
 			</li>
 		</ol>
 	</script>

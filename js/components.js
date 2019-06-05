@@ -82,9 +82,9 @@ Components_Batchlist.prototype.onCreateRootColumnList = function()
 	];
 
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
-		columnlist.push( new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'children', 'children', function( item, checked, delegator ) {Components_Batchlist.Update_Nests( item, checked, function(){}, delegator ); } ) );
+		columnlist.push( new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'alw_chldrn', 'alw_chldrn', function( item, checked, delegator ) {Components_Batchlist.Update_Nests( item, checked, function(){}, delegator ); } ) );
 	} else {
-		columnlist.push( new MMBatchList_Column_Checkbox( 'Allow Nested Components ', 'children', 'children' ) );
+		columnlist.push( new MMBatchList_Column_Checkbox( 'Allow Nested Components ', 'alw_chldrn', 'alw_chldrn' ) );
 	}
 
 	return columnlist;
@@ -99,7 +99,7 @@ Components_Batchlist.prototype.onCreate = function()
 	record.name = '';
 	record.descrip = '';
 	record.image = '';
-	record.children = 0;
+	record.alw_chldrn = 0;
 	record.disp_order = 0;
 	return record;
 }
@@ -119,7 +119,7 @@ Components_Batchlist.prototype.onDelete = function( item, callback, delegator )
 Components_Batchlist.Update_Nests = function( item, checked, callback, delegator )
 {
 	for ( i = 0; i < item.record.mmbatchlist_fieldlist.length; i++ ) {
-		if ( item.record.mmbatchlist_fieldlist[ i ].name == 'children' ) {
+		if ( item.record.mmbatchlist_fieldlist[ i ].name == 'alw_chldrn' ) {
 			item.record.mmbatchlist_fieldlist[ i ].value = checked ? 1 : 0;
 			item.record.mmbatchlist_fieldlist[ i ].encoded_value = checked ? 1 : 0;
 			break;
