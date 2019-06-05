@@ -642,12 +642,12 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
-		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentDisplayOrder',				l.TGComponents_Disp_Order:maxvalue )		OR
-						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentAttributes',				l.TGComponent_Attrs:maxvalue )				OR
-						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentAttributeDisplayOrder',	l.TGComponent_Attrs_Disp_Order:maxvalue )	OR
-						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentOptions',					l.TGComponent_Options:maxvalue )			OR
-						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentOptionDisplayOrder',		l.TGComponent_Options_Disp_Order:maxvalue )	OR
-						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGLayoutComponents',					l.TGLayouts_Components:maxvalue ) }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentDisplayOrder',				l.TGComponents_Disp_Order:maxvalue + 1 )		OR
+						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentAttributes',				l.TGComponent_Attrs:maxvalue + 1 )				OR
+						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentAttributeDisplayOrder',	l.TGComponent_Attrs_Disp_Order:maxvalue + 1 )	OR
+						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentOptions',					l.TGComponent_Options:maxvalue + 1 )			OR
+						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGComponentOptionDisplayOrder',		l.TGComponent_Options_Disp_Order:maxvalue + 1 )	OR
+						NOT [ g.Module_Library_DB ].StoreKey_Insert( 'TGLayoutComponents',					l.TGLayouts_Components:maxvalue + 1 ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
@@ -735,7 +735,6 @@
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
-		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
 
 		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
 			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ encodeentities( g.Component_ID ) }">.
@@ -747,6 +746,7 @@
 
 			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Component_ID">
 
+			<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
 			<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
 		</MvIF>
 
@@ -758,7 +758,6 @@
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
-		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
@@ -767,6 +766,7 @@
 
 		<MvHIDE FIELDS = "g.Module_Code">
 
+		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].EndContent() }">
@@ -1929,8 +1929,8 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentOption_Insert" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.component_option:id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Options' ) }">
-	<MvASSIGN NAME = "l.component_option:disp_order"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponent_Options_Disp_Order' ) }">
+	<MvASSIGN NAME = "l.component_option:id"			VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponentOptions' ) }">
+	<MvASSIGN NAME = "l.component_option:disp_order"	VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponentOptionDisplayOrder' ) }">
 
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGComponentOptions
@@ -3192,7 +3192,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_ComponentAttributes_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "JSON_ComponentAttributes_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
 	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
@@ -3201,6 +3201,7 @@
 	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
 	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
 	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Count ) }">
+	<MvASSIGN NAME = "g.cmpnt_id"		VALUE = "{ int( g.cmpnt_id ) }">
 	<MvASSIGN NAME = "l.search_query"	VALUE = "">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query, 'attr.id				AS attr_id,
@@ -3465,13 +3466,13 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_ID',	l.component_option:attr_id,	-1, -1 ) OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'attr_id',	l.component_option:attr_id,	-1, -1 ) OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'prompt',	l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.null ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_ID', 'Attribute not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'attr_id', 'Attribute not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.component_option ) }">
@@ -3486,14 +3487,14 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',				l.component_option:id,	-1, -1 )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_ID',	l.component_option:attr_id,	-1, -1 )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',		l.component_option:id,	-1, -1 )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'attr_id',	l.component_option:attr_id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'prompt',	l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.null ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_ID', 'Attribute not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'attr_id', 'Attribute not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentOption_Update( l.component_option ) }">
