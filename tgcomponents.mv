@@ -1301,8 +1301,10 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutCache_Check_All() }">
-		<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Feature_SCH_DB ].ScheduledTaskLog_Insert( l.task:id, 'W', g.Error_Code $ ': ' $ g.Error_Message ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Feature_SCH_DB ].ScheduledTaskLog_Insert( l.task:id, 'W', g.Error_Code $ ': ' $ g.Error_Message ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -2526,8 +2528,11 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutValue_Insert" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT LayoutValue_Insert_LowLevel( l.layout_value ) OR
-					NOT LayoutValue_Reference_Insert( l.layout_value ) }">
+	<MvIF EXPR = "{ NOT LayoutValue_Insert_LowLevel( l.layout_value ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT LayoutValue_Reference_Insert( l.layout_value ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -2563,27 +2568,6 @@
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutValue_Read( l.layout_value ) }">
-	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
-
-	<MvFUNCTIONRETURN VALUE = 1>
-</MvFUNCTION>
-
-<MvFUNCTION NAME = "LayoutValue_Load_All" PARAMETERS = "lc_id, layout_values var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "TGLayoutValues"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ?' }"
-				FIELDS	= "l.lc_id">
-	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
-	</MvIF>
-
-	<MvASSIGN NAME = "l.count" VALUE = 0>
-
-	<MvWHILE EXPR = "{ NOT TGLayoutValues.d.EOF }">
-		<MvEVAL EXPR = "{ LayoutValue_Read( l.layout_values[ ++l.count ] ) }">
-		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutValues" ROWS = 1>
-	</MvWHILE>
-
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -2730,9 +2714,9 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "LayoutCache_Read" PARAMETERS = "layout_cache var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.layout_value:layout_id"	VALUE = "{ TGLayoutCache.d.layout_id  }">
-	<MvASSIGN NAME = "l.layout_value:value"		VALUE = "{ miva_array_deserialize( TGLayoutCache.d.value ) }">
-	<MvASSIGN NAME = "l.layout_value:dt_cached"	VALUE = "{ TGLayoutCache.d.dt_cached }">
+	<MvASSIGN NAME = "l.layout_cache:layout_id"	VALUE = "{ TGLayoutCache.d.layout_id  }">
+	<MvASSIGN NAME = "l.layout_cache:value"		VALUE = "{ miva_array_deserialize( TGLayoutCache.d.value ) }">
+	<MvASSIGN NAME = "l.layout_cache:dt_cached"	VALUE = "{ TGLayoutCache.d.dt_cached }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutCache_Insert" PARAMETERS = "layout_cache var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -2823,7 +2807,7 @@
 
 	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
-		<MvFUNCTIONRETURN VALUE = 1>
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( '#Error#' ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGLayoutCache.d.EOF }">
@@ -2872,7 +2856,7 @@
 
 	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
-		<MvFUNCTIONRETURN VALUE = 1>
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( '#Error#' ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGLayoutCache.d.EOF }">
@@ -2898,6 +2882,8 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
+	<MvASSIGN NAME = "l.layout:value" VALUE = "{ miva_array_deserialize( l.layout:value ) }">
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -2909,7 +2895,9 @@
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT LayoutCache_Check_Layout( l.layout_id ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutCache_Load( l.layout_id, l.layout ) }">
@@ -3632,6 +3620,41 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "Runtime_LayoutComponents_Read" PARAMETERS = "component var" STANDARDOUTPUTLEVEL = "">
+	<MvEVAL EXPR = "{ LayoutComponent_Read( l.component ) }">
+
+	<MvIF EXPR = "{ NOT Component_Load_ID( l.component:cmpnt_id, l.component:component ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{	NOT ComponentAttributes_Load_All( l.component:cmpnt_id, l.attributes ) }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{	NOT LayoutComponent_Load_Values( l.component:id, l.attributes ) }">
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+	</MvIF>
+
+	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.attributes">
+		<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':value' }" VALUE = "{ l.attribute:value }">
+
+		<MvIF EXPR = "{ l.attribute:link }">
+			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':link' }" VALUE = "{ l.attribute:link }">
+			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':value' }" VALUE = "{ Load_URI( l.attribute:link ) }">
+		<MvELSEIF EXPR = "{ l.attribute:category }">
+			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':category' }" VALUE = "{ l.attribute:category }">
+		<MvELSEIF EXPR = "{ l.attribute:product }">
+			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':product' }" VALUE = "{ l.attribute:product }">
+		</MvIF>
+	</MvFOREACH>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
 <MvFUNCTION NAME = "ComponentAttributes_Load_All" PARAMETERS = "cmpnt_id, component_attributes var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponentAttributes"
@@ -3672,6 +3695,9 @@
 <MvFUNCTION NAME = "LayoutComponent_Load_Values" PARAMETERS = "lc_id, attributes var" STANDARDOUTPUTLEVEL = "">
 	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.attributes">
 		<MvIF EXPR = "{ NOT LayoutValue_Load( l.lc_id, l.attribute:id, l.layout_value ) }">
+			<MvASSIGN NAME = "l.attribute:value" VALUE = "">
+			<MvFOREACHCONTINUE>
+		<MvELSEIF EXPR = "{ ISNULL l.layout_value:value }">
 			<MvASSIGN NAME = "l.attribute:value" VALUE = "">
 			<MvFOREACHCONTINUE>
 		</MvIF>
@@ -3761,9 +3787,11 @@
 
 	<MvWHILE EXPR = "{ NOT TGLayoutComponents.d.EOF }">
 		<MvIF EXPR = "{ Runtime_LayoutComponent_Schedule_Active( TGLayoutComponents.d.dt_start, TGLayoutComponents.d.dt_end ) }">
-			<MvIF EXPR = "{ NOT LayoutComponents_Read( l.components[ ++l.count ] ) }">
-				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-				<MvFUNCTIONRETURN VALUE = 0>
+			<MvIF EXPR = "{ NOT Runtime_LayoutComponents_Read( l.layout_components[ ++l.count ] ) }">
+				<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+					<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
+					<MvFUNCTIONRETURN VALUE = 0>
+				</MvIF>
 			</MvIF>
 		</MvIF>
 
@@ -3774,12 +3802,12 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( '#Error#', l.count ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Runtime_LayoutComponents_Load_Parent" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.components_count" VALUE = "{ Runtime_LayoutComponents_Load_Parent_LowLevel( l.layout_id, l.parent_id, l.components ) }">
+<MvFUNCTION NAME = "Runtime_LayoutComponents_Load_Parent" PARAMETERS = "layout_id, parent_id, layout_components var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.components_count" VALUE = "{ Runtime_LayoutComponents_Load_Parent_LowLevel( l.layout_id, l.parent_id, l.layout_components ) }">
 
-	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components" COUNT = "{ l.components_count }">
+	<MvFOREACH ITERATOR = "l.component" ARRAY = "l.layout_components" COUNT = "{ l.components_count }">
 		<MvIF EXPR = "{ l.component:component:alw_chldrn EQ 1 }">
-			<MvASSIGN NAME = "l.component:children_count" VALUE = "{ Runtime_LayoutComponents_Load_Parent( l.component:layout_id, l.component:id, l.component:children ) }">
+			<MvASSIGN NAME = "l.component:children_count" VALUE = "{ Runtime_LayoutComponents_Load_Parent( l.layout_id, l.component:id, l.component:children ) }">
 		</MvIF>
 	</MvFOREACH>
 
@@ -3873,10 +3901,10 @@
 			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ glosub( l.attribute:value, asciichar( 10 ), '|' ) }">
 		</MvIF>
 
-		<MvIF EXPR = "{ NOT LayoutValue_Update( l.attribute ) }">
+		<MvIF EXPR = "{ NOT LayoutValue_Insert( l.attribute ) }">
 			<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_Error_IsIndexDuplicate( g.Error_Message ) }">
 				<MvFUNCTIONRETURN VALUE = 0>
-			<MvELSEIF EXPR = "{ NOT LayoutValue_Insert( l.attribute ) }">
+			<MvELSEIF EXPR = "{ NOT LayoutValue_Update( l.attribute ) }">
 				<MvFUNCTIONRETURN VALUE = 0>
 			</MvIF>
 		</MvIF>
@@ -3902,15 +3930,29 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_Layout_Load_Code" PARAMETERS = "module var, param, layout_code, layout var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT Layout_Load_Code( l.layout_code, l.layout ) }">
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.layout_code, l.loaded_layout ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT Runtime_LayoutCache_Load( l.layout:id, l.layout ) }">
+	<MvIF EXPR = "{ NOT Runtime_LayoutCache_Load( l.loaded_layout:id, l.loaded_layout ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
+
+	<MvASSIGN NAME = "l.layout" VALUE = "{ l.loaded_layout:value }">
 
 	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Load_URI" PARAMETERS = "link var" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.flags:nosession" VALUE = 1>
+
+	<MvIF EXPR = "{ l.link:type EQ 'P' AND l.link:value }">		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_URI_UT ].Store_Product_Code_URL( l.link:value, l.flags ) }">
+	<MvELSEIF EXPR = "{ l.link:type EQ 'C' AND l.link:value }">	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_URI_UT ].Store_Category_Code_URL( l.link:value, l.flags ) }">
+	<MvELSEIF EXPR = "{ l.link:type EQ 'G' AND l.link:value }">	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_URI_UT ].Store_Page_Code_URL( l.link:value, l.flags ) }">
+	<MvELSEIF EXPR = "{ l.link:type EQ 'U' AND l.link:value }">	<MvFUNCTIONRETURN VALUE = "{ l.link:value }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = "">
 </MvFUNCTION>
 
 <MvCOMMENT>
