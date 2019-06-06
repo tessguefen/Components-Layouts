@@ -81,13 +81,13 @@ Layouts_Batchlist.prototype.onCreateRootColumnList = function()
 {
 	var columnlist =
 	[
-		new MMBatchList_Column_Name( 'Layout ID', 'id', 'id')
+		new MMBatchList_Column_Name( 'Layout ID', 'id', 'Id')
 		.SetAdvancedSearchEnabled(false)
 		.SetDisplayInMenu(false)
 		.SetDisplayInList(false)
 		.SetAdvancedSearchEnabled(false),
-		new MMBatchList_Column_Code( 'Code', 'code', 'code'),
-		new MMBatchList_Column_Name( 'Name', 'name', 'name')
+		new MMBatchList_Column_Code( 'Code', 'code', 'Code'),
+		new MMBatchList_Column_Name( 'Name', 'name', 'Name')
 	];
 
 	return columnlist;

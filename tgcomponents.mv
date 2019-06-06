@@ -2975,11 +2975,11 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component:code )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.component:name )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',		l.component:descrip )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Image',		l.component:image )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'alw_chldrn',	l.component:alw_chldrn ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component:code )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',			l.component:name )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',			l.component:descrip )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Image',			l.component:image )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'Allow_Children',	l.component:alw_chldrn ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -2999,12 +2999,12 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',			l.component:id,	-1, -1 )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component:code )			OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.component:name )			OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',		l.component:descrip )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Image',		l.component:image )			OR
-					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'alw_chldrn',	l.component:alw_chldrn ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',				l.component:id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component:code )			OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',			l.component:name )			OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',			l.component:descrip )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Image',			l.component:image )			OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'Allow_Children',	l.component:alw_chldrn ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3127,13 +3127,13 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Code( 'R', 'code', l.layout:code ) OR
-					NOT [ g.Module_JSON ].JSON_Input_Text( 'R', 'name', l.layout:name ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Code( 'R', 'Code', l.layout:code ) OR
+					NOT [ g.Module_JSON ].JSON_Input_Text( 'R', 'Name', l.layout:name ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.existing_layout ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
@@ -3148,19 +3148,19 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'id',			l.layout:id,	-1, -1 )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'code',		l.layout:code )				OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'name',		l.layout:name ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',			l.layout:id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.layout:code )				OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.layout:name ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Load_ID( l.layout:id, l.previous_layout ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'id', 'Layout not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Id', 'Layout not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ ( toupper( l.previous_layout:code ) NE toupper( l.layout:code ) ) AND
 					( Layout_Load_Code( l.layout:code, l.existing_layout ) ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Update( l.layout ) }">
@@ -3175,7 +3175,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'id', l.id, -1, -1 ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Id', l.id, -1, -1 ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3315,11 +3315,11 @@
 
 	<MvASSIGN NAME = "l.component_attribute_types" VALUE = "{ ComponentAttribute_Types() }">
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'cmpnt_id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
-					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component_attribute:code )															OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',		l.component_attribute:prompt )															OR
-					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',		l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'Required',	l.component_attribute:required ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Component_Id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component_attribute:code )															OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_attribute:prompt )															OR
+					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',			l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'o', 'Required',		l.component_attribute:required ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3345,12 +3345,12 @@
 
 	<MvASSIGN NAME = "l.component_attribute_types" VALUE = "{ ComponentAttribute_Types() }">
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',			l.component_attribute:id,	-1, -1 )													OR
-					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'cmpnt_id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
-					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.component_attribute:code )															OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',		l.component_attribute:prompt )															OR
-					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',		l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'O', 'Required',	l.component_attribute:required ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',				l.component_attribute:id,	-1, -1 )													OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Component_Id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component_attribute:code )															OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_attribute:prompt )															OR
+					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',			l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Boolean(	'O', 'Required',		l.component_attribute:required ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3460,8 +3460,8 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'attr_id',	l.component_option:attr_id,	-1, -1 ) OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'prompt',	l.component_option:prompt ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_Id',	l.component_option:attr_id,	-1, -1 ) OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -3481,9 +3481,9 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',		l.component_option:id,	-1, -1 )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'attr_id',	l.component_option:attr_id,	-1, -1 )	OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'prompt',	l.component_option:prompt ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',				l.component_option:id,	-1, -1 )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_Id',	l.component_option:attr_id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 

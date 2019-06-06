@@ -99,22 +99,22 @@ ComponentAttributes_Batchlist.prototype.onCreateRootColumnList = function()
 	var columnlist;
 	var self = this;
 
-		self.id						=	new MMBatchList_Column_Name( 'ID', 'id', 'id')
+		self.id						=	new MMBatchList_Column_Name( 'ID', 'id', 'Id')
 											.SetDisplayInMenu(false)
 											.SetDisplayInList(false)
 											.SetAdvancedSearchEnabled(false)
 											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-		self.cmpnt_id				=	new MMBatchList_Column_Name( 'Component ID', 'cmpnt_id', 'cmpnt_id')
+		self.cmpnt_id				=	new MMBatchList_Column_Name( 'Component ID', 'cmpnt_id', 'Component_Id')
 											.SetDisplayInMenu(false)
 											.SetDisplayInList(false)
 											.SetAdvancedSearchEnabled(false)
 											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-		self.fields_code			=	new MMBatchList_Column_Text( 'Code', 'code', 'code' )
+		self.fields_code			=	new MMBatchList_Column_Text( 'Code', 'code', 'Code' )
 											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-		self.fields_prompt			=	new MMBatchList_Column_Text( 'Prompt', 'prompt', 'prompt' )
+		self.fields_prompt			=	new MMBatchList_Column_Text( 'Prompt', 'prompt', 'Prompt' )
 											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
 		self.fields_type			=	new Fields_Column_Type();
-		self.fields_required		=	new MMBatchList_Column_Checkbox( 'Required', 'required', 'required')
+		self.fields_required		=	new MMBatchList_Column_Checkbox( 'Required', 'required', 'Required')
 											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
 
 		self.fields_display_order	=	new MMBatchList_Column( 'Display Order', 'disp_order')
@@ -141,15 +141,15 @@ ComponentAttributes_Batchlist.prototype.CreateColumnList_Options = function()
 	var self = this;
 	var columnlist =
 	[
-		new MMBatchList_Column_Code( 'Attribute ID', 'attr_id', 'attr_id' )
+		new MMBatchList_Column_Code( 'Attribute ID', 'attr_id', 'Attribute_Id' )
 				.SetRootColumn( self.attr_id )
 				.SetSearchable( false )
 				.SetDisplayInList( false ),
-		new MMBatchList_Column_Code( 'Option ID', 'id', 'id' )
+		new MMBatchList_Column_Code( 'Option ID', 'id', 'Id' )
 				.SetRootColumn( self.id )
 				.SetSearchable( false )
 				.SetDisplayInList( false ),
-		new MMBatchList_Column_Name( 'Prompt', 'prompt', 'prompt' )
+		new MMBatchList_Column_Name( 'Prompt', 'prompt', 'Prompt' )
 				.SetRootColumn( self.fields_prompt ),
 		new MMBatchList_Column( 'Display Order', 'disp_order')
 				.SetSortByField( 'disp_order' )

@@ -56,15 +56,15 @@ Components_Batchlist.prototype.onCreateRootColumnList = function()
 {
 	var columnlist =
 	[
-		new MMBatchList_Column_Name( 'Component ID', 'id', 'id')
+		new MMBatchList_Column_Name( 'Component ID', 'id', 'Id')
 		.SetAdvancedSearchEnabled(false)
 		.SetDisplayInMenu(false)
 		.SetDisplayInList(false)
 		.SetAdvancedSearchEnabled(false),
-		new MMBatchList_Column_Code( 'Code', 'code', 'code'),
-		new MMBatchList_Column_Name( 'Name', 'name', 'name'),
-		new MMBatchList_Column_Name( 'Description', 'descrip', 'descrip'),
-		new MMBatchList_Column_Image_Upload( 'Image', 'image', 'image')
+		new MMBatchList_Column_Code( 'Code', 'code', 'Code'),
+		new MMBatchList_Column_Name( 'Name', 'name', 'Name'),
+		new MMBatchList_Column_Name( 'Description', 'descrip', 'Descrip'),
+		new MMBatchList_Column_Image_Upload( 'Image', 'image', 'Image')
 		.SetOnDisplayData( function( record ) {
 			var element;
 			element						= newElement( 'span', { 'class': 'mm9_batchlist_column_imagepreview_image_container' }, null, null );
@@ -78,13 +78,12 @@ Components_Batchlist.prototype.onCreateRootColumnList = function()
 		.SetSearchable( false )
 		.SetSortByField( 'disp_order' )
 		.SetUpdateOnModifiedOnly( true )
-
 	];
 
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
-		columnlist.push( new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'alw_chldrn', 'alw_chldrn', function( item, checked, delegator ) {Components_Batchlist.Update_Nests( item, checked, function(){}, delegator ); } ) );
+		columnlist.push( new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'alw_chldrn', 'Allow_Children', function( item, checked, delegator ) {Components_Batchlist.Update_Allow_Children( item, checked, function(){}, delegator ); } ) );
 	} else {
-		columnlist.push( new MMBatchList_Column_Checkbox( 'Allow Nested Components ', 'alw_chldrn', 'alw_chldrn' ) );
+		columnlist.push( new MMBatchList_Column_Checkbox( 'Allow Nested Components ', 'alw_chldrn', 'Allow_Children' ) );
 	}
 
 	return columnlist;
@@ -108,15 +107,18 @@ Components_Batchlist.prototype.onSave = function( item, callback, delegator )
 {
 	Components_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Component_Update', callback, delegator );
 }
+
 Components_Batchlist.prototype.onInsert = function( item, callback, delegator )
 {
 	Components_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Component_Insert', callback, delegator );
 }
+
 Components_Batchlist.prototype.onDelete = function( item, callback, delegator )
 {
 	Components_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Component_Delete', callback, delegator );
 }
-Components_Batchlist.Update_Nests = function( item, checked, callback, delegator )
+
+Components_Batchlist.Update_Allow_Children = function( item, checked, callback, delegator )
 {
 	for ( i = 0; i < item.record.mmbatchlist_fieldlist.length; i++ ) {
 		if ( item.record.mmbatchlist_fieldlist[ i ].name == 'alw_chldrn' ) {
@@ -128,10 +130,12 @@ Components_Batchlist.Update_Nests = function( item, checked, callback, delegator
 
 	Components_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Component_Update', callback, delegator );
 }
+
 Components_Batchlist.prototype.onGoTo = function( item, e )
 {
 	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGCOMPONENTS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Component_ID': item.record.id, 'Module_Type': 'util', 'TGCOMPONENTS_Screen' : 'Component' } );
 }
+
 Components_Batchlist.prototype.onDisplayOrderSave = function( fieldlist, callback, delegator )
 {
 	Components_Batchlist_Function( fieldlist, 'Components_DisplayOrder_Update', callback, delegator );
