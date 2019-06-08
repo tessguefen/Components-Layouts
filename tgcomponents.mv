@@ -1054,7 +1054,7 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_Provision_Store" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
-	<MvCOMMENT><MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
+	<MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
 		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.child_xml:name ) }">
 
 		<MvIF EXPR = "{ l.name EQ 'layout_add' }">						<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
@@ -1062,13 +1062,156 @@
 		<MvELSEIF EXPR = "{ l.name EQ 'component_add'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'component_update'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Update( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'component_delete'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_add'}">		<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Add( l.module, l.child_xml ) }">
+		<MvCOMMENT><MvELSEIF EXPR = "{ l.name EQ 'componentattribute_add'}">		<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Add( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_update'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Update( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_delete'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Delete( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'componentattributeoption_add'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttributeOption_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add'}">			<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add'}">			<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }"></MvCOMMENT>
 		</MvIF>
-	</MvFOREACH></MvCOMMENT>
+	</MvFOREACH>
+</MvFUNCTION>
+
+<MvCOMMENT>
+|
+|	Provisioning Helper Func
+|
+</MvCOMMENT>
+<MvFUNCTION NAME = "Module_Provision_Layout_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		<Layout_Add>
+			<Code>Your_Code_Here</Code>
+			<Name>Your Name Here</Name>
+		</Layout_Add>
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 'R', l.provide_xml, 'Code', l.layout:code ) OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml, 'Name', l.layout:name ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.existing_layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Layout_Update" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		<Layout_Update code="Your_Code_Here">
+			<Code>Your_New_Code_Here</Code>
+			<Name>Your New Name Here</Name>
+		</Layout_Update>
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.code, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A layout with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 'O', l.provide_xml, 'Code', l.layout:code ) OR 
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'O', l.provide_xml, 'Name', l.layout:name ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+	
+	<MvIF EXPR = "{ toupper( l.layout:code ) NE toupper( l.code ) }">
+		<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.existing_layout ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Update( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Component_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		<Component_Add>
+			<Code>Your_Code_Here</Code>
+			<Name>Your Name Here</Name>
+			<Descrip>Your Description</Descrip>
+			<Image>graphics/00000001/leia.png</Image>
+			<Allow_Children>1</Allow_Children>
+		</Component_Add>
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'R', l.provide_xml, 'Code',				l.component:code )		OR 
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'R', l.provide_xml, 'Name',				l.component:name )		OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'O', l.provide_xml, 'Descrip',			l.component:descrip )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text(		'O', l.provide_xml, 'Image',			l.component:image )		OR 
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean(	'R', l.provide_xml, 'Allow_Children',	l.component:alw_chldrn ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.existing_component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Insert( l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Component_Update" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		<Component_Update code="My_Old_Code_Here">
+			<Code>Your_Code_Here</Code>
+			<Name>Your Name Here</Name>
+			<Descrip>Your Description</Descrip>
+			<Image>graphics/00000001/leia.png</Image>
+			<Allow_Children>1</Allow_Children>
+		</Component_Update>
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Load_Code( l.code, l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'O', l.provide_xml, 'Code',				l.component:code )		OR 
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'O', l.provide_xml, 'Name',				l.component:name )		OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'O', l.provide_xml, 'Descrip',			l.component:descrip )	OR
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text(		'O', l.provide_xml, 'Image',			l.component:image )		OR 
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean(	'O', l.provide_xml, 'Allow_Children',	l.component:alw_chldrn ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ toupper( l.component:code ) NE toupper( l.code ) }">
+		<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.existing_component ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Update( l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Component_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		<Component_Delete code="My_Code_Here">	
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Load_Code( l.code, l.component ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Component_Delete( l.component:id ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -3012,9 +3155,10 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Id', 'Component not found' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ ( toupper( l.previous_component:code ) NE toupper( l.component:code ) ) AND
-					( Component_Load_Code( l.component:code, l.existing_component ) ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
+	<MvIF EXPR = "{ toupper( l.previous_component:code ) NE toupper( l.component:code ) }">
+		<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.existing_component ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
+		</MvIF>
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Component_Update( l.component ) }">
@@ -3158,9 +3302,10 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Id', 'Layout not found' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ ( toupper( l.previous_layout:code ) NE toupper( l.layout:code ) ) AND
-					( Layout_Load_Code( l.layout:code, l.existing_layout ) ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
+	<MvIF EXPR = "{ toupper( l.previous_layout:code ) NE toupper( l.layout:code ) }">
+		<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.existing_layout ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
+		</MvIF>
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Update( l.layout ) }">
@@ -3362,8 +3507,10 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'cmpnt_id', 'Component not found' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ toupper( l.component_attribute:code ) NE toupper( l.previous_component_attribute:code ) AND ComponentAttribute_Load_Code( l.component_attribute:cmpnt_id, l.component_attribute:code, l.existing_component_attribute ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
+	<MvIF EXPR = "{ toupper( l.component_attribute:code ) NE toupper( l.previous_component_attribute:code ) }">
+		<MvIF EXPR = "{ ComponentAttribute_Load_Code( l.component_attribute:cmpnt_id, l.component_attribute:code, l.existing_component_attribute ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
+		</MvIF>
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Update( l.component_attribute ) }">
