@@ -2125,8 +2125,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_Delete" PARAMETERS = "id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT Component_Delete_LowLevel( l.id ) OR
-					NOT ComponentAttributes_Delete_Component( l.id ) }">
+	<MvIF EXPR = "{ NOT Component_Delete_LowLevel( l.id )				OR
+					NOT ComponentAttributes_Delete_Component( l.id )	OR
+					NOT LayoutComponents_Delete_Component( l.id ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -3227,16 +3228,37 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponents_Delete_Layout" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponents_Delete_Component" PARAMETERS = "cmpnt_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayoutComponents"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ?' }"
-				FIELDS	= "l.layout_id">
+				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE cmpnt_id = ?' }"
+				FIELDS	= "l.cmpnt_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvASSIGN NAME = "l.count" VALUE = 0>
+	<MvWHILE EXPR = "{ NOT TGLayoutComponents.d.EOF }">
+		<MvIF EXPR = "{ NOT LayoutComponent_Delete( TGLayoutComponents.d.id  ) }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutComponents" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponents_Delete_Layout" PARAMETERS = "layout_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutComponents"
+				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ?' }"
+				FIELDS	= "l.layout_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGLayoutComponents.d.EOF }">
 		<MvIF EXPR = "{ NOT LayoutComponent_Delete( TGLayoutComponents.d.id  ) }">
