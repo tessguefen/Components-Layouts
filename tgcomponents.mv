@@ -1141,11 +1141,13 @@
 		</Component_Add>
 	</MvCOMMENT>
 
+	<MvASSIGN NAME = "l.component:alw_chldrn" VALUE = 0>
+
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'R', l.provide_xml, 'Code',				l.component:code )		OR 
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'R', l.provide_xml, 'Name',				l.component:name )		OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 		'O', l.provide_xml, 'Descrip',			l.component:descrip )	OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text(		'O', l.provide_xml, 'Image',			l.component:image )		OR 
-					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean(	'R', l.provide_xml, 'Allow_Children',	l.component:alw_chldrn ) }">
+					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean(	'O', l.provide_xml, 'Allow_Children',	l.component:alw_chldrn ) }">
 		<MvFUNCTIONRETURN>
 	</MvIF>
 
@@ -1233,6 +1235,7 @@
 	</MvIF>
 
 	<MvASSIGN NAME = "l.component_attribute:cmpnt_id" VALUE = "{ l.component:id }">
+	<MvASSIGN NAME = "l.component_attribute:required" VALUE = 0>
 
 	<MvASSIGN NAME = "l.component_attribute_types" VALUE = "{ ComponentAttribute_Types() }">
 
@@ -1347,7 +1350,7 @@
 		<MvFUNCTIONRETURN>
 	</MvIF>
 
-	<MvASSIGN NAME = "l.component_option:attr_id" VALUE = "{ l.componentattribute:id }">
+	<MvASSIGN NAME = "l.component_option:attr_id" VALUE = "{ l.component_attribute:id }">
 
 	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.component_option ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
@@ -1412,6 +1415,10 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Component with the code \'' $ l.component_code $ '\' does not exist' ) }">
 	</MvIF>
 
+	<MvASSIGN NAME = "l.layout_component:active"	VALUE = 0>
+	<MvASSIGN NAME = "l.layout_component:dt_start"	VALUE = 0>
+	<MvASSIGN NAME = "l.layout_component:dt_end"	VALUE = 0>
+
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text(		'R',	l.provide_xml, 'Name',			l.layout_component:name )			OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Code( 		'R',	l.provide_xml, 'Code',			l.layout_component:code )			OR
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Boolean(	'O',	l.provide_xml, 'Active',		l.layout_component:active )			OR
@@ -1438,6 +1445,8 @@
 		</MvIF>
 
 		<MvASSIGN NAME = "l.layout_component:parent" VALUE = "{ l.loaded_parent:id }">
+	<MvELSE>
+		<MvASSIGN NAME = "l.layout_component:parent" VALUE = 0>
 	</MvIF>
 
 	<MvASSIGN NAME = "l.layout_component:layout_id"		VALUE = "{ l.layout:id }">
@@ -1454,14 +1463,14 @@
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Missing required tag Attributes' ) }">
 		</MvIF>
 
-		<MvIF EXPR = "{ NOT Module_Provision_LayoutComponent_Attributes( l.provide_xml:tags:Attributes[ 1 ], l.layout_component:id, l.layout_component:cmpnt_id ) }">
+		<MvIF EXPR = "{ NOT Module_Provision_LayoutComponent_Attributes( l.provide_xml:tags:Attributes[ 1 ], l.layout_component:id, l.layout_component:cmpnt_id, l.child_pos ) }">
 			<MvASSIGN NAME = "l.null" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml:children[ l.child_pos ] ) }">
 		</MvIF>
 	</MvIF>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Module_Provision_LayoutComponent_Attributes" PARAMETERS = "provide_xml var, lc_id, cmpnt_id" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Module_Provision_LayoutComponent_Attributes" PARAMETERS = "provide_xml var, lc_id, cmpnt_id, child_pos var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.child_pos"		VALUE = 1>
 	<MvASSIGN NAME = "l.child_count"	VALUE = "{ miva_array_elements( l.provide_xml:children ) }">
 
@@ -1483,17 +1492,17 @@
 		</MvIF>
 
 		<MvIF EXPR = "{ l.component_option:type EQ 'link' }">
-			<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 'R', l.provide_xml:children[ l.child_pos ], 'LinkType', l.layout_value:_value:type, 'None,URL,Product,Category,Page', 'N,U,P,C,G' ) }">
+			<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_List( 'R', l.provide_xml:children[ l.child_pos ], 'LinkType', l.layout_value:value:type, 'None,URL,Product,Category,Page', 'N,U,P,C,G' ) }">
 				<MvFUNCTIONRETURN>
 			</MvIF>
 
 			<MvIF EXPR = "{ l.layout_value:_value:type NE 'N' }">
-				<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml:children[ l.child_pos ], 'Value', l.layout_value:_value:value ) }">
+				<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml:children[ l.child_pos ], 'Value', l.layout_value:value:value ) }">
 					<MvFUNCTIONRETURN>
 				</MvIF>
 			</MvIF>
 
-			<MvASSIGN NAME = "l.layout_value:value" VALUE = "{ miva_array_serialize( l.layout_value:_value ) }">
+			<MvASSIGN NAME = "l.layout_value:value" VALUE = "{ miva_array_serialize( l.layout_value:value ) }">
 		<MvELSEIF EXPR = "{ l.component_option:type EQ 'datetime' }">
 			<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Date( l.provide_xml:children[ l.child_pos ], 'Value', l.layout_value:value ) }">
 				<MvFUNCTIONRETURN>
@@ -1533,10 +1542,10 @@
 		</MvIF>
 
 		<MvASSIGN NAME = "l.layout_value_count"		VALUE = "{ l.layout_value_count + 1 }">
-		<MvASSIGN NAME = "l.layout_value:lc_id"		VALUE = "{ l.cmpnt_id }">
+		<MvASSIGN NAME = "l.layout_value:lc_id"		VALUE = "{ l.lc_id }">
 		<MvASSIGN NAME = "l.layout_value:attr_id"	VALUE = "{ l.component_option:id }">
 
-		<MvIF EXPR = "{ NOT LayoutValue_Update( l.layout_value ) }">
+		<MvIF EXPR = "{ NOT LayoutValue_Insert( l.layout_value ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
@@ -1867,10 +1876,10 @@
 		<MvIF EXPR = "{ ComponentAttributes_Load_Component( TGComponents.d.id, l.component_attributes ) }">
 			<MvFOREACH ITERATOR = "l.component_attribute" ARRAY = "l.component_attributes">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	<ComponentAttribute_Add component="' $ TGComponents.d.code $ '">' ) }">
-				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Code>'		$ l.component_attribute:code		$ '</Code>' ) }">
-				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Prompt>'	$ l.component_attribute:prompt		$ '</Prompt>' ) }">
-				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Type>'		$ l.component_attribute:type		$ '</Type>' ) }">
-				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Required>'	$ l.component_attribute:required	$ '</Required>' ) }">
+				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Code>'		$ l.component_attribute:code													$ '</Code>' ) }">
+				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Prompt>'	$ [ g.Module_Library_Utilities ].CDATA_Encode( l.component_attribute:prompt )	$ '</Prompt>' ) }">
+				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Type>'		$ l.component_attribute:type													$ '</Type>' ) }">
+				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Required>'	$ l.component_attribute:required												$ '</Required>' ) }">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	</ComponentAttribute_Add>' ) }">
 				<MvIF EXPR = "{ ( l.component_attribute:type EQ 'select' OR l.component_attribute:type EQ 'radio' ) AND
 								( l.component_attribute:option_count GT 0 ) }">
@@ -2449,8 +2458,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttribute_Delete" PARAMETERS = "component_attribute_id" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT ComponentAttribute_Delete_LowLevel( l.component_attribute_id ) OR
-					NOT ComponentOptions_Delete_Attribute( l.component_attribute_id ) }">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Delete_LowLevel( l.component_attribute_id )	OR
+					NOT ComponentOptions_Delete_Attribute( l.component_attribute_id )	OR
+					NOT LayoutValues_Delete_Attribute( l.component_attribute_id ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -3120,6 +3130,7 @@
 	<MvASSIGN NAME = "l.layout_component:id" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGLayoutComponents' ) }">
 
 	<MvIF EXPR = "{ ISNULL l.layout_component:parent }">		<MvASSIGN NAME = "l.layout_component:parent"		VALUE = 0> </MvIF>
+	<MvIF EXPR = "{ ISNULL l.layout_component:active }">		<MvASSIGN NAME = "l.layout_component:active"		VALUE = 0> </MvIF>
 	<MvIF EXPR = "{ ISNULL l.layout_component:dt_start }">		<MvASSIGN NAME = "l.layout_component:dt_start"		VALUE = 0> </MvIF>
 	<MvIF EXPR = "{ ISNULL l.layout_component:dt_end }">		<MvASSIGN NAME = "l.layout_component:dt_end"		VALUE = 0> </MvIF>
 	<MvIF EXPR = "{ ISNULL l.layout_component:disp_order }">	<MvASSIGN NAME = "l.layout_component:disp_order"	VALUE = 0> </MvIF>
@@ -3424,6 +3435,31 @@
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutValues_Delete_Attribute" PARAMETERS = "attr_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayoutValues"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE attr_id = ?' }"
+				FIELDS	= "l.attr_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGLayoutValues.d.EOF }">
+		<MvEVAL EXPR = "{ LayoutValue_Read( l.layout_value ) }">
+
+		<MvIF EXPR = "{ NOT LayoutValue_Delete( l.layout_value  ) }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutValues" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
