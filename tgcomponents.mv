@@ -1832,6 +1832,7 @@
 	</MvIF>
 
 	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+	<MvASSIGN NAME = "l.offset"			VALUE = "{ l.export_count }">
 	<MvASSIGN NAME = "l.limit"			VALUE = 5000>
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
@@ -1842,15 +1843,14 @@
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.Error_Message ) }">
-	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, export_count, l.limit) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, l.offset, l.limit) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGComponents.d.EOF AND NOT g.LayoutAndComponentsExport_Export_NeedRefresh }">
-		<MvASSIGN NAME = "l.export_count"	VALUE = "{ l.export_count + 1 }">
-
-		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Calculate_Counts( l.export_count, l.total_count ) }">
-		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( l.export_count, l.total_count ) }">
+		<MvASSIGN NAME = "l.export_count" VALUE = "{ l.export_count + 1 }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Calculate_Counts( l.display_exported_count, l.display_total_count ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( l.display_exported_count, l.display_total_count ) }">
 
 		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	<Component_Add>' ) }">
 		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Code>' $ TGComponents.d.code $ '</Code>' ) }">
@@ -1865,15 +1865,15 @@
 		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	</Component_Add>' ) }">
 
 		<MvIF EXPR = "{ ComponentAttributes_Load_Component( TGComponents.d.id, l.component_attributes ) }">
-			<MvFOREACH ITERATOR = "l.component_attribute" ARRAY = "l.component_attribute">
+			<MvFOREACH ITERATOR = "l.component_attribute" ARRAY = "l.component_attributes">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	<ComponentAttribute_Add component="' $ TGComponents.d.code $ '">' ) }">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Code>'		$ l.component_attribute:code		$ '</Code>' ) }">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Prompt>'	$ l.component_attribute:prompt		$ '</Prompt>' ) }">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Type>'		$ l.component_attribute:type		$ '</Type>' ) }">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Required>'	$ l.component_attribute:required	$ '</Required>' ) }">
 				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	</ComponentAttribute_Add>' ) }">
-
-				<MvIF EXPR = "{ l.component_attribute:option_count GT 0 }">
+				<MvIF EXPR = "{ ( l.component_attribute:type EQ 'select' OR l.component_attribute:type EQ 'radio' ) AND
+								( l.component_attribute:option_count GT 0 ) }">
 					<MvFOREACH ITERATOR = "l.component_option" ARRAY = "l.component_attribute:options">
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	<ComponentAttributeOption_Add component="' $ TGComponents.d.code $ '" code="' $ l.component_attribute:code $ '">' ) }">
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Prompt>'	$ l.component_option:prompt $ '</Prompt>' ) }">
@@ -1956,11 +1956,8 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutAndComponentsExport_Calculate_Counts" PARAMETERS = "exported_count var, total_count var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.total_count" 		VALUE = 0>
-	<MvASSIGN NAME = "l.exported_count" 	VALUE = 0>
-
-	<MvASSIGN NAME = "l.total_count" 	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedTotalCount + l.total_count }">
-	<MvASSIGN NAME = "l.exported_count"	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedCount + l.exported_count }">
+	<MvASSIGN NAME = "l.total_count" 	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedTotalCount }">
+	<MvASSIGN NAME = "l.exported_count"	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedCount }">
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -4261,7 +4258,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.null ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'attr_id', 'Attribute not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_Id', 'Attribute not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.component_option ) }">

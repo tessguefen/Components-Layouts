@@ -29,7 +29,7 @@ function ComponentAttributes_Batchlist_Option_Function( parentlist, fieldlist, _
 									   'admin',
 									   'TGCOMPONENTS',
 									   _function,
-									   'Attr_ID=' + encodeURIComponent( parentlist.id ),
+									   'Attribute_Id=' + encodeURIComponent( parentlist.id ),
 									   fieldlist,
 									   delegator );
 }
