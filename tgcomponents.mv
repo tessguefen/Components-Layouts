@@ -811,16 +811,15 @@
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
 
 	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Layouts' }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_CSS() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_CSS() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_CSS() }">
 		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_CSS() }">
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_CSS() }">
 		<link type="text/css" rel="stylesheet" href="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=styles.css' }">
 	</MvIF>
 
 	<MvASSIGN NAME = "g.Element_ComponentsAndLayouts_CSS" VALUE = 1>
 </MvFUNCTION>
-
 
 <MvFUNCTION NAME = "Element_ComponentsAndLayouts_JavaScript" PARAMETERS = "tab" STANDARDOUTPUTLEVEL = "text, html">
 	<MvIF EXPR = "{ g.Element_ComponentsAndLayouts_JavaScript }">
@@ -834,7 +833,7 @@
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Feature_TUI_AD ].Element_PageLookup_Dialog_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_JavaScript() }">
-		
+
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
@@ -860,7 +859,6 @@
 
 	<MvASSIGN NAME = "g.Element_ComponentsAndLayouts_JavaScript" VALUE = 1>
 </MvFUNCTION>
-
 
 <MvFUNCTION NAME = "Element_DuplicateLayout_Dialog_HTML" STANDARDOUTPUTLEVEL = "html, text">
 	<MvIF EXPR = "{ g.Element_DuplicateLayout_Dialog_HTML }">
@@ -898,7 +896,6 @@
 <MvFUNCTION NAME = "Element_AngularApp_HTML" STANDARDOUTPUTLEVEL = "html, text">
 	<MvINCLUDE INTERPRET = "off" FILE = "angular_app/app.html">
 </MvFUNCTION>
-
 
 <MvCOMMENT>
 |
@@ -987,7 +984,7 @@
 			pushn
 			jmp_eq		L_asm_success
 			retn
-		L_asm_success:				
+		L_asm_success:
 	</MvASSEMBLY>
 </MvFUNCTION>
 
@@ -1118,7 +1115,7 @@
 					NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'O', l.provide_xml, 'Name', l.layout:name ) }">
 		<MvFUNCTIONRETURN>
 	</MvIF>
-	
+
 	<MvIF EXPR = "{ toupper( l.layout:code ) NE toupper( l.code ) }">
 		<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.existing_layout ) }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
@@ -1200,7 +1197,7 @@
 
 <MvFUNCTION NAME = "Module_Provision_Component_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>
-		<Component_Delete code="My_Code_Here">	
+		<Component_Delete code="My_Code_Here">
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
@@ -1262,7 +1259,7 @@
 			<Prompt>My Prompt</Prompt>
 			<Type>image</Type>
 			<Required>1</Required>
-		</ComponentAttribute_Update>	
+		</ComponentAttribute_Update>
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component',	l.component_code ) OR
@@ -1325,7 +1322,7 @@
 	<MvCOMMENT>
 		<ComponentAttributeOption_Add component="My_Component" code="Attribute_Code">
 			<Prompt>My Prompt</Prompt>
-		</ComponentAttributeOption_Add>	
+		</ComponentAttributeOption_Add>
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component',	l.component_code ) OR
@@ -1399,7 +1396,7 @@
 					</Value>
 				</Attribute>
 			</Attributes>
-		</LayoutComponent_Add>	
+		</LayoutComponent_Add>
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'layout',		l.layout_code ) OR
@@ -1541,7 +1538,6 @@
 			</MvIF>
 		</MvIF>
 
-		<MvASSIGN NAME = "l.layout_value_count"		VALUE = "{ l.layout_value_count + 1 }">
 		<MvASSIGN NAME = "l.layout_value:lc_id"		VALUE = "{ l.lc_id }">
 		<MvASSIGN NAME = "l.layout_value:attr_id"	VALUE = "{ l.component_option:id }">
 
@@ -1566,7 +1562,7 @@
 	<MvASSIGN NAME = "g.LayoutAndComponentsExport_Email"			VALUE = "{ trim( g.LayoutAndComponentsExport_Email ) }">
 	<MvASSIGN NAME = "g.LayoutAndComponentsExport_SendEmail"		VALUE = "{ [ g.Module_Admin ].Trim_Boolean( g.LayoutAndComponentsExport_SendEmail ) }">
 	<MvASSIGN NAME = "g.LayoutAndComponentsExport_Option"			VALUE = "{ trim( g.LayoutAndComponentsExport_Option ) }">
-	<MvASSIGN NAME = "g.LayoutAndComponents_Export_LayoutOption"	VALUE = "{ int( g.LayoutAndComponents_Export_LayoutOption ) }">
+	<MvASSIGN NAME = "g.LayoutAndComponentsExport_LayoutOption"		VALUE = "{ int( g.LayoutAndComponentsExport_LayoutOption ) }">
 
 	<MvIF EXPR = "{ ISNULL g.LayoutAndComponentsExport_File }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'LayoutAndComponentsExport_File', 'Please specify a file' ) }">
@@ -1585,14 +1581,14 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ g.LayoutAndComponentsExport_Option NE 'components' AND
-					g.LayoutAndComponentsExport_Option NE 'layout' }">
+					g.LayoutAndComponentsExport_Option NE 'layouts' }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'LayoutAndComponentsExport_Option', 'Please select an export option' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ g.LayoutAndComponentsExport_Option EQ 'layouts' AND
-					g.LayoutAndComponents_Export_LayoutOption GT 0 }">
-		<MvIF EXPR = "{ NOT Layout_Load_ID( g.LayoutAndComponents_Export_LayoutOption, l.layout ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'LayoutAndComponents_Export_LayoutOption', 'Please select a valid layout' ) }">
+					g.LayoutAndComponentsExport_LayoutOption GT 0 }">
+		<MvIF EXPR = "{ NOT Layout_Load_ID( g.LayoutAndComponentsExport_LayoutOption, l.layout ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Admin ].FieldError( '', 'LayoutAndComponentsExport_LayoutOption', 'Please select a valid layout' ) }">
 		</MvIF>
 	</MvIF>
 
@@ -1618,17 +1614,15 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	<MvELSEIF EXPR = "{ g.LayoutAndComponentsExport_Option EQ 'layouts' }">
-		<MvIF EXPR = "{ g.LayoutAndComponents_Export_LayoutOption EQ 0 }">
-			<MvCOMMENT><MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_Layouts( l.output_file, g.LayoutAndComponentsExport_Export_ExportedCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount ) }">
+		<MvIF EXPR = "{ g.LayoutAndComponentsExport_LayoutOption EQ 0 }">
+			<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_Layouts( l.output_file, g.LayoutAndComponentsExport_Export_ExportedCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount, g.LayoutAndComponents_Export_ExportedLayoutsCount, g.LayoutAndComponents_Export_ExportedLayoutsTotalCount ) }">
 				<MvFUNCTIONRETURN VALUE = 0>
-			</MvIF></MvCOMMENT>
+			</MvIF>
 		<MvELSE>
-		<MvCOMMENT>	<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_Layout( l.output_file, g.LayoutAndComponents_Export_LayoutOption, g.LayoutAndComponentsExport_Export_ExportedCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount ) }">
+			<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_Layout( l.output_file, g.LayoutAndComponentsExport_LayoutOption, g.LayoutAndComponentsExport_Export_ExportedCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount, g.LayoutAndComponents_Export_ExportedLayoutsCount, g.LayoutAndComponents_Export_ExportedLayoutsTotalCount ) }">
 				<MvFUNCTIONRETURN VALUE = 0>
-			</MvIF></MvCOMMENT>
+			</MvIF>
 		</MvIF>
-	<MvELSE>
-		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutAndComponentsExport_Calculate_Counts( l.exported_count, l.total_count ) }">
@@ -1646,7 +1640,8 @@
 
 		<MvHIDE FIELDS = "g.Module_Code, g.LayoutAndComponentsExport_Export_Initialized, g.Reset, g.LayoutAndComponentsExport_Working_Append,
 						  g.LayoutAndComponentsExport_File, g.LayoutAndComponentsExport_Append, g.LayoutAndComponentsExport_Email, g.LayoutAndComponentsExport_SendEmail,
-						  g.LayoutAndComponentsExport_Option, g.LayoutAndComponentsExport_LayoutOption, g.LayoutAndComponentsExport_Export_ExportedCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount">
+						  g.LayoutAndComponentsExport_Option, g.LayoutAndComponentsExport_LayoutOption, g.LayoutAndComponentsExport_Export_ExportedCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount,
+						  g.LayoutAndComponents_Export_ExportedLayoutsCount, g.LayoutAndComponents_Export_ExportedLayoutsTotalCount, g.LayoutAndComponents_Export_LastLayoutID">
 		<script type="text/javascript">
 			function exp_continue()
 			{
@@ -1775,12 +1770,16 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutAndComponentsExport_Initialize_Export" PARAMETERS = "directory, output_file" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Initialize_Export" PARAMETERS = "directory, output_file" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ g.LayoutAndComponentsExport_Export_Initialized }">
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
 
-	<MvASSIGN NAME = "g.LayoutAndComponentsExport_Export_ExportedCount" VALUE = 0>
+	<MvASSIGN NAME = "g.LayoutAndComponentsExport_Export_ExportedCount"			VALUE = 0>
+	<MvASSIGN NAME = "g.LayoutAndComponents_Export_ExportedLayoutsCount"		VALUE = 0>
+	<MvASSIGN NAME = "g.LayoutAndComponents_Export_LastLayoutID"				VALUE = -1>
+	<MvASSIGN NAME = "g.LayoutAndComponentsExport_Export_ExportedTotalCount"	VALUE = 0>
+	<MvASSIGN NAME = "g.LayoutAndComponents_Export_ExportedLayoutsTotalCount"	VALUE = 0>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_Utilities ].EnsurePathExists( 'data', l.directory ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
@@ -1797,12 +1796,12 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	<MvELSEIF EXPR = "{ g.LayoutAndComponentsExport_Option EQ 'layouts' }">
-		<MvIF EXPR = "{ g.LayoutAndComponents_Export_LayoutOption EQ 0 }">
-			<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_LayoutsCount( g.LayoutAndComponentsExport_Export_ExportedTotalCount ) }">
+		<MvIF EXPR = "{ g.LayoutAndComponentsExport_LayoutOption EQ 0 }">
+			<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_AllLayoutsCount( g.LayoutAndComponents_Export_ExportedLayoutsTotalCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount ) }">
 				<MvFUNCTIONRETURN VALUE = 0>
 			</MvIF>
 		<MvELSE>
-			<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_LayoutCount( g.LayoutAndComponentsExport_Export_ExportedTotalCount ) }">
+			<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_LayoutCount( g.LayoutAndComponentsExport_LayoutOption, g.LayoutAndComponents_Export_ExportedLayoutsTotalCount, g.LayoutAndComponentsExport_Export_ExportedTotalCount ) }">
 				<MvFUNCTIONRETURN VALUE = 0>
 			</MvIF>
 		</MvIF>
@@ -1811,7 +1810,7 @@
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '<Module code="TGCOMPONENTS" feature="util">' ) }">
-	
+
 	<MvASSIGN NAME = "g.LayoutAndComponentsExport_Export_Initialized" VALUE = 1>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -1822,12 +1821,17 @@
 
 	<MvIF EXPR = "{ l.exported_count GE l.total_count }">
 		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '</Module>' ) }">
-		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( l.exported_count $ ' components & layouts data ' $ [ g.Module_Library_Utilities ].Plural( l.exported_count, 'record', 'records' ) $ ' exported to \'' $ l.output_file $ '\'' ) }">
+
+		<MvIF EXPR = "{ g.LayoutAndComponentsExport_Option EQ 'components' }">
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( l.exported_count $ [ g.Module_Library_Utilities ].Plural( l.exported_count, ' Component', ' Components' ) $ ' exported to \'' $ l.output_file $ '\'' ) }">
+		<MvELSE>
+			<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_ProgressComplete( g.LayoutAndComponentsExport_Export_ExportedCount $ [ g.Module_Library_Utilities ].Plural( l.exported_count, ' Component', ' Components' ) $ ' & ' $ g.LayoutAndComponents_Export_ExportedLayoutsCount $ [ g.Module_Library_Utilities ].Plural( l.exported_count, ' Layout', ' Layouts' ) $ ' exported to \'' $ l.output_file $ '\'' ) }">
+		</MvIF>
 
 		<MvIF EXPR = "{ g.LayoutAndComponentsExport_SendEmail }">
 			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_Utilities ].Send_Email_Attachment( g.LayoutAndComponentsExport_Email, g.LayoutAndComponentsExport_Email, '', 'Miva Merchant Components & Layouts Export', g.LayoutAndComponentsExport_File, l.directory, 'data' ) }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( '#Error#', 'LayoutAndComponentsExport Email Sent' ) }">
-		</MvIF>		
+		</MvIF>
 
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
@@ -1857,7 +1861,9 @@
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGComponents.d.EOF AND NOT g.LayoutAndComponentsExport_Export_NeedRefresh }">
-		<MvASSIGN NAME = "l.export_count" VALUE = "{ l.export_count + 1 }">
+		<MvASSIGN NAME = "l.component_attributes"	VALUE = "">
+		<MvASSIGN NAME = "l.export_count"			VALUE = "{ l.export_count + 1 }">
+
 		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Calculate_Counts( l.display_exported_count, l.display_total_count ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( l.display_exported_count, l.display_total_count ) }">
 
@@ -1897,10 +1903,10 @@
 		<MvIF EXPR = "{ ( s.globaltimeout EQ 0 ) OR ( s.globaltimeout GT 20 ) }">
 			<MvASSIGN NAME = "l.end_time" VALUE = "20">
 		<MvELSE>
-			<MvASSIGN NAME = "l.end_time" VALUE = "{ s.globaltimeout / 3 }">		
+			<MvASSIGN NAME = "l.end_time" VALUE = "{ s.globaltimeout / 3 }">
 		</MvIF>
 
-		<MvIF EXPR = "{ ( s.dyn_time_t - g.UserDataExport_Export_Time_Start ) GT l.end_time }">
+		<MvIF EXPR = "{ ( s.dyn_time_t - g.LayoutAndComponentsExport_Export_Time_Start ) GT l.end_time }">
 			<MvASSIGN NAME = "g.LayoutAndComponentsExport_Export_NeedRefresh" VALUE = 1>
 		</MvIF>
 
@@ -1916,6 +1922,208 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_Layout_LowLevel" PARAMETERS = "output_file, layout var, export_count var, total_count var, layout_export_count var, layout_total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ g.LayoutAndComponents_Export_LastLayoutID NE l.layout:id }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	<Layout_Add>' ) }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Code>' $ l.layout:code $ '</Code>' ) }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Name>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.layout:name ) $ '</Name>' ) }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	</Layout_Add>' ) }">
+
+		<MvASSIGN NAME = "g.LayoutAndComponents_Export_LastLayoutID"	VALUE = "{ l.layout:id }">
+		<MvASSIGN NAME = "l.layout_export_count"						VALUE = "{ l.layout_export_count + 1 }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( '#Error#', 'Layout \'' $ l.layout:code $ '\' exported' ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+	<MvASSIGN NAME = "l.offset"			VALUE = "{ l.export_count }">
+	<MvASSIGN NAME = "l.limit"			VALUE = 5000>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGLayoutComponents', 's' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 's.layout_id = ?', 'g.LayoutAndComponents_Export_LastLayoutID' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, 'disp_order', 'disp_order', 'disp_order' ) }">
+
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.Error_Message ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGLayoutComponentsExport', l.search_sql, l.search_fields, l.offset, l.limit) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGLayoutComponentsExport.d.EOF AND NOT g.LayoutAndComponentsExport_Export_NeedRefresh }">
+		<MvASSIGN NAME = "l.export_count" VALUE = "{ l.export_count + 1 }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Calculate_Counts( l.display_exported_count, l.display_total_count ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].Draw_ExportProgressBar_Update( l.display_exported_count, l.display_total_count ) }">
+
+		<MvIF EXPR = "{ NOT Component_Load_ID( TGLayoutComponentsExport.d.cmpnt_id, l.component ) }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponentsExport">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	<LayoutComponent_Add layout="' $ l.layout:code $ '" component="' $ l.component:code $ '">' ) }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Code>' 	$ TGLayoutComponentsExport.d.code													$ '</Code>' ) }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Name>' 	$ [ g.Module_Library_Utilities ].CDATA_Encode( TGLayoutComponentsExport.d.name )	$ '</Name>' ) }">
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Active>'	$ int( TGLayoutComponentsExport.d.active )											$ '</Active>' ) }">
+
+		<MvIF EXPR = "{ TGLayoutComponentsExport.d.parent GT 0 }">
+			<MvIF EXPR = "{ NOT LayoutComponent_Load_ID( TGLayoutComponentsExport.d.parent, l.parent_component ) }">
+				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponentsExport">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Parent>'	$ l.parent:code $ '</Parent>' ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ TGLayoutComponentsExport.d.dt_start }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Date_Start>' ) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Day>'		$ padl( time_t_dayofmonth( TGLayoutComponentsExport.d.dt_start, g.Merchant_Local_Timezone ),	2, '0' ) $ '</Day>' 	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Month>'	$ padl( time_t_month( TGLayoutComponentsExport.d.dt_start, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Month>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Year>'		$ padl( time_t_year( TGLayoutComponentsExport.d.dt_start, g.Merchant_Local_Timezone ),			4, '0' ) $ '</Year>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Hour>'		$ padl( time_t_hour( TGLayoutComponentsExport.d.dt_start, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Hour>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Minute>'	$ padl( time_t_min( TGLayoutComponentsExport.d.dt_start, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Minute>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Second>'	$ padl( time_t_sec( TGLayoutComponentsExport.d.dt_start, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Second>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		</Date_Start>' ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ TGLayoutComponentsExport.d.dt_end }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Date_End>' ) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Day>'		$ padl( time_t_dayofmonth( TGLayoutComponentsExport.d.dt_end, g.Merchant_Local_Timezone ),	2, '0' ) $ '</Day>' 	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Month>'	$ padl( time_t_month( TGLayoutComponentsExport.d.dt_end, g.Merchant_Local_Timezone ),		2, '0' ) $ '</Month>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Year>'		$ padl( time_t_year( TGLayoutComponentsExport.d.dt_end, g.Merchant_Local_Timezone ),		4, '0' ) $ '</Year>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Hour>'		$ padl( time_t_hour( TGLayoutComponentsExport.d.dt_end, g.Merchant_Local_Timezone ),		2, '0' ) $ '</Hour>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Minute>'	$ padl( time_t_min( TGLayoutComponentsExport.d.dt_end, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Minute>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Second>'	$ padl( time_t_sec( TGLayoutComponentsExport.d.dt_end, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Second>'	) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		</Date_End>' ) }">
+		</MvIF>
+
+		<MvASSIGN NAME = "l.attributes"		VALUE = "">
+		<MvASSIGN NAME = "l.layout_values"	VALUE = "">
+
+		<MvIF EXPR = "{	ComponentAttributes_Load_All( TGLayoutComponentsExport.d.cmpnt_id, l.attributes ) }">
+			<MvIF EXPR = "{ LayoutComponent_Load_Values( TGLayoutComponentsExport.d.id, l.attributes ) AND miva_array_filter( l.attributes, 1, l.attribute, 'NOT ISNULL l.attribute:value', l.attributes ) }">
+				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Attributes>' ) }">
+				<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.attributes">
+					<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			<Attribute code="' $ l.attribute:code $ '">' ) }">
+
+					<MvIF EXPR = "{ l.attribute:type EQ 'link' }">
+						<MvIF EXPR = "{ l.attribute:link:type EQ 'U' }">		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<LinkType>URL</LinkType>' ) }">
+						<MvELSEIF EXPR = "{ l.attribute:link:type EQ 'P' }">	<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<LinkType>Product</LinkType>' ) }">
+						<MvELSEIF EXPR = "{ l.attribute:link:type EQ 'C' }">	<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<LinkType>Category</LinkType>' ) }">
+						<MvELSEIF EXPR = "{ l.attribute:link:type EQ 'G' }">	<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<LinkType>Page</LinkType>' ) }">
+						<MvELSE>												<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<LinkType>None</LinkType>' ) }">
+						</MvIF>
+
+						<MvIF EXPR = "{ l.attribute:link:type NE 'N' AND NOT ISNULL l.attribute:link:value }">
+							<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.attribute:link:value ) $ '</Value>' ) }">
+						</MvIF>
+					<MvELSEIF EXPR = "{ l.attribute:type EQ 'product' }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ l.attribute:product:code $ '</Value>' ) }">
+					<MvELSEIF EXPR = "{ l.attribute:type EQ 'category' }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ l.attribute:category:code $ '</Value>' ) }">
+					<MvELSEIF EXPR = "{ l.attribute:type EQ 'imagetype' }">
+						<MvIF EXPR = "{ [ g.Module_Library_DB ].ImageType_Load_ID( l.attribute:value, l.imagetype ) }">
+							<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ l.imagetype:code $ '</Value>' ) }">
+						</MvIF>
+					<MvELSEIF EXPR = "{ l.attribute:type EQ 'multitext' }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ [ g.Module_Library_Utilities ].CDATA_Encode( miva_joinstring( l.attribute:value, '|', 'trim' ) ) $ '</Value>' ) }">
+					<MvELSEIF EXPR = "{ l.attribute:type EQ 'datetime' }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' ) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Day>'		$ padl( time_t_dayofmonth( l.attribute:value, g.Merchant_Local_Timezone ),	2, '0' ) $ '</Day>' 	) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Month>'	$ padl( time_t_month( l.attribute:value, g.Merchant_Local_Timezone ),		2, '0' ) $ '</Month>'	) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Year>'		$ padl( time_t_year( l.attribute:value, g.Merchant_Local_Timezone ),		4, '0' ) $ '</Year>'	) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Hour>'		$ padl( time_t_hour( l.attribute:value, g.Merchant_Local_Timezone ),		2, '0' ) $ '</Hour>'	) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Minute>'	$ padl( time_t_min( l.attribute:value, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Minute>'	) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Second>'	$ padl( time_t_sec( l.attribute:value, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Second>'	) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				</Value>' ) }">
+					<MvELSE>
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.attribute:value ) $ '</Value>' ) }">
+					</MvIF>
+					<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '			</Attribute>' ) }">
+				</MvFOREACH>
+
+				<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		</Attributes>' ) }">
+			</MvIF>
+		</MvIF>
+
+		<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	</LayoutComponent_Add>' ) }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Admin_Log_Action( '#Error#', 'Layout Component \'' $ TGLayoutComponentsExport.d.code $ '\' exported' ) }">
+
+		<MvIF EXPR = "{ ( s.globaltimeout EQ 0 ) OR ( s.globaltimeout GT 20 ) }">
+			<MvASSIGN NAME = "l.end_time" VALUE = "20">
+		<MvELSE>
+			<MvASSIGN NAME = "l.end_time" VALUE = "{ s.globaltimeout / 3 }">
+		</MvIF>
+
+		<MvIF EXPR = "{ ( s.dyn_time_t - g.LayoutAndComponentsExport_Export_Time_Start ) GT l.end_time }">
+			<MvASSIGN NAME = "g.LayoutAndComponentsExport_Export_NeedRefresh" VALUE = 1>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutComponentsExport" ROWS = 1>
+	</MvWHILE>
+
+	<MvIF EXPR = "{ g.LayoutAndComponentsExport_Export_NeedRefresh AND TGLayoutComponentsExport.d.EOF }">
+		<MvASSIGN NAME = "g.LayoutAndComponentsExport_Export_NeedRefresh"  VALUE = 0>
+	</MvIF>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponentsExport">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_Layout" PARAMETERS = "output_file, layout_id, export_count var, total_count var, layout_export_count var, layout_total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.export_count GE l.total_count }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Load_ID( l.layout_id, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_Layout_LowLevel( l.output_file, l.layout, l.export_count, l.total_count, l.layout_export_count, l.layout_total_count ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_Layouts" PARAMETERS = "output_file, export_count var, total_count var, layout_export_count var, layout_total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvIF EXPR = "{ l.export_count GE l.total_count }">
+		<MvFUNCTIONRETURN VALUE = 1>
+	</MvIF>
+
+	<MvASSIGN NAME = "l.search_query"	VALUE = "">
+	<MvASSIGN NAME = "l.offset"			VALUE = "{ l.layout_export_count }">
+	<MvASSIGN NAME = "l.limit"			VALUE = 5000>
+
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query, 's.*' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGLayouts', 's' ) }">
+
+	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB].SQL_Query_Build( l.search_query, l.search_fields ) }">
+
+	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.component_layouts_total_count ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.Error_Message ) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGLayouts', l.search_sql, l.search_fields, l.offset, l.limit) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvWHILE EXPR = "{ NOT TGLayouts.d.EOF AND NOT g.LayoutAndComponentsExport_Export_NeedRefresh }">
+		<MvEVAL EXPR = "{ Layout_Read( l.layout ) }">
+
+		<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_Layout_LowLevel( l.output_file, l.layout, l.export_count, l.total_count, l.layout_export_count, l.layout_total_count ) }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvSKIP NAME = "Merchant" VIEW = "TGLayouts" ROWS = 1>
+	</MvWHILE>
+
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutAndComponentsExport_Export_ComponentCount" PARAMETERS = "total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
@@ -1931,7 +2139,30 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_AllLayoutsCount" PARAMETERS = "layouts_total var, total_count var" STANDARDOUTPUTLEVEL = "">
+	<MvIF EXPR = "{ NOT LayoutAndComponentsExport_Export_LayoutsCount( l.layouts_total ) OR
+					NOT LayoutAndComponentsExport_Export_AllLayoutComponentsCount( l.total_count ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
 <MvFUNCTION NAME = "LayoutAndComponentsExport_Export_LayoutsCount" PARAMETERS = "total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGLayouts"
+				QUERY	= "{ 'SELECT COUNT( * ) AS total_count FROM ' $ g.Store_Table_Prefix $ 'TGLayouts' }">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvASSIGN NAME = "l.total_count" VALUE = "{ TGLayouts.d.total_count }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_AllLayoutComponentsCount" PARAMETERS = "total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayoutComponents"
 				QUERY	= "{ 'SELECT COUNT( * ) AS total_count FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents' }">
@@ -1945,11 +2176,13 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_LayoutCount" PARAMETERS = "total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_LayoutCount" PARAMETERS = "layout_id, layouts_total var, total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.layouts_total" VALUE = 1>
+
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayoutComponents"
 				QUERY	= "{ 'SELECT COUNT( * ) AS total_count FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ?' }"
-				FIELDS	= "g.LayoutAndComponentsExport_LayoutOption">
+				FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
 	</MvIF>
@@ -1965,8 +2198,11 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutAndComponentsExport_Calculate_Counts" PARAMETERS = "exported_count var, total_count var" STANDARDOUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.total_count" 	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedTotalCount }">
-	<MvASSIGN NAME = "l.exported_count"	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedCount }">
+	<MvASSIGN NAME = "l.exported_count"	VALUE = 0>
+	<MvASSIGN NAME = "l.total_count"	VALUE = 0>
+
+	<MvASSIGN NAME = "l.exported_count"	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedCount + g.LayoutAndComponents_Export_ExportedLayoutsCount }">
+	<MvASSIGN NAME = "l.total_count" 	VALUE = "{ g.LayoutAndComponentsExport_Export_ExportedTotalCount + g.LayoutAndComponents_Export_ExportedLayoutsTotalCount }">
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -2257,7 +2493,7 @@
 		<MvIF EXPR = "{ NOT Components_Update_Offsets_PastEnd( l.pastend, l.pastend_count ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
-	</MvIF>		
+	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -2602,7 +2838,7 @@
 		<MvIF EXPR = "{ NOT ComponentAttribute_Update_Offsets_PastEnd( l.cmpnt_id, l.pastend, l.pastend_count ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
-	</MvIF>		
+	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -2888,7 +3124,7 @@
 		<MvIF EXPR = "{ NOT ComponentOptions_Update_Offsets_PastEnd( l.data_id, l.pastend, l.pastend_count ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
-	</MvIF>		
+	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -3058,14 +3294,14 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Layout_Duplicate_LowLevel" PARAMETERS = "layout_id, layout_components var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Layout_Duplicate_LowLevel" PARAMETERS = "layout_id, layout_components var, disp_order var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>
 	|
 	|	Recursive Function that will duplicate the layout components.
 	|
 	</MvCOMMENT>
 
-	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
+	<MvIF EXPR = "{ ISNULL l.disp_order }"> <MvASSIGN NAME = "l.disp_order" VALUE = 0> </MvIF>
 
 	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.layout_components:children">
 		<MvASSIGN NAME = "l.layout_component:layout_id"		VALUE = "{ l.layout_id }">
@@ -3082,7 +3318,7 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
-		<MvIF EXPR = "{ NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout_component ) }">
+		<MvIF EXPR = "{ NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout_component, l.disp_order ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvFOREACH>
@@ -3091,8 +3327,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Layout_Duplicate" PARAMETERS = "layout_id, duplicate_layout_id" STANDARDOUTPUTLEVEL = "">
+	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
+
 	<MvIF EXPR = "{ NOT LayoutComponents_Load_Parent( l.duplicate_layout_id, 0, l.layout:children ) OR
-					NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout ) }">
+					NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout, l.disp_order ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -3751,10 +3989,9 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvIF>
-	
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
-
 
 <MvCOMMENT>
 |
@@ -4069,7 +4306,7 @@
 																		 type:attr.type,
 																		 required:attr.required',
 																		'attr.disp_order;opt.disp_order' ) }">
-																			
+
 	<MvASSIGN NAME = "l.search_sql" VALUE = "{ [ g.Module_Library_DB ].SQL_Query_Build( l.search_query, l.search_fields ) }">
 
 	<MvOPENVIEW NAME	= "Merchant"
@@ -4386,7 +4623,7 @@
 	<MvIF EXPR = "{ Components_Load_All( l.components ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
 	</MvIF>
-	
+
 	<MvFUNCTIONRETURN VALUE = "[]">
 </MvFUNCTION>
 
@@ -4615,8 +4852,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponents_Save" PARAMETERS = "layout_id, layout_components var, deleted_components var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT LayoutComponents_Save_LowLevel( l.layout_id, l.layout_components )	OR
-					NOT LayoutComponents_Delete_Components( l.deleted_components )			OR
+	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
+
+	<MvIF EXPR = "{ NOT LayoutComponents_Save_LowLevel( l.layout_id, l.layout_components, l.disp_order )	OR
+					NOT LayoutComponents_Delete_Components( l.deleted_components )							OR
 					NOT LayoutCache_Recache( l.layout_id, l.null ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -4681,18 +4920,18 @@
 					NOT Runtime_LayoutComponents_Load_Parent( l.layout_id, 0, l.layout ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
-	
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutComponents_Save_LowLevel" PARAMETERS = "layout_id, layout_components var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutComponents_Save_LowLevel" PARAMETERS = "layout_id, layout_components var, disp_order var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>
 	|
 	|	Recursive Function that will update the layout components.
 	|
 	</MvCOMMENT>
 
-	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
+	<MvIF EXPR = "{ ISNULL l.disp_order }"> <MvASSIGN NAME = "l.disp_order" VALUE = 0> </MvIF>
 
 	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.layout_components:children">
 		<MvASSIGN NAME = "l.layout_component:layout_id"		VALUE = "{ l.layout_id }">
@@ -4713,7 +4952,7 @@
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
-		<MvIF EXPR = "{ NOT LayoutComponents_Save_LowLevel( l.layout_id, l.layout_component ) }">
+		<MvIF EXPR = "{ NOT LayoutComponents_Save_LowLevel( l.layout_id, l.layout_component, l.disp_order ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvFOREACH>
@@ -4815,7 +5054,7 @@
 |
 </MvCOMMENT>
 
-<MvFUNCTION NAME = "Parse_Function_Parameters" PARAMETERS = "string, function_name var, parameters var, parameter_count var" STANDARDOUTPUTLEVEL = "">	
+<MvFUNCTION NAME = "Parse_Function_Parameters" PARAMETERS = "string, function_name var, parameters var, parameter_count var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.parameter_count" 	VALUE = 0>
 	<MvASSIGN NAME = "l.loop_counter" 		VALUE = 0>
 	<MvASSIGN NAME = "l.string" 			VALUE = "{ trim( l.string ) }">
