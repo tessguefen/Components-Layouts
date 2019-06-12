@@ -659,6 +659,30 @@
 						NOT [ g.Module_Library_DB ].StoreKey_Delete( 'TGLayouts_Components' ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
+
+		<MvCOMMENT>
+		|
+		|	Update disp_order of component layouts per layout
+		|
+		</MvCOMMENT>
+
+		<MvIF EXPR = "{ Layout_Load_All( l.layouts ) }">
+			<MvFOREACH ITERATOR = "l.layout" ARRAY = "l.layouts">
+				<MvASSIGN NAME = "l.disp_order"					VALUE = 0>
+				<MvASSIGN NAME = "l.layout_component:children"	VALUE = "">
+
+				<MvIF EXPR = "{ LayoutComponents_Load_Parent( l.layout:id, 0, l.layout_component:children ) }">
+					<MvASSIGN NAME = "l.layout_component:layout_id"	VALUE = "{ l.layout:id }">
+					<MvASSIGN NAME = "l.layout_component:code"		VALUE = "{ l.layout:code }">
+					<MvASSIGN NAME = "l.layout_component:name"		VALUE = "{ l.layout:name }">
+					<MvASSIGN NAME = "l.layout_component:id"		VALUE = 0>
+
+					<MvIF EXPR = "{ NOT LayoutComponents_Save_LowLevel( l.layout:id, l.layout_component, l.disp_order ) }">
+						<MvFUNCTIONRETURN VALUE = 0>
+					</MvIF>
+				</MvIF>
+			</MvFOREACH>
+		</MvIF>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -733,8 +757,6 @@
 	<MvIF EXPR = "{ g.TGCOMPONENTS_Screen }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components', '', '' ) }">
 
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
-		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
 
 		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
 			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ encodeentities( g.Component_ID ) }">.
@@ -743,6 +765,9 @@
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS_SCREEN', 'TGCOMPONENTS_SCREEN_Components:Attributes' ) }">
+
+			<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+			<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
 
 			<MvHIDE FIELDS = "g.Module_Code,g.TGCOMPONENTS_Screen,g.Component_ID">
 
@@ -756,15 +781,17 @@
 	<MvELSE>
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components & Layouts', '', '' ) }">
 
-		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
-		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].DrawTabs( 'TGCOMPONENTS', 'TGCOMPONENTS_Layouts:Layouts,TGCOMPONENTS_Components:Components' ) }">
 
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_AdminUI_CSS() }">
+		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
+
 		<MvHIDE FIELDS = "g.Module_Code">
+
 
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
@@ -838,12 +865,12 @@
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
 
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=Layouts.js' }"></script>
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=components.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=Components.js' }"></script>
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Components_Batchlist(); } );
 		</script>
@@ -1033,9 +1060,9 @@
 	<MvELSEIF EXPR = "{ ( '.css' EIN g.Filename ) EQ len_var( g.Filename ) }">	<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ g.Filename EQ 'components.js' }">				<MvINCLUDE FILE = "js/components.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">				<MvINCLUDE FILE = "js/layouts.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'ComponentAttributes.js' }">	<MvINCLUDE FILE = "js/component_attrs.js" INTERPRET="OFF">
+	<MvIF EXPR = "{ g.Filename EQ 'Components.js' }">				<MvINCLUDE FILE = "js/Components.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'Layouts.js' }">				<MvINCLUDE FILE = "js/Layouts.js" INTERPRET="OFF">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'ComponentAttributes.js' }">	<MvINCLUDE FILE = "js/ComponentAttributes.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">			<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">	<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">					<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
@@ -1464,6 +1491,10 @@
 			<MvASSIGN NAME = "l.null" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml:children[ l.child_pos ] ) }">
 		</MvIF>
+
+		<MvIF EXPR = "{ NOT LayoutComponents_DisplayOrder_Update_Values( l.layout_id, l.layout_component:disp_order ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml:children[ l.child_pos ] ) }">
+		</MvIF>
 	</MvIF>
 </MvFUNCTION>
 
@@ -1493,7 +1524,7 @@
 				<MvFUNCTIONRETURN>
 			</MvIF>
 
-			<MvIF EXPR = "{ l.layout_value:_value:type NE 'N' }">
+			<MvIF EXPR = "{ l.layout_value:value:type NE 'N' }">
 				<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml:children[ l.child_pos ], 'Value', l.layout_value:value:value ) }">
 					<MvFUNCTIONRETURN>
 				</MvIF>
@@ -1973,7 +2004,7 @@
 				<MvFUNCTIONRETURN VALUE = 0>
 			</MvIF>
 
-			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Parent>'	$ l.parent:code $ '</Parent>' ) }">
+			<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Parent>' $ l.parent_component:code $ '</Parent>' ) }">
 		</MvIF>
 
 		<MvIF EXPR = "{ TGLayoutComponentsExport.d.dt_start }">
@@ -3329,8 +3360,11 @@
 <MvFUNCTION NAME = "Layout_Duplicate" PARAMETERS = "layout_id, duplicate_layout_id" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
 
-	<MvIF EXPR = "{ NOT LayoutComponents_Load_Parent( l.duplicate_layout_id, 0, l.layout:children ) OR
-					NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout, l.disp_order ) }">
+	<MvIF EXPR = "{ NOT LayoutComponents_Load_Parent( l.duplicate_layout_id, 0, l.layout:children ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout, l.disp_order ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
@@ -3564,6 +3598,23 @@
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
 
 	<MvFUNCTIONRETURN VALUE = "{ l.return }">
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "LayoutComponents_DisplayOrder_Update_Values" PARAMETERS = "layout_id, disp_order" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvQUERY NAME	= "Merchant"
+			 QUERY	= "{ 'UPDATE ' 
+							$ g.Store_Table_Prefix $ 'TGLayoutComponents 
+						  SET 
+							disp_order = disp_order + 1 
+						  WHERE 
+						  	layout_id = ? AND
+							disp_order >= ?' }" 
+			 FIELDS	= "l.layout_id, l.disp_order">
+	<MvIF EXPR = "{ g.MvQUERY_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+	</MvIF>
+
+	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
 <MvCOMMENT>
