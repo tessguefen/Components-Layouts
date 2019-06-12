@@ -5038,7 +5038,7 @@
 
 			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ miva_array_serialize( l.attribute:category ) }">
 		<MvELSEIF EXPR = "{ l.attribute:type EQ 'multitext' }">
-			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ glosub( l.attribute:value, asciichar( 10 ), '|' ) }">
+			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ miva_joinstring( l.attribute:value, asciichar( 10 ), 'trim' ) }">
 		</MvIF>
 
 		<MvIF EXPR = "{ NOT LayoutValue_Insert( l.attribute ) }">

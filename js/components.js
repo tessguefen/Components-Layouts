@@ -54,6 +54,13 @@ Components_Batchlist.prototype.onLoad = Components_Batchlist_Load_Query;
 
 Components_Batchlist.prototype.onCreateRootColumnList = function()
 {
+	var self = this;
+	var columnlist;
+	var allow_children_column;
+
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) )	allow_children_column = new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'alw_chldrn', 'Allow_Children', function( item, checked, delegator ) { self.Update_Allow_Children( item, checked, function(){}, delegator ); } );
+	else										allow_children_column = new MMBatchList_Column_Checkbox( 'Allow Nested Components ', 'alw_chldrn', 'Allow_Children' );
+
 	var columnlist =
 	[
 		new MMBatchList_Column_Name( 'Component ID', 'id', 'Id')
@@ -73,6 +80,7 @@ Components_Batchlist.prototype.onCreateRootColumnList = function()
 
 			return element;
 		}),
+		allow_children_column,
 		new MMBatchList_Column( 'Display Order', 'disp_order')
 		.SetDisplayInList( false )
 		.SetSearchable( false )
@@ -80,11 +88,6 @@ Components_Batchlist.prototype.onCreateRootColumnList = function()
 		.SetUpdateOnModifiedOnly( true )
 	];
 
-	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
-		columnlist.push( new MMBatchList_Column_CheckboxSlider( 'Allow Nested Components', 'alw_chldrn', 'Allow_Children', function( item, checked, delegator ) {Components_Batchlist.Update_Allow_Children( item, checked, function(){}, delegator ); } ) );
-	} else {
-		columnlist.push( new MMBatchList_Column_Checkbox( 'Allow Nested Components ', 'alw_chldrn', 'Allow_Children' ) );
-	}
 
 	return columnlist;
 }
@@ -118,7 +121,7 @@ Components_Batchlist.prototype.onDelete = function( item, callback, delegator )
 	Components_Batchlist_Function( item.record.mmbatchlist_fieldlist, 'Component_Delete', callback, delegator );
 }
 
-Components_Batchlist.Update_Allow_Children = function( item, checked, callback, delegator )
+Components_Batchlist.prototype.Update_Allow_Children = function( item, checked, callback, delegator )
 {
 	for ( i = 0; i < item.record.mmbatchlist_fieldlist.length; i++ ) {
 		if ( item.record.mmbatchlist_fieldlist[ i ].name == 'alw_chldrn' ) {
