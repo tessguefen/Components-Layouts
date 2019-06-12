@@ -34,21 +34,14 @@ function ComponentAttributes_Batchlist_Option_Function( parentlist, fieldlist, _
 									   delegator );
 }
 
-function ComponentAttributes_Batchlist_DisplayOrder( fields, _function, callback, delegator )
+function ComponentAttributes_Batchlist_DisplayOrder( fieldlist, _function, callback, delegator )
 {
-	var i;
-	var parameters = 'cmpnt_id=' + encodeURIComponent( cmpnt_id );
-
-	for ( i = 0; i < fields.length; i++ ) {
-		parameters += ( parameters.length ? '&' : '' ) + encodeURIComponent( fields[ i ].name ) + '=' + encodeURIComponent( fields[ i ].value );
-	}
-
 	return AJAX_Call_Module_FieldList( callback,
 									   'admin',
 									   'TGCOMPONENTS',
 									   _function,
-									   parameters,
-									   '',
+									   'cmpnt_id=' + encodeURIComponent( cmpnt_id ),
+									   fieldlist,
 									   delegator );
 }
 
