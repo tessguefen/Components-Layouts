@@ -855,6 +855,8 @@
 
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
 
+	<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
+
 	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Layouts' }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
@@ -865,17 +867,17 @@
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
 
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=Layouts.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=Components.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=components.js' }"></script>
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Components_Batchlist(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_SCREEN_Components' }">
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=ComponentAttributes.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=componentattributelist.js' }"></script>
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].JavaScript_Set_A_Variable( 'cmpnt_id', g.Component_ID ) }">
 
@@ -1060,14 +1062,15 @@
 	<MvELSEIF EXPR = "{ ( '.css' EIN g.Filename ) EQ len_var( g.Filename ) }">	<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
 	</MvIF>
 
-	<MvIF EXPR = "{ g.Filename EQ 'Components.js' }">				<MvINCLUDE FILE = "js/Components.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'Layouts.js' }">				<MvINCLUDE FILE = "js/Layouts.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'ComponentAttributes.js' }">	<MvINCLUDE FILE = "js/ComponentAttributes.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">			<MvINCLUDE FILE = "angular_app/angular.min.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">	<MvINCLUDE FILE = "angular_app/angular-ui-tree.min.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">					<MvINCLUDE FILE = "angular_app/app.js" INTERPRET="OFF">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'styles.css' }">				<MvINCLUDE FILE = "angular_app/styles.css" INTERPRET="OFF">
-	<MvELSE>														<MvASSIGN NAME = "l.null" VALUE = "{ miva_output_header( 'Status', '404 Not Found' ) }">
+	<MvIF EXPR = "{ g.Filename EQ 'functions.js' }">					<MvINCLUDE INTERPRET = "off" FILE = "js/functions.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'components.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "js/components.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">					<MvINCLUDE INTERPRET = "off" FILE = "js/layouts.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'componentattributelist.js' }">	<MvINCLUDE INTERPRET = "off" FILE = "js/componentattributelist.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular.min.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">		<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular-ui-tree.min.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'app.js' }">						<MvINCLUDE INTERPRET = "off" FILE = "angular_app/app.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'styles.css' }">					<MvINCLUDE INTERPRET = "off" FILE = "angular_app/styles.css">
+	<MvELSE>															<MvASSIGN NAME = "l.null" VALUE = "{ miva_output_header( 'Status', '404 Not Found' ) }">
 	</MvIF>
 </MvFUNCTION>
 
@@ -4451,7 +4454,7 @@
 
 	<MvASSIGN NAME = "l.component_attribute_types" VALUE = "{ ComponentAttribute_Types() }">
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Component_Id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Component_ID',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component_attribute:code )															OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_attribute:prompt )															OR
 					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',			l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
@@ -4481,8 +4484,8 @@
 
 	<MvASSIGN NAME = "l.component_attribute_types" VALUE = "{ ComponentAttribute_Types() }">
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',				l.component_attribute:id,	-1, -1 )													OR
-					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Component_Id',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'ID',				l.component_attribute:id,	-1, -1 )													OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Component_ID',	l.component_attribute:cmpnt_id,	-1, -1 )												OR
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component_attribute:code )															OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_attribute:prompt )															OR
 					NOT [ g.Module_JSON ].JSON_Input_List(		'R', 'Type',			l.component_attribute:type,	l.component_attribute_types, l.component_attribute_types )	OR
@@ -4516,7 +4519,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Id', l.id, -1, -1 ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'ID', l.id, -1, -1 ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -4598,13 +4601,13 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_Id',	l.component_option:attr_id,	-1, -1 ) OR
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_ID',	l.component_option:attr_id,	-1, -1 ) OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.null ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_Id', 'Attribute not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_ID', 'Attribute not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.component_option ) }">
@@ -4619,8 +4622,8 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',				l.component_option:id,	-1, -1 )		OR
-					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_Id',	l.component_option:attr_id,	-1, -1 )	OR
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'ID',				l.component_option:id,	-1, -1 )		OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_ID',	l.component_option:attr_id,	-1, -1 )	OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
@@ -4641,7 +4644,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Id', l.id, -1, -1 ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'ID', l.id, -1, -1 ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
