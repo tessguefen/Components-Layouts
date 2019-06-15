@@ -1,7 +1,7 @@
 function ComponentAttributes_List( cmpnt_id )
 {
 	var self = this;
-	self.cmpnt_id = cmpnt_id;
+	self.component_id = cmpnt_id;
 
 	MMBatchList.call( self, 'tgcomponents_componentattributes' );
 
@@ -38,7 +38,10 @@ function ComponentAttributes_List( cmpnt_id )
 
 DeriveFrom( MMBatchList, ComponentAttributes_List );
 
-ComponentAttributes_List.prototype.onLoad = ComponentAttributes_Load_Query( this.cmpnt_id );
+ComponentAttributes_List.prototype.onLoad = function( filter, sort, offset, count, callback, delegator )
+{
+	return ComponentAttributes_Load_Query( this.component_id, filter, sort, offset, count, callback, delegator ); 
+}
 
 ComponentAttributes_List.prototype.onCreateRootColumnList = function()
 {
@@ -159,10 +162,9 @@ ComponentAttributes_List.prototype.onCreate = function()
 {
 	var record;
 
-
 	record			= new Object();
 	record.id		= 0;
-	record.cmpnt_id	= this.cmpnt_id;
+	record.cmpnt_id	= this.component_id;
 	record.code		= '';
 	record.prompt	= '';
 	record.required	= 0;
@@ -183,7 +185,7 @@ ComponentAttributes_List.prototype.onInsert = function( item, callback, delegato
 
 ComponentAttributes_List.prototype.onDisplayOrderSave = function( fieldlist, callback )
 {
-	ComponentAttributes_DisplayOrder_Update( this.cmpnt_id, fieldlist, callback, '' );
+	ComponentAttributes_DisplayOrder_Update( this.component_id, fieldlist, callback, '' );
 }
 
 ComponentAttributes_List.prototype.onSetDisplayOrder = function( recordlist, start_index )
@@ -251,7 +253,6 @@ ComponentAttributes_List.prototype.Field_RowSupportsChildren_Hook = function( it
 
 	return true;
 } 
-
 
 ComponentAttributes_List.prototype.onProcessLoadedData = function( recordlist, start_index )
 {
@@ -367,3 +368,4 @@ Fields_Column_Type.prototype.onDisplayData = function( record )
 
 	return text;
 }
+

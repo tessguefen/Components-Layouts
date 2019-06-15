@@ -38,7 +38,6 @@ function ComponentAttribute_Update( data, callback, delegator )
 
 function ComponentAttribute_Delete( id, callback, delegator )
 {
-	{
 	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'ComponentAttribute_Delete',
 	{
 		ID: id
@@ -51,7 +50,7 @@ function ComponentAttributes_DisplayOrder_Update( cmpnt_id, fieldlist, callback,
 									   'admin',
 									   'TGCOMPONENTS',
 									   'ComponentAttributes_DisplayOrder_Update',
-									   'cmpnt_id=' + encodeURIComponent( cmpnt_id ),
+									   'Component_ID=' + encodeURIComponent( cmpnt_id ),
 									   fieldlist,
 									   delegator );
 }
@@ -77,21 +76,8 @@ function ComponentOption_Update( parent_data, data, callback, delegator )
 
 function ComponentOption_Delete( id, callback, delegator )
 {
-	{
 	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'ComponentOption_Delete',
 	{
 		ID: id
 	}, delegator );
-}
-
-
-function ComponentAttributes_Batchlist_Option_Function( parentlist, fieldlist, _function, callback, delegator )
-{ 
-	return AJAX_Call_Module_FieldList( callback,
-									   'admin',
-									   'TGCOMPONENTS',
-									   _function,
-									   'Attribute_Id=' + encodeURIComponent( parentlist.id ),
-									   fieldlist,
-									   delegator );
 }

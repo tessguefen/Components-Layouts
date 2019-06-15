@@ -855,8 +855,6 @@
 
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
 
-	<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
-
 	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Layouts' }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_CategoryLookup_Dialog_JavaScript() }">
@@ -867,22 +865,26 @@
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=angular-ui-tree.min.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
 
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
+
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=components.js' }"></script>
 		<script language="JavaScript">
 			MMScreen_LoadFinished( function() { new Components_Batchlist(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_SCREEN_Components' }">
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=componentattributelist.js' }"></script>
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].JavaScript_Set_A_Variable( 'cmpnt_id', g.Component_ID ) }">
 
 		<script language="JavaScript">
-			MMScreen_LoadFinished( function() { new ComponentAttributes_Batchlist( cmpnt_id ); } );
+			MMScreen_LoadFinished( function() { new ComponentAttributes_List( cmpnt_id ); } );
 		</script>
 	</MvIF>
 
@@ -4330,11 +4332,20 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
-	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
-	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
-	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Count ) }">
-	<MvASSIGN NAME = "g.cmpnt_id"		VALUE = "{ int( g.cmpnt_id ) }">
+	<MvASSIGN NAME = "l.filter"			VALUE = "">
+	<MvASSIGN NAME = "l.sort"			VALUE = "">
+	<MvASSIGN NAME = "l.offset"			VALUE = 0>
+	<MvASSIGN NAME = "l.count"			VALUE = 0>
+	<MvASSIGN NAME = "g.cmpnt_id"		VALUE = 0>
+
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Filter(	'o', 'Filter',			l.filter )				OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Sort',			l.sort )				OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'o', 'Offset',			l.offset,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'o', 'Count',			l.count,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'o', 'Component_ID',	g.cmpnt_id,	-1, -1 ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
+	</MvIF>
+
 	<MvASSIGN NAME = "l.search_query"	VALUE = "">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query, 'attr.id				AS attr_id,
@@ -4352,9 +4363,9 @@
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_LEFT_OUTER_JOIN( l.search_query, 'attr', g.Store_Table_Prefix $ 'TGComponentOptions', 'opt', 'opt.attr_id = attr.id', '' ) }">
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 'attr.cmpnt_id = ?', 'g.cmpnt_id' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'code:attr.code;opt.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, l.filter,'code:attr.code;opt.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, g.Sort,
+	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, l.sort,
 																		'code:attr.code;opt.code,
 																		 prompt:attr.prompt;opt.prompt,
 																		 type:attr.type,
