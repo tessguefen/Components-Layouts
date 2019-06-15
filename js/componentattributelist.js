@@ -7,7 +7,6 @@ function ComponentAttributes_List( cmpnt_id )
 	this.branch_options = this.AddBranch( this.CreateColumnList_Options(), 'options' );
 	this.Branch_SetCreateFunction( this.branch_options, this.Option_Create );
 
-	self.Branch_SetInsertFunction( self.branch_options, self.Option_Insert );
 	this.Branch_SetInsertFunction( this.branch_options, this.Option_Insert );
 	this.Branch_SetSaveFunction( this.branch_options, this.Option_Save );
 	this.Branch_SetDeleteFunction( this.branch_options, this.Option_Delete );
