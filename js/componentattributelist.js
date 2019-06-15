@@ -1,112 +1,104 @@
 function ComponentAttributes_List( cmpnt_id )
 {
-	var self = this;
-	self.component_id = cmpnt_id;
+	this.cmpnt_id = cmpnt_id;
 
-	MMBatchList.call( self, 'tgcomponents_componentattributes' );
+	MMBatchList.call( this, 'tgcomponents_componentattributes' );
 
-	self.branch_options = self.AddBranch( self.CreateColumnList_Options(), 'options' );
-	self.Branch_SetCreateFunction( self.branch_options, self.Option_Create );
+	this.branch_options = this.AddBranch( this.CreateColumnList_Options(), 'options' );
+	this.Branch_SetCreateFunction( this.branch_options, this.Option_Create );
 
 	self.Branch_SetInsertFunction( self.branch_options, self.Option_Insert );
-	self.Branch_SetSaveFunction( self.branch_options, self.Option_Save );
-	self.Branch_SetDeleteFunction( self.branch_options, self.Option_Delete );
-	self.Branch_SetFindIndex_ParamsFunction( this.branch_options, this.Option_FindIndex_Params );
-	self.Branch_SetFindIndex_CompareFunction( this.branch_options, this.Option_FindIndex_Compare );
+	this.Branch_SetInsertFunction( this.branch_options, this.Option_Insert );
+	this.Branch_SetSaveFunction( this.branch_options, this.Option_Save );
+	this.Branch_SetDeleteFunction( this.branch_options, this.Option_Delete );
+	this.Branch_SetFindIndex_ParamsFunction( this.branch_options, this.Option_FindIndex_Params );
+	this.Branch_SetFindIndex_CompareFunction( this.branch_options, this.Option_FindIndex_Compare );
 
-	self.Feature_Add_RowSupportsChildren_AddHook( self.Field_RowSupportsChildren_Hook );
+	this.Feature_Add_RowSupportsChildren_AddHook( this.Field_RowSupportsChildren_Hook );
 
-	if ( CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) ) {
-		self.Feature_Add_Enable( 'Add Field', 'Save Field', 'Add Option', 'Cancel', 'Add Field', 'Save Field', 'Add Option', '' );
+	if ( CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) )
+	{
+		this.Feature_Add_Enable( 'Add Field', 'Save Field', 'Add Option', 'Cancel', 'Add Field', 'Save Field', 'Add Option', '' );
 	}
 
-	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
-		self.Feature_Edit_Enable( 'Edit Field(s)' );
-		self.Feature_RowDoubleClick_Enable();
-		self.Feature_DisplayOrder_Enable( 'disp_order', 'Components_Order' );
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) )
+	{
+		this.Feature_Edit_Enable( 'Edit Field(s)' );
+		this.Feature_RowDoubleClick_Enable();
+		this.Feature_DisplayOrder_Enable( 'disp_order', 'Components_Order' );
 	}
 
-	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
-		self.Feature_Delete_Enable( 'Delete Field(s)' );
+	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) )
+	{
+		this.Feature_Delete_Enable( 'Delete Field(s)' );
 	}
 
-	self.Feature_SearchBar_SetPlaceholderText( 'Search Fields...' );
-	self.SetDefaultSort( 'disp_order', '' );
+	this.Feature_SearchBar_SetPlaceholderText( 'Search Fields...' );
+	this.SetDefaultSort( 'disp_order', '' );
 
-	self.Branch_SetDisplayOrderPrefix( this.branch_options, 'Option_Order' );
+	this.Branch_SetDisplayOrderPrefix( this.branch_options, 'Option_Order' );
 }
 
 DeriveFrom( MMBatchList, ComponentAttributes_List );
 
 ComponentAttributes_List.prototype.onLoad = function( filter, sort, offset, count, callback, delegator )
 {
-	return ComponentAttributes_Load_Query( this.component_id, filter, sort, offset, count, callback, delegator ); 
+	return ComponentAttributes_Load_Query( this.cmpnt_id, filter, sort, offset, count, callback, delegator ); 
 }
 
 ComponentAttributes_List.prototype.onCreateRootColumnList = function()
 {
-	var columnlist;
-	var self = this;
-
-		self.id						=	new MMBatchList_Column_Name( 'ID', 'id', 'ID')
-											.SetDisplayInMenu(false)
-											.SetDisplayInList(false)
-											.SetAdvancedSearchEnabled(false)
-											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-		self.cmpnt_id				=	new MMBatchList_Column_Name( 'Component ID', 'cmpnt_id', 'Component_ID')
-											.SetDisplayInMenu(false)
-											.SetDisplayInList(false)
-											.SetAdvancedSearchEnabled(false)
-											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-		self.fields_code			=	new MMBatchList_Column_Text( 'Code', 'code', 'Code' )
-											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-		self.fields_prompt			=	new MMBatchList_Column_Text( 'Prompt', 'prompt', 'Prompt' )
-											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-		self.fields_type			=	new Fields_Column_Type();
-		self.fields_required		=	new MMBatchList_Column_Checkbox( 'Required', 'required', 'Required')
-											.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
-
-		self.fields_display_order	=	new MMBatchList_Column( 'Display Order', 'disp_order')
+	this.fields_id				=	new MMBatchList_Column_Name( 'ID', 'id', 'ID')
+										.SetDisplayInMenu(false)
+										.SetDisplayInList(false)
+										.SetAdvancedSearchEnabled(false)
+										.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
+	this.fields_cmpnt_id		=	new MMBatchList_Column_Name( 'Component ID', 'cmpnt_id', 'Component_ID')
+										.SetDisplayInMenu(false)
+										.SetDisplayInList(false)
+										.SetAdvancedSearchEnabled(false)
+										.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
+	this.fields_code			=	new MMBatchList_Column_Text( 'Code', 'code', 'Code' )
+										.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
+	this.fields_prompt			=	new MMBatchList_Column_Text( 'Prompt', 'prompt', 'Prompt' )
+										.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
+	this.fields_type			=	new Fields_Column_Type();
+	this.fields_required		=	new MMBatchList_Column_Checkbox( 'Required', 'required', 'Required')
+										.SetContentAttributeList( { 'class': 'mm9_batchlist_level_col' } );
+	this.fields_display_order	=	new MMBatchList_Column( 'Display Order', 'disp_order')
 										.SetDisplayInList( false )
 										.SetSearchable( false )
 										.SetSortByField( 'disp_order' )
-										.SetUpdateOnModifiedOnly( true ),
-	columnlist =
-	[
-		self.id,
-		self.cmpnt_id,
-		self.fields_code,
-		self.fields_prompt,
-		self.fields_type,
-		self.fields_required,
-		self.fields_display_order
+										.SetUpdateOnModifiedOnly( true );
+	return [
+		this.fields_id,
+		this.fields_cmpnt_id,
+		this.fields_code,
+		this.fields_prompt,
+		this.fields_type,
+		this.fields_required,
+		this.fields_display_order
 	];
-
-	return columnlist;
 }
 
 ComponentAttributes_List.prototype.CreateColumnList_Options = function()
 {
-	var self = this;
-	var columnlist =
-	[
-		new MMBatchList_Column_Code( 'Attribute ID', 'attr_id', 'Attribute_ID' )
-				.SetRootColumn( self.attr_id )
+	return [
+		new MMBatchList_Column_Name( 'Attribute ID', 'attr_id', 'Attribute_ID' )
+				.SetRootColumn( this.fields_id )
 				.SetSearchable( false )
 				.SetDisplayInList( false ),
 		new MMBatchList_Column_Code( 'Option ID', 'id', 'ID' )
-				.SetRootColumn( self.id )
+				.SetRootColumn( this.fields_cmpnt_id )
 				.SetSearchable( false )
 				.SetDisplayInList( false ),
 		new MMBatchList_Column_Name( 'Prompt', 'prompt', 'Prompt' )
-				.SetRootColumn( self.fields_prompt ),
+				.SetRootColumn( this.fields_prompt ),
 		new MMBatchList_Column( 'Display Order', 'disp_order')
 				.SetSortByField( 'disp_order' )
 				.SetSearchable( false )
 				.SetDisplayInList( false )
 	];
-
-	return columnlist;
 }
 
 ComponentAttributes_List.prototype.onRetrieveChildBranch = function( item )
@@ -155,7 +147,7 @@ ComponentAttributes_List.prototype.onSave = function( item, callback, delegator 
 		}
 	}
 
-	ComponentAttribute_Update( item.record.mmbatchlist_fieldlist, callback, delegator );
+	ComponentAttribute_Update( item.record, callback, delegator );
 }
 
 ComponentAttributes_List.prototype.onCreate = function()
@@ -164,7 +156,7 @@ ComponentAttributes_List.prototype.onCreate = function()
 
 	record			= new Object();
 	record.id		= 0;
-	record.cmpnt_id	= this.component_id;
+	record.cmpnt_id	= this.cmpnt_id;
 	record.code		= '';
 	record.prompt	= '';
 	record.required	= 0;
@@ -180,12 +172,12 @@ ComponentAttributes_List.prototype.onDelete = function( item, callback, delegato
 
 ComponentAttributes_List.prototype.onInsert = function( item, callback, delegator )
 {
-	ComponentAttribute_Insert( item.record.mmbatchlist_fieldlist, callback, delegator );
+	ComponentAttribute_Insert( item.record, callback, delegator );
 }
 
 ComponentAttributes_List.prototype.onDisplayOrderSave = function( fieldlist, callback )
 {
-	ComponentAttributes_DisplayOrder_Update( this.component_id, fieldlist, callback, '' );
+	ComponentAttributes_DisplayOrder_Update( this.cmpnt_id, fieldlist, callback, '' );
 }
 
 ComponentAttributes_List.prototype.onSetDisplayOrder = function( recordlist, start_index )
@@ -238,16 +230,18 @@ ComponentAttributes_List.prototype.Option_Insert = function( item, callback, del
 		return this.onerror( error );
 	}
 
-	ComponentOption_Insert( attribute_record, item.record.mmbatchlist_fieldlist, callback, delegator );
+	ComponentOption_Insert( attribute_record, item.record, callback, delegator );
 }
 
 ComponentAttributes_List.prototype.Field_RowSupportsChildren_Hook = function( item )
 {
-	if ( !item || !item.record ) {
+	if ( !item || !item.record )
+	{
 		return false;
 	}
 
-	if ( item.record.type != 'radio' && item.record.type != 'select' ){
+	if ( item.record.type != 'radio' && item.record.type != 'select' )
+	{
 		return false;
 	}
 
@@ -284,6 +278,8 @@ ComponentAttributes_List.prototype.Option_FindIndex_Params = function( item )
 
 ComponentAttributes_List.prototype.Option_FindIndex_Compare = function( item, params )
 {
+	if ( params == null ) return false;
+
 	var attribute_record = this.GetListItemRecord_Parent( item.index );
 
 	if ( item.record											&&
@@ -300,13 +296,13 @@ ComponentAttributes_List.prototype.Option_FindIndex_Compare = function( item, pa
 ComponentAttributes_List.prototype.Option_Save = function( item, callback, delegator )
 {
 	var parent_field = this.GetListItemRecord_Parent( item.index );
-	ComponentOption_Update( parent_field, item.record.mmbatchlist_fieldlist, callback, delegator );
+	ComponentOption_Update( parent_field, item.record, callback, delegator );
 
 }
 
 ComponentAttributes_List.prototype.Option_Delete = function( item, callback, delegator )
 {
-	ComponentOption_Delete( item.record.mmbatchlist_fieldlist, callback, delegator );
+	ComponentOption_Delete( item.record.id, callback, delegator );
 }
 
 function Fields_Column_Type()

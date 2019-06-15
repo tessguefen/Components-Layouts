@@ -4363,10 +4363,10 @@
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_LEFT_OUTER_JOIN( l.search_query, 'attr', g.Store_Table_Prefix $ 'TGComponentOptions', 'opt', 'opt.attr_id = attr.id', '' ) }">
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_WHERE( l.search_query, 'attr.cmpnt_id = ?', 'g.cmpnt_id' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, l.filter,'code:attr.code;opt.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, l.filter,'code:attr.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, l.sort,
-																		'code:attr.code;opt.code,
+																		'code:attr.code,
 																		 prompt:attr.prompt;opt.prompt,
 																		 type:attr.type,
 																		 required:attr.required',
