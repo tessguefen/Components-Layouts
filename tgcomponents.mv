@@ -867,6 +867,7 @@
 
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=duplicatelayoutdialog.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layoutdialog.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layoutlist.js' }"></script>
 
 		<script language="JavaScript">
@@ -1069,6 +1070,7 @@
 	<MvELSEIF EXPR = "{ g.Filename EQ 'componentlist.js' }">			<MvINCLUDE INTERPRET = "off" FILE = "js/componentlist.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'layoutlist.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "js/layoutlist.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'duplicatelayoutdialog.js' }">	<MvINCLUDE INTERPRET = "off" FILE = "js/duplicatelayoutdialog.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'layoutdialog.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "js/layoutdialog.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'componentattributelist.js' }">	<MvINCLUDE INTERPRET = "off" FILE = "js/componentattributelist.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular.min.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">		<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular-ui-tree.min.js">
