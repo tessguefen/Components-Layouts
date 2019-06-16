@@ -873,9 +873,9 @@
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=components.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=componentlist.js' }"></script>
 		<script language="JavaScript">
-			MMScreen_LoadFinished( function() { new Components_Batchlist(); } );
+			MMScreen_LoadFinished( function() { new Components_List(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_SCREEN_Components' }">
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
@@ -1065,7 +1065,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ g.Filename EQ 'functions.js' }">					<MvINCLUDE INTERPRET = "off" FILE = "js/functions.js">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'components.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "js/components.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'componentlist.js' }">			<MvINCLUDE INTERPRET = "off" FILE = "js/componentlist.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">					<MvINCLUDE INTERPRET = "off" FILE = "js/layouts.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'componentattributelist.js' }">	<MvINCLUDE INTERPRET = "off" FILE = "js/componentattributelist.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular.min.js">
@@ -4060,17 +4060,25 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvASSIGN NAME = "g.Filter"			VALUE = "{ trim( g.Filter ) }">
-	<MvASSIGN NAME = "g.Sort"			VALUE = "{ trim( g.Sort ) }">
-	<MvASSIGN NAME = "g.Offset"			VALUE = "{ int( g.Offset ) }">
-	<MvASSIGN NAME = "g.Count"			VALUE = "{ int( g.Count ) }">
+	<MvASSIGN NAME = "l.filter"			VALUE = "">
+	<MvASSIGN NAME = "l.sort"			VALUE = "">
+	<MvASSIGN NAME = "l.offset"			VALUE = 0>
+	<MvASSIGN NAME = "l.count"			VALUE = 0>
+
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Filter(	'o', 'Filter',			l.filter )				OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Sort',			l.sort )				OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'o', 'Offset',			l.offset,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Number(	'o', 'Count',			l.count,	-1, -1 ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
+	</MvIF>
+
 	<MvASSIGN NAME = "l.search_query"	VALUE = "">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_SELECT( l.search_query,'s.*' ) }">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponents', 's' ) }">
 
-	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, g.Filter,'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,alw_chldrn:s.alw_chldrn,disp_order:s.disp_order' ) }">
+	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, l.filter,'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,alw_chldrn:s.alw_chldrn,disp_order:s.disp_order' ) }">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields(l.search_query, g.Sort, 'id:s.id,code:s.code,name:s.name,descrip:s.descrip,image:s.image,alw_chldrn:s.alw_chldrn,disp_order:s.disp_order', 's.disp_order' ) }">
 
@@ -4078,18 +4086,18 @@
 
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error(g.Error_Code, g.Error_Message ) }">
-	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, g.Offset, g.Count) }">
+	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, l.offset, l.count) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( '#Error#', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvASSIGN NAME = "l.count" VALUE = 0>
+	<MvASSIGN NAME = "l.component_count" VALUE = 0>
 
 	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Response_Start() }">
 		{
 			"data":
 				[
-					<MvWHILE EXPR = "{ ( NOT TGComponents.d.EOF ) AND ( ( g.Count EQ 0 ) OR (l.count LT g.Count ) ) }">
-					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.count ) }">
+					<MvWHILE EXPR = "{ ( NOT TGComponents.d.EOF ) AND ( ( l.count EQ 0 ) OR (l.component_count LT l.count ) ) }">
+					<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.component_count ) }">
 					"id": <MvEVAL EXPR = "{ int( TGComponents.d.id ) }">,
 					"code" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.code ) }">",
 					"name" : "<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Encode( TGComponents.d.name ) }">",
@@ -4103,7 +4111,7 @@
 				],
 
 			"total_count": <MvEVAL EXPR = "{ int( l.total_count ) }">,
-			"start_offset": <MvEVAL EXPR = "{ int( g.Offset ) }">
+			"start_offset": <MvEVAL EXPR = "{ int( l.offset ) }">
 		}
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
 	}
@@ -4123,7 +4131,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.existing_component ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Component_Insert( l.component ) }">
@@ -4138,7 +4146,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',				l.component:id,	-1, -1 )	OR
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'ID',				l.component:id,	-1, -1 )	OR
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component:code )			OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',			l.component:name )			OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'o', 'Descrip',			l.component:descrip )		OR
@@ -4148,12 +4156,12 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Component_Load_ID( l.component:id, l.previous_component ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Id', 'Component not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'ID', 'Component not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ toupper( l.previous_component:code ) NE toupper( l.component:code ) }">
 		<MvIF EXPR = "{ Component_Load_Code( l.component:code, l.existing_component ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'A component with the code \'' $ l.existing_component:code $ '\' already exists' ) }">
 		</MvIF>
 	</MvIF>
 
@@ -4169,7 +4177,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Id', l.id, -1, -1 ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'ID', l.id, -1, -1 ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -4474,11 +4482,11 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Component_Load_ID( l.component_attribute:cmpnt_id, l.null ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'cmpnt_id', 'Component not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Component_ID', 'Component not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ ComponentAttribute_Load_Code( l.component_attribute:cmpnt_id, l.component_attribute:code, l.existing_component_attribute ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Insert( l.component_attribute ) }">
@@ -4505,16 +4513,16 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_attribute:id, l.previous_component_attribute ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Id', 'Attribute not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'ID', 'Attribute not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Component_Load_ID( l.component_attribute:cmpnt_id, l.null ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'cmpnt_id', 'Component not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Component_ID', 'Component not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ toupper( l.component_attribute:code ) NE toupper( l.previous_component_attribute:code ) }">
 		<MvIF EXPR = "{ ComponentAttribute_Load_Code( l.component_attribute:cmpnt_id, l.component_attribute:code, l.existing_component_attribute ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'An attribute with the code \'' $ l.existing_component_attribute:code $ '\' already exists' ) }">
 		</MvIF>
 	</MvIF>
 

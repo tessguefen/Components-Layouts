@@ -1,3 +1,62 @@
+// Component Functions
+
+function Components_Load_Query( filter, sort, offset, count, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Components_Load_Query',
+	{
+		Filter:			filter,
+		Sort:			sort,
+		Offset:			offset,
+		Count:			count
+	}, delegator );
+}
+
+function Component_Insert( data, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Component_Insert',
+	{
+		Code:			data.code,
+		Name:			data.name,
+		Descrip:		data.descrip,
+		Image:			data.image,
+		Allow_Children:	data.alw_chldrn
+	}, delegator );
+}
+
+function Component_Update( data, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Component_Update',
+	{
+		ID:				data.id,
+		Code:			data.code,
+		Name:			data.name,
+		Descrip:		data.descrip,
+		Image:			data.image,
+		Allow_Children:	data.alw_chldrn
+	}, delegator );
+}
+
+function Component_Delete( id, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Component_Delete',
+	{
+		ID: id
+	}, delegator );
+}
+
+function Component_DisplayOrder_Update( fieldlist, callback, delegator )
+{
+	return AJAX_Call_Module_FieldList( callback,
+									   'admin',
+									   'TGCOMPONENTS',
+									   'Components_DisplayOrder_Update',
+									   '',
+									   fieldlist,
+									   delegator );
+}
+
+// ComponentAttribute Functions
+
 function ComponentAttributes_Load_Query( cmpnt_id, filter, sort, offset, count, callback, delegator )
 {
 	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'ComponentAttributes_Load_Query',
@@ -7,7 +66,6 @@ function ComponentAttributes_Load_Query( cmpnt_id, filter, sort, offset, count, 
 		Offset:			offset,
 		Count:			count,
 		Component_ID:	cmpnt_id
-
 	}, delegator );
 }
 
