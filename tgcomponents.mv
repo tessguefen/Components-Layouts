@@ -464,8 +464,7 @@
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 		</MvIF>
 
-		<MvASSIGN NAME = "l.count"		VALUE = 0>
-		<MvASSIGN NAME = "l.layout_component"	VALUE = "">
+		<MvASSIGN NAME = "l.count" VALUE = 0>
 
 		<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
 			<MvASSIGN NAME = "l.layout_component" VALUE = "">
@@ -478,11 +477,12 @@
 			|	Query directly used for backwards compatibility. v2.000 updated `Component_Update`
 			|
 			</MvCOMMENT>
+
 			<MvQUERY NAME	= "Merchant"
 					 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
-							      SET
+								  SET
 									code = ?
-							      WHERE
+								  WHERE
 								    id = ?' }"
 					 FIELDS	= "l.layout_component:code, l.layout_component:id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
@@ -1087,7 +1087,7 @@
 |
 </MvCOMMENT>
 
-<MvFUNCTION NAME = "Module_Clientside" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, compresswhitespace" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Module_Clientside" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, compresswhitespace">
 	<MvIF EXPR = "{ ( '.js' EIN g.Filename ) EQ len_var( g.Filename ) }">		<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/javascript' ) }">
 	<MvELSEIF EXPR = "{ ( '.css' EIN g.Filename ) EQ len_var( g.Filename ) }">	<MvEVAL EXPR = "{ [ g.Module_Clientside ].Module_Content_Type( l.module, 'text/css' ) }">
 	</MvIF>
@@ -2158,7 +2158,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_Layout" PARAMETERS = "output_file, layout_id, export_count var, total_count var, layout_export_count var, layout_total_count var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutAndComponentsExport_Export_Layout" PARAMETERS = "output_file, layout_id, export_count var, total_count var, layout_export_count var, layout_total_count var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ l.export_count GE l.total_count }">
 		<MvFUNCTIONRETURN VALUE = 1>
 	</MvIF>
@@ -2454,7 +2454,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Component_Delete" PARAMETERS = "id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "Component_Delete" PARAMETERS = "id" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT Component_Delete_LowLevel( l.id )				OR
 					NOT ComponentAttributes_Delete_Component( l.id )	OR
 					NOT LayoutComponents_Delete_Component( l.id ) }">
@@ -3691,7 +3691,7 @@
 	<MvASSIGN NAME = "l.layout_value:layouts_components_id"	VALUE = "{ TGLayoutValues.d.lc_id  }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Insert" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Insert" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT LayoutValue_Insert_LowLevel( l.layout_value ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
@@ -3737,7 +3737,7 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "LayoutValue_Update" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "LayoutValue_Update" PARAMETERS = "layout_value var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT LayoutValue_Reference_Update( l.layout_value ) OR
 					NOT LayoutValue_Update_Lowlevel( l.layout_value ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
@@ -4697,7 +4697,7 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.null ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'attr_id', 'Attribute not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_ID', 'Attribute not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentOption_Update( l.component_option ) }">
@@ -5098,8 +5098,8 @@
 			<MvASSIGN NAME = "l.attribute:product:id" VALUE = 0>
 
 			<MvIF EXPR = "{ [ g.Module_Library_DB ].Product_Load_Code( l.attribute:product:code, l.loaded_product ) }">
-				<MvASSIGN NAME = "l.attribute:product:id" VALUE = "{ l.loaded_product:id }">
-				<MvASSIGN NAME = "l.attribute:product:code" VALUE = "{ l.loaded_product:code }">
+				<MvASSIGN NAME = "l.attribute:product:id"	VALUE = "{ l.loaded_product:id }">
+				<MvASSIGN NAME = "l.attribute:product:code"	VALUE = "{ l.loaded_product:code }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ miva_array_serialize( l.attribute:product ) }">
@@ -5107,8 +5107,8 @@
 			<MvASSIGN NAME = "l.attribute:category:id" VALUE = 0>
 
 			<MvIF EXPR = "{ [ g.Module_Library_DB ].Category_Load_Code( l.attribute:category:code, l.loaded_category ) }">
-				<MvASSIGN NAME = "l.attribute:category:id" VALUE = "{ l.loaded_category:id }">
-				<MvASSIGN NAME = "l.attribute:category:code" VALUE = "{ l.loaded_category:code }">
+				<MvASSIGN NAME = "l.attribute:category:id"		VALUE = "{ l.loaded_category:id }">
+				<MvASSIGN NAME = "l.attribute:category:code"	VALUE = "{ l.loaded_category:code }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.attribute:value" VALUE = "{ miva_array_serialize( l.attribute:category ) }">
