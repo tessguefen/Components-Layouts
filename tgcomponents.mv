@@ -1092,6 +1092,7 @@
 
 		<MvIF EXPR = "{ l.name EQ 'layout_add' }">						<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'layout_update'}">				<MvEVAL EXPR = "{ Module_Provision_Layout_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layout_delete'}">				<MvEVAL EXPR = "{ Module_Provision_Layout_Delete( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'component_add'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'component_update'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Update( l.module, l.child_xml ) }">
 		<MvELSEIF EXPR = "{ l.name EQ 'component_delete'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
@@ -1159,6 +1160,24 @@
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Update( l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
+	</MvIF>
+</MvFUNCTION>
+
+<MvFUNCTION NAME = "Module_Provision_Layout_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
+	<MvCOMMENT>
+		<Layout_Delete code="Your_Code_Here" />
+	</MvCOMMENT>
+
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml, 'code', l.code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Load_Code( l.code, l.layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'A layout with the code \'' $ l.code $ '\' does not exist' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ NOT Layout_Delete( l.layout:id ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml ) }">
 	</MvIF>
 </MvFUNCTION>
@@ -1333,7 +1352,7 @@
 
 <MvFUNCTION NAME = "Module_Provision_ComponentAttribute_Delete" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>
-		<ComponentAttribute_Delete component="My_Component" code="Attribute_Code">
+		<ComponentAttribute_Delete component="My_Component" code="Attribute_Code" />
 	</MvCOMMENT>
 
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Attribute_Text( l.provide_xml,	'component',	l.component_code ) OR

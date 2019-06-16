@@ -152,8 +152,7 @@
 	list-style:none
 }
 .angular-ui-tree-nodes .angular-ui-tree-nodes{
-	padding-left:20px;
-	padding-right:20px
+	padding-left:40px;
 }
 .angular-ui-tree-node,.angular-ui-tree-placeholder{
 	position:relative;
