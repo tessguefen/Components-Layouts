@@ -1,4 +1,4 @@
-function Components_List()
+function TGComponentList()
 {
 	MMBatchList.call( this, 'tgcomponents_components' );
 
@@ -28,11 +28,11 @@ function Components_List()
 	this.SetDefaultSort( 'disp_order', '' );
 }
 
-DeriveFrom( MMBatchList, Components_List );
+DeriveFrom( MMBatchList, TGComponentList );
 
-Components_List.prototype.onLoad = Components_Load_Query;
+TGComponentList.prototype.onLoad = ComponentList_Load_Query;
 
-Components_List.prototype.onCreateRootColumnList = function()
+TGComponentList.prototype.onCreateRootColumnList = function()
 {
 	var self = this;
 	var allow_children_column;
@@ -67,7 +67,7 @@ Components_List.prototype.onCreateRootColumnList = function()
 	];
 }
 
-Components_List.prototype.onCreate = function()
+TGComponentList.prototype.onCreate = function()
 {
 	var record;
 
@@ -83,38 +83,38 @@ Components_List.prototype.onCreate = function()
 	return record;
 }
 
-Components_List.prototype.onInsert = function( item, callback, delegator )
+TGComponentList.prototype.onInsert = function( item, callback, delegator )
 {
 	Component_Insert( item.record, callback, delegator );
 }
 
-Components_List.prototype.onSave = function( item, callback, delegator )
+TGComponentList.prototype.onSave = function( item, callback, delegator )
 {
 	Component_Update( item.record, callback, delegator );
 }
 
-Components_List.prototype.onDelete = function( item, callback, delegator )
+TGComponentList.prototype.onDelete = function( item, callback, delegator )
 {
 	Component_Delete( item.record.id, callback, delegator );
 }
 
-Components_List.prototype.Update_Allow_Children = function( item, checked, callback, delegator )
+TGComponentList.prototype.Update_Allow_Children = function( item, checked, callback, delegator )
 {
 	item.record.alw_chldrn = checked ? 1 : 0;
 	Component_Update( item.record, callback, delegator );
 }
 
-Components_List.prototype.onGoTo = function( item, e )
+TGComponentList.prototype.onGoTo = function( item, e )
 {
 	return OpenLinkHandler( e, adminurl, { 'Module_Code': 'TGCOMPONENTS', 'Store_Code': Store_Code, 'Screen': 'SUTL', 'Component_ID': item.record.id, 'Module_Type': 'util', 'TGCOMPONENTS_Screen' : 'Component' } );
 }
 
-Components_List.prototype.onDisplayOrderSave = function( fieldlist, callback, delegator )
+TGComponentList.prototype.onDisplayOrderSave = function( fieldlist, callback, delegator )
 {
 	Component_DisplayOrder_Update( fieldlist, callback, delegator );
 }
 
-Components_List.prototype.onSetDisplayOrder = function( recordlist, start_index )
+TGComponentList.prototype.onSetDisplayOrder = function( recordlist, start_index )
 {
 	var i, i_len, j, j_len;
 

@@ -355,22 +355,20 @@
 		</MvCOMMENT>
 
 		<MvQUERY NAME	= "Merchant"
-				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
-				 				ADD
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache ADD
 				 				(
 				 					dt_cached	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 ) $ '
-				 				)'}">
+				 				)' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 		</MvIF>
 
 		<MvQUERY NAME	= "Merchant"
-				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
-				 				ADD
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ADD
 				 				(
 				 					dt_start	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 ) $ ',
 				 					dt_end		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 ) $ '
-				 				)'}">
+				 				)' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 		</MvIF>
@@ -388,11 +386,10 @@
 		</MvCOMMENT>
 
 		<MvQUERY NAME	= "Merchant"
-				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGComponents
-				 				ADD
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGComponents ADD
 				 				(
 				 					disp_order	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 ) $ '
-				 				)'}">
+				 				)' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 		</MvIF>
@@ -448,11 +445,10 @@
 		</MvCOMMENT>
 
 		<MvQUERY NAME	= "Merchant"
-				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
-				 				ADD
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ADD
 				 				(
 				 					code	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 ) $ '
-				 				)'}">
+				 				)' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 		</MvIF>
@@ -783,9 +779,11 @@
 	<MvIF EXPR = "{ g.TGCOMPONENTS_Screen }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components', '', '' ) }">
 
-
 		<MvIF EXPR = "{ NOT Component_Load_ID( g.Component_ID, l.component ) }">
-			ERROR: Could not load Screen for Component ID: <MvEVAL EXPR = "{ encodeentities( g.Component_ID ) }">.
+			<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', 'Component not found' ) }">
+			</MvIF>
+			<MvFUNCTIONRETURN VALUE = 0>
 		<MvELSE>
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Component: ' $ encodeentities( l.component:name ), encodeentities( l.component:name ), '' ) }">
 			<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
@@ -897,13 +895,13 @@
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layoutlist.js' }"></script>
 
 		<script language="JavaScript">
-			MMScreen_LoadFinished( function() { new Layouts_List(); } );
+			MMScreen_LoadFinished( function() { new TGLayoutList(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=componentlist.js' }"></script>
 		<script language="JavaScript">
-			MMScreen_LoadFinished( function() { new Components_List(); } );
+			MMScreen_LoadFinished( function() { new TGComponentList(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_SCREEN_Components' }">
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
@@ -1054,12 +1052,12 @@
 </MvCOMMENT>
 
 <MvFUNCTION NAME = "Module_JSON" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ g.Module_Function EQ 'Components_Load_Query' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_Query( l.module ) }">
+	<MvIF EXPR = "{ g.Module_Function EQ 'ComponentList_Load_Query' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentList_Load_Query( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Insert' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Update' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Delete' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Delete( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_DisplayOrder_Update' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_Components_DisplayOrder_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layouts_Load_Query' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Layouts_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'LayoutList_Load_Query' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_LayoutList_Load_Query( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Update' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Delete' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Delete( l.module ) }">
@@ -1071,8 +1069,8 @@
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Insert' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Update' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentOption_Delete' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentOption_Delete( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Load_LayoutComponents' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Load_LayoutComponents( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_Load_All' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_Components_Load_All( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'LayoutComponents_Load_Layout' }">				<MvFUNCTIONRETURN VALUE = "{ JSON_LayoutComponents_Load_Layout( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'ComponentList_Load_All' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_ComponentList_Load_All( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Save' }">								<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Save( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Duplicate' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Duplicate( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'LayoutCache_Delete' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_LayoutCache_Delete( l..module ) }">
@@ -1116,17 +1114,17 @@
 	<MvFOREACH ITERATOR = "l.child_xml" ARRAY = "l.provide_xml:children">
 		<MvASSIGN NAME = "l.name"		VALUE = "{ tolower( l.child_xml:name ) }">
 
-		<MvIF EXPR = "{ l.name EQ 'layout_add' }">						<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'layout_update'}">				<MvEVAL EXPR = "{ Module_Provision_Layout_Update( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'layout_delete'}">				<MvEVAL EXPR = "{ Module_Provision_Layout_Delete( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'component_add'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'component_update'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Update( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'component_delete'}">				<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_add'}">		<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_update'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Update( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_delete'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Delete( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'componentattributeoption_add'}">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttributeOption_Add( l.module, l.child_xml ) }">
-		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add'}">			<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }">
+		<MvIF EXPR = "{ l.name EQ 'layout_add' }">							<MvEVAL EXPR = "{ Module_Provision_Layout_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layout_update' }">					<MvEVAL EXPR = "{ Module_Provision_Layout_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layout_delete' }">					<MvEVAL EXPR = "{ Module_Provision_Layout_Delete( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_add' }">					<MvEVAL EXPR = "{ Module_Provision_Component_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_update' }">				<MvEVAL EXPR = "{ Module_Provision_Component_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'component_delete' }">				<MvEVAL EXPR = "{ Module_Provision_Component_Delete( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_add' }">			<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_update' }">		<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Update( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattribute_delete' }">		<MvEVAL EXPR = "{ Module_Provision_ComponentAttribute_Delete( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'componentattributeoption_add' }">	<MvEVAL EXPR = "{ Module_Provision_ComponentAttributeOption_Add( l.module, l.child_xml ) }">
+		<MvELSEIF EXPR = "{ l.name EQ 'layoutcomponent_add' }">				<MvEVAL EXPR = "{ Module_Provision_LayoutComponent_Add( l.module, l.child_xml ) }">
 		</MvIF>
 	</MvFOREACH>
 </MvFUNCTION>
@@ -2646,7 +2644,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( '#Error#', l.layouts_count ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "components var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "ComponentList_Load_All" PARAMETERS = "components var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGComponents"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponents ORDER BY disp_order' }">
@@ -2676,7 +2674,7 @@
 
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
 
-	<MvFUNCTIONRETURN VALUE = 1>
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( '#Error#', l.count ) }">
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -4104,7 +4102,7 @@
 |
 </MvCOMMENT>
 
-<MvFUNCTION NAME = "JSON_Components_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "JSON_ComponentList_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
 	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
@@ -4269,7 +4267,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Layouts_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
+<MvFUNCTION NAME = "JSON_LayoutList_Load_Query" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace" ERROROUTPUTLEVEL = "">
 	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
@@ -4723,7 +4721,7 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Success() }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Layout_Load_LayoutComponents" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
+<MvFUNCTION NAME = "JSON_LayoutComponents_Load_Layout" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
@@ -4737,12 +4735,12 @@
 	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.layout_components ) }">
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "JSON_Components_Load_All" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text">
+<MvFUNCTION NAME = "JSON_ComponentList_Load_All" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "html, text">
 	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 1, 0, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ Components_Load_All( l.components ) }">
+	<MvIF EXPR = "{ ComponentList_Load_All( l.components ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Output( l.components ) }">
 	</MvIF>
 
@@ -4754,11 +4752,14 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Layout_ID', l.layout_id, -1, -1 ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Layout_ID', l.layout_id, -1, -1 ) OR
+					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Layout_Data', l.layout_data ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
-	<MvASSIGN NAME = "l.null" VALUE = "{ miva_json_decode( decodeattribute( g.Layout_Data ), l.layout_data ) }">
+	<MvIF EXPR = "{ NOT miva_json_decode( l.layout_data, l.layout_data ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( '#Error#', miva_json_decode_last_error() ) }">
+	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutComponents_Save( l.layout_id, l.layout_data:layout, l.layout_data:deleted ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( g.Error_Code, g.Error_Message ) }">

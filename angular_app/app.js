@@ -8,28 +8,22 @@
 			var self = this;
 
 			self.getData = function( layout_id, callback ) {
-				return AJAX_Call_Module( callback,
-								'admin',
-								'TGCOMPONENTS',
-								'Layout_Load_LayoutComponents',
-								'Layout_ID=' + layout_id );
+				return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'LayoutComponents_Load_Layout',
+				{
+					Layout_ID: layout_id
+				});
 			}
 
 			self.getComponents = function( callback ) {
-				return AJAX_Call_Module( callback,
-								'admin',
-								'TGCOMPONENTS',
-								'Components_Load_All' );
+				return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'ComponentList_Load_All' );
 			}
 
 			self.saveLayout = function( layout_id, data, callback ) {
-				return AJAX_Call_Module_FieldList( callback,
-									   'admin',
-									   'TGCOMPONENTS',
-									   'Layout_Save',
-									   'Layout_ID=' + layout_id +
-									   '&Layout_Data=' + encodeURIComponent( data ),
-									   '' );
+				return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Layout_Save',
+				{
+					Layout_ID: layout_id,
+					Layout_Data: data
+				});
 			}
 
 			return self;

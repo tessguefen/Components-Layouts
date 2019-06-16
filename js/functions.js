@@ -1,8 +1,8 @@
 // Layout Functions
 
-function Layouts_Load_Query( filter, sort, offset, count, callback, delegator )
+function LayoutList_Load_Query( filter, sort, offset, count, callback, delegator )
 {
-	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Layouts_Load_Query',
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'LayoutList_Load_Query',
 	{
 		Filter:			filter,
 		Sort:			sort,
@@ -55,9 +55,9 @@ function Layouts_Delete_Cache( callback )
 
 // Component Functions
 
-function Components_Load_Query( filter, sort, offset, count, callback, delegator )
+function ComponentList_Load_Query( filter, sort, offset, count, callback, delegator )
 {
-	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Components_Load_Query',
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'ComponentList_Load_Query',
 	{
 		Filter:			filter,
 		Sort:			sort,

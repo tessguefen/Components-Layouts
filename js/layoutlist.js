@@ -1,4 +1,4 @@
-function Layouts_List()
+function TGLayoutList()
 {
 	MMBatchList.call( this, 'tgcomponents_layouts' );
 
@@ -29,11 +29,11 @@ function Layouts_List()
 	this.processingdialog = new ProcessingDialog();
 }
 
-DeriveFrom( MMBatchList, Layouts_List );
+DeriveFrom( MMBatchList, TGLayoutList );
 
-Layouts_List.prototype.onLoad = Layouts_Load_Query;
+TGLayoutList.prototype.onLoad = LayoutList_Load_Query;
 
-Layouts_List.prototype.onCreateRootColumnList = function()
+TGLayoutList.prototype.onCreateRootColumnList = function()
 {
 	return [
 		new MMBatchList_Column_Name( 'Layout ID', 'id', 'ID')
@@ -46,7 +46,7 @@ Layouts_List.prototype.onCreateRootColumnList = function()
 	];
 }
 
-Layouts_List.prototype.onCreate = function()
+TGLayoutList.prototype.onCreate = function()
 {
 	var record;
 
@@ -58,22 +58,22 @@ Layouts_List.prototype.onCreate = function()
 	return record;
 }
 
-Layouts_List.prototype.onSave = function( item, callback, delegator )
+TGLayoutList.prototype.onSave = function( item, callback, delegator )
 {
 	Layout_Update( item.record, callback, delegator );
 }
 
-Layouts_List.prototype.onInsert = function( item, callback, delegator )
+TGLayoutList.prototype.onInsert = function( item, callback, delegator )
 {
 	Layout_Insert( item.record, callback, delegator );
 }
 
-Layouts_List.prototype.onDelete = function( item, callback, delegator )
+TGLayoutList.prototype.onDelete = function( item, callback, delegator )
 {
 	Layout_Delete( item.record.id, callback, delegator );
 }
 
-Layouts_List.prototype.editLayout = function( item, e )
+TGLayoutList.prototype.editLayout = function( item, e )
 {
 	var self = this;
 	var dialog;
@@ -99,13 +99,13 @@ Layouts_List.prototype.editLayout = function( item, e )
 	dialog.Show();
 }
 
-Layouts_List.prototype.DeleteLayoutCache = function()
+TGLayoutList.prototype.DeleteLayoutCache = function()
 {
 	var self = this;
 	Layouts_Delete_Cache( function( response ) { self.Refresh(); } );
 }
 
-Layouts_List.prototype.DuplicateLayout = function( item, e )
+TGLayoutList.prototype.DuplicateLayout = function( item, e )
 {
 	var self = this;
 	var duplicatelayout;
