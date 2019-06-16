@@ -163,17 +163,6 @@
 </Module>
 ```
 
-## Random Screenshots
-
-![Admin UI](https://puu.sh/Cdege/c62bb923a8.png)
-![Admin UI 2](http://puu.sh/CdehI/f0f7f1f4ee.png)
-![Edit Popup](http://puu.sh/Cdek3/ea07237c3c.png)
-![Add New Popup - With All Fields](http://puu.sh/Cdejg/20525978bb.png)
-![Duplicate Layouts Feature](http://puu.sh/Cdelt/b6b53e5f62.png)
-![But Wait! There's More](http://puu.sh/CdekT/a04b50493a.png)
----
-
-
 ## Example
 
 ```
