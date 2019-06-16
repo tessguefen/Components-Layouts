@@ -418,9 +418,22 @@
 			<MvEVAL EXPR = "{ Component_Read( l.component ) }">
 			<MvASSIGN NAME = "l.component:disp_order" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponents_Disp_Order' ) }">
 
-			<MvIF EXPR = "{ NOT Component_Update( l.component ) }">
+			<MvCOMMENT>
+			|
+			|	Query directly used for backwards compatibility. v2.000 updated `Component_Update`
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME	= "Merchant"
+					 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponents
+								  SET
+									disp_order = ?
+								  WHERE
+									id = ?' }"
+					 FIELDS	= "l.component:disp_order, l.component:id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
 				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponents">
-				<MvFUNCTIONRETURN VALUE = 0>
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 			</MvIF>
 
 			<MvSKIP NAME = "Merchant" VIEW = "TGComponents" ROWS = 1>
@@ -452,22 +465,35 @@
 		</MvIF>
 
 		<MvASSIGN NAME = "l.count"		VALUE = 0>
-		<MvASSIGN NAME = "l.components"	VALUE = "">
+		<MvASSIGN NAME = "l.layout_component"	VALUE = "">
 
 		<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
-			<MvEVAL EXPR = "{ LayoutComponent_Read( l.components[ ++l.count ] ) }">
-			<MvASSIGN NAME = "l.components" INDEX = "{ l.count }" MEMBER = "code" VALUE = "{ l.components[ l.count ]:id }">
+			<MvASSIGN NAME = "l.layout_component" VALUE = "">
+
+			<MvEVAL EXPR = "{ LayoutComponent_Read( l.layout_component ) }">
+			<MvASSIGN NAME = "l.layout_component:code" VALUE = "{ l.layout_component:id }">
+
+			<MvCOMMENT>
+			|
+			|	Query directly used for backwards compatibility. v2.000 updated `Component_Update`
+			|
+			</MvCOMMENT>
+			<MvQUERY NAME	= "Merchant"
+					 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components
+							      SET
+									code = ?
+							      WHERE
+								    id = ?' }"
+					 FIELDS	= "l.layout_component:code, l.layout_component:id">
+			<MvIF EXPR = "{ g.MvQUERY_Error }">
+				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
+			</MvIF>
 
 			<MvSKIP NAME = "Merchant" VIEW = "TGLayouts_Components" ROWS = 1>
 		</MvWHILE>
 
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
-
-		<MvFOREACH ITERATOR = "l.component" ARRAY = "l.components">
-			<MvIF EXPR = "{ NOT LayoutComponent_Update( l.component ) }">
-				<MvFUNCTIONRETURN VALUE = 0>
-			</MvIF>
-		</MvFOREACH>
 
 		<MvCOMMENT>
 		|
