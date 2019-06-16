@@ -1,3 +1,58 @@
+// Layout Functions
+
+function Layouts_Load_Query( filter, sort, offset, count, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Layouts_Load_Query',
+	{
+		Filter:			filter,
+		Sort:			sort,
+		Offset:			offset,
+		Count:			count
+	}, delegator );
+}
+
+function Layout_Update( data, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Layout_Update',
+	{
+		ID:				data.id,
+		Code:			data.code,
+		Name:			data.name
+	}, delegator );
+}
+
+function Layout_Insert( data, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Layout_Insert',
+	{
+		Code:			data.code,
+		Name:			data.name
+	}, delegator );
+}
+
+function Layout_Delete( id, callback, delegator )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Layout_Delete',
+	{
+		ID: id
+	}, delegator );
+}
+
+function Layout_Duplicate( layout_id, code, name, callback )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'Layout_Duplicate',
+	{
+		Layout_ID:	layout_id,
+		Code: 		code,
+		Name: 		name
+	});
+}
+
+function Layouts_Delete_Cache( callback )
+{
+	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'LayoutCache_Delete' );
+}
+
 // Component Functions
 
 function Components_Load_Query( filter, sort, offset, count, callback, delegator )

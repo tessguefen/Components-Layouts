@@ -866,10 +866,11 @@
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=app.js' }"></script>
 
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
-		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layouts.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=duplicatelayoutdialog.js' }"></script>
+		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=layoutlist.js' }"></script>
 
 		<script language="JavaScript">
-			MMScreen_LoadFinished( function() { new Layouts_Batchlist(); } );
+			MMScreen_LoadFinished( function() { new Layouts_List(); } );
 		</script>
 	<MvELSEIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Components' }">
 		<script language="JavaScript" src="{ g.clientside_url $ 'Module_Code=TGCOMPONENTS&Filename=functions.js' }"></script>
@@ -1066,7 +1067,8 @@
 
 	<MvIF EXPR = "{ g.Filename EQ 'functions.js' }">					<MvINCLUDE INTERPRET = "off" FILE = "js/functions.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'componentlist.js' }">			<MvINCLUDE INTERPRET = "off" FILE = "js/componentlist.js">
-	<MvELSEIF EXPR = "{ g.Filename EQ 'layouts.js' }">					<MvINCLUDE INTERPRET = "off" FILE = "js/layouts.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'layoutlist.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "js/layoutlist.js">
+	<MvELSEIF EXPR = "{ g.Filename EQ 'duplicatelayoutdialog.js' }">	<MvINCLUDE INTERPRET = "off" FILE = "js/duplicatelayoutdialog.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'componentattributelist.js' }">	<MvINCLUDE INTERPRET = "off" FILE = "js/componentattributelist.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular.min.js' }">				<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular.min.js">
 	<MvELSEIF EXPR = "{ g.Filename EQ 'angular-ui-tree.min.js' }">		<MvINCLUDE INTERPRET = "off" FILE = "angular_app/angular-ui-tree.min.js">
@@ -4296,14 +4298,14 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Id',			l.layout:id,	-1, -1 )	OR
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'ID',			l.layout:id,	-1, -1 )	OR
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.layout:code )				OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.layout:name ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Load_ID( l.layout:id, l.previous_layout ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Id', 'Layout not found' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'ID', 'Layout not found' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ toupper( l.previous_layout:code ) NE toupper( l.layout:code ) }">
@@ -4324,7 +4326,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Id', l.id, -1, -1 ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'ID', l.id, -1, -1 ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
@@ -4727,6 +4729,10 @@
 					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',		l.layout:code )						OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Name',		l.layout:name )}">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
+	</MvIF>
+
+	<MvIF EXPR = "{ Layout_Load_Code( l.layout:code, l.existing_layout ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'A layout with the code \'' $ l.existing_layout:code $ '\' already exists' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Insert( l.layout ) }">
