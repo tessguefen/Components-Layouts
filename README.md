@@ -36,11 +36,22 @@
 - Textfield
 - Textarea
 - Image Upload
-- Category (supply ID)
-- Product (supply ID)
-- Link (Includes Product, Category, Page, URL & None )
+- Category
+	- To update via XML, Category Code.
+	- To update in Admin, Category Code.
+	- Value returns `:category:id` and `:category:code`
+- Product
+	- To update via XML, Product Code.
+	- To update in Admin, Product Code.
+	- Value returns `:product:id` and `:product:code`
+- Link
+	- Includes Product, Category, Page, URL & None
 - Image Type
+	- To update via XML, Image Type Code.
+	- To update in Admin, Image Type Code (from select dropdown)
+	- Value returns Image Type ID
 - Date/Time Picker
+	- Returns timestamp
 - Multi-Text
 	- To Update via XML, Pipe Seperated.
 	- To update via Admin, Line Breaks are used to seperate.
