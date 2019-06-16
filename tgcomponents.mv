@@ -4853,15 +4853,19 @@
 	</MvIF>
 
 	<MvFOREACH ITERATOR = "l.attribute" ARRAY = "l.attributes">
-		<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':value' }" VALUE = "{ l.attribute:value }">
+		<MvREFERENCEARRAY NAME = "l.component_attribute" VARIABLE = "l.component:attributes">
+			<MvMEMBER NAME = "{ l.attribute:code }">
+		</MvREFERENCEARRAY>
+
+		<MvASSIGN NAME = "l.component_attribute:value" VALUE = "{ l.attribute:value }">
 
 		<MvIF EXPR = "{ l.attribute:link }">
-			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':link' }" VALUE = "{ l.attribute:link }">
-			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':value' }" VALUE = "{ Load_URI( l.attribute:link ) }">
+			<MvASSIGN NAME = "l.component_attribute:link"	VALUE = "{ l.attribute:link }">
+			<MvASSIGN NAME = "l.component_attribute:value"	VALUE = "{ Load_URI( l.attribute:link ) }">
 		<MvELSEIF EXPR = "{ l.attribute:category }">
-			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':category' }" VALUE = "{ l.attribute:category }">
+			<MvASSIGN NAME = "l.component_attribute:category"	VALUE = "{ l.attribute:category }">
 		<MvELSEIF EXPR = "{ l.attribute:product }">
-			<MvASSIGN NAME = "{ 'l.component:attributes:' $ l.attribute:code $ ':product' }" VALUE = "{ l.attribute:product }">
+			<MvASSIGN NAME = "l.component_attribute:product"	VALUE = "{ l.attribute:product }">
 		</MvIF>
 	</MvFOREACH>
 
