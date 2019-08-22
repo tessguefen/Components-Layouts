@@ -19,7 +19,8 @@ function LayoutComponents( components, layout, data )
 
 LayoutComponents.prototype.LayoutHTML = function()
 {
-	this.layout_container.innerHTML = this.layout.name;
+	this.layout_name = document.getElementById( 'layout-name' );
+	this.layout_name.innerHTML = this.layout.name;
 }
 
 LayoutComponents.prototype.Initialize = function()
