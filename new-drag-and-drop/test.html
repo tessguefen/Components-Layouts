@@ -1,46 +1,66 @@
-<html lang="en">
+<html lang="en" class="component-and-layouts-html">
 <head>
 	<style>
-	.components-and-layouts,
-	.components-and-layouts *,
-	.components-and-layouts *::before,
-	.components-and-layouts *::after {
-		box-sizing: inherit;
+	*,
+	*::before,
+	*::after {
+		box-sizing:  border-box;
 	}
-	.components-and-layouts {
-		position: relative;
+	.component-and-layouts-html,
+	.component-and-layouts-body {
 		height: 100%;
-		width: 100%;
+		margin: 0;
+		font-family: sans-serif;
+	}
+	.component-and-layouts {
+		display: flex;
+		height: 100vh;
+		flex-direction: column;
+		margin: 0;
+		overflow: hidden;
+	}
+	#layout {
+		height: 100px;
+		background: #fafcfe
+	}
+	#main {
+		display: flex;
+		flex: 1;
+		height: 100%;
+		overflow: hidden;
 	}
 	#layoutcomponents {
-		width: 70%;
-		position: absolute;
+		flex: 1;
 		height: 100%;
-		position: absolute;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		overflow-x: hidden;
 		overflow-y: auto;
+		background: #fff;
 	}
 	#components {
-		width: 29%;
+		flex: 0 0 30vw;
 		height: 100%;
-		position: absolute;
-		right: 0;
-		top: 0;
-		bottom: 0;
 		overflow-y: auto;
+	}
+	.component {
+		position: relative;
+		display: block;
+		padding: 16px 1.25rem 16px 45px;
+		margin-bottom: -1px;
+		background-color: #fff;
+		border: 1px solid #ccc;
+		margin-top: 5px;
+		background: #fff;
+		border-radius: 5px;
 	}
 	.layout-component {
 		position: relative;
-	    display: block;
-	    padding: 16px 1.25rem 16px 45px;
-	    margin-bottom: -1px;
-	    background-color: #fff;
-	    border: 1px solid rgba(0,0,0,.125);
-	    margin-top: 5px;
-	    background: #ccc;
+		display: block;
+		padding: 16px 1.25rem 16px 45px;
+		margin-bottom: -1px;
+		background-color: #fff;
+		border: 1px solid #ccc;
+		margin-top: 5px;
+		background: #fff;
+		border-radius: 5px;
 	}
 	.layout-component .handle {
 		cursor: pointer;
@@ -50,7 +70,7 @@
 		bottom: 0;
 		height: 100%;
 		width: 30;
-		background: red;
+		background: #ccc;
 	}
 	.layout-component .handle:before {
 		content: "";
@@ -64,88 +84,92 @@
 	}
 	.nested-sortable {
 		padding: 5px;
-		background: rgba(0,0,0,.125);
+		background: #fafafe;
 		border: 1px solid transparent;
 	}
 	.nested-sortable:empty {
-		background: transparent;
-		border: 1px dashed #000;
+		border-color: #ccc;
 	}
 	</style>
 </head>
-<body translate="no" class="">
-	<div class="components-and-layouts">
-		<div id="layoutcomponents" class="nested-sortable"></div>
-		<div id="components" class="">
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
-			<div class="component"><span class="handle"></span>hi</div>
-			<div class="component"><span class="handle"></span>wadap</div>
-			<div class="component"><span class="handle"></span>yea boi</div>
+<body translate="no" class="component-and-layouts-body">
+	<div class="component-and-layouts">
+		<div id="layout">
+			Layout.
+		</div>
+		<div id="main">
+			<div id="layoutcomponents" class="nested-sortable"></div>
+			<div id="components">
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+				<div class="component"><span class="handle"></span>hi</div>
+				<div class="component"><span class="handle"></span>wadap</div>
+				<div class="component"><span class="handle"></span>yea boi</div>
+			</div>
 		</div>
 	</div>
 	<script src="js/Sortable.min.js"></script>
