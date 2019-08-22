@@ -31,11 +31,15 @@ LayoutComponents.prototype.Initialize = function()
 			name: 'nested',
 			pull: 'clone'
 		},
+		sort: false,
 		animation: 150,
 		onEnd: function( evt ){
+			if ( evt.item.parentNode === self.component_container )
+			{
+				return;
+			}
+			
 			evt.item.classList.add( 'layout-component' );
-			console.log( 'pop that pop up open biotch' );
-
 			// setTimeout(function() {
 			// 	// if you click cancel
 			// 	evt.item.remove();
