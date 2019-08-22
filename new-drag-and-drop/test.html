@@ -22,7 +22,12 @@
 	#layout {
 		padding: 20px 40px;
 		background: #fafcfe;
+	}
+	#layout-name {
 		font-size: 30px;
+	}
+	#layout-code {
+		font-size: 11px;
 	}
 	#main {
 		display: flex;
@@ -47,7 +52,7 @@
 	.layout-component {
 		position: relative;
 		display: block;
-		padding: 16px 1.25rem;
+		padding: 16px 20px;
 		margin-bottom: 10px;
 		background-color: #fff;
 		border: 1px solid #ccc;
@@ -56,7 +61,7 @@
 		font-size: 13px;
 	}
 	.layout-component {
-		padding: 16px 1.25rem 16px 45px;
+		padding: 16px 20px 16px 50px;
 	}
 	.layout-component .handle {
 		cursor: pointer;
@@ -65,14 +70,14 @@
 		left: 0;
 		bottom: 0;
 		height: 100%;
-		width: 30;
+		width: 40px;
 		background: #ccc;
 	}
 	.layout-component .handle:before {
 		content: "";
 		position: absolute;
-		top: 16px;
-		left: 13px;
+		top: 21px;
+		left: 17px;
 		display: block;
 		width: 4px;
 		height: 4px;
@@ -99,7 +104,8 @@
 <body translate="no" class="component-and-layouts-body">
 	<div class="component-and-layouts">
 		<div id="layout">
-			<span id="layout-name"></span>
+			<div id="layout-name"></div>
+			<div id="layout-code"></div>
 		</div>
 		<div id="main">
 			<div id="layoutcomponents" class="nested-sortable"></div>

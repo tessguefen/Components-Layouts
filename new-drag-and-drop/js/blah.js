@@ -20,7 +20,10 @@ function LayoutComponents( components, layout, data )
 LayoutComponents.prototype.LayoutHTML = function()
 {
 	this.layout_name = document.getElementById( 'layout-name' );
+	this.layout_code = document.getElementById( 'layout-code' );
+
 	this.layout_name.innerHTML = this.layout.name;
+	this.layout_code.innerHTML = 'Code: ' + this.layout.code;
 }
 
 LayoutComponents.prototype.Initialize = function()
