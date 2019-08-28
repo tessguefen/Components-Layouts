@@ -111,6 +111,30 @@
 		background-size: 60px 60px;
 		background-position: 0 0,30px 30px;
 	}
+
+	/* Details */
+	.component-wrap {
+		overflow: auto;
+	}
+	.component-wrap:after {
+		content: "";
+		clear: both;
+		display: table;
+	}
+	.component-name {
+		width: 80%;
+		float: left;
+	}
+	.component-toggle {
+		text-align: right;
+		float: left;
+		font-size: 10px;
+		width: 20%;
+	}
+	.component-details {
+		display: none;
+		padding-top: 10px;
+	}
 	</style>
 </head>
 <body translate="no" class="component-and-layouts-body">
