@@ -18,10 +18,12 @@
 		flex-direction: column;
 		margin: 0;
 		overflow: hidden;
+		background: #f4f5f7;
 	}
 	#layout {
+		background: #fff;
 		padding: 20px 40px;
-		background: #fafcfe;
+		border-bottom: 1px solid #efefef;
 	}
 	#layout-name {
 		font-size: 30px;
@@ -39,11 +41,21 @@
 		flex: 1;
 		height: 100%;
 		overflow-y: auto;
-		background: #fff;
 		padding: 10px;
 	}
-	#components {
+	.components {
 		flex: 0 0 30vw;
+		display: flex;
+		height: 100%;
+		padding: 10px;
+		background: #ffffff;
+		flex-direction: column;
+	}
+	.components-title {
+		padding: 10px;
+		border-bottom: 1px solid #efefef;
+	}
+	#components {
 		height: 100%;
 		overflow-y: auto;
 		padding: 10px;
@@ -109,7 +121,12 @@
 		</div>
 		<div id="main">
 			<div id="layoutcomponents" class="nested-sortable"></div>
-			<div id="components"></div>
+			<div class="components">
+				<div class="components-title">
+					Components
+				</div>
+				<div id="components"></div>
+			</div>
 		</div>
 	</div>
 	<script src="js/Sortable.min.js"></script>

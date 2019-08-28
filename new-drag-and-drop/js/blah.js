@@ -64,8 +64,12 @@ LayoutComponents.prototype.Initialize = function()
 				return;
 			}
 
+			evt.clone.layout_component = evt.item.layout_component;
+
 			evt.item.classList.add( 'layout-component' );
 			evt.item.classList.remove( 'component' );
+
+			self.BuildChildrenElement( evt.item );
 
 			// setTimeout(function() {
 			// 	// if you click cancel
@@ -109,24 +113,32 @@ LayoutComponents.prototype.BuildLayoutComponent = function( layout_component )
 		self.container.appendChild( elem );
 	}
 
-	if ( layout_component.component.alw_chldrn === 1 )
-	{
-		children_elem = document.createElement( 'div' );
-		children_elem.classList.add( 'nested-sortable', 'list-group' );
-		elem.appendChild( children_elem );
-
-		self.Sortable( children_elem );
-	}
+	self.BuildChildrenElement( elem );
 
 
 	if ( layout_component.children_count > 0 )
 	{
 		for (var i = 0; i < layout_component.children_count; i++)
 		{
-			layout_component.children[ i ].parent_element = children_elem;
+			layout_component.children[ i ].parent_element = elem.children_elem;
 			self.BuildLayoutComponent( layout_component.children[ i ] );
 		}
 	}
+}
+
+LayoutComponents.prototype.BuildChildrenElement = function( elem )
+{
+	if ( elem.layout_component.component.alw_chldrn === 0 )
+	{
+		return;
+	}
+
+	elem.children_elem = document.createElement( 'div' );
+
+	elem.children_elem.classList.add( 'nested-sortable', 'list-group' );
+	elem.appendChild( elem.children_elem );
+
+	this.Sortable( elem.children_elem );
 }
 
 LayoutComponents.prototype.Sortable = function( elem )
