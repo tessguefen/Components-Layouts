@@ -2,7 +2,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.015">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.016">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -53,6 +53,8 @@
 	1.015
 		- Security Bug Fixes Release
 		- Minor XML Import Bug fix
+	1.016
+		- Removed decodeattribute( g.Payload )
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -3581,7 +3583,6 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvASSIGN NAME = "g.Payload"	VALUE = "{ decodeattribute( g.Payload ) }">
 	<MvASSIGN NAME = "l.null"		VALUE = "{ miva_json_decode( g.Payload, l.payload ) }">
 
 	<MvIF EXPR = "{ NOT Layout_Components_Save( g.Layout_ID, l.payload:layout, l.payload:deleted ) }">
