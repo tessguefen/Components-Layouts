@@ -55,6 +55,8 @@
 		- Minor XML Import Bug fix
 	1.016
 		- Removed decodeattribute( g.Payload )
+	1.017
+		- BUGFIX: 'Component_Update' > removed disp_order update.
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -1268,11 +1270,10 @@
 							name = ?,
 							descrip = ?,
 							image = ?,
-							allow_children = ?,
-							disp_order = ?
+							allow_children = ?
 						  WHERE
 							id		= ?' }"
-			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children, l.component:disp_order, l.component:id">
+			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:allow_children, l.component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-COMPONENTS-0006', 'Could not update component.' ) }">
 	</MvIF>
