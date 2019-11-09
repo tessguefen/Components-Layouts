@@ -20,7 +20,7 @@
 	font-family: 'MuseoSans';
 	font-weight: normal;
 	background: #fff;
-	border-radius: 3px;
+	border-radius: 4px;
 	box-shadow: 2px 4px 25px 0 rgba( 0, 0, 0, 0.2 );
 	z-index: 2;
 }
@@ -89,7 +89,7 @@
 	margin: 8px;
 	background: #fff;
 	border: none;
-	border-radius: 3px;
+	border-radius: 4px;
 	text-align: center;
 	text-decoration: none;
 	white-space: nowrap;
@@ -134,7 +134,7 @@
 
 .angular-ui-tree-dropzone,
 .angular-ui-tree-empty{
-	border:2px dashed #b4b4b4;
+	border:2px dashed #6A6E79;
 	min-height:100px;
 	background-color:#e5e5e5;
 	background-image:-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);
@@ -151,14 +151,28 @@
 	padding:0;
 	list-style:none
 }
+
+.cmp_container_wrap {
+	background: #F7F7FA;
+	padding: 17px 12px;
+	margin-bottom: 21px;
+}
+
+.cmp_container_wrap .cmp_container_wrap {
+	padding-right: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+#tree-root {
+	background: none;
+}
+
 .angular-ui-tree-nodes .angular-ui-tree-nodes{
 	padding-left:40px;
 }
 .angular-ui-tree-node,.angular-ui-tree-placeholder{
 	position:relative;
-	margin:0;
-	padding:0;
-	min-height:20px;
 	line-height:20px
 }
 .angular-ui-tree-hidden{
@@ -216,7 +230,7 @@ tr.angular-ui-tree-empty{
 .layout_dialog_container {
 	display: block;
 	height: 100%;
-	background: #f4f5f5;
+	background: #FFF;
 }
 .layout_dialog_close {
 	position: absolute;
@@ -266,7 +280,7 @@ tr.angular-ui-tree-empty{
 	top: 0;
 	left: 0;
 	right: 0;
-	background-color: #f4f5f5;
+	background-color: #FFF;
 	border-bottom: 1px solid transparent;
 	box-sizing: border-box;
 	z-index: 1;
@@ -274,10 +288,18 @@ tr.angular-ui-tree-empty{
 .layout_dialog_titlebar_inner {
 	position: relative;
 	display: block;
-	margin: 80px 90px 0;
+	margin: 70px 90px 10px;
 	height: 50px;
-	border-bottom: 1px solid #ddd;
-	background: #f4f5f5;
+	background: #FFF;
+}
+
+.layout_dialog_titlebar_code {
+	color: #969DA8;
+	font-size: 11px;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-top: -10px;
+	position: relative;
 }
 .layout_dialog_titlebar_title {
 	position: relative;
@@ -300,20 +322,21 @@ tr.angular-ui-tree-empty{
 	margin-left: 15px;
 	padding: 11px;
 	line-height: 1;
-	background: #fff;
+	color: #FFF;
+	background: #1eabbd;
 	cursor: pointer;
 	outline: none;
 	text-align: center;
 	white-space: normal;
 	box-sizing: border-box;
-	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-	border-radius: 3px;
+	border-radius: 4px;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	box-shadow: 0px 4px 13px #9090903C;
 }
 .layout_dialog_content {
 	position: absolute;
@@ -616,34 +639,45 @@ tr.angular-ui-tree-empty{
 	position: relative;
 	display: block;
 	margin: 15px auto;
-	width: 100%;
-	max-width: 900px;
+	max-width: 100%;
+	width: 1400px;
 	box-sizing: border-box;
 }
 .cmp-component {
 	position: relative;
 	display: block;
+	margin-top: 7px;
 }
+
+.cmp-component:first-child {
+	margin-top: 21px;
+}
+
+.cmp-component:last-child {
+	margin-bottom: 20px;
+}
+
 .cmp-component--wrapper {
 	position: relative;
 	display: block;
-	margin: 15px auto;
 	width: 100%;
-	max-width: 900px;
 	box-sizing: border-box;
-	background-color: #fff;
-	border-radius: 3px;
-	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
+	background-color: #F7F7FA;
+	border-radius: 4px;
 }
+.cmp_container_wrap .cmp-component--wrapper {
+	background: #FFF;
+	box-shadow: 0px 3px 10px #00000008;
+}
+
 .cmp-component--drag {
 	position: relative;
 	display: inline-block;
 	vertical-align: middle;
-	margin: 10px 26px 10px 0;
+	margin: 10px 20px 10px 0;
 	width: 70px;
-	height: 40px;
+	height: 43px;
 	padding: 18px 24px;
-	border-right: 1px solid #e0e0e0;
 	box-sizing: border-box;
 	background: transparent;
 	line-height: 1;
@@ -662,7 +696,7 @@ tr.angular-ui-tree-empty{
 	left: 27px;
 	width: 15px;
 	height: 2px;
-	background-color: #b4b4b4;
+	background-color: #6A6E79;
 	transition: 0.25s all linear;
 }
 .cmp-component--drag__line2 {
@@ -672,14 +706,14 @@ tr.angular-ui-tree-empty{
 	position: relative;
 	display: inline-block;
 	vertical-align: middle;
-	padding: 18px 0px;
+	padding: 10px 0px;
 	width: calc(100% - 96px - 70px - 91px);
-	font-size: 20px;
+	font-size: 14px;
 	font-family: 'MuseoSans';
 }
 .cmp-component--title__component {
 	display: block;
-	opacity: .65;
+	opacity: .75;
 	font-size: 12px;
 	letter-spacing: 0.015em;
 	margin-bottom: 0.25rem;
@@ -708,7 +742,7 @@ tr.angular-ui-tree-empty{
 	left: 17px;
 	width: 10px;
 	height: 2px;
-	background-color: #b4b4b4;
+	background-color: #6A6E79;
 	transition: 0.25s all linear;
 	transform: rotate(45deg);
 }
@@ -718,7 +752,7 @@ tr.angular-ui-tree-empty{
 	left: 23px;
 	width: 10px;
 	height: 2px;
-	background-color: #b4b4b4;
+	background-color: #6A6E79;
 	transition: 0.25s all linear;
 	transform: rotate(-45deg);
 }
@@ -742,7 +776,6 @@ tr.angular-ui-tree-empty{
 	height: 40px;
 	line-height: 1;
 	background: transparent;
-	border-left: 1px solid #e0e0e0;
 	cursor: pointer;
 	outline: none;
 	text-align: center;
@@ -769,7 +802,7 @@ tr.angular-ui-tree-empty{
 	width: 4px;
 	height: 4px;
 	border-radius: 50%;
-	background-color: #b4b4b4;
+	background-color: #6A6E79;
 	transition: 0.1s all linear;
 }
 .cmp-component--actions__button_el2 {
