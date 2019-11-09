@@ -257,7 +257,7 @@
 			layout_data.layout = angular.copy( $scope.data.layout );
 			layout_data.deleted = angular.copy( $scope.data.itemsForDeletion );
 
-			ComponentsAPI.saveLayout( layout_data.layout.layout_id, JSON.stringify( layout_data ), function() {
+			ComponentsAPI.saveLayout( layout_data.layout.layout_id, layout_data, function() {
 				$scope.$apply(function() {
 					$scope.data.is_processing = 0;
 				});

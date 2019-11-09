@@ -4819,13 +4819,9 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Layout_ID', l.layout_id, -1, -1 ) OR
-					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Layout_Data', l.layout_data ) }">
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'R', 'Layout_ID', l.layout_id, -1, -1 ) OR
+					NOT [ g.Module_JSON ].JSON_Input_Retrieve_Raw( 'Layout_Data', l.layout_data ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
-	</MvIF>
-
-	<MvIF EXPR = "{ NOT miva_json_decode( l.layout_data, l.layout_data ) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( '#Error#', miva_json_decode_last_error() ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT LayoutComponents_Save( l.layout_id, l.layout_data:layout, l.layout_data:deleted ) }">
