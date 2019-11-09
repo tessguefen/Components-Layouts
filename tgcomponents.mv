@@ -1096,7 +1096,7 @@
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Update' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Component_Delete' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Component_Delete( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Components_DisplayOrder_Update' }">			<MvFUNCTIONRETURN VALUE = "{ JSON_Components_DisplayOrder_Update( l.module ) }">
-	<MvELSEIF EXPR = "{ g.Module_Function EQ 'LayoutList_Load_Query' }">						<MvFUNCTIONRETURN VALUE = "{ JSON_LayoutList_Load_Query( l.module ) }">
+	<MvELSEIF EXPR = "{ g.Module_Function EQ 'LayoutList_Load_Query' }">					<MvFUNCTIONRETURN VALUE = "{ JSON_LayoutList_Load_Query( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Insert' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Insert( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Update' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Update( l.module ) }">
 	<MvELSEIF EXPR = "{ g.Module_Function EQ 'Layout_Delete' }">							<MvFUNCTIONRETURN VALUE = "{ JSON_Layout_Delete( l.module ) }">
@@ -2479,11 +2479,10 @@
 							name = ?,
 							descrip = ?,
 							image = ?,
-							alw_chldrn = ?,
-							disp_order = ?
+							alw_chldrn = ?
 						  WHERE
 							id = ?' }"
-			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:alw_chldrn, l.component:disp_order, l.component:id">
+			 FIELDS	= "l.component:code, l.component:name, l.component:descrip, l.component:image, l.component:alw_chldrn, l.component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
 	</MvIF>
