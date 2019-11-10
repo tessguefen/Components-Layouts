@@ -62,6 +62,10 @@
 	1.015
 		- Security Bug Fixes Release
 		- Minor XML Import Bug fix
+	1.016
+		- Removed decodeattribute( g.Payload )
+	1.017
+		- BUGFIX: 'Component_Update' > removed disp_order update.
 	2.00
 		- Major changes
 </MvCOMMENT>
@@ -463,11 +467,6 @@
 		<MvASSIGN NAME = "l.count" VALUE = 0>
 
 		<MvWHILE EXPR = "{ NOT TGLayouts_Components.d.EOF }">
-			<MvASSIGN NAME = "l.layout_component" VALUE = "">
-
-			<MvEVAL EXPR = "{ LayoutComponent_Read( l.layout_component ) }">
-			<MvASSIGN NAME = "l.layout_component:code" VALUE = "{ l.layout_component:id }">
-
 			<MvCOMMENT>
 			|
 			|	Query directly used for backwards compatibility. v2.000 updated `Component_Update`
@@ -480,7 +479,7 @@
 									code = ?
 								  WHERE
 								    id = ?' }"
-					 FIELDS	= "l.layout_component:code, l.layout_component:id">
+					 FIELDS	= "TGLayouts_Components.d.id, TGLayouts_Components.d.id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
 				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts_Components">
 				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvQUERY_Error ) }">
@@ -5199,12 +5198,10 @@
 	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.deleted_components:children">
 		<MvASSIGN NAME = "l.layout_component:id" VALUE = "{ int( l.layout_component:id ) }">
 
-		<MvIF EXPR = "{ l.layout_component:id EQ 0 }">
-			<MvFOREACHCONTINUE>
-		</MvIF>
-
-		<MvIF EXPR = "{ NOT LayoutComponent_Delete( l.layout_component:id ) }">
-			<MvFUNCTIONRETURN VALUE = 0>
+		<MvIF EXPR = "{ l.layout_component:id GT 0 }">
+			<MvIF EXPR = "{ NOT LayoutComponent_Delete( l.layout_component:id ) }">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
 		</MvIF>
 
 		<MvIF EXPR = "{ NOT LayoutComponents_Delete_Components( l.layout_component ) }">
