@@ -72,7 +72,7 @@
 	position:relative;
 	text-align:left;
 	vertical-align:middle;
-	width:calc(50%-25px);
+	width:calc(50% - 25px);
 }
 
 .mm9_actiondialog_actions_right {
@@ -80,7 +80,7 @@
 	position:relative;
 	text-align:right;
 	vertical-align:middle;
-	width:calc(50%-25px);
+	width:calc(50% - 25px);
 }
 
 .mm_actiondialog_button {
@@ -115,8 +115,7 @@
 	margin:8px 8px 8px 0;
 }
 
-.mm_actiondialog_button.active,
-.mm_actiondialog_button.focus {
+.mm_actiondialog_button.active,.mm_actiondialog_button.focus {
 	border-color:none;
 }
 
@@ -149,8 +148,7 @@
 	font-weight:700;
 }
 
-.angular-ui-tree-dropzone,
-.angular-ui-tree-empty {
+.angular-ui-tree-dropzone,.angular-ui-tree-empty {
 	background-color:rgba(0,0,0,.01);
 	background-image:linear-gradient(45deg,#fff25%,transparent0,transparent75%,#fff0,#fff),linear-gradient(45deg,#fff25%,transparent0,transparent75%,#fff0,#fff);
 	background-position:0 0 30px;
@@ -190,8 +188,7 @@
 	padding-left:40px;
 }
 
-.angular-ui-tree-node,
-.angular-ui-tree-placeholder {
+.angular-ui-tree-node,.angular-ui-tree-placeholder {
 	line-height:20px;
 	position:relative;
 }
@@ -393,7 +390,7 @@ tr.angular-ui-tree-empty {
 	left:0;
 	position:absolute;
 	top:0;
-	width:calc(100%-314px);
+	width:calc(100% - 314px);
 }
 
 .layout_dialog_bottom_actionbar_subtitle {
@@ -417,7 +414,7 @@ tr.angular-ui-tree-empty {
 	font-weight:700;
 	margin-left:60px;
 	margin-top:8px;
-	max-width:calc(100%-60px-45px-30px);
+	max-width:calc(100% - 60px - 45px - 30px);
 	overflow:hidden;
 	position:relative;
 	text-overflow:ellipsis;
@@ -471,10 +468,7 @@ tr.angular-ui-tree-empty {
 	margin-bottom:1.5rem;
 }
 
-.dialogform--styledinput,
-.dialogform--styledtext,
-.dialogform--styledcheckbox,
-.dialogform--styledradio {
+.dialogform--styledinput,.dialogform--styledtext,.dialogform--styledcheckbox,.dialogform--styledradio {
 	-khtml-user-select:none;
 	-moz-user-select:none;
 	-ms-user-select:none;
@@ -496,17 +490,12 @@ tr.angular-ui-tree-empty {
 	width:100%;
 }
 
-.dialogform--styledtext,
-.dialogform--styledcheckbox,
-.dialogform--styledradio {
+.dialogform--styledtext,.dialogform--styledcheckbox,.dialogform--styledradio {
 	border:0;
 	padding:0;
 }
 
-.dialogform--styledinput-title,
-.dialogform--styledtext-title,
-.dialogform--styledcheckbox-prompt,
-.dialogform--styledradio-title {
+.dialogform--styledinput-title,.dialogform--styledtext-title,.dialogform--styledcheckbox-prompt,.dialogform--styledradio-title {
 	color:#999;
 	display:block;
 	font-size:10px;
@@ -522,13 +511,7 @@ tr.angular-ui-tree-empty {
 	top:-3px;
 }
 
-.dialogform--styleinput-select,
-.dialogform--styledtext-text,
-.dialogform--styleinput-input,
-.dialogform--styledradio-label,
-.dialogform--styleinput-textarea,
-.dialogform--styleinput-linkselect,
-.dialogform--styleinput-linkvalue {
+.dialogform--styleinput-select,.dialogform--styledtext-text,.dialogform--styleinput-input,.dialogform--styledradio-label,.dialogform--styleinput-textarea,.dialogform--styleinput-linkselect,.dialogform--styleinput-linkvalue {
 	border:0;
 	color:#000;
 	font-size:14px;
@@ -552,7 +535,7 @@ tr.angular-ui-tree-empty {
 }
 
 .dialogform--styleinput-linkvalue {
-	width:calc(100%-280px);
+	width:calc(100% - 280px);
 }
 
 .dialogform--styleinput-datetime {
@@ -572,9 +555,8 @@ tr.angular-ui-tree-empty {
 	position:relative;
 }
 
-.dialogform--styledlookup .dialogform--styleinput-input,
-.dialogform--styledlookup .dialogform--styledinput-title {
-	width:calc(100%-180px);
+.dialogform--styledlookup .dialogform--styleinput-input,.dialogform--styledlookup .dialogform--styledinput-title {
+	width:calc(100% - 180px);
 }
 
 .dialogform--lookup-button {
@@ -724,8 +706,7 @@ tr.angular-ui-tree-empty {
 	width:70px;
 }
 
-.cmp-component--drag__line1,
-.cmp-component--drag__line2 {
+.cmp-component--drag__line1,.cmp-component--drag__line2 {
 	background-color:#6A6E79;
 	height:2px;
 	left:27px;
@@ -746,7 +727,7 @@ tr.angular-ui-tree-empty {
 	padding:10px 0;
 	position:relative;
 	vertical-align:middle;
-	width:calc(100%-96px-70px-91px);
+	width:calc(100% - 96px - 70px - 91px);
 }
 
 .cmp-component--title__component {
@@ -840,9 +821,7 @@ tr.angular-ui-tree-empty {
 	top:0;
 }
 
-.cmp-component--actions__button_el1,
-.cmp-component--actions__button_el2,
-.cmp-component--actions__button_el3 {
+.cmp-component--actions__button_el1,.cmp-component--actions__button_el2,.cmp-component--actions__button_el3 {
 	background-color:#6A6E79;
 	border-radius:50%;
 	height:4px;
@@ -870,7 +849,7 @@ tr.angular-ui-tree-empty {
 	height:0;
 	left:auto;
 	position:absolute;
-	right:calc(50%-12px);
+	right:calc(50% - 12px);
 	width:0;
 	z-index:3;
 }
@@ -884,7 +863,7 @@ tr.angular-ui-tree-empty {
 	height:0;
 	left:auto;
 	position:absolute;
-	right:calc(50%-12px);
+	right:calc(50% - 12px);
 	width:0;
 	z-index:3;
 }
@@ -906,9 +885,7 @@ tr.angular-ui-tree-empty {
 	z-index:1;
 }
 
-.cmp-component--actions__active .cmp-component--actions__button_el1,
-.cmp-component--actions__active .cmp-component--actions__button_el2,
-.cmp-component--actions__active .cmp-component--actions__button_el3 {
+.cmp-component--actions__active .cmp-component--actions__button_el1,.cmp-component--actions__active .cmp-component--actions__button_el2,.cmp-component--actions__active .cmp-component--actions__button_el3 {
 	background:#1eabbd;
 }
 
@@ -938,28 +915,18 @@ tr.angular-ui-tree-empty {
 	position:relative;
 }
 
-.mm9_actiondialog_title.visible,
-.layout_dialog_loading.layout_dialog_is_loading,
-.cmp-component--actions__active .cmp-component--actions__menu,
-.cmp-component--actions__active .cmp-component--actions__tail_border,
-.cmp-component--actions__active .cmp-component--actions__tail {
+.mm9_actiondialog_title.visible,.layout_dialog_loading.layout_dialog_is_loading,.cmp-component--actions__active .cmp-component--actions__menu,.cmp-component--actions__active .cmp-component--actions__tail_border,.cmp-component--actions__active .cmp-component--actions__tail {
 	display:block;
 }
 
-.mm_actiondialog_button.negative .mm9_button_text,
-.dialogform--error .dialogform--styledinput-title,
-.dialogform--error .dialogform--styledtext-title,
-.dialogform--error .dialogform--styledcheckbox-prompt,
-.dialogform--error .dialogform--styledradio-title {
+.mm_actiondialog_button.negative .mm9_button_text,.dialogform--error .dialogform--styledinput-title,.dialogform--error .dialogform--styledtext-title,.dialogform--error .dialogform--styledcheckbox-prompt,.dialogform--error .dialogform--styledradio-title {
 	color:#ff6b59;
 }
 
-.angular-ui-tree-hidden,
-.cmp--nodes__hidden ol {
+.angular-ui-tree-hidden,.cmp--nodes__hidden ol {
 	display:none;
 }
 
-.angular-ui-tree-drag .tree-node-content,
-.dialogform--styledradio-label:first-child {
+.angular-ui-tree-drag .tree-node-content,.dialogform--styledradio-label:first-child {
 	margin-top:0;
 }
