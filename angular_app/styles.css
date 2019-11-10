@@ -134,9 +134,10 @@
 
 .angular-ui-tree-dropzone,
 .angular-ui-tree-empty{
-	border:2px dashed #6A6E79;
+	border-radius: 4px;
+	border:2px dashed rgba(0,0,0,0.25);
 	min-height:100px;
-	background-color:#e5e5e5;
+	background-color: rgba(0,0,0,.01);
 	background-image:-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),-webkit-linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);
 	background-image:linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff),linear-gradient(45deg,#fff 25%,transparent 0,transparent 75%,#fff 0,#fff);
 	background-size:60px 60px;
@@ -585,7 +586,7 @@ tr.angular-ui-tree-empty{
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background-color: #f1f1f1;
+	background-color: #FFF;
 	z-index: 1;
 }
 .layout_dialog_loading.layout_dialog_is_loading {

@@ -39,7 +39,7 @@
 
 							<div ui-tree class="cmp-components">
 								<ol ui-tree-nodes="" ng-model="data.layout.children" id="tree-root">
-									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.children" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_children, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
+									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.alw_chldrn ? undefined : true  }}" ng-repeat="node in data.layout.children" ng-class="{ 'cmp_container_wrap' : node.component.alw_chldrn, 'cmp_item_wrap' : !node.component.alw_chldrn, 'cmp--nodes__hidden': node.hide_children, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
 								</ol>
 							</div>
 
@@ -305,7 +305,7 @@
 
 	<!-- Nested node template -->
 	<script type="text/ng-template" id="nodes_renderer.html">
-		<div ui-tree-handle class="cmp-component--wrapper" ng-class="{ 'cmp_container' : node.component.allow_children, 'cmp_item' : !node.component.allow_children }" ng-init="checkNodes( node )">
+		<div ui-tree-handle class="cmp-component--wrapper" ng-class="{ 'cmp_container' : node.component.alw_chldrn, 'cmp_item' : !node.component.alw_chldrn }" ng-init="checkNodes( node )">
 			
 			<span class="cmp-component--drag">
 				<span class="cmp-component--drag__line1"></span>
@@ -328,7 +328,7 @@
 			<span class="cmp-component--actions" data-nodrag ng-class="{ 'cmp-component--actions__active' : nodeActive == node }" ng-if="permissions.can_add || permissions.can_edit || permissions.can_delete">
 				<span class="cmp-component--actions__row">
 					<div class="cmp-component--actions__menu">
-						<span class="cmp-component--actions__item" ng-if="permissions.can_add && node.component.allow_children" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
+						<span class="cmp-component--actions__item" ng-if="permissions.can_add && node.component.alw_chldrn" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="editComponent( node ); toggleNodeActions();">Edit Component</span>
 						<span class="cmp-component--actions__item" ng-if="permissions.can_add" ng-click="duplicateComponent( parent, node )">Duplicate Component</span>
 						<span class="cmp-component--actions__divider" ng-if="permissions.can_edit"></span>
@@ -348,8 +348,8 @@
 				</span>
 			</span>
 		</div>
-		<ol ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.children">
-			<li class="cmp-component" ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_children, 'cmp-component--title__inactive' : !node.active }">
+		<ol ng-attr-data-nodrop-enabled="{{ node.component.alw_chldrn ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.children">
+			<li class="cmp-component" ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.alw_chldrn, 'cmp_item_wrap' : !node.component.alw_chldrn, 'cmp--nodes__hidden': node.hide_children, 'cmp-component--title__inactive' : !node.active }">
 			</li>
 		</ol>
 	</script>
