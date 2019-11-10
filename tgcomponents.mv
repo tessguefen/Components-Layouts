@@ -19,71 +19,53 @@
 
 <MvCOMMENT>
 	Change Log
-
 	1.001
 		UI Updates
 		- Styled Top Level Components
 		- Added Collapse Toggle
-
 	1.002
 		Bug Fixes
 		- Import Issue with components with no attributes.
-
 	1.003
 		UI Updates
 		- Added "datetime" attribute for a Date/Time picker. Returns timestamp.
-
 	1.004
 		Added Layout Caching! :sunglasses:
-
 	1.005
 		- Fixed UI issue with Radio buttons.
-
 	1.006
 		- Added Date Cached
 		- Added Date Start/ End per Layout> Components
-
 	1.007
 		- Actually Added Scheduling
 		- Added Scheduled Task
-
 	1.008
 		- Updated PRV tags
 		- Updated api_ver
-
 	1.009
 		- Added Check for Layout Cache for Start/End Dates per Layout on Runtime Call
 		- Display Order for Components (o.m.g.)
-
 	1.010
 		- Array Field Type
-
 	1.011
 		- Added Export Option for All Layouts, or a specific layout
 		- Made 'multitext' textarea larger.
-
 	1.012
 		- Max wins, column code added
-
 	1.013
 		- Minor bug fix (display order of Component Attributes)
 		- Updated `Code` display on Layout Edit
 		- Fixed left over data in previous modal issue (since )
-
 	1.014
 		- Major clean up / formatting
 		- Added int() on certain values when inserting via lowlevel functions
-
 	1.015
 		- Security Bug Fixes Release
 		- Minor XML Import Bug fix
-
 	1.016
 		- Removed decodeattribute( g.Payload )
-
 	1.017
 		- BUGFIX: 'Component_Update' > removed disp_order update.
-
 	2.00
 		- Major changes
 </MvCOMMENT>
