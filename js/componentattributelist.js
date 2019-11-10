@@ -363,4 +363,3 @@ Fields_Column_Type.prototype.onDisplayData = function( record )
 
 	return text;
 }
-

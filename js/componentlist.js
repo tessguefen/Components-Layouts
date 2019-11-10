@@ -136,3 +136,8 @@ TGComponentList.prototype.onSetDisplayOrder = function( recordlist, start_index 
 		}
 	}
 }
+
+TGComponentList.prototype.onDeleteConfirmationMessage = function()
+{
+	return 'Are you sure you wish to delete ' + ( this.ActiveItemList_Count() > 1 ? ( this.ActiveItemList_Count() + ' records?' ) : '1 record?' ) + ' This can not be undone. All references to the component' + ( this.ActiveItemList_Count() > 1 ? 's' : '' ) + ' will be deleted.';
+}
