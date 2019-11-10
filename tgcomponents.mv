@@ -3,7 +3,7 @@
 <MvCOMMENT>
 |
 | Prefix			: MOD-UTL-CAL
-| Next Error Code	: 158
+| Next Error Code	: 159
 |
 </MvCOMMENT>
 
@@ -19,53 +19,71 @@
 
 <MvCOMMENT>
 	Change Log
+
 	1.001
 		UI Updates
 		- Styled Top Level Components
 		- Added Collapse Toggle
+
 	1.002
 		Bug Fixes
 		- Import Issue with components with no attributes.
+
 	1.003
 		UI Updates
 		- Added "datetime" attribute for a Date/Time picker. Returns timestamp.
+
 	1.004
 		Added Layout Caching! :sunglasses:
+
 	1.005
 		- Fixed UI issue with Radio buttons.
+
 	1.006
 		- Added Date Cached
 		- Added Date Start/ End per Layout> Components
+
 	1.007
 		- Actually Added Scheduling
 		- Added Scheduled Task
+
 	1.008
 		- Updated PRV tags
 		- Updated api_ver
+
 	1.009
 		- Added Check for Layout Cache for Start/End Dates per Layout on Runtime Call
 		- Display Order for Components (o.m.g.)
+
 	1.010
 		- Array Field Type
+
 	1.011
 		- Added Export Option for All Layouts, or a specific layout
 		- Made 'multitext' textarea larger.
+
 	1.012
 		- Max wins, column code added
+
 	1.013
 		- Minor bug fix (display order of Component Attributes)
 		- Updated `Code` display on Layout Edit
 		- Fixed left over data in previous modal issue (since )
+
 	1.014
 		- Major clean up / formatting
 		- Added int() on certain values when inserting via lowlevel functions
+
 	1.015
 		- Security Bug Fixes Release
 		- Minor XML Import Bug fix
+
 	1.016
 		- Removed decodeattribute( g.Payload )
+
 	1.017
 		- BUGFIX: 'Component_Update' > removed disp_order update.
+
 	2.00
 		- Major changes
 </MvCOMMENT>
@@ -2828,7 +2846,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE id = ?' }"
 			 FIELDS	= "l.component_attribute_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0090', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -2840,7 +2858,7 @@
 				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE cmpnt_id = ?' }"
 				FIELDS	= "l.cmpnt_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0090', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0091', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGComponentAttributes.d.EOF }">
@@ -2880,7 +2898,7 @@
 																				   'g.ComponentAttribute_ID, g.Field_cmpnt_id',
 																				   l.fields[ l.field_pos ]:offset - 1,
 																				   1 ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0091', g.Error_Message ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0092', g.Error_Message ) }">
 		</MvIF>
 
 		<MvIF EXPR = "{ TGComponentAttributes.d.EOF }">
@@ -2922,7 +2940,7 @@
 														disp_order>= ? AND cmpnt_id = ?' }" 
 													FIELDS = "l.disp_order, l.cmpnt_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0092', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0093', g.MvQUERY_Error ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponentAttributeDisplayOrder' ) }">
@@ -2941,7 +2959,7 @@
 														id = ? AND cmpnt_id = ?' }" 
 													FIELDS = "l.disp_order, g.ComponentAttribute_ID, l.cmpnt_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0093', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0094', g.MvQUERY_Error ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.field_pos"	VALUE = "{ l.field_pos + 1 }">
@@ -2986,7 +3004,7 @@
 													id = ? AND cmpnt_id = ?' }" 
 												FIELDS = "l.disp_order, g.ComponentAttribute_ID, l.cmpnt_id">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0094', g.MvQUERY_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0095', g.MvQUERY_Error ) }">
 		</MvIF>
 
 		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
@@ -3005,12 +3023,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE cmpnt_id = ? ORDER BY disp_order' }"
 				FIELDS	= "l.cmpnt_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0095', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0096', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponentAttributes.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0096' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0097' ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -3032,7 +3050,7 @@
 
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
 
-	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0097', l.count ) }">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0098', l.count ) }">
 </MvFUNCTION>
 
 <MvCOMMENT>
@@ -3059,7 +3077,7 @@
 						  ( ?, ?, ?, ? )' }"
 			 FIELDS	= "l.component_option:id, l.component_option:attr_id, l.component_option:prompt, l.component_option:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0098', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0099', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3071,12 +3089,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponentOptions WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0099', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0100', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponentOptions.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentOptions">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0100' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0101' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ ComponentOption_Read( l.component_option ) }">
@@ -3090,7 +3108,7 @@
 			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponentOptions SET prompt = ? WHERE id = ?' }"
 			 FIELDS	= "l.component_option:prompt, l.component_option:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0101', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0102', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3101,7 +3119,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponentOptions WHERE id = ?' }"
 			 FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0102', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0103', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3112,7 +3130,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGComponentOptions WHERE attr_id = ?' }"
 			 FIELDS	= "l.attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0103', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0104', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3124,12 +3142,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponentOptions WHERE attr_id = ? ORDER BY disp_order' }"
 				FIELDS	= "l.attr_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0104', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0105', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponentOptions.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentOptions">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0105' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0106' ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGComponentOptions.d.EOF }">
@@ -3208,7 +3226,7 @@
 														disp_order>= ? AND attr_id = ?' }" 
 													FIELDS = "l.disp_order, l.attr_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0106', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0107', g.MvQUERY_Error ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_DB ].StoreKey_Generate( 'TGComponentOptionDisplayOrder' ) }">
@@ -3227,7 +3245,7 @@
 														id = ? AND attr_id = ?' }" 
 													FIELDS = "l.disp_order, g.Option_Order_Attribute_ID, l.attr_id">
 			<MvIF EXPR = "{ g.MvQUERY_Error }">
-				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0107', g.MvQUERY_Error ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0108', g.MvQUERY_Error ) }">
 			</MvIF>
 
 			<MvASSIGN NAME = "l.option_pos"	VALUE = "{ l.option_pos + 1 }">
@@ -3271,7 +3289,7 @@
 													id = ? AND attr_id = ?' }" 
 												FIELDS = "l.disp_order, g.Option_Order_Attribute_ID, l.attr_id">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0108', g.MvQUERY_Error ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0109', g.MvQUERY_Error ) }">
 		</MvIF>
 
 		<MvASSIGN NAME = "l.pastend_pos"	VALUE = "{ l.pastend_pos + 1 }">
@@ -3302,7 +3320,7 @@
 						  ( ?, ?, ? )' }"
 			 FIELDS	= "l.layout:id, l.layout:code, l.layout:name">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0109', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0110', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3314,12 +3332,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0110', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0111', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayouts.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0111' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0112' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ Layout_Read( l.layout ) }">
@@ -3334,12 +3352,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( 'code' ) $ ' = ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( '?' ) }"
 				FIELDS	= "l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0112', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0113', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayouts.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0113' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0114' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ Layout_Read( l.layout ) }">
@@ -3362,7 +3380,7 @@
 				VIEW	= "TGLayouts"
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts' }">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0114', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0115', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -3374,7 +3392,7 @@
 
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayouts">
 
-	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0115', l.count ) }">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0116', l.count ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Layout_Update_LowLevel" PARAMETERS = "layout var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
@@ -3387,7 +3405,7 @@
 							id = ?' }"
 			 FIELDS	= "l.layout:code, l.layout:name, l.layout:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0116', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0117', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3408,7 +3426,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayouts WHERE id = ?' }"
 			 FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0117', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0118', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3506,7 +3524,7 @@
 			 		   l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end,
 			 		   l.layout_component:code">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0118', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0119', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3518,12 +3536,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE id = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0119', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0120', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutComponents.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0120' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0121' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutComponent_Read( l.layout_component ) }">
@@ -3538,12 +3556,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ? AND ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( 'code' ) $ ' = ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( '?' ) }"
 				FIELDS	= "l.layout_id, l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0121', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0122', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutComponents.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0122' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0123' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutComponent_Read( l.layout_component ) }">
@@ -3574,7 +3592,7 @@
 			 		   l.layout_component:disp_order, l.layout_component:dt_start, l.layout_component:dt_end,
 			 		   l.layout_component:code, l.layout_component:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0123', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0124', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3596,7 +3614,7 @@
 				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE parent = ?' }"
 				FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0124', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0125', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.layout_components"			VALUE = "">
@@ -3622,7 +3640,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE id = ?' }"
 			 FIELDS	= "l.id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0125', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0126', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3634,7 +3652,7 @@
 				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE cmpnt_id = ?' }"
 				FIELDS	= "l.cmpnt_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0126', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0127', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.layout_components"			VALUE = "">
@@ -3661,7 +3679,7 @@
 				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ?' }"
 				FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0127', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0128', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.layout_components"			VALUE = "">
@@ -3689,12 +3707,12 @@
 							  WHERE layout_id = ? AND ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( 'code' ) $ ' = ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( '?' ) }"
 				FIELDS	= "l.layout_id, l.code">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0128', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0129', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutComponents.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0129' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0130' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutComponent_Read( l.layout_component ) }">
@@ -3711,7 +3729,7 @@
 				QUERY	= "{ 'SELECT disp_order FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ? AND parent = ? ORDER BY disp_order DESC LIMIT 1' }"
 				FIELDS	= "l.layout_id, l.parent">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0130', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0131', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutComponents.d.EOF }">
@@ -3736,7 +3754,7 @@
 							disp_order >= ?' }" 
 			 FIELDS	= "l.layout_id, l.disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0131', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0132', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3782,7 +3800,7 @@
 						  ( ?, ?, ? )' }"
 			 FIELDS	= "l.layout_value:lc_id, l.layout_value:attr_id, l.layout_value:value">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0132', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0133', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3794,12 +3812,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ? AND attr_id = ?' }"
 				FIELDS	= "l.lc_id, l.attr_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0133', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0134', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutValues.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutValues">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0134' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0135' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutValue_Read( l.layout_value ) }">
@@ -3827,7 +3845,7 @@
 						    attr_id = ?' }"
 			 FIELDS	= "l.layout_value:value, l.layout_value:lc_id, l.layout_value:attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0135', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0136', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3847,7 +3865,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ? AND attr_id = ?' }"
 			 FIELDS	= "l.layout_value:lc_id, l.layout_value:attr_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0136', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0137', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3859,7 +3877,7 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE attr_id = ?' }"
 				FIELDS	= "l.attr_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0137', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0138', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGLayoutValues.d.EOF }">
@@ -3883,7 +3901,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutValues WHERE lc_id = ?' }"
 			 FIELDS	= "l.lc_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0138', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0139', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -3953,12 +3971,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'GeneratedImages WHERE image = ?' }"
 				FIELDS	= "l.file">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0139', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0140', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ GeneratedImages.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "GeneratedImages">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0140' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0141' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].GeneratedImage_Read( l.generatedimage ) }">
@@ -3989,7 +4007,7 @@
 						  ( ?, ?, ? )' }"
 			 FIELDS	= "l.layout_cache:layout_id, l.layout_cache:value, s.dyn_time_t">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0141', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0142', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -4001,12 +4019,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutCache WHERE layout_id = ?' }"
 				FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0142', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0143', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0143' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0144' ) }">
 	</MvIF>
 
 	<MvEVAL EXPR = "{ LayoutCache_Read( l.layout_cache ) }">
@@ -4020,7 +4038,7 @@
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutCache WHERE layout_id = ?' }"
 			 FIELDS	= "l.layout_id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0144', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0145', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -4030,7 +4048,7 @@
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'DELETE FROM ' $ g.Store_Table_Prefix $ 'TGLayoutCache' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0145', g.MvQUERY_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0146', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
@@ -4062,12 +4080,12 @@
 									)' }"
 				FIELDS	= "s.dyn_time_t, s.dyn_time_t">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0146', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0147', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0147' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0148' ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGLayoutCache.d.EOF }">
@@ -4111,12 +4129,12 @@
 									)' }"
 				FIELDS	= "l.layout_id, s.dyn_time_t, s.dyn_time_t">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0148', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0149', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGLayoutCache.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutCache">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0149' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0150' ) }">
 	</MvIF>
 
 	<MvWHILE EXPR = "{ NOT TGLayoutCache.d.EOF }">
@@ -4207,7 +4225,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error(g.Error_Code, g.Error_Message ) }">
 	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGComponents', l.search_sql, l.search_fields, l.offset, l.count) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'MOD-UTL-CAL-0150', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'MOD-UTL-CAL-0151', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.component_count" VALUE = 0>
@@ -4364,7 +4382,7 @@
 	<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].SQL_Query_Count( l.search_query, l.total_count ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error(g.Error_Code, g.Error_Message ) }">
 	<MvELSEIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_OPENVIEW_Range('Merchant', 'TGLayouts', l.search_sql, l.search_fields, g.Offset, g.Count) }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'MOD-UTL-CAL-0151', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'MOD-UTL-CAL-0152', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -4507,7 +4525,7 @@
 				QUERY	= "{ l.search_sql }"
 				FIELDS	= "{ l.search_fields }">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'MOD-UTL-CAL-0152', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_Error( 'MOD-UTL-CAL-0153', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.total_count"	VALUE = 0>
@@ -4948,12 +4966,12 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE cmpnt_id = ? ORDER BY disp_order' }"
 				FIELDS	= "l.cmpnt_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0153', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0154', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ TGComponentAttributes.d.EOF }">
 		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0154' ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0155' ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -5021,7 +5039,7 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ? AND parent = ? ORDER BY disp_order' }"
 				FIELDS	= "l.layout_id, l.parent_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0155', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0156', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -5036,7 +5054,7 @@
 	</MvWHILE>
 
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0156', l.count ) }">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0157', l.count ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "LayoutComponents_Load_Parent" PARAMETERS = "layout_id, parent_id, components var" STANDARDOUTPUTLEVEL = "">
@@ -5069,7 +5087,7 @@
 				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayoutComponents WHERE layout_id = ? AND parent = ? AND active = 1 ORDER BY disp_order' }"
 				FIELDS	= "l.layout_id, l.parent_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
-		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0157', g.MvOPENVIEW_Error ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0158', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.count" VALUE = 0>
@@ -5088,7 +5106,7 @@
 	</MvWHILE>
 
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0158', l.count ) }">
+	<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].ListLoad_EOF_Return( 'MOD-UTL-CAL-0159', l.count ) }">
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Runtime_LayoutComponents_Load_Parent" PARAMETERS = "layout_id, parent_id, layout_components var" STANDARDOUTPUTLEVEL = "">
