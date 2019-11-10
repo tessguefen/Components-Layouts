@@ -146,7 +146,7 @@
 
 			$scope.$apply(function() {
 				if ( $scope.mmdialog.component.parent.children.length === 0 ) $scope.mmdialog.component.parent.children = [];
-				if ( $scope.mmdialog.component.component.alw_chldrn == 1 ) $scope.mmdialog.component.children = [];
+				if ( $scope.mmdialog.component.component.alw_chldrn === 1 ) $scope.mmdialog.component.children = [];
 				$scope.mmdialog.component.parent.children.push( angular.copy( $scope.mmdialog.component ) );
 				$scope.closeMMDialog();
 			});
