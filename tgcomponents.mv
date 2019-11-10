@@ -3637,16 +3637,20 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
+	<MvASSIGN NAME = "l.layout_components"			VALUE = "">
+	<MvASSIGN NAME = "l.layout_components_count"	VALUE = 0>
+
 	<MvWHILE EXPR = "{ NOT TGLayoutComponents.d.EOF }">
-		<MvIF EXPR = "{ NOT LayoutComponent_Delete( TGLayoutComponents.d.id  ) }">
-			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
+		<MvEVAL EXPR = "{ LayoutComponent_Read( l.layout_components[ ++l.layout_components_count ] ) }">
 
 		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutComponents" ROWS = 1>
 	</MvWHILE>
 
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
+
+	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.layout_components" COUNT = "{ l.layout_components_count }">
+		<MvASSIGN NAME = "l.null" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
+	</MvFOREACH>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -3660,16 +3664,20 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( '#Error#', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
+	<MvASSIGN NAME = "l.layout_components"			VALUE = "">
+	<MvASSIGN NAME = "l.layout_components_count"	VALUE = 0>
+
 	<MvWHILE EXPR = "{ NOT TGLayoutComponents.d.EOF }">
-		<MvIF EXPR = "{ NOT LayoutComponent_Delete( TGLayoutComponents.d.id  ) }">
-			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
-			<MvFUNCTIONRETURN VALUE = 0>
-		</MvIF>
+		<MvEVAL EXPR = "{ LayoutComponent_Read( l.layout_components[ ++l.layout_components_count ] ) }">
 
 		<MvSKIP NAME = "Merchant" VIEW = "TGLayoutComponents" ROWS = 1>
 	</MvWHILE>
 
 	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGLayoutComponents">
+
+	<MvFOREACH ITERATOR = "l.layout_component" ARRAY = "l.layout_components" COUNT = "{ l.layout_components_count }">
+		<MvASSIGN NAME = "l.null" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
+	</MvFOREACH>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MVFUNCTION>
