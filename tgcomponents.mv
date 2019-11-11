@@ -1,4 +1,4 @@
-<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id$">
+<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: 65b71da792f552d6fc08b92a37ebe643a90470c2 $">
 
 <MvCOMMENT>
 |
@@ -2814,9 +2814,9 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttribute_Delete" PARAMETERS = "component_attribute_id" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ NOT ComponentAttribute_Delete_LowLevel( l.component_attribute_id )	OR
+	<MvIF EXPR = "{ NOT LayoutValues_Delete_Attribute( l.component_attribute_id )		OR
 					NOT ComponentOptions_Delete_Attribute( l.component_attribute_id )	OR
-					NOT LayoutValues_Delete_Attribute( l.component_attribute_id ) }">
+					NOT ComponentAttribute_Delete_LowLevel( l.component_attribute_id ) }">
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
