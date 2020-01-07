@@ -807,6 +807,14 @@
 		</MvIF>
 	</MvIF>
 
+	<MvCOMMENT>
+	|
+	|	Clear Layout Cache after any upgrade.
+	|
+	</MvCOMMENT>
+
+	<MvASSIGN NAME = "l.null" VALUE = "{ LayoutCache_Delete_All() }">
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
