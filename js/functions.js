@@ -173,6 +173,7 @@ function ComponentOption_Insert( parent_data, data, callback, delegator )
 	return AJAX_Call_Module_JSON( callback, 'admin', 'TGCOMPONENTS', 'ComponentOption_Insert',
 	{
 		Attribute_ID:	parent_data.id,
+		Code:			data.code,
 		Prompt:			data.prompt
 	}, delegator );
 }
@@ -183,6 +184,7 @@ function ComponentOption_Update( parent_data, data, callback, delegator )
 	{
 		ID:				data.id,
 		Attribute_ID:	parent_data.id,
+		Code:			data.code,
 		Prompt:			data.prompt
 	}, delegator );
 }

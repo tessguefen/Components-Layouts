@@ -199,7 +199,7 @@
 						<input type="text" ng-value="attribute.value" placeholder="-- Select One --" class="dialogform--styleinput-input" readonly />
 						<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-init="attribute.value = attribute.value || ''" class="dialogform--styleinput-select">
 							<option value="">-- Select One --</option>
-							<option ng-repeat="option in attribute.options" ng-value="option.prompt">{{ option.prompt }}</option>
+							<option ng-repeat="option in attribute.options" ng-value="option.code">{{ option.prompt }}</option>
 						</select>
 					</div>
 				</div>
@@ -208,7 +208,7 @@
 					<div class="dialogform--styledradio">
 						<div class="dialogform--styledradio-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
 						<label ng-repeat="option in attribute.options" class="dialogform--styledradio-label">
-							<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.prompt" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
+							<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.code" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
 						</label>
 					</div>
 				</div>

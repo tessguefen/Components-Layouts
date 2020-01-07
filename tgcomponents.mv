@@ -1,9 +1,9 @@
-<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: 65b71da792f552d6fc08b92a37ebe643a90470c2 $">
+<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: f85a76c70d32b5f6994191b8300d8082778ea378 $">
 
 <MvCOMMENT>
 |
 | Prefix			: MOD-UTL-CAL
-| Next Error Code	: 159
+| Next Error Code	: 166
 |
 </MvCOMMENT>
 
@@ -11,7 +11,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "2.000">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "2.001">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -66,8 +66,10 @@
 		- Removed decodeattribute( g.Payload )
 	1.017
 		- BUGFIX: 'Component_Update' > removed disp_order update.
-	2.00
+	2.000
 		- Major changes
+	2.001
+		- Added 'code' for component options
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -154,6 +156,7 @@
 							(
 								id			' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								attr_id		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
+								code		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 50 )		$ ',
 								prompt		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ ',
 								disp_order	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$'
 							)' }">
@@ -168,7 +171,7 @@
 	</MvIF>
 
 	<MvQUERY NAME = "Merchant"
-			 QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponentOptions_2 ON ' $ g.Store_Table_Prefix $ 'TGComponentOptions ( attr_id, prompt )' }">
+			 QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponentOptions_2 ON ' $ g.Store_Table_Prefix $ 'TGComponentOptions ( attr_id, code )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0009', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -742,6 +745,65 @@
 					</MvIF>
 				</MvIF>
 			</MvFOREACH>
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.version LT 2.001 }">
+		<MvASSIGN NAME = "l.null" VALUE = "{ [ g.Module_Library_Native_DBAPI ].DB_Drop_Index( g.Store_Table_Prefix $ 'TGComponentOptions', g.Store_Table_Prefix $ 'TGComponentOptions_2' ) }">
+
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGComponentOptions ADD
+				 				(
+									code ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 50 ) $ '
+				 				)' }">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0161', g.MvQUERY_Error ) }">
+		</MvIF>
+
+		<MvOPENVIEW NAME	= "Merchant"
+					VIEW	= "TGComponentOptions"
+					QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponentOptions' }">
+		<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0162', g.MvOPENVIEW_Error ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ TGComponentOptions.d.EOF }">
+			<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentOptions">
+		</MvIF>
+
+		<MvWHILE EXPR = "{ NOT TGComponentOptions.d.EOF }">
+			<MvEVAL EXPR = "{ ComponentOption_Read( l.component_option ) }">
+
+			<MvASSIGN NAME = "l.component_option:code"	VALUE = "{ tolower( slugify( l.component_option:prompt ) ) }">
+
+			<MvIF EXPR = "{ NOT ComponentOption_Update( l.component_option ) }">
+				<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentOptions">
+				<MvFUNCTIONRETURN VALUE = 0>
+			</MvIF>
+
+			<MvCOMMENT>
+			|
+			|	Update sNN_TGLayoutValues to store :code, instead of :prompt.
+			|
+			</MvCOMMENT>
+
+			<MvQUERY NAME	= "Merchant"
+					 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGLayoutValues
+								SET
+									value = ?
+								WHERE
+									attr_id = ? AND value = ?' }"
+					 FIELDS	= "l.component_option:code, l.component_option:attr_id, l.component_option:prompt">
+
+			<MvSKIP NAME = "Merchant" VIEW = "TGComponentOptions" ROWS = 1>
+		</MvWHILE>
+
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentOptions">
+
+		<MvQUERY NAME = "Merchant"
+			 QUERY = "{ 'CREATE INDEX ' $ g.Store_Table_Prefix $ 'TGComponentOptions_2 ON ' $ g.Store_Table_Prefix $ 'TGComponentOptions ( attr_id, code )' }">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0163', g.MvQUERY_Error ) }">
 		</MvIF>
 	</MvIF>
 
@@ -1438,6 +1500,7 @@
 <MvFUNCTION NAME = "Module_Provision_ComponentAttributeOption_Add" PARAMETERS = "module var, provide_xml var" STANDARDOUTPUTLEVEL = "">
 	<MvCOMMENT>
 		<ComponentAttributeOption_Add component="My_Component" code="Attribute_Code">
+			<Code>MyCode</Code>
 			<Prompt>My Prompt</Prompt>
 		</ComponentAttributeOption_Add>
 	</MvCOMMENT>
@@ -1460,8 +1523,16 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Attributes must be radio or select to have options.' ) }">
 	</MvIF>
 
+	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml, 'Code', l.component_option:code ) }">
+		<MvFUNCTIONRETURN>
+	</MvIF>
+
 	<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Text( 'R', l.provide_xml, 'Prompt', l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN>
+	</MvIF>
+
+	<MvIF EXPR = "{ ComponentOption_Load_Code( l.component_attribute:id, l.component_option:code, l.existing_component_option ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'An option with the code \'' $ l.existing_component_option:code $ '\' already exists' ) }">
 	</MvIF>
 
 	<MvASSIGN NAME = "l.component_option:attr_id" VALUE = "{ l.component_attribute:id }">
@@ -1656,6 +1727,10 @@
 				</MvIF>
 
 				<MvASSIGN NAME = "l.layout_value:value" VALUE = "{ l.imagetype:id }">
+			<MvELSEIF EXPR = "{ l.component_option:type EQ 'radio' OR l.component_option:type EQ 'select' }">
+				<MvIF EXPR = "{ NOT ComponentOption_Load_Code( l.component_option:id, l.layout_value:value, l.null ) }">
+					<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml:children[ l.child_pos ], 'Option with Code \'' $ l.layout_value:value $ '\' was not found.' ) }">
+				</MvIF>
 			</MvIF>
 		</MvIF>
 
@@ -2012,6 +2087,7 @@
 								( l.component_attribute:option_count GT 0 ) }">
 					<MvFOREACH ITERATOR = "l.component_option" ARRAY = "l.component_attribute:options">
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	<ComponentAttributeOption_Add component="' $ TGComponents.d.code $ '" code="' $ l.component_attribute:code $ '">' ) }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Code>'		$ l.component_option:code $ '</Code>' ) }">
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '		<Prompt>'	$ l.component_option:prompt $ '</Prompt>' ) }">
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '	</ComponentAttributeOption_Add>' ) }">
 					</MvFOREACH>
@@ -3044,6 +3120,7 @@
 <MvFUNCTION NAME = "ComponentOption_Read" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.component_option:id"			VALUE = "{ TGComponentOptions.d.id }">
 	<MvASSIGN NAME = "l.component_option:attr_id"		VALUE = "{ TGComponentOptions.d.attr_id }">
+	<MvASSIGN NAME = "l.component_option:code"			VALUE = "{ TGComponentOptions.d.code }">
 	<MvASSIGN NAME = "l.component_option:prompt"		VALUE = "{ TGComponentOptions.d.prompt }">
 	<MvASSIGN NAME = "l.component_option:disp_order"	VALUE = "{ TGComponentOptions.d.disp_order }">
 </MvFUNCTION>
@@ -3054,10 +3131,10 @@
 
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGComponentOptions
-						  ( id, attr_id, prompt, disp_order )
+						  ( id, attr_id, code, prompt, disp_order )
 						  VALUES
-						  ( ?, ?, ?, ? )' }"
-			 FIELDS	= "l.component_option:id, l.component_option:attr_id, l.component_option:prompt, l.component_option:disp_order">
+						  ( ?, ?, ?, ?, ? )' }"
+			 FIELDS	= "l.component_option:id, l.component_option:attr_id, l.component_option:code, l.component_option:prompt, l.component_option:disp_order">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0099', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -3085,10 +3162,35 @@
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
+<MvFUNCTION NAME = "ComponentOption_Load_Code" PARAMETERS = "attr_id, code, component_option var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
+	<MvOPENVIEW NAME	= "Merchant"
+				VIEW	= "TGComponentOptions"
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGComponentOptions WHERE ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( 'code' ) $ ' = ' $ [ g.Module_Library_Native_DBAPI ].DB_Compare_UPPER( '?' ) $ ' AND attr_id = ?' }"
+				FIELDS	= "l.code, l.attr_id">
+	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0164', g.MvOPENVIEW_Error ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ TGComponentOptions.d.EOF }">
+		<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentOptions">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_DB ].Error_Load_EOF( 'MOD-UTL-CAL-0165' ) }">
+	</MvIF>
+
+	<MvEVAL EXPR = "{ ComponentOption_Read( l.component_option ) }">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentOptions">
+
+	<MvFUNCTIONRETURN VALUE = 1>
+</MvFUNCTION>
+
 <MvFUNCTION NAME = "ComponentOption_Update" PARAMETERS = "component_option var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvQUERY NAME	= "Merchant"
-			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponentOptions SET prompt = ? WHERE id = ?' }"
-			 FIELDS	= "l.component_option:prompt, l.component_option:id">
+			 QUERY	= "{ 'UPDATE ' $ g.Store_Table_Prefix $ 'TGComponentOptions
+						  SET
+							 code = ?,
+							 prompt = ?
+						  WHERE
+						  	id = ?' }"
+			 FIELDS	= "l.component_option:code, l.component_option:prompt, l.component_option:id">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0102', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -4485,6 +4587,7 @@
 																				 attr.disp_order		AS attr_disp_order,
 																				 opt.id					AS opt_id,
 																				 opt.attr_id			AS opt_attr_id,
+																				 opt.code				AS opt_code,
 																				 opt.prompt				AS opt_prompt,
 																				 opt.disp_order			AS opt_disp_order' ) }">
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_FROM( l.search_query, g.Store_Table_Prefix $ 'TGComponentAttributes', 'attr' ) }">
@@ -4494,7 +4597,7 @@
 	<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_Filter( l.search_query, l.filter,'code:attr.code,prompt:attr.prompt;opt.prompt,type:attr.type,required:attr.required' ) }">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_DB ].SQL_Query_OrderBy_Fields( l.search_query, l.sort,
-																		'code:attr.code,
+																		'code:attr.code;opt.code,
 																		 prompt:attr.prompt;opt.prompt,
 																		 type:attr.type,
 																		 required:attr.required',
@@ -4559,6 +4662,7 @@
 				<MvEVAL EXPR = "{ [ g.Module_JSON ].JSON_ArrayElement_Start( l.opt_count ) }">
 				"id":			<MvEVAL EXPR = "{ int( TGComponentAttributes.d.opt_id ) }">,
 				"attr_id":		<MvEVAL EXPR = "{ int( TGComponentAttributes.d.opt_attr_id ) }">,
+				"code":			"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponentAttributes.d.opt_code ) }">",
 				"prompt":		"<MvEVAL EXPR = "{ encodejavascriptstring( TGComponentAttributes.d.opt_prompt ) }">",
 				"disp_order":	<MvEVAL EXPR = "{ int( TGComponentAttributes.d.opt_disp_order ) }">
 
@@ -4740,13 +4844,18 @@
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
 	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
 
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_ID',	l.component_option:attr_id,	-1, -1 ) OR
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_ID',	l.component_option:attr_id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component_option:code )				OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.null ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_ID', 'Attribute not found' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ ComponentOption_Load_Code( l.component_option:attr_id, l.component_option:code, l.null ) }">
+		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'An option with the code \'' $ l.component_option:code $ '\' already exists' ) }">
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentOption_Insert( l.component_option ) }">
@@ -4763,12 +4872,19 @@
 
 	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'ID',				l.component_option:id,	-1, -1 )		OR
 					NOT [ g.Module_JSON ].JSON_Input_Number(	'R', 'Attribute_ID',	l.component_option:attr_id,	-1, -1 )	OR
+					NOT [ g.Module_JSON ].JSON_Input_Code(		'R', 'Code',			l.component_option:code )				OR
 					NOT [ g.Module_JSON ].JSON_Input_Text(		'R', 'Prompt',			l.component_option:prompt ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_InputErrors() }">
 	</MvIF>
 
-	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.null ) }">
+	<MvIF EXPR = "{ NOT ComponentAttribute_Load_ID( l.component_option:attr_id, l.previous_component_option ) }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Attribute_ID', 'Attribute not found' ) }">
+	</MvIF>
+
+	<MvIF EXPR = "{ toupper( l.component_option:code ) NE toupper( l.previous_component_option:code ) }">
+		<MvIF EXPR = "{ ComponentOption_Load_Code( l.component_option:attr_id, l.component_option:code, l.existing_component_option ) }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_JSON ].JSON_Response_FieldError( 'Code', 'An option with the code \'' $ l.existing_component_option:code $ '\' already exists' ) }">
+		</MvIF>
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT ComponentOption_Update( l.component_option ) }">
@@ -4936,6 +5052,8 @@
 			<MvASSIGN NAME = "l.component_attribute:category"	VALUE = "{ l.attribute:category }">
 		<MvELSEIF EXPR = "{ l.attribute:product }">
 			<MvASSIGN NAME = "l.component_attribute:product"	VALUE = "{ l.attribute:product }">
+		<MvELSEIF EXPR = "{ l.attribute:option }">
+			<MvASSIGN NAME = "l.component_attribute:option"	VALUE = "{ l.attribute:option }">
 		</MvIF>
 	</MvFOREACH>
 
@@ -5009,6 +5127,10 @@
 			<MvIF EXPR = "{ ISNULL l.attribute:category:code }">	<MvASSIGN NAME = "l.attribute:category:code"	VALUE = "">	</MvIF>
 		<MvELSEIF EXPR = "{ l.attribute:type EQ 'multitext' }">
 			<MvASSIGN NAME = "l.null" VALUE = "{ miva_splitstring( l.attribute:value, '|', l.attribute:value, 'trim' ) }">
+		<MvELSEIF EXPR = "{ l.attribute:type EQ 'radio' OR l.attribute:type EQ 'select' }">
+			<MvIF EXPR = "{ ComponentOption_Load_Code( l.attribute:id, l.attribute:value, l.attribute:option ) }">
+				<MvASSIGN NAME = "l.attribute:value" VALUE = "{ l.attribute:option:prompt }">
+			</MvIF>
 		</MvIF>
 	</MvFOREACH>
 

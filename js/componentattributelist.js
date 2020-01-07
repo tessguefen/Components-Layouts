@@ -91,6 +91,8 @@ ComponentAttributes_List.prototype.CreateColumnList_Options = function()
 				.SetRootColumn( this.fields_cmpnt_id )
 				.SetSearchable( false )
 				.SetDisplayInList( false ),
+		new MMBatchList_Column_Code( 'Option Code', 'code', 'Code' )
+				.SetRootColumn( this.fields_code ),
 		new MMBatchList_Column_Name( 'Prompt', 'prompt', 'Prompt' )
 				.SetRootColumn( this.fields_prompt ),
 		new MMBatchList_Column( 'Display Order', 'disp_order')
@@ -209,6 +211,7 @@ ComponentAttributes_List.prototype.Option_Create = function()
 	record				= new Object();
 	record.id			= 0;
 	record.attr_id		= 0;
+	record.code			= '';
 	record.prompt		= '';
 	record.disp_order	= 0;
 
