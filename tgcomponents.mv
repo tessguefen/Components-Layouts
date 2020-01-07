@@ -913,7 +913,6 @@
 	<MvELSE>
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_Start( 'Components & Layouts', '', '' ) }">
 
-
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginScreen_End( 'Components & Layouts', '', '' ) }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].BeginContent() }">
 
@@ -923,7 +922,6 @@
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_CSS( g.Tab ) }">
 
 		<MvHIDE FIELDS = "g.Module_Code">
-
 
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_HTML( g.Tab ) }">
 		<MvEVAL EXPR = "{ Element_ComponentsAndLayouts_JavaScript( g.Tab ) }">
@@ -1864,7 +1862,6 @@
 			<MvASSIGN NAME = "g.LayoutAndComponentsExport_File"			VALUE = "">
 			<MvASSIGN NAME = "g.LayoutAndComponentsExport_Append"		VALUE = "">
 			<MvASSIGN NAME = "g.LayoutAndComponentsExport_SendEmail"	VALUE = 0>
-
 			<MvASSIGN NAME = "g.LayoutAndComponentsExport_Option"		VALUE = "components">
 			<MvASSIGN NAME = "g.LayoutAndComponentsExport_LayoutOption"	VALUE = 0>
 		</MvIF>
@@ -2941,11 +2938,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentAttribute_Update_Offsets" PARAMETERS = "cmpnt_id, fields var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.pastend_count"			VALUE = 0>
-
-	<MvASSIGN NAME = "l.field_pos"				VALUE = 1>
-	<MvASSIGN NAME = "l.field_count"			VALUE = "{ miva_array_elements( l.fields ) }">
-	<MvASSIGN NAME = "g.Field_cmpnt_id"		VALUE = "{ l.cmpnt_id }">
+	<MvASSIGN NAME = "l.pastend_count"	VALUE = 0>
+	<MvASSIGN NAME = "l.field_pos"		VALUE = 1>
+	<MvASSIGN NAME = "l.field_count"	VALUE = "{ miva_array_elements( l.fields ) }">
+	<MvASSIGN NAME = "g.Field_cmpnt_id"	VALUE = "{ l.cmpnt_id }">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray( l.fields, l.field_count ) }">
 
@@ -3253,11 +3249,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "ComponentOptions_Update_Offsets" PARAMETERS = "attr_id, options var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
-	<MvASSIGN NAME = "l.pastend_count"				VALUE = 0>
-
-	<MvASSIGN NAME = "l.option_pos"				VALUE = 1>
-	<MvASSIGN NAME = "l.option_count"			VALUE = "{ miva_array_elements( l.options ) }">
-	<MvASSIGN NAME = "g.Option_attr_id" 		VALUE = "{ l.attr_id }">
+	<MvASSIGN NAME = "l.pastend_count"	VALUE = 0>
+	<MvASSIGN NAME = "l.option_pos"		VALUE = 1>
+	<MvASSIGN NAME = "l.option_count"	VALUE = "{ miva_array_elements( l.options ) }">
+	<MvASSIGN NAME = "g.Option_attr_id" VALUE = "{ l.attr_id }">
 
 	<MvEVAL EXPR = "{ [ g.Module_Library_Utilities ].SortOffsetArray( l.options, l.option_count ) }">
 
@@ -4160,15 +4155,15 @@
 									layoutcache.layout_id = layoutcomponents.layout_id
 								WHERE
 									( 
-										layoutcomponents.dt_start> 0 AND
+										layoutcomponents.dt_start > 0 AND
 										layoutcomponents.dt_start < ? AND
-										layoutcomponents.dt_start> layoutcache.dt_cached
+										layoutcomponents.dt_start > layoutcache.dt_cached
 									)
 									OR
 									(
-										layoutcomponents.dt_end> 0 AND
+										layoutcomponents.dt_end > 0 AND
 										layoutcomponents.dt_end < ? AND
-										layoutcomponents.dt_end> layoutcache.dt_cached
+										layoutcomponents.dt_end > layoutcache.dt_cached
 									)' }"
 				FIELDS	= "s.dyn_time_t, s.dyn_time_t">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
@@ -4209,15 +4204,15 @@
 								WHERE
 									layoutcomponents.layout_id = ? AND
 									( 
-										layoutcomponents.dt_start> 0 AND
+										layoutcomponents.dt_start > 0 AND
 										layoutcomponents.dt_start < ? AND
-										layoutcomponents.dt_start> layoutcache.dt_cached
+										layoutcomponents.dt_start > layoutcache.dt_cached
 									)
 									OR
 									(
-										layoutcomponents.dt_end> 0 AND
+										layoutcomponents.dt_end > 0 AND
 										layoutcomponents.dt_end < ? AND
-										layoutcomponents.dt_end> layoutcache.dt_cached
+										layoutcomponents.dt_end > layoutcache.dt_cached
 									)' }"
 				FIELDS	= "l.layout_id, s.dyn_time_t, s.dyn_time_t">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
