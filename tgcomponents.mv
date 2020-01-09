@@ -3555,7 +3555,9 @@
 	<MvASSIGN NAME = "l.disp_order" VALUE = 0>
 
 	<MvIF EXPR = "{ NOT LayoutComponents_Load_Parent( l.duplicate_layout_id, 0, l.layout:children ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
 	</MvIF>
 
 	<MvIF EXPR = "{ NOT Layout_Duplicate_LowLevel( l.layout_id, l.layout, l.disp_order ) }">
