@@ -1,4 +1,4 @@
-<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: f85a76c70d32b5f6994191b8300d8082778ea378 $">
+<MIVA STANDARDOUTPUTLEVEL = "" IDENT = "$Id: ae2409684e6450d418a371aebb84bd6c2beebd99 $">
 
 <MvCOMMENT>
 |
@@ -5243,7 +5243,9 @@
 <MvFUNCTION NAME = "Runtime_Layout_Load" PARAMETERS = "layout_id, layout var" STANDARDOUTPUTLEVEL = "">
 	<MvIF EXPR = "{ NOT Layout_Load_ID( l.layout_id, l.loaded_layout ) OR
 					NOT Runtime_LayoutComponents_Load_Parent( l.layout_id, 0, l.layout ) }">
-		<MvFUNCTIONRETURN VALUE = 0>
+		<MvIF EXPR = "{ NOT [ g.Module_Library_DB ].Error_Is_EOF() }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
 	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
