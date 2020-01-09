@@ -2239,6 +2239,8 @@
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Minute>'	$ padl( time_t_min( l.attribute:value, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Minute>'	) }">
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '					<Second>'	$ padl( time_t_sec( l.attribute:value, g.Merchant_Local_Timezone ),			2, '0' ) $ '</Second>'	) }">
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				</Value>' ) }">
+					<MvELSEIF EXPR = "{ l.attribute:type EQ 'radio' OR l.attribute:type EQ 'select' }">
+						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ l.attribute:option:code $ '</Value>' ) }">
 					<MvELSE>
 						<MvEVAL EXPR = "{ LayoutAndComponentsExport_Export_Line( l.output_file, '				<Value>' $ [ g.Module_Library_Utilities ].CDATA_Encode( l.attribute:value ) $ '</Value>' ) }">
 					</MvIF>
