@@ -2917,22 +2917,22 @@
 
 <MvFUNCTION NAME = "ComponentAttributes_Delete_Component" PARAMETERS = "cmpnt_id" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
-				VIEW	= "TGComponentAttributes"
+				VIEW	= "TGComponentAttributesDelete"
 				QUERY	= "{ 'SELECT id FROM ' $ g.Store_Table_Prefix $ 'TGComponentAttributes WHERE cmpnt_id = ?' }"
 				FIELDS	= "l.cmpnt_id">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'MOD-UTL-CAL-0091', g.MvOPENVIEW_Error ) }">
 	</MvIF>
 
-	<MvWHILE EXPR = "{ NOT TGComponentAttributes.d.EOF }">
-		<MvIF EXPR = "{ NOT ComponentAttribute_Delete( TGComponentAttributes.d.id  ) }">
+	<MvWHILE EXPR = "{ NOT TGComponentAttributesDelete.d.EOF }">
+		<MvIF EXPR = "{ NOT ComponentAttribute_Delete( TGComponentAttributesDelete.d.id  ) }">
 			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 
-		<MvSKIP NAME = "Merchant" VIEW = "TGComponentAttributes" ROWS = 1>
+		<MvSKIP NAME = "Merchant" VIEW = "TGComponentAttributesDelete" ROWS = 1>
 	</MvWHILE>
 
-	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributes">
+	<MvCLOSEVIEW NAME = "Merchant" VIEW = "TGComponentAttributesDelete">
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
