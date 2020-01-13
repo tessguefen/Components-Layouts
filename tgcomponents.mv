@@ -1650,13 +1650,10 @@
 
 	<MvIF EXPR = "{ ComponentAttributes_Load_Component( l.component:id, l.component:attributes ) }">
 		<MvIF EXPR = "{ NOT [ g.Module_Feature_PRV_AD ].PRV_Tag_Exists( l.provide_xml, 'Attributes' ) }">
-			<MvASSIGN NAME = "l.null" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogMessage( l.provide_xml, 'Missing required tag Attributes' ) }">
-		</MvIF>
-
-		<MvIF EXPR = "{ NOT Module_Provision_LayoutComponent_Attributes( l.provide_xml:tags:Attributes[ 1 ], l.layout_component:id, l.layout_component:cmpnt_id, l.child_pos ) }">
-			<MvASSIGN NAME = "l.null" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
-			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml:children[ l.child_pos ] ) }">
+			<MvIF EXPR = "{ NOT Module_Provision_LayoutComponent_Attributes( l.provide_xml:tags:Attributes[ 1 ], l.layout_component:id, l.layout_component:cmpnt_id, l.child_pos ) }">
+				<MvASSIGN NAME = "l.null" VALUE = "{ LayoutComponent_Delete( l.layout_component:id ) }">
+				<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Feature_PRV_AD ].PRV_LogError( l.provide_xml:children[ l.child_pos ] ) }">
+			</MvIF>
 		</MvIF>
 
 		<MvIF EXPR = "{ NOT LayoutComponents_DisplayOrder_Update_Values( l.layout_id, l.layout_component:disp_order ) }">
