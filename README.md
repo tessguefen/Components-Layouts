@@ -1,6 +1,6 @@
 # Components
 
-*Current Version 1.017*
+*Current Version 2.000*
 
 ## Features
 
@@ -8,7 +8,7 @@
 	- Add a **Code**, **Name**, Description, Image, and **Allow Nested Components**
 	- Add specific attributes/ options for each component.
 		- **Code**, **Prompt**, **Type**, **Required**
-		- Types: Text Field, Radio Buttons, Drop-down List, Checkbox, Text Area, Image, Product, Category, Link
+		- [Types](#attribute-types)
 		- Editable Display Order
 - Layouts
 	- Add a **Code**, **Name**
@@ -27,6 +27,7 @@
 		- Export Components (All)
 		- Export Layouts (All or select one layout)
 
+
 ## Attribute Types
 
 - Dropdown
@@ -35,11 +36,22 @@
 - Textfield
 - Textarea
 - Image Upload
-- Category (supply ID)
-- Product (supply ID)
-- Link (Includes Product, Category, Page, URL & None )
+- Category
+	- To update via XML, Category Code.
+	- To update in Admin, Category Code.
+	- Value returns `:category:id` and `:category:code`
+- Product
+	- To update via XML, Product Code.
+	- To update in Admin, Product Code.
+	- Value returns `:product:id` and `:product:code`
+- Link
+	- Includes Product, Category, Page, URL & None
 - Image Type
+	- To update via XML, Image Type Code.
+	- To update in Admin, Image Type Code (from select dropdown)
+	- Value returns Image Type ID
 - Date/Time Picker
+	- Returns timestamp
 - Multi-Text
 	- To Update via XML, Pipe Seperated.
 	- To update via Admin, Line Breaks are used to seperate.
@@ -74,7 +86,7 @@
 		<Name>Your Name Here</Name>
 		<Descrip>Your Description</Descrip>
 		<Image>graphics/00000001/leia.png</Image>
-		<Allow_Nest>1</Allow_Nest>
+		<Allow_Children>1</Allow_Children>
 	</Component_Add>
 
 	<Component_Update code="My_Old_Code_Here">
@@ -82,7 +94,7 @@
 		<Name>Your Name Here</Name>
 		<Descrip>Your Description</Descrip>
 		<Image>graphics/00000001/leia.png</Image>
-		<Allow_Nest>1</Allow_Nest>
+		<Allow_Children>1</Allow_Children>
 	</Component_Update>
 
 	<Component_Delete code="My_Code_Here" />
@@ -109,11 +121,25 @@
 
 	<LayoutComponent_Add layout="My_Layout_Code" component="Component_Code">
 		<Name>Name</Name>
+		<Code>MyCode</Code>
 		<Active>1</Active>
-		<Parent>Some Parent</Parent>
-		<Parent_Code>Some_Parent_Code</Parent_Code>
-		<Date_Start><![CDATA[12/05/2018 21:10:03]]></Date_Start>
-		<Date_End><![CDATA[12/29/2018 21:10:05]]></Date_End>
+		<Parent>Parent_Component_Code</Parent>
+		<Date_Start>
+			<Day>01</Day>
+			<Month>02</Month>
+			<Year>2019</Year>
+			<Hour>11</Hour>
+			<Minute>30</Minute>
+			<Second>00</Second>
+		</Date_Start>
+		<Date_End>
+			<Day>01</Day>
+			<Month>02</Month>
+			<Year>2019</Year>
+			<Hour>12</Hour>
+			<Minute>00</Minute>
+			<Second>00</Second>
+		</Date_End>
 		<Attributes>
 			<Attribute code="MyAttribute">
 				<Value>My Value Here</Value>
@@ -122,22 +148,20 @@
 				<LinkType>Product</LinkType>
 				<Value>My Value Here</Value>
 			</Attribute>
+			<Attribute code="Some_DateTime">
+				<Value>
+					<Day>01</Day>
+					<Month>02</Month>
+					<Year>2019</Year>
+					<Hour>11</Hour>
+					<Minute>30</Minute>
+					<Second>00</Second>
+				</Value>
+			</Attribute>
 		</Attributes>
-	</LayoutComponent_Add>	
-
+	</LayoutComponent_Add>
 </Module>
 ```
-
-## Random Screenshots
-
-![Admin UI](https://puu.sh/Cdege/c62bb923a8.png)
-![Admin UI 2](http://puu.sh/CdehI/f0f7f1f4ee.png)
-![Edit Popup](http://puu.sh/Cdek3/ea07237c3c.png)
-![Add New Popup - With All Fields](http://puu.sh/Cdejg/20525978bb.png)
-![Duplicate Layouts Feature](http://puu.sh/Cdelt/b6b53e5f62.png)
-![But Wait! There's More](http://puu.sh/CdekT/a04b50493a.png)
----
-
 
 ## Example
 
@@ -262,115 +286,213 @@
 
 ## Experimental Recusrive Component Rendering
 
+### Caller
 ```xml
-<mvt:if expr="ISNULL l.settings:page:layout_code">
+<mvt:assign name="l.settings:layout_code" value="'homepage'" />
+<mvt:capture variable="l.null">
+	<mvt:item name="readytheme" param="contentsection( 'load_layout' )" />
+</mvt:capture>
+<mvt:eval expr="l.settings:final_output" />
+```
+
+### ReadyTheme > Content Section > `load_layout`
+```xml
+<mvt:assign name="l.settings:final_output" 	value="''" />
+
+<mvt:if expr="NOT len_var( l.settings:layout_code )">
 	<mvt:exit />
 </mvt:if>
 
 <mvt:assign name="l.settings:layout" value="''" />
-<mvt:item name="tgcomponent" param="Layout_Load_Code( l.settings:page:layout_code, l.settings:layout )"/>
+<mvt:item name="tgcomponent" param="Layout_Load_Code( l.settings:layout_code, l.settings:layout )"/>
 
 <mvt:if expr="ISNULL l.settings:layout">
 	<mvt:exit />
 </mvt:if>
 
-<mvt:do file="g.Module_Library_Utilities" name="l.success" value="QuickSortArray( l.settings:layout, ':disp_order', -1 )" />
+<mvt:if expr="NOT l.settings:layout_components:templ_id">
+	<mvt:item name="readytheme" param="Load_ContentSection( 'layout_components', l.all_settings:layout_components )" />
+</mvt:if>
 
-<mvt:assign name="l.components"				value="l.settings:layout" />
-<mvt:assign name="l.data"					value="''" />
-<mvt:assign name="l.components_count"		value="miva_array_elements( l.components )" />
-<mvt:assign name="l.while_pos"				value="1" />
-<mvt:assign name="l.settings:final_output" 	value="''" />
-<mvt:assign name="l.settings:unique_id" 	value="'tgcl-parent'" />
+<mvt:if expr="NOT l.settings:layout_components:templ_id">
+	<mvt:exit />
+</mvt:if>
 
-<mvt:while expr="( l.while_pos LE l.components_count )">
+<mvt:do file="g.Module_Feature_TUI_DB" name="l.loaded" value="ManagedTemplate_Load_ID( l.settings:layout_components:templ_id, l.settings:layout_components_rt )" />
 
-	<mvt:assign name="l.settings:current_item" value="miva_variable_value( 'l.components[' $ l.while_pos $ ']' )" />
+<mvt:assign name="l.settings:layout_component:children" value="l.settings:layout" />
+<mvt:assign name="l.settings:layout_component:children_count" value="miva_array_elements( l.settings:layout )" />
 
-	<mvt:if expr="l.settings:current_item:component:code">
-		<mvt:capture variable="l.data">
-			<mvt:if expr="l.settings:current_item:component:code EQ 'shadows_hero'">
-				<section class="o-layout">
-					<div class="o-layout__item">
-						<mvt:if expr="l.settings:current_item:attributes:link:value">
-							<a class="x-hero" href="&mvte:current_item:attributes:link:value";">
-								<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
-							</a>
-						<mvt:else>
-							<span class="x-hero">
-								<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
-							</span>
-						</mvt:if>
-					</div>
-				</section>
-				<br>
-			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_text'">
-				<section class="o-layout t-storefront-about">
-					<div class="o-layout__item u-text-center">
-						<br>
-						<h3 class="c-heading-charlie c-heading--keyline u-text-bold u-text-uppercase">
-							<mvt:if expr="l.settings:current_item:attributes:subtitle:value">
-								<span class="c-heading--subheading u-color-gray-30">&mvt:current_item:attributes:subtitle:value;</span>
-								<mvt:if expr="l.settings:current_item:attributes:title:value"><br></mvt:if>
-							</mvt:if>
-							&mvt:current_item:attributes:title:value;
-						</h3>
-						<p>
-							<span class="u-inline-block u-text-constrain t-storefront-about__brief">&mvt:current_item:attributes:text:value;</span>
-						</p>
-						<br>
-					</div>
-				</section>
-				<br>
-			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_large_promo'">
-				<section class="o-layout">
-					<div class="o-layout__item">
-						<mvt:if expr="l.settings:current_item:attributes:link:value">
-							<a href="&mvte:current_item:attributes:link:value";">
-								<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
-							</a>
-						<mvt:else>
-							<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
-						</mvt:if>
-					</div>
-				</section>
-				<br>
-			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_small_promo_wrap'">
-				<mvt:if expr="l.settings:current_item:children_count GT 0">
-					<section class="o-layout u-grids-1 u-grids-2--m">
-						<!--[&mvt:unique_id;:&mvt:current_item:id;]-->
-					</section>
+<mvt:assign name="g.Current_Component_Position" value="0" />
+
+<mvt:capture variable="l.settings:final_output">
+	<mvt:do file="g.Store_Template_Path $ l.settings:layout_components_rt:filename" name="l.success" value="Template_Render( l.null, l.settings )" />
+</mvt:capture>
+
+<mvt:assign name="l.settings:layout_code" value="''" />
+```
+
+### ReadyTheme > Content Section > `layout_components`
+```xml
+<mvt:if expr="NOT l.settings:layout_component:children">
+	<mvt:exit />
+</mvt:if>
+
+<mvt:comment>
+	To render children, use the following:
+
+	<mvt:assign name="l.current_component" value="l.settings:current_component" />
+	<mvt:assign name="l.layout_component" value="l.settings:layout_component" />
+	<mvt:assign name="l.settings:layout_component" value="l.settings:current_component" />
+	<mvt:do file="g.Store_Template_Path $ l.settings:layout_components_rt:filename" name="l.success" value="Template_Render( l.empty, l.settings )" />
+	<mvt:assign name="l.settings:current_component" value="l.current_component" />
+	<mvt:assign name="l.settings:layout_component" value="l.layout_component" />
+</mvt:comment>
+
+<mvt:foreach iterator="current_component" array="layout_component:children">
+	<mvt:assign name="g.Current_Component_Position" value="g.Current_Component_Position + 1" />
+	<mvt:if expr="l.settings:current_component:component:code EQ 'some_component'">
+		<mvt:comment>
+			name		Title
+			children	children of section
+		</mvt:comment>
+		<mvt:assign name="l.settings:current_component:extra_css" value="''" />
+		<mvt:if expr="l.settings:current_component:attributes:disable_on_mobile:value EQ 1">
+			<mvt:assign name="l.settings:current_component:extra_css" value="' medium-show hide'" />
+		</mvt:if>
+		<div class="component_some_component&mvt:current_component:extra_css;">
+			<div class="row">
+				<div class="column whole">
+					<h2 class="some_component--title bold heading-font align-center">&mvt:current_component:name;</h2>
+				</div>
+			</div>
+			<div class="clearfix">
+				<mvt:assign name="l.current_component" value="l.settings:current_component" />
+				<mvt:assign name="l.layout_component" value="l.settings:layout_component" />
+				<mvt:assign name="l.settings:layout_component" value="l.settings:current_component" />
+				<mvt:do file="g.Store_Template_Path $ l.settings:layout_components_rt:filename" name="l.success" value="Template_Render( l.empty, l.settings )" />
+				<mvt:assign name="l.settings:current_component" value="l.current_component" />
+				<mvt:assign name="l.settings:layout_component" value="l.layout_component" />
+			</div>
+		</div>
+	<mvt:elseif expr="l.settings:current_component:component:code EQ 'module_x'">
+		<mvt:comment>
+		|
+		|	Product Listing Set Up
+		|
+		</mvt:comment>
+		<mvt:assign name="l.width" value="400" />
+		<mvt:assign name="l.height" value="500" />
+
+		<mvt:if expr="NOT l.settings:current_component:attributes:imagetype:value">
+			<mvt:do file="g.Module_Library_DB" name="l.success" value="ImageType_Load_Code( 'Default', l.default_imagetype )" />
+			<mvt:assign name="l.settings:current_component:attributes:imagetype:value" value="l.default_imagetype:id" />
+		</mvt:if>
+
+		<mvt:assign name="l.hash" value="crypto_md5( l.settings:current_component:id $ l.settings:current_component:attributes:category:category:id )" />
+
+		<mvt:if expr="NOT g.Transients_Off">
+			<mvt:do file="g.Module_Root $ '/modules/util/transients.mvc'" name="l.products" value="Get_Transient( l.hash )" />
+		</mvt:if>
+
+		<mvt:if expr="NOT ISNULL l.products">
+			<!-- Cached -->
+			<mvt:assign name="l.settings:current_component:products" value="miva_array_deserialize( l.products )" />
+		<mvt:else>
+			<mvt:assign name="l.products" value="''" />
+
+			<mvt:do file="g.Module_Library_DB" name="l.success" value="Runtime_ProductList_Load_Offset_Category_Sort( l.settings:current_component:attributes:category:category:id, 0, 8, 'disp_order_desc', l.nextoffset, l.settings:current_component:products )" />
+			<mvt:foreach iterator="product" array="current_component:products">
+				<mvt:assign name="l.settings:product:base_price" value="l.settings:product:price" />
+			</mvt:foreach>
+			<mvt:do name="l.void" file="g.Module_Feature_TUI_UT" value="CommonComponentFields_Initialize_Product_Discounts_Runtime( l.settings:current_component:products, miva_array_elements(l.settings:current_component:products))" />
+			<mvt:foreach iterator="product" array="current_component:products">
+
+				<mvt:assign name="l.productimage" value="NULL" />
+				<mvt:assign name="l.temp" value="NULL" />
+				<mvt:assign name="l.load_cropped" value="NULL" />
+
+				<mvt:comment>
+					Set-up
+						Load in :link
+						Load in `:imagetypes:Default` image type.
+				</mvt:comment>
+				<mvt:do file="g.Module_Feature_URI_UT" name="l.settings:product:link" value="Store_Product_URL( l.settings:product, l.flags )" />
+				<mvt:item name="customfields" param="Read_Product_ID( l.settings:product:id, 'brand', l.settings:product:customfield_values:customfields:brand )" />
+
+				<mvt:do file="g.Module_Library_DB" name="l.success" value="ProductImage_Load_Type( l.settings:product:id, l.settings:current_component:attributes:imagetype:value, l.temp:productimage )" />
+				<mvt:if expr="( NOT l.temp:productimage:image_id ) AND ( l.default_imagetype:id NE l.settings:current_component:attributes:imagetype:value )">
+					<mvt:do file="g.Module_Library_DB" name="l.success" value="ProductImage_Load_Type( l.settings:product:id, l.default_imagetype:id, l.temp:productimage )" />
 				</mvt:if>
-			<mvt:elseif expr="l.settings:current_item:component:code EQ 'shadows_small_promo'">
-				<p class="o-layout__item">
-					<mvt:if expr="l.settings:current_item:attributes:link:value">
-						<a href="&mvte:current_item:attributes:link:value";">
-							<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
-						</a>
-					<mvt:else>
-						<img src="&mvte:current_item:attributes:image:value;" alt="&mvte:current_item:attributes:alt:value;">
-					</mvt:if>
-				</p>
+				<mvt:do file="g.Module_Library_DB" name="l.load_cropped" value="GeneratedImage_Load_Dimensions( l.temp:productimage:image_id, l.width, l.height, l.temp:cropped_image )" />
+
+				<mvt:if expr="NOT l.load_cropped">
+					<mvt:do file="g.Module_Library_DB" name="l.success" value="Image_Load_ID( l.temp:productimage:image_id, l.temp:imagedata  )" />
+					<mvt:do file="g.Module_Library_DB" name="l.success" value="Image_Load_File( l.temp:imagedata:image, l.temp:product_image )" />
+					<mvt:do file="g.Module_Library_DB" name="l.success" value="GeneratedImage_FindOrInsert_Image_Dimensions( l.temp:product_image, l.width, l.height, l.temp:cropped_image )" />
+				</mvt:if>
+
+				<mvt:assign name="l.settings:product:imagetypes:Default" value="l.temp:cropped_image:image" />
+
+				<mvt:if expr="NOT ISNULL l.settings:product:imagetypes:Default">
+					<mvt:assign name="l.settings:product:src" value="l.settings:product:imagetypes:Default" />
+				<mvt:else>
+					<mvt:assign name="l.settings:product:src" value="g.theme_path $ '/images/img_no_thumb.jpg'" />
+				</mvt:if>
+
+				<mvt:do file="g.Module_Store_Module_Currency" name="l.settings:product:formatted_base_price" value="CurrencyModule_AddFormatting( g.Store:currncy_mod, l.settings:product:base_price  )" />
+				<mvt:do file="g.Module_Store_Module_Currency" name="l.settings:product:formatted_price" value="CurrencyModule_AddFormatting( g.Store:currncy_mod, l.settings:product:price  )" />
+			</mvt:foreach>
+
+			<mvt:if expr="NOT g.Transients_Off">
+				<mvt:do file="g.Module_Root $ '/modules/util/transients.mvc'" name="l.set_transient" value="Set_Transient( l.hash, miva_array_serialize( l.settings:current_component:products ), 60*60*12)" />
 			</mvt:if>
-		</mvt:capture>
-	</mvt:if>
+		</mvt:if>
 
-	<mvt:if expr="l.settings:current_item:children_count GT 0">
-		<mvt:do file="g.Module_Library_Utilities" name="l.success" value="QuickSortArray( l.settings:current_item:children, ':disp_order', -1 )" />
-		<mvt:assign name="l.components_count" value="miva_array_merge( l.settings:current_item:children, 1, l.settings:current_item:children_count, l.components, -1 )" />
-	</mvt:if>
-	
-	<mvt:assign name="l.find_me" value="'<!--[' $ l.settings:unique_id $ ':' $ l.settings:current_item:parent $ ']-->'" />
-	<mvt:assign name="l.index" value="indexof( l.find_me, l.settings:final_output, 1 )" />
-	<mvt:if expr="l.index GT 0">
-		<mvt:assign name="l.index_findme_length" value="l.index + len_var( l.find_me )" />
-		<mvt:assign name="l.settings:final_output" value="substring_var( l.settings:final_output, 1, l.index_findme_length ) $ l.data $ substring_var( l.settings:final_output, l.index_findme_length, len_var( l.settings:final_output ) )" />
-	<mvt:else>
-		<mvt:assign name="l.settings:final_output" value="l.data $ l.settings:final_output" />
-	</mvt:if>
+		<mvt:assign name="l.settings:current_component:extra_css" value="''" />
+		<mvt:if expr="l.settings:current_component:attributes:disable_on_mobile:value EQ 1">
+			<mvt:assign name="l.settings:current_component:extra_css" value="' medium-show hide'" />
+		</mvt:if>
 
-	<mvt:assign name="l.while_pos" value="l.while_pos + 1" />
-</mvt:while>
+		<mvt:assign name="l.counter" value="0" />
+		<div class="column whole component_module_x slider-fade-inactive&mvt:current_component:extra_css;">
+			<mvt:foreach iterator="product" array="current_component:products">
+				<mvt:assign name="l.counter" value="l.counter + 1" />
+				<div class="productslider-component-2 align-center column x-large-one-third">
+					<div class="productslider-component-1__inner">
+
+						<div class="productslider-component-1__image flex ai-center jc-center align-center">
+							<a href="&mvt:product:link;">
+								<mvt:if expr="g.Current_Component_Position GT 2 AND l.counter LE 4">
+									<img data-src="&mvte:product:src;" alt="&mvte:product:name;" class="lazyload" />
+								<mvt:elseif expr="l.counter GT 4">
+									<img data-lazy="&mvte:product:src;" alt="&mvte:product:name;" />
+								<mvt:else>
+									<img src="&mvte:product:src;" alt="&mvte:product:name;" />
+								</mvt:if>
+							</a>
+						</div>
+
+						<mvt:if expr="l.settings:product:customfield_values:customfields:brand">
+							<div class="productslider-component-1__brand medium large-align-left align-center">
+								&mvt:product:customfield_values:customfields:brand;
+							</div>
+						</mvt:if>
+
+						<h2 class="productslider-component-1__name bold large-align-left align-center"><a href="&mvt:product:link;" class="no-decoration">&mvt:product:name;</a></h2>
+
+						<div class="productslider-component-1__pricing medium large-align-left align-center">
+							<mvt:if expr="l.settings:product:base_price GT l.settings:product:price">
+								<span class="productslider-component-1__base-price">&mvt:product:formatted_base_price;</span>
+							</mvt:if>
+							<span class="productslider-component-1__price">&mvt:product:formatted_price;</span>
+						</div>
+					</div>
+				</div>
+			</mvt:foreach>
+		</div>
+	</mvt:if>
+</mvt:foreach>
 ```
 
 ## SQL to grab all image paths.
