@@ -4667,11 +4667,10 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "JSON_ComponentAttributes_DisplayOrder_Update" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
-	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">									<MvFUNCTIONRETURN>	</MvIF>
-	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">						<MvFUNCTIONRETURN>	</MvIF>
-	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">	<MvFUNCTIONRETURN>	</MvIF>
-
-	<MvASSIGN NAME = "l.cmpnt_id" VALUE = "{ g.cmpnt_id }">
+	<MvIF EXPR = "{ g.Session_Type NE 'admin' }">															<MvFUNCTIONRETURN> </MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Store_Open() }">												<MvFUNCTIONRETURN> </MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_Admin ].CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) }">							<MvFUNCTIONRETURN> </MvIF>
+	<MvIF EXPR = "{ NOT [ g.Module_JSON ].JSON_Input_Number( 'r', 'Component_ID', l.cmpnt_id, -1, -1 ) }">	<MvFUNCTIONRETURN> </MvIF>
 
 	<MvFOREACH ITERATOR = "l.attributes_order" ARRAY = "g.Components_Order" INDEX = "l.pos">
 		<MvASSIGN NAME = "l.attributes_order:id"				VALUE = "{ int( l.attributes_order:id ) }">
