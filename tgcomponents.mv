@@ -2,7 +2,7 @@
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
 	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.017">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.018">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -1008,6 +1008,11 @@
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMDialog_CSS() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMDialog_JavaScript() }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_Privileges_JavaScript() }">
+
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_JavaScript() }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ProductLookup_Dialog_CSS() }">
 
@@ -1038,6 +1043,8 @@
 		<div id="jsLayoutBatchlist"></div>
 
 		<MvEVAL EXPR = "{ DuplicateLayout_Dialog_HTML() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMDialog_HTML() }">
 
 		<MvEVAL EXPR = "{ Component_HTML_App() }">
 
@@ -1119,7 +1126,15 @@
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Component_HTML_App" STANDARDOUTPUTLEVEL = "text, html, compresswhitespace">
-	<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF">
+	<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components" ng-mouseup="toggleNodeActions();">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_Begin( 'layout_dialog' ) }">
+		<MvINCLUDE FILE = "angular_app/app-dialog.mv" INTERPRET="OFF">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_End( 'layout_dialog' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_Begin( 'layoutcomponent' ) }">
+		<MvINCLUDE FILE = "angular_app/app-component-dialog.mv" INTERPRET="OFF">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_End( 'layoutcomponent' ) }">
+		<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF">
+	</div>
 </MvFUNCTION>
 
 <MvFUNCTION NAME = "Components_Load_All" PARAMETERS = "return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">

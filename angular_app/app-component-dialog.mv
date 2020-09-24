@@ -1,0 +1,3 @@
+<div ng-form="dialogForm">
+	<div ng-include="'mm_dialog_content.html'"></div>
+</div>
