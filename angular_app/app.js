@@ -198,13 +198,15 @@
 				this.button_add									= null;
 				this.button_save								= this.ActionItem_Add( 'Add', function() { $scope.insertNewComponent(); } );
 				this.button_delete								= null;
-				this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );	
+				this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { self.Hide(); } );
+				this.SetTitle('Add New Component');
 			} else {
 				// Buttons
 				this.button_add									= null;
 				this.button_save								= this.ActionItem_Add( 'Update', function() { $scope.updateComponent( node ); } );
 				this.button_delete								= null;
 				this.button_cancel 								= this.ActionItem_Add( 'Cancel', function() { $scope.cancelEdit( node ) } );
+				this.SetTitle('Edit Component - ' + node.component.name + ' (' + node.component.code + ')');
 			}
 		}
 		DeriveFrom( MMDialog, LayoutPopup );

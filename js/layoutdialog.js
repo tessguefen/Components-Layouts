@@ -4,7 +4,7 @@ function Layout_Dialog( layout )
 
 	self.layout	= layout;
 
-	MMDialog.call( this, 'mm9_dialog_layout', null, null );
+	MMDialog.call( this, 'layout_dialog', null, null );
 
 	self.element_container	= document.getElementById( 'layout_dialog_container' );
 

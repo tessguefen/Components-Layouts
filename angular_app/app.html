@@ -1,356 +1,263 @@
-<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components" ng-mouseup="toggleNodeActions();">
-	<div id="mm9_dialog_layout_mmdialog" class="mm9_dialog" data-mmdisableonsubmit="on">
-		<div class="mm9_dialog_container">
-			<div id="mm9_dialog_layout_mmdialog_content_container" class="mm9_dialog_content_container">
-				<div id="mm9_dialog_layout_mmdialog_close" class="mm9_dialog_close mm9_mivaicon icon-cancel"></div>
-				<div id="mm9_dialog_layout_mmdialog_fullscreen" class="mm9_dialog_button_fullscreen mm9_mivaicon icon-fullscreen_start" style="display: block;"></div>
-				<div id="mm9_dialog_layout_mmdialog_title" class="mm9_dialog_title"></div>
-				<div id="mm9_dialog_layout_mmdialog_content" class="mm9_dialog_content mm9_dialog_content_body">
-					<span id="layout_dialog_container" class="layout_dialog_container">
-						<div class="layout_dialog_close">
-							<span class="layout_dialog_close_button"></span>
-						</div>
+<!-- MMDialog Content -->
+<script type="text/ng-template" id="mm_dialog_content.html">
+	<div class="dialogform--wrapper">
+		<div class="dialogform--header">
 
-						<div class="layout_dialog_titlebar">
-							<div class="layout_dialog_titlebar_inner">
-								<div class="layout_dialog_titlebar_code">Code: {{ data.layout.code }}</div>
-								<span class="layout_dialog_titlebar_title">{{ data.layout.name }}</span>
-								<span class="layout_dialog_titlebar_controls">
-									<span ng-click="newComponent( data.layout )" class="layout_dialog_action"><span class="icon-add"></span> Add New Component</span>
-								</span>
-							</div>
-						</div>
-
-						<div class="layout_dialog_content">
-
-							<div class="layout_dialog_loading" ng-class="{ 'layout_dialog_is_loading' : data.is_loading }">
-								<div class="layout_dialog_loading_content">
-									<span class="layout_dialog_loading_title">Loading...</span>
-									<span class="layout_dialog_loading_subtitle">Please wait while your layout is loaded.</span>
-								</div>
-							</div>
-
-							<div class="layout_dialog_loading" ng-class="{ 'layout_dialog_is_loading' : data.is_processing }">
-								<div class="layout_dialog_loading_content">
-									<span class="layout_dialog_loading_title">Processing...</span>
-									<span class="layout_dialog_loading_subtitle">Please wait while your layout is saved.</span>
-								</div>
-							</div>
-
-							<div ui-tree class="cmp-components">
-								<ol ui-tree-nodes="" ng-model="data.layout.children" id="tree-root">
-									<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.alw_chldrn ? undefined : true  }}" ng-repeat="node in data.layout.children" ng-class="{ 'cmp_container_wrap' : node.component.alw_chldrn, 'cmp_item_wrap' : !node.component.alw_chldrn, 'cmp--nodes__hidden': node.hide_children, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
-								</ol>
-							</div>
-
-						</div>
-
-						<div class="layout_dialog_bottom">
-							<span class="layout_dialog_actionbar">
-								<span class="layout_dialog_bottom_actionbar_subtitle">Layout Name</span>
-								<span class="layout_dialog_bottom_actionbar_title">{{ data.layout.name }}</span>
-							</span>
-							<span class="layout_dialog_bottom_buttons"></span>
-						</div>
-					</span>
+			<div ng-if="components.length > 0 && mmdialog.type == 'add'">
+				<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_component.$invalid }">
+					<div class="dialogform--styledinput-title">Component</div>
+					<input type="text" ng-value="mmdialog.component.component.name" placeholder="-- Select One --" class="dialogform--styleinput-input" readonly />
+					<select name="layoutcomponent_component" ng-model="mmdialog.component.component" class="dialogform--styleinput-select" required>
+						<option value="" disabled>-- Select One --</option>
+						<option ng-repeat="component in components track by component.id" ng-value="component">{{ component.name }}</option>
+					</select>
 				</div>
-				<div id="mm9_dialog_layout_mmdialog_actionbar" class="mm9_dialog_actionbar"></div>
 			</div>
-			<div id="mm9_dialog_layout_mmdialog_resize_top" class="mm9_dialog_resize_top"></div>
-			<div id="mm9_dialog_layout_mmdialog_resize_right" class="mm9_dialog_resize_right"></div>
-			<div id="mm9_dialog_layout_mmdialog_resize_bottom" class="mm9_dialog_resize_bottom"></div>
-			<div id="mm9_dialog_layout_mmdialog_resize_left" class="mm9_dialog_resize_left"></div>
-			<div id="mm9_dialog_layout_mmdialog_resize_topright" class="mm9_dialog_resize_topright"></div>
-			<div id="mm9_dialog_layout_mmdialog_resize_bottomright" class="mm9_dialog_resize_bottomright"></div>
-			<div id="mm9_dialog_layout_mmdialog_resize_bottomleft" class="mm9_dialog_resize_bottomleft"></div>
-			<div id="mm9_dialog_layout_mmdialog_resize_topleft" class="mm9_dialog_resize_topleft"></div>
+
+			<div ng-if="mmdialog.component.component.descrip">
+				<div class="dialogform--styledtext">
+					<div class="dialogform--styledtext-title">Component Description</div>
+					<div class="dialogform--styledtext-text">{{ mmdialog.component.component.descrip }}</div>
+				</div>
+			</div>
+
+			<div ng-if="mmdialog.component.component.image">
+				<img ng-src="{{ mmdialog.component.component.image }}" style="max-width: 205px; max-height: 205px;" />
+			</div>
+
+			<div ng-if="mmdialog.component.component.id > 0">
+
+				<div ng-if="mmdialog.component.component.id">
+					<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_name.$invalid }">
+						<div class="dialogform--styledinput-title">Component Name*</div>
+						<input type="text" name="layoutcomponent_name" ng-model="mmdialog.component.name" class="dialogform--styleinput-input" placeholder="Component Name" required />
+					</div>
+
+					<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_code.$invalid }">
+						<div class="dialogform--styledinput-title">Component Code*</div>
+						<input type="text" name="layoutcomponent_code" ng-model="mmdialog.component.code" class="dialogform--styleinput-input" placeholder="Component Code" required />
+					</div>
+				</div>
+
+				<label class="dialogform--styledcheckbox">
+					<input type="checkbox" name="layoutcomponent_active" ng-model="mmdialog.component.active" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
+					<span class="dialogform--styledcheckbox-prompt">Active</span>
+				</label>
+
+				<div class="dialogform--styledinput dialogform--styledlookup">
+					<div class="dialogform--styledinput-title">Not Valid Before</div>
+					<div class="dialogform--styledlookup-wrap">
+						<input id="js-component-dt_start" ng-model="mmdialog.component.dt_start" type="hidden" />
+						<div class="dialogform--styleinput-input">
+							<input type="text" value="{{ mmdialog.component.dt_start ? dateTimeFormatted( mmdialog.component.dt_start ) : '' }}" placeholder="Select Date/Time" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_start', 'dt_start' )" class="dialogform--styleinput-datetime" readonly />
+							<span class="datetimepicker-remove" ng-if="mmdialog.component.dt_start" ng-click="mmdialog.component.dt_start = ''">Remove</span>
+						</div>
+						<span class="dialogform--lookup-button" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_start', 'dt_start' )"><span class="dialogform--lookup-text">Select Date/
+						Time</span></span>
+					</div>
+				</div>
+
+				<div class="dialogform--styledinput dialogform--styledlookup">
+					<div class="dialogform--styledinput-title">Not Valid After</div>
+					<div class="dialogform--styledlookup-wrap">
+						<input id="js-component-dt_end" ng-model="mmdialog.component.dt_end" type="hidden" />
+						<div class="dialogform--styleinput-input">
+							<input type="text" value="{{ mmdialog.component.dt_end ? dateTimeFormatted( mmdialog.component.dt_end ) : '' }}" placeholder="Select Date/Time" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_end', 'dt_end' )" class="dialogform--styleinput-datetime" readonly />
+							<span class="datetimepicker-remove" ng-if="mmdialog.component.dt_end" ng-click="mmdialog.component.dt_end = ''">Remove</span>
+						</div>
+						<span class="dialogform--lookup-button" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_end', 'dt_end' )"><span class="dialogform--lookup-text">Select Date/
+						Time</span></span>
+					</div>
+				</div>
+				
+
+			</div>
+
 		</div>
 	</div>
 
-	<div id="layoutcomponent_mmdialog" class="mm9_dialog layout_mm_dialog">
-		<div class="mm9_dialog_container">
-			<div id="layoutcomponent_mmdialog_content_container" class="mm9_dialog_content_container">
-				<div id="layoutcomponent_mmdialog_close" class="mm9_dialog_close mm9_mivaicon icon-cancel"></div>
-				<div id="layoutcomponent_mmdialog_title" class="mm9_dialog_title">{{ mmdialog.title }}</div>
-				<div id="layoutcomponent_mmdialog_content" class="mm9_dialog_content mm9_dialog_content_body">
-					<div ng-form="dialogForm">
-						<div ng-include="'mm_dialog_content.html'"></div>
-					</div>
+	<div>
+
+		<div ng-if="mmdialog.component.component.id > 0" ng-repeat="attribute in mmdialog.component.component.attributes" ng-class="{ 'dialogform--error' : componentValidation( attribute, $index ) }">
+
+			<div ng-if="attribute.type == 'text'">
+				<div class="dialogform--styledinput">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
 				</div>
-				<div id="layoutcomponent_mmdialog_actionbar" class="mm9_dialog_actionbar"></div>
 			</div>
-			<div id="layoutcomponent_mmdialog_resize_top" class="mm9_dialog_resize_top"></div>
-			<div id="layoutcomponent_mmdialog_resize_right" class="mm9_dialog_resize_right"></div>
-			<div id="layoutcomponent_mmdialog_resize_bottom" class="mm9_dialog_resize_bottom"></div>
-			<div id="layoutcomponent_mmdialog_resize_left" class="mm9_dialog_resize_left"></div>
-			<div id="layoutcomponent_mmdialog_resize_topright" class="mm9_dialog_resize_topright"></div>
-			<div id="layoutcomponent_mmdialog_resize_bottomright" class="mm9_dialog_resize_bottomright"></div>
-			<div id="layoutcomponent_mmdialog_resize_bottomleft" class="mm9_dialog_resize_bottomleft"></div>
-			<div id="layoutcomponent_mmdialog_resize_topleft" class="mm9_dialog_resize_topleft"></div>
-		</div>
-	</div>
-	
-	<!-- MMDialog Content -->
-	<script type="text/ng-template" id="mm_dialog_content.html">
-		<div class="dialogform--wrapper">
-			<div class="dialogform--header">
 
-				<div ng-if="components.length > 0 && mmdialog.type == 'add'">
-					<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_component.$invalid }">
-						<div class="dialogform--styledinput-title">Component</div>
-						<input type="text" ng-value="mmdialog.component.component.name" placeholder="-- Select One --" class="dialogform--styleinput-input" readonly />
-						<select name="layoutcomponent_component" ng-model="mmdialog.component.component" class="dialogform--styleinput-select" required>
-							<option value="" disabled>-- Select One --</option>
-							<option ng-repeat="component in components track by component.id" ng-value="component">{{ component.name }}</option>
-						</select>
-					</div>
+			<div ng-if="attribute.type == 'multitext'">
+				<div class="dialogform--styledinput">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<textarea rows="7" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-textarea"></textarea>
 				</div>
-
-				<div ng-if="mmdialog.component.component.descrip">
-					<div class="dialogform--styledtext">
-						<div class="dialogform--styledtext-title">Component Description</div>
-						<div class="dialogform--styledtext-text">{{ mmdialog.component.component.descrip }}</div>
-					</div>
-				</div>
-
-				<div ng-if="mmdialog.component.component.image">
-					<img ng-src="{{ mmdialog.component.component.image }}" style="max-width: 205px; max-height: 205px;" />
-				</div>
-
-				<div ng-if="mmdialog.component.component.id > 0">
-
-					<div ng-if="mmdialog.component.component.id">
-						<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_name.$invalid }">
-							<div class="dialogform--styledinput-title">Component Name*</div>
-							<input type="text" name="layoutcomponent_name" ng-model="mmdialog.component.name" class="dialogform--styleinput-input" placeholder="Component Name" required />
-						</div>
-
-						<div class="dialogform--styledinput" ng-class="{ 'dialogform--error' : mmdialog.show_errors && dialogForm.layoutcomponent_code.$invalid }">
-							<div class="dialogform--styledinput-title">Component Code*</div>
-							<input type="text" name="layoutcomponent_code" ng-model="mmdialog.component.code" class="dialogform--styleinput-input" placeholder="Component Code" required />
-						</div>
-					</div>
-
-					<label class="dialogform--styledcheckbox">
-						<input type="checkbox" name="layoutcomponent_active" ng-model="mmdialog.component.active" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
-						<span class="dialogform--styledcheckbox-prompt">Active</span>
-					</label>
-
-					<div class="dialogform--styledinput dialogform--styledlookup">
-						<div class="dialogform--styledinput-title">Not Valid Before</div>
-						<div class="dialogform--styledlookup-wrap">
-							<input id="js-component-dt_start" ng-model="mmdialog.component.dt_start" type="hidden" />
-							<div class="dialogform--styleinput-input">
-								<input type="text" value="{{ mmdialog.component.dt_start ? dateTimeFormatted( mmdialog.component.dt_start ) : '' }}" placeholder="Select Date/Time" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_start', 'dt_start' )" class="dialogform--styleinput-datetime" readonly />
-								<span class="datetimepicker-remove" ng-if="mmdialog.component.dt_start" ng-click="mmdialog.component.dt_start = ''">Remove</span>
-							</div>
-							<span class="dialogform--lookup-button" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_start', 'dt_start' )"><span class="dialogform--lookup-text">Select Date/
-							Time</span></span>
-						</div>
-					</div>
-
-					<div class="dialogform--styledinput dialogform--styledlookup">
-						<div class="dialogform--styledinput-title">Not Valid After</div>
-						<div class="dialogform--styledlookup-wrap">
-							<input id="js-component-dt_end" ng-model="mmdialog.component.dt_end" type="hidden" />
-							<div class="dialogform--styleinput-input">
-								<input type="text" value="{{ mmdialog.component.dt_end ? dateTimeFormatted( mmdialog.component.dt_end ) : '' }}" placeholder="Select Date/Time" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_end', 'dt_end' )" class="dialogform--styleinput-datetime" readonly />
-								<span class="datetimepicker-remove" ng-if="mmdialog.component.dt_end" ng-click="mmdialog.component.dt_end = ''">Remove</span>
-							</div>
-							<span class="dialogform--lookup-button" ng-click="dateTimePopup( mmdialog.component, 'js-component-dt_end', 'dt_end' )"><span class="dialogform--lookup-text">Select Date/
-							Time</span></span>
-						</div>
-					</div>
-					
-
-				</div>
-
 			</div>
-		</div>
 
-		<div>
-
-			<div ng-if="mmdialog.component.component.id > 0" ng-repeat="attribute in mmdialog.component.component.attributes" ng-class="{ 'dialogform--error' : componentValidation( attribute, $index ) }">
-
-				<div ng-if="attribute.type == 'text'">
-					<div class="dialogform--styledinput">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<input type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
-					</div>
+			<div ng-if="attribute.type == 'memo'">
+				<div class="dialogform--styledinput">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<textarea placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-textarea"></textarea>
 				</div>
+			</div>
 
-				<div ng-if="attribute.type == 'multitext'">
-					<div class="dialogform--styledinput">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<textarea rows="7" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-textarea"></textarea>
-					</div>
+			<div ng-if="attribute.type == 'select'">
+				<div class="dialogform--styledinput">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<input type="text" ng-value="attribute.value" placeholder="-- Select One --" class="dialogform--styleinput-input" readonly />
+					<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-select">
+						<option value="">-- Select One --</option>
+						<option ng-repeat="option in attribute.options" ng-value="option.code">{{ option.prompt }}</option>
+					</select>
 				</div>
+			</div>
 
-				<div ng-if="attribute.type == 'memo'">
-					<div class="dialogform--styledinput">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<textarea placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-textarea"></textarea>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'select'">
-					<div class="dialogform--styledinput">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<input type="text" ng-value="attribute.value" placeholder="-- Select One --" class="dialogform--styleinput-input" readonly />
-						<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-init="attribute.value = attribute.value || ''" class="dialogform--styleinput-select">
-							<option value="">-- Select One --</option>
-							<option ng-repeat="option in attribute.options" ng-value="option.code">{{ option.prompt }}</option>
-						</select>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'radio'">
-					<div class="dialogform--styledradio">
-						<div class="dialogform--styledradio-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<label ng-repeat="option in attribute.options" class="dialogform--styledradio-label">
-							<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.code" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
-						</label>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'checkbox'">
-					<label class="dialogform--styledcheckbox">
-						<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
-						<span class="dialogform--styledcheckbox-prompt">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</span>
+			<div ng-if="attribute.type == 'radio'">
+				<div class="dialogform--styledradio">
+					<div class="dialogform--styledradio-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<label ng-repeat="option in attribute.options" class="dialogform--styledradio-label">
+						<input type="radio" name="layoutcomponent_{{$parent.$index}}" ng-model="attribute.value" ng-value="option.code" ng-required="{{ attribute.required ? true : false }}"> {{ option.prompt }}
 					</label>
 				</div>
-
-				<div ng-if="attribute.type == 'product'">
-					<div class="dialogform--styledinput dialogform--styledlookup">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<div class="dialogform--styledlookup-wrap">
-							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.product.code" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
-							<span class="dialogform--lookup-button" ng-click="productPopup( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Lookup Product</span></span>
-						</div>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'category'">
-					<div class="dialogform--styledinput dialogform--styledlookup">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<div class="dialogform--styledlookup-wrap">
-							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.category.code" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
-							<span class="dialogform--lookup-button" ng-click="categoryPopup( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Lookup Category</span></span>
-						</div>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'image'">
-					<div class="dialogform--image" ng-if="attribute.value">
-						<img ng-src="{{ attribute.value }}" style="max-width: 200px; max-height: 150px;" ng-attr-title="{{ 'Image for ' + attribute.prompt }}" ng-attr-alt="{{ 'Image for ' + attribute.prompt }}" />
-					</div>
-					<div class="dialogform--styledinput dialogform--styledlookup">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<div class="dialogform--styledlookup-wrap">
-							<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
-							<span class="dialogform--lookup-button" ng-click="imageUpload( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Upload Image</span></span>
-						</div>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'link'">
-					<div class="dialogform--styledinput dialogform--styledlookup">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<select name="layoutcomponent_type_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}" ng-init="attribute.link.type = attribute.link.type || 'N'" class="dialogform--styleinput-linkselect">
-							<option value="N">None</option>
-							<option value="U">URL</option>
-							<option value="P">Product</option>
-							<option value="C">Category</option>
-							<option value="G">Page</option>
-						</select>
-						<input ng-if="attribute.link.type && attribute.link.type != 'N'" name="layoutcomponent_link_{{$index}}" required type="text" ng-model="attribute.link.value" id="js-attribute_link_{{ attribute.id }}" class="dialogform--styleinput-linkvalue" placeholder="{{ attribute.prompt }}" />
-						<span ng-if="attribute.link.type && attribute.link.type != 'N' && attribute.link.type != 'U'" ng-click="linkPopup( attribute )" class="dialogform--lookup-button">
-							<span ng-if="attribute.link.type == 'P'" class="dialogform--lookup-text">Lookup Product</span>
-							<span ng-if="attribute.link.type == 'C'" class="dialogform--lookup-text">Lookup Category</span>
-							<span ng-if="attribute.link.type == 'G'" class="dialogform--lookup-text">Lookup Page</span>
-						</span>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'imagetype'">
-					<div class="dialogform--styledinput">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<input type="text" value="{{ attribute.value ? imagetypeDescrip( attribute ) : '' }}" placeholder="-- Select Image Type --" class="dialogform--styleinput-input" readonly />
-						<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}" class="dialogform--styleinput-select">
-							<option value="">-- Select Image Type --</option>
-							<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
-						</select>
-					</div>
-				</div>
-
-				<div ng-if="attribute.type == 'datetime'">
-					<div class="dialogform--styledinput dialogform--styledlookup">
-						<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
-						<div class="dialogform--styledlookup-wrap">
-							<input id="js-attribute_{{ attribute.id }}" type="hidden" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
-							<div class="dialogform--styleinput-input">
-								<input type="text" value="{{ attribute.value ? dateTimeFormatted( attribute.value ) : '' }}" ng-attr-placeholder="Select Date/Time" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id, 'attribute' )" class="dialogform--styleinput-datetime" readonly />
-								<span class="datetimepicker-remove" ng-if="attribute.value" ng-click="attribute.value = ''">Remove</span>
-							</div>
-							<span class="dialogform--lookup-button" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id, 'attribute' )"><span class="dialogform--lookup-text">Select Date/
-							Time</span></span>
-						</div>
-					</div>
-				</div>
-
 			</div>
 
-		</div>
-	</script>
+			<div ng-if="attribute.type == 'checkbox'">
+				<label class="dialogform--styledcheckbox">
+					<input type="checkbox" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" ng-true-value="1" ng-false-value="0" class="dialogform--styledcheckbox-checkbox">
+					<span class="dialogform--styledcheckbox-prompt">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</span>
+				</label>
+			</div>
 
-	<!-- Nested node template -->
-	<script type="text/ng-template" id="nodes_renderer.html">
-		<div ui-tree-handle class="cmp-component--wrapper" ng-class="{ 'cmp_container' : node.component.alw_chldrn, 'cmp_item' : !node.component.alw_chldrn }" ng-init="checkNodes( node )">
-			
-			<span class="cmp-component--drag">
-				<span class="cmp-component--drag__line1"></span>
-				<span class="cmp-component--drag__line2"></span>
-			</span>
-
-			<span class="cmp-component--title">
-				<span class="cmp-component--title__component">{{node.component.name}} ({{ node.component.code }})&nbsp;&nbsp;&nbsp;<strong>Code:</strong> {{node.code}}</span>
-				<span class="cmp-component--title__name">{{node.name}}</span>
-			</span>
-
-			<span class="cmp-component--expand" ng-if="node.children.length" ng-click="slideToggle( node )" data-nodrag>
-				<span class="cmp-component--expand__icon" ng-attr-title="{{ node.hide_children ? 'Show Children' : 'Hide Children' }}" ng-class="{ 'cmp-component--expand__toggled' : node.hide_children }">
-					<span class="cmp-component--expand__line1"></span>
-					<span class="cmp-component--expand__line2"></span>
-				</span>
-			</span>
-			<span class="cmp-component--expand" ng-if="!node.children.length" data-nodrag></span>
-
-			<span class="cmp-component--actions" data-nodrag ng-class="{ 'cmp-component--actions__active' : nodeActive == node }" ng-if="permissions.can_add || permissions.can_edit || permissions.can_delete">
-				<span class="cmp-component--actions__row">
-					<div class="cmp-component--actions__menu">
-						<span class="cmp-component--actions__item" ng-if="permissions.can_add && node.component.alw_chldrn" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
-						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="editComponent( node ); toggleNodeActions();">Edit Component</span>
-						<span class="cmp-component--actions__item" ng-if="permissions.can_add" ng-click="duplicateComponent( parent, node )">Duplicate Component</span>
-						<span class="cmp-component--actions__divider" ng-if="permissions.can_edit"></span>
-						<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="toggleActive( node )">{{ node.active ? 'De-activate' : 'Activate' }}</span>
-						<span class="cmp-component--actions__divider" ng-if="permissions.can_delete"></span>
-						<span class="cmp-component--actions__item" ng-if="permissions.can_delete" ng-click="removeComponent( this, node )">Delete Component</span>
+			<div ng-if="attribute.type == 'product'">
+				<div class="dialogform--styledinput dialogform--styledlookup">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<div class="dialogform--styledlookup-wrap">
+						<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.product.code" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
+						<span class="dialogform--lookup-button" ng-click="productPopup( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Lookup Product</span></span>
 					</div>
-					<span class="cmp-component--actions__button" tabindex="0" title="More Options" ng-click="toggleNodeActions( node )">
-						<span class="cmp-component--actions__button_custom">
-							<span class="cmp-component--actions__button_el1"></span>
-							<span class="cmp-component--actions__button_el2"></span>
-							<span class="cmp-component--actions__button_el3"></span>
-						</span>
-						<span class="cmp-component--actions__tail_border"></span>
-						<span class="cmp-component--actions__tail"></span>
+				</div>
+			</div>
+
+			<div ng-if="attribute.type == 'category'">
+				<div class="dialogform--styledinput dialogform--styledlookup">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<div class="dialogform--styledlookup-wrap">
+						<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.category.code" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
+						<span class="dialogform--lookup-button" ng-click="categoryPopup( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Lookup Category</span></span>
+					</div>
+				</div>
+			</div>
+
+			<div ng-if="attribute.type == 'image'">
+				<div class="dialogform--image" ng-if="attribute.value">
+					<img ng-src="{{ attribute.value }}" style="max-width: 200px; max-height: 150px;" ng-attr-title="{{ 'Image for ' + attribute.prompt }}" ng-attr-alt="{{ 'Image for ' + attribute.prompt }}" />
+				</div>
+				<div class="dialogform--styledinput dialogform--styledlookup">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<div class="dialogform--styledlookup-wrap">
+						<input id="js-attribute_{{ attribute.id }}" type="text" placeholder="{{ attribute.prompt }}" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" class="dialogform--styleinput-input" />
+						<span class="dialogform--lookup-button" ng-click="imageUpload( 'js-attribute_' + attribute.id )"><span class="dialogform--lookup-text">Upload Image</span></span>
+					</div>
+				</div>
+			</div>
+
+			<div ng-if="attribute.type == 'link'">
+				<div class="dialogform--styledinput dialogform--styledlookup">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<select name="layoutcomponent_type_{{$index}}" ng-model="attribute.link.type" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}" ng-init="attribute.link.type = attribute.link.type || 'N'" class="dialogform--styleinput-linkselect">
+						<option value="N">None</option>
+						<option value="U">URL</option>
+						<option value="P">Product</option>
+						<option value="C">Category</option>
+						<option value="G">Page</option>
+					</select>
+					<input ng-if="attribute.link.type && attribute.link.type != 'N'" name="layoutcomponent_link_{{$index}}" required type="text" ng-model="attribute.link.value" id="js-attribute_link_{{ attribute.id }}" class="dialogform--styleinput-linkvalue" placeholder="{{ attribute.prompt }}" />
+					<span ng-if="attribute.link.type && attribute.link.type != 'N' && attribute.link.type != 'U'" ng-click="linkPopup( attribute )" class="dialogform--lookup-button">
+						<span ng-if="attribute.link.type == 'P'" class="dialogform--lookup-text">Lookup Product</span>
+						<span ng-if="attribute.link.type == 'C'" class="dialogform--lookup-text">Lookup Category</span>
+						<span ng-if="attribute.link.type == 'G'" class="dialogform--lookup-text">Lookup Page</span>
 					</span>
+				</div>
+			</div>
+
+			<div ng-if="attribute.type == 'imagetype'">
+				<div class="dialogform--styledinput">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<input type="text" value="{{ attribute.value ? imagetypeDescrip( attribute ) : '' }}" placeholder="-- Select Image Type --" class="dialogform--styleinput-input" readonly />
+					<select name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" id="js-attribute_{{ attribute.id }}" class="dialogform--styleinput-select">
+						<option value="">-- Select Image Type --</option>
+						<option ng-repeat="option in attribute.options" ng-value="option.id">{{ option.descrip }}</option>
+					</select>
+				</div>
+			</div>
+
+			<div ng-if="attribute.type == 'datetime'">
+				<div class="dialogform--styledinput dialogform--styledlookup">
+					<div class="dialogform--styledinput-title">{{ attribute.prompt }}{{ attribute.required ? '*' : '' }}</div>
+					<div class="dialogform--styledlookup-wrap">
+						<input id="js-attribute_{{ attribute.id }}" type="hidden" name="layoutcomponent_{{$index}}" ng-model="attribute.value" ng-required="{{ attribute.required ? true : false }}" />
+						<div class="dialogform--styleinput-input">
+							<input type="text" value="{{ attribute.value ? dateTimeFormatted( attribute.value ) : '' }}" ng-attr-placeholder="Select Date/Time" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id, 'attribute' )" class="dialogform--styleinput-datetime" readonly />
+							<span class="datetimepicker-remove" ng-if="attribute.value" ng-click="attribute.value = ''">Remove</span>
+						</div>
+						<span class="dialogform--lookup-button" ng-click="dateTimePopup( attribute, 'js-attribute_' + attribute.id, 'attribute' )"><span class="dialogform--lookup-text">Select Date/
+						Time</span></span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+</script>
+
+<!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+	<div ui-tree-handle class="cmp-component--wrapper" ng-class="{ 'cmp_container' : node.component.alw_chldrn, 'cmp_item' : !node.component.alw_chldrn }" ng-init="checkNodes( node )">
+		
+		<span class="cmp-component--drag">
+			<span class="cmp-component--drag__line1"></span>
+			<span class="cmp-component--drag__line2"></span>
+		</span>
+
+		<span class="cmp-component--title">
+			<span class="cmp-component--title__component">{{node.component.name}} ({{ node.component.code }})&nbsp;&nbsp;&nbsp;<strong>Code:</strong> {{node.code}}</span>
+			<span class="cmp-component--title__name">{{node.name}}</span>
+		</span>
+
+		<span class="cmp-component--expand" ng-if="node.children.length" ng-click="slideToggle( node )" data-nodrag>
+			<span class="cmp-component--expand__icon" ng-attr-title="{{ node.hide_children ? 'Show Children' : 'Hide Children' }}" ng-class="{ 'cmp-component--expand__toggled' : node.hide_children }">
+				<span class="cmp-component--expand__line1"></span>
+				<span class="cmp-component--expand__line2"></span>
+			</span>
+		</span>
+		<span class="cmp-component--expand" ng-if="!node.children.length" data-nodrag></span>
+
+		<span class="cmp-component--actions" data-nodrag ng-class="{ 'cmp-component--actions__active' : nodeActive == node }" ng-if="permissions.can_add || permissions.can_edit || permissions.can_delete">
+			<span class="cmp-component--actions__row">
+				<div class="cmp-component--actions__menu">
+					<span class="cmp-component--actions__item" ng-if="permissions.can_add && node.component.alw_chldrn" ng-click="newComponent( this ); toggleNodeActions();">Add Child</span>
+					<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="editComponent( node ); toggleNodeActions();">Edit Component</span>
+					<span class="cmp-component--actions__item" ng-if="permissions.can_add" ng-click="duplicateComponent( parent, node )">Duplicate Component</span>
+					<span class="cmp-component--actions__divider" ng-if="permissions.can_edit"></span>
+					<span class="cmp-component--actions__item" ng-if="permissions.can_edit" ng-click="toggleActive( node )">{{ node.active ? 'De-activate' : 'Activate' }}</span>
+					<span class="cmp-component--actions__divider" ng-if="permissions.can_delete"></span>
+					<span class="cmp-component--actions__item" ng-if="permissions.can_delete" ng-click="removeComponent( this, node )">Delete Component</span>
+				</div>
+				<span class="cmp-component--actions__button" tabindex="0" title="More Options" ng-click="toggleNodeActions( node )">
+					<span class="cmp-component--actions__button_custom">
+						<span class="cmp-component--actions__button_el1"></span>
+						<span class="cmp-component--actions__button_el2"></span>
+						<span class="cmp-component--actions__button_el3"></span>
+					</span>
+					<span class="cmp-component--actions__tail_border"></span>
+					<span class="cmp-component--actions__tail"></span>
 				</span>
 			</span>
-		</div>
-		<ol ng-attr-data-nodrop-enabled="{{ node.component.alw_chldrn ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.children">
-			<li class="cmp-component" ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.alw_chldrn, 'cmp_item_wrap' : !node.component.alw_chldrn, 'cmp--nodes__hidden': node.hide_children, 'cmp-component--title__inactive' : !node.active }">
-			</li>
-		</ol>
-	</script>
-</div>
+		</span>
+	</div>
+	<ol ng-attr-data-nodrop-enabled="{{ node.component.alw_chldrn ? undefined : true  }}" ui-tree-nodes="" ng-init="parent = node" ng-model="node.children">
+		<li class="cmp-component" ng-repeat="node in node.children" ui-tree-node ng-include="'nodes_renderer.html'" ng-class="{ 'cmp_container_wrap' : node.component.alw_chldrn, 'cmp_item_wrap' : !node.component.alw_chldrn, 'cmp--nodes__hidden': node.hide_children, 'cmp-component--title__inactive' : !node.active }">
+		</li>
+	</ol>
+</script>
