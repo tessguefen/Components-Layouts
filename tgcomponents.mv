@@ -877,6 +877,9 @@
 		<div id="tgcomponents_layouts"></div>
 
 		<MvEVAL EXPR = "{ Element_DuplicateLayout_Dialog_HTML() }">
+
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMDialog_HTML() }">
+
 		<MvEVAL EXPR = "{ Element_AngularApp_HTML() }">
 
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_HTML() }">
@@ -898,6 +901,9 @@
 	</MvIF>
 
 	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMBatchList_CSS() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMDialog_CSS() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_MMDialog_JavaScript() }">
+	<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_Privileges_JavaScript() }">
 
 	<MvIF EXPR = "{ l.tab EQ 'TGCOMPONENTS_Layouts' }">
 		<MvEVAL EXPR = "{ [ g.Module_Admin ].Element_ActionDialog_CSS() }">
@@ -988,8 +994,16 @@
 	<MvASSIGN NAME = "g.Element_DuplicateLayout_Dialog_HTML" VALUE = 1>
 </MvFUNCTION>
 
-<MvFUNCTION NAME = "Element_AngularApp_HTML" STANDARDOUTPUTLEVEL = "html, text">
-	<MvINCLUDE INTERPRET = "off" FILE = "angular_app/app.html">
+<MvFUNCTION NAME = "Element_AngularApp_HTML" STANDARDOUTPUTLEVEL  = "text, html, compresswhitespace">
+	<div id="ComponentsController_ID" ng-controller="ComponentsController" ng-app="Components" ng-mouseup="toggleNodeActions();">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_Begin( 'layout_dialog' ) }">
+		<MvINCLUDE FILE = "angular_app/app-dialog.mv" INTERPRET="OFF">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_End( 'layout_dialog' ) }">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_Begin( 'layoutcomponent' ) }">
+		<MvINCLUDE FILE = "angular_app/app-component-dialog.mv" INTERPRET="OFF">
+		<MvEVAL EXPR = "{ [ g.Module_Admin ].MMDialog_End( 'layoutcomponent' ) }">
+		<MvINCLUDE FILE = "angular_app/app.html" INTERPRET="OFF">
+	</div>
 </MvFUNCTION>
 
 <MvCOMMENT>
