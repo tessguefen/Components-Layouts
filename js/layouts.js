@@ -56,13 +56,14 @@ function Layouts_Batchlist()
 	if ( CanI( 'TGCOMPONENTS', 0, 1, 0, 0 ) ) {
 		self.Feature_Add_Enable('Add Layout');
 	}
+
+	self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'View/ Edit Layout', 'View/ Edit Layout', 'goto', self.editLayout );
+
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) ) {
 		self.Feature_Edit_Enable('Edit Layout(s)');
 		self.Feature_RowDoubleClick_Enable();
 		self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', self.DuplicateLayout );
 	}
-
-	self.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'View/ Edit Layout', 'View/ Edit Layout', 'goto', self.editLayout );
 
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) ) {
 		self.Feature_Delete_Enable('Delete Layout(s)');
