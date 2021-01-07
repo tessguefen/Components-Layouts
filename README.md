@@ -377,3 +377,4 @@
 ```mysql
 SELECT s01_TGLayouts_Values.value FROM s01_TGLayouts_Values LEFT JOIN s01_TGComponent_Attrs ON s01_TGComponent_Attrs.id = s01_TGLayouts_Values.attr_id WHERE s01_TGComponent_Attrs.type = 'image'
 ```
+
