@@ -10,14 +10,14 @@ function TGLayoutList()
 		this.Feature_Add_Enable( 'Add Layout' );
 	}
 
+	this.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'View/ Edit Layout', 'View/ Edit Layout', 'goto', this.editLayout );
+	
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 1, 0 ) )
 	{
 		this.Feature_Edit_Enable( 'Edit Layout(s)' );
 		this.Feature_RowDoubleClick_Enable();
 		this.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'Duplicate Layout', 'Duplicate Template', 'readytheme', this.DuplicateLayout );
 	}
-
-	this.Feature_Buttons_AddButton_Dynamic_SingleSelect( 'View/ Edit Layout', 'View/ Edit Layout', 'goto', this.editLayout );
 
 	if ( CanI( 'TGCOMPONENTS', 0, 0, 0, 1 ) )
 	{

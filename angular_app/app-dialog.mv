@@ -29,8 +29,8 @@
 		</div>
 
 		<div ui-tree class="cmp-components">
-			<ol ui-tree-nodes="" ng-model="data.layout.nodes" id="tree-root">
-				<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.nodes" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
+			<ol ui-tree-nodes="" ng-model="data.layout.children" id="tree-root">
+				<li class="cmp-component" ng-attr-data-nodrop-enabled="{{ node.component.allow_children ? undefined : true  }}" ng-repeat="node in data.layout.children" ng-class="{ 'cmp_container_wrap' : node.component.allow_children, 'cmp_item_wrap' : !node.component.allow_children, 'cmp--nodes__hidden': node.hide_nodes, 'cmp-component--title__inactive' : !node.active }" ui-tree-node ng-include="'nodes_renderer.html'" ng-init="parent = data.layout" ></li>
 			</ol>
 		</div>
 
