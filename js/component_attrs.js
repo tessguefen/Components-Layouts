@@ -142,7 +142,7 @@ ComponentAttrs_Batchlist.prototype.CreateColumnList_Options = function()
 	var columnlist =
 	[
 		new MMBatchList_Column_Code( 'Attribute ID', 'attr_id', 'attr_id' )
-				.SetRootColumn( self.attr_id )
+				.SetRootColumn( self.id )
 				.SetSearchable( false )
 				.SetDisplayInList( false ),
 		new MMBatchList_Column_Code( 'Option ID', 'id', 'id' )
