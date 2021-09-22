@@ -61,6 +61,8 @@
 		- BUGFIX: MM10
 	1.019
 		- BUGFIX: Removed `opt.code` (random). And changed "View Layout" button placement to be first.
+	1.020
+		- BUGFIX: `attr_id` didn't exist in batchlist, utilized `id`
 </MvCOMMENT>
 
 <MvCOMMENT>
