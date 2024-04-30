@@ -1,8 +1,8 @@
 <MvFUNCTION NAME = "Module_Description" PARAMETERS = "module var" STANDARDOUTPUTLEVEL = "">
 	<MvASSIGN NAME = "l.module:code"		VALUE = "TGCOMPONENTS">
 	<MvASSIGN NAME = "l.module:name"		VALUE = "Components & Layouts">
-	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen">
-	<MvASSIGN NAME = "l.module:version"		VALUE = "1.020">
+	<MvASSIGN NAME = "l.module:provider"	VALUE = "Tess Guefen Stearns">
+	<MvASSIGN NAME = "l.module:version"		VALUE = "1.021">
 	<MvASSIGN NAME = "l.module:api_ver"		VALUE = "9.12">
 	<MvASSIGN NAME = "l.module:description"	VALUE = "Create components to easily manipulate customized layouts.">
 	<MvASSIGN NAME = "l.module:features"	VALUE = "data_store, util, component, json, clientside, provision_store, export, scheduledtask">
@@ -63,6 +63,8 @@
 		- BUGFIX: Removed `opt.code` (random). And changed "View Layout" button placement to be first.
 	1.020
 		- BUGFIX: `attr_id` didn't exist in batchlist, utilized `id`
+	1.021
+		- Update for 10.09
 </MvCOMMENT>
 
 <MvCOMMENT>
@@ -273,14 +275,15 @@
 							(
 								layout_id	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 0 )	$ ',
 								value		' $ [ g.Module_Library_Native_DBAPI ].DB_Type_MEMO()			$ ',
-								dt_cached	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 )	$ '
+								dt_cached	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_NUMBER( 0, 255 )	$ ',
+								http_host	' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 )		$ '
 							)' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1017', g.MvQUERY_Error ) }">
 	</MvIF>
 
 	<MvQUERY NAME = "Merchant"
-			 QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache ( layout_id )' }">
+			 QUERY = "{ 'CREATE UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache_1 ON ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache ( layout_id, http_host )' }">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-INSTALL-1018', g.MvQUERY_Error ) }">
 	</MvIF>
@@ -482,6 +485,42 @@
 				 QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Components ADD UNIQUE INDEX TGLayouts_Components_3 ( layout_id, code )' }">
 		<MvIF EXPR = "{ g.MvQUERY_Error }">
 			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1012', g.MvQUERY_Error ) }">
+		</MvIF>
+	</MvIF>
+
+	<MvIF EXPR = "{ l.version LT 1.021 }">
+		<MvCOMMENT>
+		|
+		|	Add column `http_host`
+		|
+		</MvCOMMENT>
+		<MvQUERY NAME	= "Merchant"
+				 QUERY	= "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
+				 				ADD
+				 				(
+									http_host ' $ [ g.Module_Library_Native_DBAPI ].DB_Type_CHAR( 254 ) $ '
+				 				)'}">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1013', g.MvQUERY_Error ) }">
+		</MvIF>
+
+		<MvCOMMENT>
+		|
+		|	Adjust Unique Index
+		|
+		</MvCOMMENT>
+		<MvIF EXPR = "{ NOT [ g.Module_Library_Native_DBAPI ].DB_Drop_Index( g.Store_Table_Prefix $ 'TGLayouts_Cache', g.Store_Table_Prefix $ 'TGLayouts_Cache_1' ) }">
+			<MvFUNCTIONRETURN VALUE = 0>
+		</MvIF>
+
+		<MvQUERY NAME = "Merchant"
+				 QUERY = "{ 'ALTER TABLE ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache ADD UNIQUE INDEX ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache_1 ( layout_id, http_host )' }">
+		<MvIF EXPR = "{ g.MvQUERY_Error }">
+			<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGCOMPONENTS-UPGRADE-1014', g.MvQUERY_Error ) }">
+		</MvIF>
+
+		<MvIF EXPR = "{ NOT Layout_Cache_DeleteAll() }">
+			<MvFUNCTIONRETURN VALUE = 0>
 		</MvIF>
 	</MvIF>
 
@@ -1747,7 +1786,9 @@
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTS-0006', 'Could not update layout.' ) }">
 	</MvIF>
 
-	<MvASSIGN NAME = "l.null" VALUE = "{ Layout_Cache_Recache( l.layout:id ) }">
+	<MvIF EXPR = "{ NOT Layout_Cache_Delete( l.layout_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
 
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
@@ -3200,7 +3241,10 @@
 		<MvFUNCTIONRETURN VALUE = 0>
 	</MvIF>
 
-	<MvASSIGN NAME = "l.null" VALUE = "{ Layout_Cache_Recache( l.layout_id ) }">
+	<MvIF EXPR = "{ NOT Layout_Cache_Delete( l.layout_id ) }">
+		<MvFUNCTIONRETURN VALUE = 0>
+	</MvIF>
+
 	<MvFUNCTIONRETURN VALUE = 1>
 </MvFUNCTION>
 
@@ -4049,8 +4093,8 @@
 <MvFUNCTION NAME = "Layout_Cache_Load_Lowlevel" PARAMETERS = "layout_id, return var" STANDARDOUTPUTLEVEL = "" ERROROUTPUTLEVEL = "">
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Cache"
-				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache WHERE layout_id = ?' }"
-				FIELDS	= "l.layout_id">
+				QUERY	= "{ 'SELECT * FROM ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache WHERE layout_id = ? AND http_host = ?' }"
+				FIELDS	= "l.layout_id, s.http_host">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0001', 'Could not load Display Order.' ) }">
 	</MvIF>
@@ -4083,10 +4127,10 @@
 
 	<MvQUERY NAME	= "Merchant"
 			 QUERY	= "{ 'INSERT INTO ' $ g.Store_Table_Prefix $ 'TGLayouts_Cache
-						  ( layout_id, value, dt_cached )
+						  ( layout_id, value, dt_cached, http_host )
 						  VALUES
-						  ( ?, ?, ? )' }"
-			 FIELDS	= "l.layout_id, l.layout_values, s.dyn_time_t">
+						  ( ?, ?, ?, ? )' }"
+			 FIELDS	= "l.layout_id, l.layout_values, s.dyn_time_t, s.http_host">
 	<MvIF EXPR = "{ g.MvQUERY_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0003', 'Could not save Layout Cache.' ) }">
 	</MvIF>
@@ -4127,15 +4171,16 @@
 	<MvOPENVIEW NAME	= "Merchant"
 				VIEW	= "TGLayouts_Cache"
 				QUERY	= "{
-								'SELECT
-									layoutcache.layout_id
-								FROM
-									' $ g.Store_Table_Prefix $ 'TGLayouts_Cache layoutcache
-								JOIN
-									' $ g.Store_Table_Prefix $ 'TGLayouts_Components layoutcomponents
-								ON
-									layoutcache.layout_id = layoutcomponents.layout_id
-								WHERE
+							'SELECT
+								layoutcache.layout_id
+							FROM
+								' $ g.Store_Table_Prefix $ 'TGLayouts_Cache layoutcache
+							JOIN
+								' $ g.Store_Table_Prefix $ 'TGLayouts_Components layoutcomponents
+							ON
+								layoutcache.layout_id = layoutcomponents.layout_id
+							WHERE
+								(
 									( 
 										layoutcomponents.dt_start> 0 AND
 										layoutcomponents.dt_start < ? AND
@@ -4146,9 +4191,9 @@
 										layoutcomponents.dt_end> 0 AND
 										layoutcomponents.dt_end < ? AND
 										layoutcomponents.dt_end> layoutcache.dt_cached
-									)'
-							}"
-				FIELDS	= "s.dyn_time_t, s.dyn_time_t">
+									)
+								) AND layoutcache.http_host = ?'}"
+				FIELDS	= "s.dyn_time_t, s.dyn_time_t, s.http_host">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0006', 'Could not Load Layouts.' ) }">
 	</MvIF>
@@ -4182,6 +4227,7 @@
 									layoutcache.layout_id = layoutcomponents.layout_id
 								WHERE
 									layoutcomponents.layout_id = ? AND
+									layoutcache.http_host = ? AND
 									( 
 										layoutcomponents.dt_start> 0 AND
 										layoutcomponents.dt_start < ? AND
@@ -4194,7 +4240,7 @@
 										layoutcomponents.dt_end> layoutcache.dt_cached
 									)'
 							}"
-				FIELDS	= "l.layout_id, s.dyn_time_t, s.dyn_time_t">
+				FIELDS	= "l.layout_id, s.http_host, s.dyn_time_t, s.dyn_time_t">
 	<MvIF EXPR = "{ g.MvOPENVIEW_Error }">
 		<MvFUNCTIONRETURN VALUE = "{ [ g.Module_Library_Utilities ].Error( 'TGComponents-LAYOUTCACHE-0007', 'Could not Load Layout.' ) }">
 	</MvIF>
